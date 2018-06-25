@@ -26,7 +26,7 @@ Install LAMP (Linux, Apache2, MySQL & PHP)
     apt-get update
     apt-get install php php-mysql php-gettext php-mbstring php-xdebug libapache2-mod-php  php-dev php-soap
     apt-get install php-dev build-essential php-pear libaio1 php-xml php-soap php-curl -y
-    a2enmod php7.0
+    a2enmod php7.2
     service apache2 restart
 
 Install MsSQL
