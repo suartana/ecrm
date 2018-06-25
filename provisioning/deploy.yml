@@ -1,0 +1,136 @@
+- name: Deploy
+  hosts: local
+  connection: local
+
+  vars_prompt:
+    - name: "git_revision"
+      prompt: "What git revision should be deployed?"
+      private: no
+
+  tasks:
+    - name: Store variables as fact for other hosts
+      set_fact:
+        git_revision: "{{ git_revision }}"
+        deploy_role: "{{ deploy_role }}"
+        deploy_brand: "{{ deploy_brand }}"
+        git_ssh_repository: "{{ git_ssh }}:{{ git_repo }}.git"
+        git_http_repository: "{{ git_http }}/{{ git_repo }}"
+        deploy_notify: "{{ deploy_notify }}"
+
+    - name: Create temporary folder for build
+      tempfile:
+        state: directory
+      register: build_folder
+
+    - name: Clone git repository from {{ git_ssh_repository }} | revision {{ git_revision }}
+      git:
+        key_file: "{{ ssh_key }}"
+        accept_hostkey: yes
+        repo: "{{ git_ssh_repository }}"
+        dest: "{{ build_folder.path }}/{{ git_revision }}"
+        version: "{{ git_revision }}"
+
+    - name: copy branch specific config files
+      copy:
+        src: "{{ build_folder.path }}/{{ git_revision }}/rollout-config/{{deploy_role}}/{{ deploy_brand }}/app/config/{{ item }}"
+        dest: "{{ build_folder.path }}/{{ git_revision }}/app/config/{{ item }}"
+      with_items:
+        - "bootstrap.php"
+        - "core.php"
+        - "database.php"
+
+    - name: copy branch specific webroot files
+      copy:
+        src: "{{ build_folder.path }}/{{ git_revision }}/rollout-config/{{deploy_role}}/{{ deploy_brand }}/app/webroot/{{ item }}"
+        dest: "{{ build_folder.path }}/{{ git_revision }}/app/webroot/{{ item }}"
+      with_items:
+        - "pingtest.php"
+
+    - name: delete some unused files
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ build_folder.path }}/{{ git_revision }}/Vagrantfile"
+        - "{{ build_folder.path }}/{{ git_revision }}/provisioning"
+        - "{{ build_folder.path }}/{{ git_revision }}/rollout-config"
+        - "{{ build_folder.path }}/{{ git_revision }}/README.md"
+        - "{{ build_folder.path }}/{{ git_revision }}/.gitignore"
+        - "{{ build_folder.path }}/{{ git_revision }}/.editorconfig"
+        - "{{ build_folder.path }}/{{ git_revision }}/.git"
+
+    - name: Create tarball for build
+      command: tar czf {{ git_revision }}.tar.gz {{ git_revision }}
+      args:
+        chdir: "{{ build_folder.path }}"
+        warn: false
+
+    - name: Display temporary folder to the user
+      debug:
+        msg: "Generated build in folder {{ build_folder.path }}"
+
+- name: Deploy build
+  hosts: webservers
+  remote_user: deploy
+
+  vars:
+    git_http_repository: "{{ hostvars['localhost']['git_http_repository'] }}"
+    git_revision: "{{ hostvars['localhost']['git_revision'] }}"
+    local_build_path: "{{ hostvars['localhost']['build_folder']['path'] }}"
+    deploy_role:  "{{ hostvars['localhost']['deploy_role'] }}"
+    deploy_brand: "{{ hostvars['localhost']['deploy_brand'] }}"
+    deploy_notify: "{{ hostvars['localhost']['deploy_notify'] }}"
+
+  tasks:
+    - name: Extract build tarball on the server
+      unarchive:
+        src: "{{ local_build_path }}/{{ git_revision }}.tar.gz"
+        dest: "{{ target_server_project_dir }}/builds"
+
+    - name: chmod tmp
+      file:
+        path: "{{ target_server_project_dir }}/builds/{{ git_revision }}/app/tmp"
+        state: directory
+        group: www
+        mode: u=rwx,g=rwx,o=rx
+        recurse: yes
+
+    - name: Remove previous symlink
+      file:
+        path: "{{ target_server_project_dir }}/builds/previous"
+        state: absent
+
+    - name: Move current to previous
+      command: mv {{ target_server_project_dir }}/builds/current {{ target_server_project_dir }}/builds/previous
+
+    - name: Symlink new build as current
+      file:
+        src: "{{ target_server_project_dir }}/builds/{{ git_revision }}"
+        dest: "{{ target_server_project_dir }}/builds/current"
+        state: link
+
+    - name: Create symlink for the files folder
+      file:
+        src: "{{ target_server_project_dir }}/files"
+        dest: "{{ target_server_project_dir }}/builds/current/app/webroot/files"
+        state: link
+
+    - mail:
+        host: localhost
+        port: 25
+        to: "{{ deploy_notify }}"
+        subject: 'Deploy finished: {{ git_http_repository }} | {{deploy_role}}'
+        body: '{{ ansible_hostname }}: {{deploy_role}}-{{deploy_brand}}-deploying of {{ git_http_repository }}/commit/{{ git_revision }} has successfully finished, visit {{target_web_url}}'
+
+- name: Deploy
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+    - name: delete tmp files
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ build_folder.path }}"

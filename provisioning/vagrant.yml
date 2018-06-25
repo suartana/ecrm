@@ -1,0 +1,150 @@
+---
+- hosts: all
+
+  handlers:
+    - name: restart apache
+      service: name=apache2 state=restarted
+    - name: restart mysql
+      service: name=mysql state=restarted
+
+  pre_tasks:
+    - name: Upgrade all packages to the latest version.
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+  tasks:
+    - name: Get Ansible dependencies.
+      apt: "name={{ item }}"
+      with_items:
+        - python-apt
+        - python-pycurl
+        - python-mysqldb
+
+    - name: Install Apache, MySQL, PHP, etc.
+      apt: "name={{ item }} state=present"
+      with_items:
+        - git
+        - curl
+        - unzip
+        - sendmail
+        - fabric
+        - python-toml
+        - aptitude
+        - apache2
+        - mysql-client
+        - mysql-server
+        - php-cli
+        - php-curl
+        - php-dev
+        - php-gd
+        - php-apcu
+        - php-json
+        - php-opcache
+        - php-xml
+        - php-mbstring
+        - php-mcrypt
+        - php-pdo-mysql
+        - php-zip
+        - libapache2-mod-php
+        - vim-nox
+
+    - name: Disable the firewall (since this is for local dev only).
+      service: name=ufw state=stopped
+
+    - name: Add Apache users to the vagrant group, so it can write to our files.
+      user:
+        name: www-data
+        groups: vagrant
+        append: yes
+
+    - name: Create certificate when configured
+      command: >
+        openssl req -x509 -nodes -subj '/CN={{ domain }}' -days 365
+        -newkey rsa:4096 -sha256 -keyout {{ item.key }} -out {{ item.cert }}
+        creates={{ item.cert }}
+      with_items: "{{ self_signed_certs }}"
+
+    - name: Enable Apache modules
+      apache2_module: "name={{ item }} state=present"
+      with_items:
+        - rewrite
+        - ssl
+        - headers
+      
+    - name: Add Apache virtual host
+      template:
+        src: "templates/local.dev.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ domain }}.dev.conf"
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart apache
+
+    - name: Symlink virtual host to sites-enabled.
+      file:
+        src: "/etc/apache2/sites-available/{{ domain }}.dev.conf"
+        dest: "/etc/apache2/sites-enabled/{{ domain }}.dev.conf"
+        state: link
+      notify: restart apache
+
+    - name: Remove default virtualhost file.
+      file:
+        path: "/etc/apache2/sites-enabled/000-default.conf"
+        state: absent
+      notify: restart apache
+
+    - name: "Start Apache, MySQL, and PHP."
+      service: "name={{ item }} state=started enabled=yes"
+      with_items:
+        - apache2
+        - mysql
+      notify: restart apache
+
+    - name: Adjust OpCache memory setting.
+      lineinfile:
+        dest: "/etc/php/7.0/apache2/conf.d/10-opcache.ini"
+        regexp: "^opcache.memory_consumption"
+        line: "opcache.memory_consumption = 96"
+        state: present
+      notify: restart apache
+
+    - name: Create MySQL config override file.
+      template:
+        src: "templates/mysql.cnf.j2"
+        dest: "/etc/mysql/mysql.conf.d/vagrant.mysql.cnf"
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart mysql
+
+    - name: Remove the MySQL test database.
+      mysql_db: db=test state=absent
+
+    - name: Create a MySQL database for Drupal.
+      mysql_db: "db={{ domain }} state=present"
+
+    - name: Create a MySQL user for Drupal.
+      mysql_user:
+        name: "{{ domain }}"
+        password: "{{ domain }}"
+        priv: "*.*:ALL"
+        host: "%"
+        state: present
+
+    - name: Download Composer installer.
+      get_url:
+        url: https://getcomposer.org/installer
+        dest: /tmp/composer-installer.php
+        mode: 0755
+
+    - name: Run Composer installer.
+      command: >
+        php composer-installer.php
+        chdir=/tmp
+        creates=/usr/local/bin/composer
+
+    - name: Move Composer into globally-accessible location.
+      shell: >
+        mv /tmp/composer.phar /usr/local/bin/composer
+        creates=/usr/local/bin/composer

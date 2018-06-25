@@ -1,0 +1,7 @@
+# ssh
+ssh_key: "~/.ssh/id_rsa"
+
+#git
+git_ssh: "git@mue1-git02"
+git_http: "http://mue1-git02"
+git_repo: "ch/docucrm"

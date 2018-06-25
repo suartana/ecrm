@@ -1,0 +1,34 @@
+# MySQL configuration for Vagrant local development.
+
+[client]
+# Use utf8 for everything.
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+innodb_buffer_pool_size=1G
+
+# Allow Drupal's huge packages.
+max_allowed_packet = 32M
+
+# Use utf8 for everything, server edition.
+character_set_server = utf8mb4
+collation_server = utf8mb4_unicode_ci
+
+# Bind to all IPs, so we can connect from the host machine.
+bind-address = 0.0.0.0
+
+# Only cache small result sets for more speed.
+query_cache_limit = 16K
+
+# Increase query cache size a bit for more speed.
+query_cache_size = 64M
+
+# Disable binary logging for more speed (and less disk space).
+skip-log-bin
+
+# SQL mode tweaks to work around errors in generated queries.
+# See https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql
+sql_mode = STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION

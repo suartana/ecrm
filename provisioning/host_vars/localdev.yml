@@ -1,0 +1,9 @@
+# The docroot where Apache should serve files from.
+docroot: "/vagrant"
+
+# The resulting domain will be [domain].test (with .test appended).
+domain: "docucrm"
+
+self_signed_certs:
+  - key: /etc/ssl/private/server.key
+    cert: /etc/ssl/certs/server.crt
