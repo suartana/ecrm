@@ -7,8 +7,8 @@ Deploying with Ansible
 
 Before you start:
 
-1. make sure you have a valid keyfile `id_rsa` in your vagrants home directory: `~/.ssh/id_rsa` and its chmoded to `600` otherwise it will not work.
-2. the `deploy` user on the target server needs write access to the `builds` folder on target server's deploy directory.
+# make sure you have a valid keyfile `id_rsa` in your vagrants home directory: `~/.ssh/id_rsa` and its chmoded to `600` otherwise it will not work.
+# the `deploy` user on the target server needs write access to the `builds` folder on target server's deploy directory.
 
 You can deploy with those commands:
 
@@ -29,13 +29,13 @@ replace `{brand}` with `ch`, `cz`, `at` or `de`
 Local development with Vagrant
 ------------------------------
 
-1. Install [Virtualbox][vbox-dl]
-2. Install [Vagrant 2.x][vagrant-dl]
-3. Add this line to your `/etc/hosts` file: 192.168.88.20 docucrm.docu.test
+# Install [Virtualbox][vbox-dl]
+# Install [Vagrant 2.x][vagrant-dl]
+#  Add this line to your `/etc/hosts` file: 192.168.88.20 docucrm.docu.test
 
-4. Run `vagrant up --provision` and then the following:
+# Run `vagrant up --provision` and then the following:
 
-###commands
+#commands
 
 `vagrant ssh`
 password: vagrant
@@ -51,14 +51,14 @@ password: vagrant
 `a2enmod php7.0`
 `service apache2 restart`
 
-5. Install MSSSQL
+# Install MSSSQL
 
 `pear install --nodeps MDB2_Driver_mssql`
 `apt install php-odbc php-sybase -y`
 
 `systemctl restart apache2`
 
-6. Oracle client installation
+# Oracle client installation
 **********************************************************************************
 First prerequirements are a working apache2 and php7.2 (Ubunti 18.04) environement.
 
@@ -147,7 +147,7 @@ else {
 }
 ?>
 
-7. copy the right config files from
+# copy the right config files from
 
 	`\rollout-config\liveserver`
 
@@ -155,7 +155,7 @@ else {
 
 	`\app\config`
 
-8. Open https://docuportal.test/ in your browser.
+# Open https://docuportal.test/ in your browser.
 
 [vbox-dl]: https://www.virtualbox.org/wiki/Downloads
 [vagrant-dl]: https://www.vagrantup.com/downloads.html
