@@ -63,11 +63,11 @@ Oracle client installation
 ------------------------------------------------------------
 First prerequirements are a working apache2 and php7.2 (Ubunti 18.04) environement.
 
-Download the basic (like instantclient-basic-linux.x64-12.2.0.1.0.zip) and the sdk (instantclient-sdk-linux.x64-12.2.0.1.0.zip) package from the Oracle Website 
+Download the basic (like instantclient-basic-linux.x64-12.1.0.2.0.zip) and the sdk (instantclient-sdk-linux.x64-12.1.0.1.0.zip) package from the Oracle Website 
 http://www.oracle.com/technetwork/database/database-technologies/instant-client/downloads/index.html
 
 Upload both files to your webserver, you can use WinSCP for it
-Unzip both files on server, in my case, you will get a new folder named "instantclient_12_2"
+Unzip both files on server, in my case, you will get a new folder named "instantclient_12_1"
 
 Create destination folder
 ------------------------------------------------------------
@@ -75,11 +75,11 @@ mkdir /opt/oracle
 
 Move and rename the instantclient folder
 ------------------------------------------------------------
-mv instantclient_12_2 /opt/oracle/instantclient
+mv instantclient_12_1/ /opt/oracle/instantclient
 
 Change rights on folder
 ------------------------------------------------------------
-chown -R root:www-data /opt/oracle
+chown -R vagrant:www-data /opt/oracle
 
 Check if you have the required packages for installing OCI8
 ------------------------------------------------------------
