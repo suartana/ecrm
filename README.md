@@ -148,7 +148,7 @@ else {
 ?>
 
 
-# Open https://docuportal.test/ in your browser.
+# Open http://docucrm.docu.test/ in your browser.
 
 [vbox-dl]: https://www.virtualbox.org/wiki/Downloads
 [vagrant-dl]: https://www.vagrantup.com/downloads.html
