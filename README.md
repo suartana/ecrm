@@ -147,13 +147,6 @@ else {
 }
 ?>
 
-# copy the right config files from
-
-	`\rollout-config\liveserver`
-
-	to your config directory
-
-	`\app\config`
 
 # Open https://docuportal.test/ in your browser.
 
