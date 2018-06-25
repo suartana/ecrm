@@ -59,7 +59,7 @@ password: vagrant
 `systemctl restart apache2`
 
 # Oracle client installation
-**********************************************************************************
+
 First prerequirements are a working apache2 and php7.2 (Ubunti 18.04) environement.
 
 Download the basic (like instantclient-basic-linux.x64-12.2.0.1.0.zip) and the sdk (instantclient-sdk-linux.x64-12.2.0.1.0.zip) package from the Oracle Website 
