@@ -1,0 +1,21 @@
+<VirtualHost *:80>
+	ServerName {{ domain }}.test
+	DocumentRoot {{ docroot }}
+	Redirect permanent / https://{{ domain }}.test
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName {{ domain }}.test
+    ServerAlias www.{{ domain }}.test
+    DocumentRoot {{ docroot }}
+	
+	SSLEngine on
+	SSLCertificateFile {{ self_signed_certs.0.cert }}
+	SSLCertificateKeyFile {{ self_signed_certs.0.key }}
+
+    <Directory "{{ docroot }}">
+        Options +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
