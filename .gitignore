@@ -1,0 +1,9 @@
+*.py[co]
+.idea
+.vscode
+.DS_Store
+__MACOSX
+/provisioning/*.retry
+.vagrant
+.project
+
