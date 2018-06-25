@@ -1,5 +1,4 @@
-DOCU CRM  
------------------------------ 
+# DOCU CRM  
 
 
 Deploying with Ansible
@@ -7,8 +6,8 @@ Deploying with Ansible
 
 Before you start:
 
-# make sure you have a valid keyfile `id_rsa` in your vagrants home directory: `~/.ssh/id_rsa` and its chmoded to `600` otherwise it will not work.
-# the `deploy` user on the target server needs write access to the `builds` folder on target server's deploy directory.
+- Make sure you have a valid keyfile `id_rsa` in your vagrants home directory: `~/.ssh/id_rsa` and its chmoded to `600` otherwise it will not work.
+- The `deploy` user on the target server needs write access to the `builds` folder on target server's deploy directory.
 
 You can deploy with those commands:
 
@@ -29,13 +28,15 @@ replace `{brand}` with `ch`, `cz`, `at` or `de`
 Local development with Vagrant
 ------------------------------
 
-# Install [Virtualbox][vbox-dl]
-# Install [Vagrant 2.x][vagrant-dl]
-#  Add this line to your `/etc/hosts` file: 192.168.88.20 docucrm.docu.test
+- Install [Virtualbox][vbox-dl]
+- Install [Vagrant 2.x][vagrant-dl]
+- Add this line to your `/etc/hosts` file: 192.168.88.20 docucrm.docu.test
 
-# Run `vagrant up --provision` and then the following:
+Run `vagrant up --provision` and then the following:
+------------------------------------------------------------
 
-#commands
+commands
+------------------------------------------------------------
 
 `vagrant ssh`
 password: vagrant
@@ -51,15 +52,15 @@ password: vagrant
 `a2enmod php7.0`
 `service apache2 restart`
 
-# Install MSSSQL
-
+Install MSSSQL
+------------------------------------------------------------
 `pear install --nodeps MDB2_Driver_mssql`
 `apt install php-odbc php-sybase -y`
 
 `systemctl restart apache2`
 
-# Oracle client installation
-
+Oracle client installation
+------------------------------------------------------------
 First prerequirements are a working apache2 and php7.2 (Ubunti 18.04) environement.
 
 Download the basic (like instantclient-basic-linux.x64-12.2.0.1.0.zip) and the sdk (instantclient-sdk-linux.x64-12.2.0.1.0.zip) package from the Oracle Website 
@@ -68,88 +69,110 @@ http://www.oracle.com/technetwork/database/database-technologies/instant-client/
 Upload both files to your webserver, you can use WinSCP for it
 Unzip both files on server, in my case, you will get a new folder named "instantclient_12_2"
 
-# Create destination folder
-
+Create destination folder
+------------------------------------------------------------
 mkdir /opt/oracle
 
-# Move and rename the instantclient folder
-
+Move and rename the instantclient folder
+------------------------------------------------------------
 mv instantclient_12_2 /opt/oracle/instantclient
 
-# Change rights on folder
-
+Change rights on folder
+------------------------------------------------------------
 chown -R root:www-data /opt/oracle
 
-# Check if you have the required packages for installing OCI8
+Check if you have the required packages for installing OCI8
+------------------------------------------------------------
 apt install php7.2-dev php-pear build-essential libaio1
 
-# Create necessary soft links
+Create necessary soft links
+------------------------------------------------------------
 ln -s /opt/oracle/instantclient/libclntsh.so.12.1 /opt/oracle/instantclient/libclntsh.so
 
 ln -s /opt/oracle/instantclient/libocci.so.12.1 /opt/oracle/instantclient/libocci.so
 
-# Add instant client to ld config files
-
+Add instant client to ld config files
+------------------------------------------------------------
 echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient
 
-# Update Dynamic Linker Run-Time Bindings
-
+Update Dynamic Linker Run-Time Bindings
+------------------------------------------------------------
 ldconfig
 
-# Now install OCI8 by pecl
-
+Now install OCI8 by pecl
+------------------------------------------------------------
 pecl install oci8
 
-# The OCI8 installation is asking you for the right folder
-
+The OCI8 installation is asking you for the right folder
+------------------------------------------------------------
 instantclient,/opt/oracle/instantclient
 
-# Add oci lib to the cli php config (console php)
-
+Add oci lib to the cli php config (console php)
+------------------------------------------------------------
 echo "extension = oci8.so" >> /etc/php/7.2/cli/php.ini
 
-# Add oci lib to the apache php config
-
+Add oci lib to the apache php config
+------------------------------------------------------------
 echo "extension = oci8.so" >> /etc/php/7.2/apache2/php.ini
 
-# Set environement variables for the cli version (you will need to reboot the server after)
-
+Set environement variables for the cli version (you will need to reboot the server after)
+------------------------------------------------------------
 echo "LD_LIBRARY_PATH=\"/opt/oracle/instantclient\"" >> /etc/environment
 
 echo "ORACLE_HOME=\"/opt/oracle/instantclient\"" >> /etc/environment
 
-# Set environement variables for the apache version
-
+Set environement variables for the apache version
+------------------------------------------------------------
 echo "export LD_LIBRARY_PATH=\"/opt/oracle/instantclient\"" >> /etc/apache2/envvars
 
 echo "export ORACLE_HOME=\"/opt/oracle/instantclient\"" >> /etc/apache2/envvars
 
-# Restart Apache
+Restart Apache
+------------------------------------------------------------
 service apache2 restart
 
 
 You're done, now you can test your connection to the Oracle database
 
-# PHP CONNECTION EXAMPLE=
-
+PHP CONNECTION EXAMPLE 
+------------------------------------------------------------
 <?php
 // Create connection to Oracle, change HOST IP and SID string!
-$db = "(DESCRIPTION=(ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 000.000.000.000)(PORT = 1521)))(CONNECT_DATA=(SID=XXX)))";
-// Enter here your username (DBUSER) and password!
-$conn = oci_connect("DBUSER", "PASSWORD",$db);
-if (!$conn) {
-   $m = oci_error();
-   echo $m['message']. PHP_EOL;
-   exit;
+
+$server = "";
+$user = "";
+$pass = "";
+$database = "";
+
+
+try {
+    $pdo = new \PDO(
+        sprintf(
+         "dblib:host=%s;dbname=%s",
+         $server,
+         $database
+        ),
+         $user,
+         $pass
+    );
+     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+     echo "There was a problem connecting. " . $e->getMessage();
 }
-else {
-   print "Oracle database connection online". PHP_EOL;
-}
+
+$query = "SELECT * FROM DEBI_DBL";
+$statement = $pdo->prepare($query);
+$statement->execute();
+$results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+var_dump($results);
+
+
 ?>
 
 
-# Open http://docucrm.docu.test/ in your browser.
-
+Open http://docucrm.docu.test/ in your browser.
+------------------------------------------------------------
 [vbox-dl]: https://www.virtualbox.org/wiki/Downloads
 [vagrant-dl]: https://www.vagrantup.com/downloads.html
 
