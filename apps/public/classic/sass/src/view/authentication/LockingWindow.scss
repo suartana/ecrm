@@ -1,0 +1,11 @@
+.auth-locked-window{
+    .x-window-body {
+        background-color: $base-crm-background-color;
+    }
+
+    &.x-window-default {
+        border: none;
+        border-radius: 0;
+        padding: 0;
+    }
+}
