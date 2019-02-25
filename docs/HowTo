@@ -1,0 +1,20 @@
+security:
+encoders:
+    App\Entity\User:
+        algorithm: bcrypt
+providers:
+    user_provider:
+      entity:
+        class: App\Entity\User
+        property: username
+firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      anonymous: ~
+      json_login:
+        check_path: login
+      provider: user_provider
+      logout:
+        path: logout
