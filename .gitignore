@@ -1,6 +1,7 @@
 *.py[co]
 .idea
 .vscode
+.sencha
 .DS_Store
 __MACOSX
 /provisioning/*.retry
