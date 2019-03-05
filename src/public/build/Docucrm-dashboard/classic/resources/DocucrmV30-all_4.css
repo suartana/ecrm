@@ -1,0 +1,1777 @@
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3069 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-bc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-bc {
+    background-image: url(images/btn/btn-wizard-blue-small-focus-pressed-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3077 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-mr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-mr {
+    background-image: url(images/btn/btn-wizard-blue-small-focus-pressed-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3081 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-blue-small-mc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-blue-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3095 */
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-tl,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-bl,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-tr,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-br,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-tc,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-bc {
+    background-image: url(images/btn/btn-wizard-blue-small-disabled-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3103 */
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-ml,
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-mr {
+    background-image: url(images/btn/btn-wizard-blue-small-disabled-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3107 */
+.x-btn.x-btn-disabled .x-btn-wizard-blue-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3117 */
+.x-nbr .x-btn-wizard-blue-small {
+    background-image: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3142 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-first {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3144 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-first .x-btn-wizard-blue-small-mc {
+    padding-right: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3148 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-middle {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3150 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-middle .x-btn-wizard-blue-small-mc {
+    padding-right: 7px !important;
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3156 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-last .x-btn-wizard-blue-small-mc {
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3163 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-first {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3165 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-first .x-btn-wizard-blue-small-mc {
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3169 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-middle {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3171 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-middle .x-btn-wizard-blue-small-mc {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3177 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-last .x-btn-wizard-blue-small-mc {
+    padding-top: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3183 */
+.x-nbr .x-segmented-button-item.x-btn-wizard-blue-small:after {
+    content: ' ';
+    border-style: solid;
+    border-width: 0;
+    position: absolute;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3201 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3207 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-first:after {
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3210 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-blue-small.x-segmented-button-last:after {
+    right: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3216 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3222 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-first:after {
+    top: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3225 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-blue-small.x-segmented-button-last:after {
+    bottom: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3233 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-wizard-blue-small:after {
+    border-width: 1px;
+    border-color: #f2d2cf;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3249 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-wizard-blue-small:after {
+    border-width: 1px;
+    border-color: #eed1ce;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3267 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-wizard-blue-small:after,
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-wizard-blue-small:after {
+    border-width: 1px;
+    border-color: #e5cecb;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-focus-corners.gif), sides:url(images/btn/btn-wizard-blue-small-focus-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-over.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-over-corners.gif), sides:url(images/btn/btn-wizard-blue-small-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-focus-over-corners.gif), sides:url(images/btn/btn-wizard-blue-small-focus-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-pressed.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-pressed-corners.gif), sides:url(images/btn/btn-wizard-blue-small-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-focus-pressed-corners.gif), sides:url(images/btn/btn-wizard-blue-small-focus-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-disabled.x-btn-wizard-blue-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-blue-small-disabled-corners.gif), sides:url(images/btn/btn-wizard-blue-small-disabled-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3294 */
+.x-button-wizard-blue-small-cell > .x-grid-cell-inner {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3299 */
+.x-button-wizard-blue-small-cell > .x-grid-cell-inner >.x-btn-wizard-blue-small {
+    vertical-align: top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-btn-wizard-soft-purple-small {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    border-radius: 0;
+    padding: 7px 7px 7px 7px;
+    border-width: 0;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-btn-wizard-soft-purple-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-btn-wizard-soft-purple-small {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-btn-wizard-soft-purple-small-frameInfo {
+    font-family: th-0-0-0-0-0-0-0-0-7-7-7-7;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-btn-wizard-soft-purple-small-tl {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-btn-wizard-soft-purple-small-tr {
+    background-position: right 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-btn-wizard-soft-purple-small-bl {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-btn-wizard-soft-purple-small-br {
+    background-position: right 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-btn-wizard-soft-purple-small-ml {
+    background-position: 0 top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-btn-wizard-soft-purple-small-mr {
+    background-position: right top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-btn-wizard-soft-purple-small-tc {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-btn-wizard-soft-purple-small-bc {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-btn-wizard-soft-purple-small-tr,
+.x-btn-wizard-soft-purple-small-br,
+.x-btn-wizard-soft-purple-small-mr {
+    padding-right: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-btn-wizard-soft-purple-small-tl,
+.x-btn-wizard-soft-purple-small-bl,
+.x-btn-wizard-soft-purple-small-ml {
+    padding-left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-btn-wizard-soft-purple-small-tc {
+    height: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-btn-wizard-soft-purple-small-bc {
+    height: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-btn-wizard-soft-purple-small-mc {
+    padding: 7px 7px 7px 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:0 0 0 0" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2463 */
+.x-btn-wizard-soft-purple-small {
+    border-color: #e85645;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2470 */
+.x-btn-button-wizard-soft-purple-small {
+    min-height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2475 */
+.x-ie9m .x-btn-button-wizard-soft-purple-small {
+    min-height: auto;
+    height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2482 */
+.x-btn-inner-wizard-soft-purple-small {
+    font: 500 12px/16px 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    color: #606060;
+    padding: 0 5px;
+    max-width: 100%;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2502 */
+.x-ie9 .x-btn-icon-right > .x-btn-inner-wizard-soft-purple-small,
+.x-ie9 .x-btn-icon-left > .x-btn-inner-wizard-soft-purple-small {
+    max-width: calc(100% - 16px);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2510 */
+.x-safari8m .x-btn-icon-right > .x-btn-inner-wizard-soft-purple-small,
+.x-safari8m .x-btn-icon-left > .x-btn-inner-wizard-soft-purple-small {
+    max-width: calc(100% - 15px);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2516 */
+.x-ie10p .x-btn-inner-wizard-soft-purple-small {
+    max-width: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2521 */
+.x-btn-icon-el-wizard-soft-purple-small {
+    font-size: 16px;
+    height: 16px;
+    color: #919191;
+    line-height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2527 */
+.x-btn-icon-left > .x-btn-icon-el-wizard-soft-purple-small,
+.x-btn-icon-right > .x-btn-icon-el-wizard-soft-purple-small {
+    width: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2532 */
+.x-btn-icon-top > .x-btn-icon-el-wizard-soft-purple-small,
+.x-btn-icon-bottom > .x-btn-icon-el-wizard-soft-purple-small {
+    min-width: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2554 */
+.x-ie8 .x-btn-icon-el-wizard-soft-purple-small.x-btn-glyph {
+    color: #919191;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2561 */
+.x-btn-text.x-btn-icon-left > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-right: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2565 */
+.x-btn-text.x-btn-icon-left > .x-btn-icon-el-wizard-soft-purple-small.x-rtl {
+    margin-right: 0;
+    margin-left: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2572 */
+.x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-left: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2576 */
+.x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-purple-small.x-rtl {
+    margin-left: 0;
+    margin-right: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2583 */
+.x-btn-text.x-btn-icon-top > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-bottom: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2587 */
+.x-btn-text.x-btn-icon-bottom > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-top: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2593 */
+.x-btn-arrow-right > .x-btn-icon.x-btn-no-text.x-btn-button-wizard-soft-purple-small {
+    padding-right: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2596 */
+.x-btn-arrow-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-right: 5px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2603 */
+.x-btn-arrow-bottom > .x-btn-button-wizard-soft-purple-small,
+.x-btn-split-bottom > .x-btn-button-wizard-soft-purple-small {
+    padding-bottom: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2609 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-arrow-right:after {
+    width: 18px;
+    content: "\f0d7";
+    font: 16px/1 FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2636 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-arrow-bottom:after {
+    height: 12px;
+    content: "\f0d7";
+    font: 16px/12px FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2663 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-right > .x-btn-button {
+    padding-right: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2666 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-right > .x-btn-button.x-rtl {
+    padding-right: 0;
+    padding-left: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2671 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-right > .x-btn-button:after {
+    border-right: 1px solid #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2676 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-right:after {
+    width: 20px;
+    content: "\f0d7";
+    font: 16px/1 FontAwesome;
+    color: #f0f0f0;
+    padding-left: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2692 */
+.x-btn-wrap-wizard-soft-purple-small.x-rtl.x-btn-split-right:after {
+    padding-left: 0;
+    padding-right: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2702 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-bottom {
+    margin-bottom: -7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2704 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-bottom > .x-btn-button:after {
+    border-bottom: 1px solid #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2715 */
+.x-btn-wrap-wizard-soft-purple-small.x-btn-split-bottom:after {
+    height: 20px;
+    content: "\f0d7";
+    font: 16px/20px FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2748 */
+.x-btn-split-right > .x-btn-icon.x-btn-no-text.x-btn-button-wizard-soft-purple-small {
+    padding-right: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2751 */
+.x-btn-split-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-purple-small {
+    margin-right: 5px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2757 */
+.x-keyboard-mode .x-btn-focus.x-btn-wizard-soft-purple-small {
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2793 */
+.x-btn-wizard-soft-purple-small .x-btn-arrow-el {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 27px;
+    pointer-events: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2802 */
+.x-btn-wizard-soft-purple-small .x-btn-arrow-el.x-rtl {
+    right: inherit;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2810 */
+.x-keyboard-mode .x-btn-wizard-soft-purple-small.x-arrow-focus .x-btn-arrow-el {
+    border: 1px solid #f2d2cf;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2817 */
+.x-btn-over.x-btn-wizard-soft-purple-small {
+    border-color: #d54f3f;
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2874 */
+.x-btn.x-btn-menu-active.x-btn-wizard-soft-purple-small,
+.x-btn.x-btn-pressed.x-btn-wizard-soft-purple-small {
+    border-color: #ae4034;
+    background-image: none;
+    background-color: #925e8b;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2886 */
+.x-btn.x-btn-menu-active.x-btn-wizard-soft-purple-small .x-btn-inner,
+.x-btn.x-btn-pressed.x-btn-wizard-soft-purple-small .x-btn-inner {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2933 */
+.x-btn.x-btn-disabled.x-btn-wizard-soft-purple-small {
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2966 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-tl,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-bl,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-tr,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-br,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-tc,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2974 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-ml,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2978 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-purple-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2991 */
+.x-btn-over .x-btn-wizard-soft-purple-small-tl,
+.x-btn-over .x-btn-wizard-soft-purple-small-bl,
+.x-btn-over .x-btn-wizard-soft-purple-small-tr,
+.x-btn-over .x-btn-wizard-soft-purple-small-br,
+.x-btn-over .x-btn-wizard-soft-purple-small-tc,
+.x-btn-over .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-over-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2999 */
+.x-btn-over .x-btn-wizard-soft-purple-small-ml,
+.x-btn-over .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-over-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3003 */
+.x-btn-over .x-btn-wizard-soft-purple-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3016 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-over-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3024 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-over-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3028 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-purple-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3043 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-tl,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-bl,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-tr,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-br,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-tc,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-bc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-tl,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-bl,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-tr,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-br,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-tc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-pressed-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3051 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-ml,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-mr,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-ml,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-pressed-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3055 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-purple-small-mc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-purple-small-mc {
+    background-color: #925e8b;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3069 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-bc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-pressed-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3077 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-mr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-focus-pressed-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3081 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-purple-small-mc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-purple-small-mc {
+    background-color: #925e8b;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3095 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-tl,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-bl,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-tr,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-br,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-tc,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-disabled-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3103 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-ml,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-purple-small-disabled-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3107 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-purple-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3117 */
+.x-nbr .x-btn-wizard-soft-purple-small {
+    background-image: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3142 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-first {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3144 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-first .x-btn-wizard-soft-purple-small-mc {
+    padding-right: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3148 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-middle {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3150 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-middle .x-btn-wizard-soft-purple-small-mc {
+    padding-right: 7px !important;
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3156 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-last .x-btn-wizard-soft-purple-small-mc {
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3163 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-first {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3165 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-first .x-btn-wizard-soft-purple-small-mc {
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3169 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-middle {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3171 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-middle .x-btn-wizard-soft-purple-small-mc {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3177 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-last .x-btn-wizard-soft-purple-small-mc {
+    padding-top: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3183 */
+.x-nbr .x-segmented-button-item.x-btn-wizard-soft-purple-small:after {
+    content: ' ';
+    border-style: solid;
+    border-width: 0;
+    position: absolute;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3201 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3207 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-first:after {
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3210 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-purple-small.x-segmented-button-last:after {
+    right: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3216 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3222 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-first:after {
+    top: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3225 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-purple-small.x-segmented-button-last:after {
+    bottom: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3233 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-wizard-soft-purple-small:after {
+    border-width: 1px;
+    border-color: #f2d2cf;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3249 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-wizard-soft-purple-small:after {
+    border-width: 1px;
+    border-color: #eed1ce;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3267 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-wizard-soft-purple-small:after,
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-wizard-soft-purple-small:after {
+    border-width: 1px;
+    border-color: #e5cecb;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-focus-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-focus-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-over.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-over-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-focus-over-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-focus-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-pressed.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-pressed-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-focus-pressed-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-focus-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-disabled.x-btn-wizard-soft-purple-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-purple-small-disabled-corners.gif), sides:url(images/btn/btn-wizard-soft-purple-small-disabled-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3294 */
+.x-button-wizard-soft-purple-small-cell > .x-grid-cell-inner {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3299 */
+.x-button-wizard-soft-purple-small-cell > .x-grid-cell-inner >.x-btn-wizard-soft-purple-small {
+    vertical-align: top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-btn-wizard-soft-green-small {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    border-radius: 0;
+    padding: 7px 7px 7px 7px;
+    border-width: 0;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-btn-wizard-soft-green-small {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-btn-wizard-soft-green-small-frameInfo {
+    font-family: th-0-0-0-0-0-0-0-0-7-7-7-7;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-btn-wizard-soft-green-small-tl {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-btn-wizard-soft-green-small-tr {
+    background-position: right 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-btn-wizard-soft-green-small-bl {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-btn-wizard-soft-green-small-br {
+    background-position: right 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-btn-wizard-soft-green-small-ml {
+    background-position: 0 top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-btn-wizard-soft-green-small-mr {
+    background-position: right top;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-btn-wizard-soft-green-small-tc {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-btn-wizard-soft-green-small-bc {
+    background-position: 0 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-btn-wizard-soft-green-small-tr,
+.x-btn-wizard-soft-green-small-br,
+.x-btn-wizard-soft-green-small-mr {
+    padding-right: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-btn-wizard-soft-green-small-tl,
+.x-btn-wizard-soft-green-small-bl,
+.x-btn-wizard-soft-green-small-ml {
+    padding-left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-btn-wizard-soft-green-small-tc {
+    height: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-btn-wizard-soft-green-small-bc {
+    height: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-btn-wizard-soft-green-small-mc {
+    padding: 7px 7px 7px 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:0 0 0 0" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2463 */
+.x-btn-wizard-soft-green-small {
+    border-color: #e85645;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2470 */
+.x-btn-button-wizard-soft-green-small {
+    min-height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2475 */
+.x-ie9m .x-btn-button-wizard-soft-green-small {
+    min-height: auto;
+    height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2482 */
+.x-btn-inner-wizard-soft-green-small {
+    font: 500 12px/16px 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    color: #fff;
+    padding: 0 5px;
+    max-width: 100%;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2502 */
+.x-ie9 .x-btn-icon-right > .x-btn-inner-wizard-soft-green-small,
+.x-ie9 .x-btn-icon-left > .x-btn-inner-wizard-soft-green-small {
+    max-width: calc(100% - 16px);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2510 */
+.x-safari8m .x-btn-icon-right > .x-btn-inner-wizard-soft-green-small,
+.x-safari8m .x-btn-icon-left > .x-btn-inner-wizard-soft-green-small {
+    max-width: calc(100% - 15px);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2516 */
+.x-ie10p .x-btn-inner-wizard-soft-green-small {
+    max-width: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2521 */
+.x-btn-icon-el-wizard-soft-green-small {
+    font-size: 16px;
+    height: 16px;
+    color: #fff;
+    line-height: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2527 */
+.x-btn-icon-left > .x-btn-icon-el-wizard-soft-green-small,
+.x-btn-icon-right > .x-btn-icon-el-wizard-soft-green-small {
+    width: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2532 */
+.x-btn-icon-top > .x-btn-icon-el-wizard-soft-green-small,
+.x-btn-icon-bottom > .x-btn-icon-el-wizard-soft-green-small {
+    min-width: 16px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2554 */
+.x-ie8 .x-btn-icon-el-wizard-soft-green-small.x-btn-glyph {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2561 */
+.x-btn-text.x-btn-icon-left > .x-btn-icon-el-wizard-soft-green-small {
+    margin-right: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2565 */
+.x-btn-text.x-btn-icon-left > .x-btn-icon-el-wizard-soft-green-small.x-rtl {
+    margin-right: 0;
+    margin-left: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2572 */
+.x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-green-small {
+    margin-left: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2576 */
+.x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-green-small.x-rtl {
+    margin-left: 0;
+    margin-right: 3px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2583 */
+.x-btn-text.x-btn-icon-top > .x-btn-icon-el-wizard-soft-green-small {
+    margin-bottom: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2587 */
+.x-btn-text.x-btn-icon-bottom > .x-btn-icon-el-wizard-soft-green-small {
+    margin-top: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2593 */
+.x-btn-arrow-right > .x-btn-icon.x-btn-no-text.x-btn-button-wizard-soft-green-small {
+    padding-right: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2596 */
+.x-btn-arrow-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-green-small {
+    margin-right: 5px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2603 */
+.x-btn-arrow-bottom > .x-btn-button-wizard-soft-green-small,
+.x-btn-split-bottom > .x-btn-button-wizard-soft-green-small {
+    padding-bottom: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2609 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-arrow-right:after {
+    width: 18px;
+    content: "\f0d7";
+    font: 16px/1 FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2636 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-arrow-bottom:after {
+    height: 12px;
+    content: "\f0d7";
+    font: 16px/12px FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2663 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-right > .x-btn-button {
+    padding-right: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2666 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-right > .x-btn-button.x-rtl {
+    padding-right: 0;
+    padding-left: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2671 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-right > .x-btn-button:after {
+    border-right: 1px solid #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2676 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-right:after {
+    width: 20px;
+    content: "\f0d7";
+    font: 16px/1 FontAwesome;
+    color: #f0f0f0;
+    padding-left: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2692 */
+.x-btn-wrap-wizard-soft-green-small.x-rtl.x-btn-split-right:after {
+    padding-left: 0;
+    padding-right: 7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2702 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-bottom {
+    margin-bottom: -7px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2704 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-bottom > .x-btn-button:after {
+    border-bottom: 1px solid #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2715 */
+.x-btn-wrap-wizard-soft-green-small.x-btn-split-bottom:after {
+    height: 20px;
+    content: "\f0d7";
+    font: 16px/20px FontAwesome;
+    color: #f0f0f0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2748 */
+.x-btn-split-right > .x-btn-icon.x-btn-no-text.x-btn-button-wizard-soft-green-small {
+    padding-right: 8px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2751 */
+.x-btn-split-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-wizard-soft-green-small {
+    margin-right: 5px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2757 */
+.x-keyboard-mode .x-btn-focus.x-btn-wizard-soft-green-small {
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2793 */
+.x-btn-wizard-soft-green-small .x-btn-arrow-el {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 27px;
+    pointer-events: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2802 */
+.x-btn-wizard-soft-green-small .x-btn-arrow-el.x-rtl {
+    right: inherit;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2810 */
+.x-keyboard-mode .x-btn-wizard-soft-green-small.x-arrow-focus .x-btn-arrow-el {
+    border: 1px solid #f2d2cf;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2817 */
+.x-btn-over.x-btn-wizard-soft-green-small {
+    border-color: #d54f3f;
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2874 */
+.x-btn.x-btn-menu-active.x-btn-wizard-soft-green-small,
+.x-btn.x-btn-pressed.x-btn-wizard-soft-green-small {
+    border-color: #ae4034;
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2886 */
+.x-btn.x-btn-menu-active.x-btn-wizard-soft-green-small .x-btn-inner,
+.x-btn.x-btn-pressed.x-btn-wizard-soft-green-small .x-btn-inner {
+    color: #404040;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2933 */
+.x-btn.x-btn-disabled.x-btn-wizard-soft-green-small {
+    background-image: none;
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2966 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-tl,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-bl,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-tr,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-br,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-tc,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2974 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-ml,
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2978 */
+.x-keyboard-mode .x-btn-focus .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2991 */
+.x-btn-over .x-btn-wizard-soft-green-small-tl,
+.x-btn-over .x-btn-wizard-soft-green-small-bl,
+.x-btn-over .x-btn-wizard-soft-green-small-tr,
+.x-btn-over .x-btn-wizard-soft-green-small-br,
+.x-btn-over .x-btn-wizard-soft-green-small-tc,
+.x-btn-over .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-over-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:2999 */
+.x-btn-over .x-btn-wizard-soft-green-small-ml,
+.x-btn-over .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-over-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3003 */
+.x-btn-over .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3016 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-over-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3024 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-over-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3028 */
+.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3043 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-tl,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-bl,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-tr,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-br,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-tc,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-bc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-tl,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-bl,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-tr,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-br,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-tc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-pressed-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3051 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-ml,
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-mr,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-ml,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-pressed-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3055 */
+.x-btn.x-btn-menu-active .x-btn-wizard-soft-green-small-mc,
+.x-btn.x-btn-pressed .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3069 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-bc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-tl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-bl,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-tr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-br,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-tc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-pressed-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3077 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-mr,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-ml,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-focus-pressed-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3081 */
+.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-wizard-soft-green-small-mc,
+.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3095 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-tl,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-bl,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-tr,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-br,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-tc,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-bc {
+    background-image: url(images/btn/btn-wizard-soft-green-small-disabled-corners.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3103 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-ml,
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-mr {
+    background-image: url(images/btn/btn-wizard-soft-green-small-disabled-sides.gif);
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3107 */
+.x-btn.x-btn-disabled .x-btn-wizard-soft-green-small-mc {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3117 */
+.x-nbr .x-btn-wizard-soft-green-small {
+    background-image: none;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3142 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-first {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3144 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-first .x-btn-wizard-soft-green-small-mc {
+    padding-right: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3148 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-middle {
+    border-right-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3150 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-middle .x-btn-wizard-soft-green-small-mc {
+    padding-right: 7px !important;
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3156 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-last .x-btn-wizard-soft-green-small-mc {
+    padding-left: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3163 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-first {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3165 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-first .x-btn-wizard-soft-green-small-mc {
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3169 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-middle {
+    border-bottom-width: 0 !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3171 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-middle .x-btn-wizard-soft-green-small-mc {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3177 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-last .x-btn-wizard-soft-green-small-mc {
+    padding-top: 7px !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3183 */
+.x-nbr .x-segmented-button-item.x-btn-wizard-soft-green-small:after {
+    content: ' ';
+    border-style: solid;
+    border-width: 0;
+    position: absolute;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3201 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3207 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-first:after {
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3210 */
+.x-nbr .x-segmented-button-item-horizontal.x-btn-wizard-soft-green-small.x-segmented-button-last:after {
+    right: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3216 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small:after {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3222 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-first:after {
+    top: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3225 */
+.x-nbr .x-segmented-button-item-vertical.x-btn-wizard-soft-green-small.x-segmented-button-last:after {
+    bottom: 0;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3233 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-wizard-soft-green-small:after {
+    border-width: 1px;
+    border-color: #f2d2cf;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3249 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-wizard-soft-green-small:after {
+    border-width: 1px;
+    border-color: #eed1ce;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3267 */
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-wizard-soft-green-small:after,
+.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-wizard-soft-green-small:after {
+    border-width: 1px;
+    border-color: #e5cecb;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-focus-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-focus-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-over.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-over-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-focus-over-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-focus-over-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-pressed.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-pressed-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-focus-pressed-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-focus-pressed-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-btn-disabled.x-btn-wizard-soft-green-small:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom, frame:1px 1px 1px 1px, corners:url(images/btn/btn-wizard-soft-green-small-disabled-corners.gif), sides:url(images/btn/btn-wizard-soft-green-small-disabled-sides.gif)" !important;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3294 */
+.x-button-wizard-soft-green-small-cell > .x-grid-cell-inner {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+/* /var/www/html/docucrm30/ext/classic/theme-neutral/sass/var/button/Button.scss:3299 */
+.x-button-wizard-soft-green-small-cell > .x-grid-cell-inner >.x-btn-wizard-soft-green-small {
+    vertical-align: top;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/forms/Wizards.scss:43 */
+.x-btn-pressed .x-btn-icon-el-wizard-blue-small {
+    color: #579ddb;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/forms/Wizards.scss:48 */
+.x-btn-pressed.x-btn-disabled.x-btn-wizard-soft-purple-small,
+.x-btn-pressed.x-btn-disabled .x-btn-wizard-soft-purple-small-mc {
+    background-color: #925e8b;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/forms/Wizards.scss:54 */
+.x-btn-pressed .x-btn-icon-el-wizard-soft-purple-small {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/forms/Wizards.scss:58 */
+.x-btn-pressed .x-btn-icon-el-wizard-soft-green-small {
+    color: #404040;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/BlankPage.scss:1 */
+.blank-page-container {
+    text-align: center;
+    color: #cacaca;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/BlankPage.scss:4 */
+.blank-page-container .fa-outer-class {
+    margin: auto;
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    background-color: #ebebeb;
+    text-align: center;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/BlankPage.scss:11 */
+.blank-page-container .fa-outer-class .x-fa:before {
+    line-height: 150px;
+    font-size: 80px;
+    color: #cacaca;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/BlankPage.scss:17 */
+.blank-page-container h1 {
+    margin: 5px;
+    line-height: 30px;
+    font-weight: normal;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:2 */
+.error-page-container .error-page-inner-container {
+    margin-top: -50px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:5 */
+.error-page-container .x-window-body-default {
+    background-image: url('images/error-page-background.jpg');
+    background-size: cover;
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:11 */
+.error-page-container.x-window-default {
+    border: none;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:14 */
+.error-page-container .error-page-top-text {
+    font-size: 150px;
+    line-height: 150px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:18 */
+.error-page-container .error-page-bottom-text {
+    font-size: 18px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:21 */
+.error-page-container .error-page-desc {
+    line-height: 24px;
+    text-align: center;
+    font-size: 18px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:25 */
+.error-page-container .error-page-desc a {
+    color: #f95c4a;
+    text-decoration: none;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/Error404Window.scss:28 */
+.error-page-container .error-page-desc a:hover {
+    text-decoration: underline;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:4 */
+.pages-faq-container .x-header.x-panel-header-light {
+    border-bottom: 1px solid #ddd !important;
+    padding: 15px 16px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:7 */
+.pages-faq-container .x-header.x-panel-header-light .x-panel-header-title-light {
+    color: #404040;
+    font-size: 14px;
+    font-family: "Open Sans";
+    font-weight: Bold;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:15 */
+.pages-faq-container .x-header .x-fa {
+    line-height: 16px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:18 */
+.pages-faq-container .x-header .x-tool-after-title .x-tool-img {
+    display: none;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:22 */
+.pages-faq-container .x-accordion-body {
+    padding-left: 34px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:25 */
+.pages-faq-container .round-btn {
+    background-color: #f95c4a;
+    border-color: #f95c4a !important;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:4 */
+.pages-faq-container .round-btn .x-btn-inner-default-toolbar-small {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:7 */
+.pages-faq-container .round-btn:hover {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:8 */
+.pages-faq-container .round-btn:hover .x-btn-inner-default-toolbar-small,
+.pages-faq-container .round-btn:hover .x-btn-inner-default-small {
+    color: #f95c4a;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:11 */
+.pages-faq-container .round-btn:hover .x-btn-icon-el-default-small,
+.pages-faq-container .round-btn:hover .x-btn-icon-el-default-toolbar-small {
+    color: #f95c4a;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:30 */
+.pages-faq-container .x-accordion-hd .x-title-icon {
+    color: #404040 !important;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:34 */
+.pages-faq-container .x-accordion-hd.x-collapsed .x-title-icon:before {
+    content: "\f0da" !important;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:41 */
+.faq-left-sidebar .x-fa {
+    font-size: 16px;
+    margin-right: 10px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:45 */
+.faq-left-sidebar .faq-tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:49 */
+.faq-left-sidebar .faq-tips-list li {
+    margin: 15px 0;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:51 */
+.faq-left-sidebar .faq-tips-list li:before {
+    font-family: FontAwesome;
+    content: "\f111";
+    padding-right: 10px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:56 */
+.faq-left-sidebar .faq-tips-list li.pointone:before {
+    color: #56b650;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:59 */
+.faq-left-sidebar .faq-tips-list li.pointtwo:before {
+    color: #ffc037;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:62 */
+.faq-left-sidebar .faq-tips-list li.pointthree:before {
+    color: #e55149;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:65 */
+.faq-left-sidebar .faq-tips-list li.pointfour:before {
+    color: #a97fe3;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:71 */
+.faq-left-sidebar .borderCls {
+    border-bottom: 1px solid #ddd;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/pages/FAQ.scss:76 */
+.FAQPanel .x-title-text-default {
+    font-size: 16px;
+    font-weight: normal;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:2 */
+.allRecordsCls .x-grid-cell-inner {
+    padding: 15px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:4 */
+.allRecordsCls .x-grid-cell-inner div {
+    white-space: normal;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:7 */
+.allRecordsCls .x-grid-cell-inner .resultsTitleCls {
+    font-size: 14px;
+    color: #333;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:11 */
+.allRecordsCls .x-grid-cell-inner .resultsUrlCls a {
+    color: #f95c4a;
+    text-decoration: none;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:14 */
+.allRecordsCls .x-grid-cell-inner .resultsUrlCls a:hover {
+    text-decoration: underline;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:18 */
+.allRecordsCls .x-grid-cell-inner .imageRowCls img {
+    margin-right: 15px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:24 */
+.user-grid .x-grid-td {
+    vertical-align: middle;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:26 */
+.user-grid .x-grid-td img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:30 */
+.user-grid .x-grid-body {
+    border-width: 1px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/search/Results.scss:34 */
+.x-action-col-icon {
+    font-size: 13px !important;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:1 */
+.widget-top-first-container {
+    background-color: #468fd3;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:4 */
+.widget-bottom-first-container {
+    background-color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:7 */
+.postion-class {
+    position: relative;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:10 */
+.widget-name-text {
+    font-family: "Open Sans";
+    font-weight: Bold;
+    font-size: 16px;
+    line-height: 16px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:17 */
+.widget-tool-button .widget-follow-button,
+.widget-tool-button .widget-follow-button .x-frame-mc {
+    background-color: #82c748;
+    border-color: #82c748 !important;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:4 */
+.widget-tool-button .widget-follow-button .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-follow-button .x-frame-mc .x-btn-inner-default-toolbar-small {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:7 */
+.widget-tool-button .widget-follow-button:hover,
+.widget-tool-button .widget-follow-button .x-frame-mc:hover {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:8 */
+.widget-tool-button .widget-follow-button:hover .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-follow-button:hover .x-btn-inner-default-small,
+.widget-tool-button .widget-follow-button .x-frame-mc:hover .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-follow-button .x-frame-mc:hover .x-btn-inner-default-small {
+    color: #82c748;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:11 */
+.widget-tool-button .widget-follow-button:hover .x-btn-icon-el-default-small,
+.widget-tool-button .widget-follow-button:hover .x-btn-icon-el-default-toolbar-small,
+.widget-tool-button .widget-follow-button .x-frame-mc:hover .x-btn-icon-el-default-small,
+.widget-tool-button .widget-follow-button .x-frame-mc:hover .x-btn-icon-el-default-toolbar-small {
+    color: #82c748;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:20 */
+.widget-tool-button .widget-message-button,
+.widget-tool-button .widget-message-button .x-frame-mc {
+    background-color: #f95c4a;
+    border-color: #f95c4a !important;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:4 */
+.widget-tool-button .widget-message-button .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-message-button .x-frame-mc .x-btn-inner-default-toolbar-small {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:7 */
+.widget-tool-button .widget-message-button:hover,
+.widget-tool-button .widget-message-button .x-frame-mc:hover {
+    background-color: transparent;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:8 */
+.widget-tool-button .widget-message-button:hover .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-message-button:hover .x-btn-inner-default-small,
+.widget-tool-button .widget-message-button .x-frame-mc:hover .x-btn-inner-default-toolbar-small,
+.widget-tool-button .widget-message-button .x-frame-mc:hover .x-btn-inner-default-small {
+    color: #f95c4a;
+}
+/* /var/www/html/docucrm30/classic/sass/etc/all.scss:11 */
+.widget-tool-button .widget-message-button:hover .x-btn-icon-el-default-small,
+.widget-tool-button .widget-message-button:hover .x-btn-icon-el-default-toolbar-small,
+.widget-tool-button .widget-message-button .x-frame-mc:hover .x-btn-icon-el-default-small,
+.widget-tool-button .widget-message-button .x-frame-mc:hover .x-btn-icon-el-default-toolbar-small {
+    color: #f95c4a;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:23 */
+.widget-tool-button .x-btn-inner-default-toolbar-small {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:27 */
+.widget-top-container-first-img {
+    position: absolute;
+    z-index: 200;
+    margin-top: 94px;
+    border: 3px solid #fff;
+    -webkit-border-radius: 36px;
+    -moz-border-radius: 36px;
+    -ms-border-radius: 36px;
+    border-radius: 36px;
+    left: 50%;
+    margin-left: -33px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:36 */
+.widget-top-second-container {
+    background-color: #8dc153;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:39 */
+.widget-top-first-third-container {
+    background-color: #607d8b;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:43 */
+.widget-top-first-fourth-container {
+    background: url('images/img2.jpg');
+    background-size: 100% auto;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:47 */
+.widget-top-second-panel .x-fa {
+    color: #fff;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:51 */
+.widget-follower-toolbar {
+    background-color: #fafafa;
+    font-size: 12px;
+    padding: 0;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:58 */
+.widget-follower-toolbar .x-form-display-field {
+    font-size: 13px;
+    color: #333;
+    font-family: "Open Sans";
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:63 */
+.widget-follower-toolbar .x-form-display-field .label {
+    color: #404040;
+    font-size: 12px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:68 */
+.widget-follower-toolbar .widget-follower-tool-label {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:74 */
+.info-card-item {
+    text-align: center;
+    background: #fff;
+    padding: 45px 10px !important;
+    font-size: 24px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:81 */
+.info-card-item.info-card-large-wrap h2 {
+    font-size: 48px;
+    line-height: 48px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:85 */
+.info-card-item.info-card-large-wrap span.x-fa {
+    height: 75px;
+    width: 75px;
+    border-radius: 38px;
+    color: #fff;
+    font-size: 30px;
+    line-height: 75px;
+    margin: 15px 0;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:94 */
+.info-card-item.info-card-large-wrap span.x-fa.fa-shopping-cart {
+    background-color: #458fd2;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:97 */
+.info-card-item.info-card-large-wrap span.x-fa.fa-envelope {
+    background-color: #4caf50;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:100 */
+.info-card-item.info-card-large-wrap span.x-fa.fa-code {
+    background-color: #9c27b0;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:103 */
+.info-card-item.info-card-large-wrap span.x-fa.fa-file-text {
+    background-color: #e91e63;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:107 */
+.info-card-item.info-card-large-wrap .infodiv {
+    font-size: 14px;
+    line-height: 16px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:112 */
+.info-card-item.cornflower-blue:before {
+    background: #458fd2;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:115 */
+.info-card-item.green:before {
+    background: #4caf50;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:118 */
+.info-card-item.magenta:before {
+    background: #9c27b0;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:121 */
+.info-card-item.pink:before {
+    background: #e91e63;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:124 */
+.info-card-item.orange:before {
+    background: #ffc107;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:127 */
+.info-card-item.blue:before {
+    background: #673ab7;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:130 */
+.info-card-item h2 {
+    font-size: 30px;
+    font-weight: normal;
+    margin: 0;
+    margin: 0;
+    line-height: 32px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:137 */
+.info-card-item div {
+    line-height: 24px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:140 */
+.info-card-item span {
+    font-size: 24px;
+    line-height: 24px;
+}
+/* /var/www/html/docucrm30/classic/sass/src/view/widgets/Widgets.scss:146 */
+.info-card-item:before {
+    width: 100%;
+    position: absolute;
+    height: 3px;
+    content: "";
+    top: 0;
+    left: 0;
+}
