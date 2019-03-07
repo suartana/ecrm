@@ -226,3 +226,32 @@ Open http://docucrm.docu.test/ in your browser.
 [vagrant-dl]: https://www.vagrantup.com/downloads.html
 
 
+
+## Apache2 Config
+
+
+<VirtualHost *:80>
+
+    ServerName docucrm.docu.test
+    ServerAlias docucrm.docu.test
+
+    DocumentRoot /vagrant/src/servers/public/
+    #create alias for the client files
+    #AliasMatch (.*\.(png|ico|gif|jpg|jpeg|js|css|woff|ttf|svg))$ /my-location/$1
+    AliasMatch (.*\.(png|ico|gif|jpg|jpeg|js|css|woff|ttf|svg|json|woff2))$ /vagrant/src/clients/$1
+    #clients side folders
+    <Directory /vagrant/src/clients/>
+         Require all granted
+    </Directory>
+    #server side folders
+    <Directory /vagrant/src/servers/public/>
+         Options Indexes FollowSymLinks MultiViews
+         AllowOverride all
+         Allow from All
+         Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/docucrm_error.log
+    CustomLog /var/log/apache2/docucrm_access.log combined
+
+</VirtualHost>
