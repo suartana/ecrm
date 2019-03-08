@@ -3,3 +3,4 @@ Ext.define('Ext.theme.touchsizing.grid.plugin.RowExpander', {
     
     headerWidth: 32
 });
+

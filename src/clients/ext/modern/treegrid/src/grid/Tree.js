@@ -97,7 +97,8 @@ Ext.define('Ext.grid.Tree', {
 
     /**
      * @event nodecollapse
-     * Fires after an row has been visually collapsed and its child nodes are no longer visible in the tree.
+     * Fires after an row has been visually collapsed and its child nodes are no longer
+     * visible in the tree.
      * @param {Ext.grid.Row} node                   The row that was collapsed
      * @param {Ext.data.NodeInterface} record       The record that was collapsed
      */
@@ -106,7 +107,7 @@ Ext.define('Ext.grid.Tree', {
 
         /**
          * @cfg {Boolean} expanderFirst
-         * `true` to display the expander to the left of the item text.  
+         * `true` to display the expander to the left of the item text.
          * `false` to display the expander to the right of the item text.
          */
         expanderFirst: true,
@@ -141,7 +142,7 @@ Ext.define('Ext.grid.Tree', {
         columns: false, // Non-null to force running the applier.
 
         rowLines: false,
-        
+
         /**
          * @cfg {Boolean} [folderSort=false]
          * True to automatically prepend a leaf sorter to the store.
@@ -160,8 +161,10 @@ Ext.define('Ext.grid.Tree', {
                 dataIndex: this.getDisplayField(),
                 minWidth: 100,
                 flex: 1
-            }];
+            }
+            ];
         }
+
         return columns;
     },
 
@@ -172,11 +175,12 @@ Ext.define('Ext.grid.Tree', {
         if (oldRoot) {
             delete oldRoot.fireEventArgs;
         }
-        
+
         // We take over from event firing so we can relay.
         // Cannot use Function.createSequence. That does not return the return values
         if (newRoot) {
             fireEventArgs = newRoot.fireEventArgs;
+
             newRoot.fireEventArgs = function(eventName) {
                 // Fire on the original firer
                 var ret = fireEventArgs.apply(newRoot, arguments);
@@ -186,19 +190,20 @@ Ext.define('Ext.grid.Tree', {
                     arguments[0] = me.rootEventsMap[eventName] || ('item' + eventName);
                     ret = me.fireEventArgs.apply(me, arguments);
                 }
+
                 return ret;
             };
         }
     },
 
-    updateExpanderFirst: function (expanderFirst) {
+    updateExpanderFirst: function(expanderFirst) {
         var el = this.element;
 
         el.toggleCls(this.expanderFirstCls, expanderFirst);
         el.toggleCls(this.expanderLastCls, !expanderFirst);
     },
 
-    updateExpanderOnly: function (expanderOnly) {
+    updateExpanderOnly: function(expanderOnly) {
         var el = this.element;
 
         el.toggleCls(this.expanderOnlyCls, expanderOnly);
@@ -206,10 +211,11 @@ Ext.define('Ext.grid.Tree', {
     },
 
     /**
-     * Sets root node of this tree. All trees *always* have a root node. It may be {@link #rootVisible hidden}.
+     * Sets root node of this tree. All trees *always* have a root node. It may be
+     * {@link #rootVisible hidden}.
      *
-     * If the passed node has not already been loaded with child nodes, and has its expanded field set, this triggers
-     * the {@link #cfg-store} to load the child nodes of the root.
+     * If the passed node has not already been loaded with child nodes, and has its expanded field
+     * set, this triggers the {@link #cfg-store} to load the child nodes of the root.
      * @param {Ext.data.TreeModel/Object} root
      * @return {Ext.data.TreeModel} The new root
      */
@@ -227,10 +233,11 @@ Ext.define('Ext.grid.Tree', {
      */
     getRootNode: function() {
         var store = this.getStore();
+
         return store ? store.getRoot() : null;
     },
 
-    
+
     /**
      * Expands a record that is loaded in the tree.
      * @param {Ext.data.Model} record The record to expand
@@ -281,11 +288,14 @@ Ext.define('Ext.grid.Tree', {
         if (root) {
             Ext.suspendLayouts();
             scope = scope || me;
+
             if (me.getStore().rootVisible) {
                 root.collapse(true, callback, scope);
-            } else {
+            }
+            else {
                 root.collapseChildren(true, callback, scope);
             }
+
             Ext.resumeLayouts(true);
         }
     },
@@ -303,7 +313,9 @@ Ext.define('Ext.grid.Tree', {
         doChildTouchStart: function(location) {
             var cell = location.cell;
 
-            if (cell && (!cell.isTreeCell || this.getSelectOnExpander() || location.event.target !== cell.expanderElement.dom)) {
+            if (cell && (!cell.isTreeCell ||
+                this.getSelectOnExpander() ||
+                location.event.target !== cell.expanderElement.dom)) {
                 this.callParent([location]);
             }
         },
@@ -319,30 +331,36 @@ Ext.define('Ext.grid.Tree', {
 
             if (newStore) {
                 me.store = newStore;
+                newRoot = newStore.getRoot();
 
                 // If there is no root node defined, then create one.
                 // Ensure a first onRootChange is called so we can hook into the event firing
-                if (newRoot = newStore.getRoot()) {
+                if (newRoot) {
                     me.onRootChange(newRoot);
-                } else {
+                }
+                else {
                     newStore.setRoot(me.getRoot());
                     newRoot = newStore.getRoot();
                 }
 
-                // Store must have the same idea about root visibility as us before callParent binds it.
+                // Store must have the same idea about root visibility as us before callParent
+                // binds it.
                 if (!('rootVisible' in newStore.initialConfig)) {
                     newStore.setRootVisible(me.getRootVisible());
                 }
-                // TreeStore must have an upward link to the TreePanel so that nodes can find their owning tree in NodeInterface.getOwnerTree
-                // TODO: NodeInterface.getOwnerTree is deprecated. Data class must not be coupled to UI. Remove this link
-                // when that method is removed.
+
+                // TreeStore must have an upward link to the TreePanel so that nodes can find their
+                // owning tree in NodeInterface.getOwnerTree
+                // TODO: NodeInterface.getOwnerTree is deprecated. Data class must not be coupled
+                // to UI. Remove this link when that method is removed.
                 newStore.ownerTree = me;
 
                 me.callParent([newStore, oldStore]);
 
                 newStore.folderSort = me.getFolderSort();
 
-                // Monitor the TreeStore for the root node being changed. Return a Destroyable object
+                // Monitor the TreeStore for the root node being changed. Return a Destroyable
+                // object
                 me.storeListeners = me.mon(newStore, {
                     destroyable: true,
                     rootchange: me.onRootChange,
@@ -368,9 +386,13 @@ Ext.define('Ext.grid.Tree', {
                 // If store is autoLoad, that will already have been kicked off.
                 // If its already expanded, or in the process of loading, the TreeStore
                 // has started that at the end of updateRoot
-                if (!newStore.rootVisible && !newStore.autoLoad && !(newRoot.isExpanded() || newRoot.isLoading())) {
+                if (!newStore.rootVisible &&
+                    !newStore.autoLoad &&
+                    !(newRoot.isExpanded() ||
+                        newRoot.isLoading())) {
                     // A hidden root must be expanded, unless it's overridden with autoLoad: false.
-                    // If it's loaded, set its expanded field (silently), and skip ahead to the onNodeExpand callback.
+                    // If it's loaded, set its expanded field (silently), and skip ahead to the
+                    // onNodeExpand callback.
                     if (newRoot.isLoaded()) {
                         newRoot.data.expanded = true;
                         newStore.onNodeExpand(newRoot, newRoot.childNodes);

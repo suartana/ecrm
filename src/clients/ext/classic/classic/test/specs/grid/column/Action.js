@@ -9,9 +9,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+
             return this;
         };
     
@@ -32,7 +34,9 @@ function() {
     
     function triggerAction(type, row, colIdx) {
         var cell = getCell(row || 0, colIdx || 1);
+
         jasmine.fireMouseEvent(cell.querySelector('.' + Ext.grid.column.Action.prototype.actionIconCls), type || 'click');
+
         return cell;
     }
 
@@ -57,7 +61,7 @@ function() {
                 header: 'Action',
                 renderer: Ext.emptyFn,
                 items: [{
-                    handler: actionHandler|| Ext.emptyFn,
+                    handler: actionHandler || Ext.emptyFn,
                     isActionDisabled: Ext.emptyFn
                 }]
             }],
@@ -153,7 +157,7 @@ function() {
                 return msgBox.isVisible() === true && msgBox.containsFocus;
             }, 'message box to show and focus');
 
-            runs(function () {
+            runs(function() {
                 expect(Ext.getCmp(msgBox.id)).toBe(msgBox);
 
                 // Hide the message box
@@ -192,7 +196,7 @@ function() {
                     renderer: Ext.emptyFn,
                     items: [{
                         iconCls: 'x-fa fa-cog',
-                        getTip: function (value, metadata, record) {
+                        getTip: function(value, metadata, record) {
                             return record.get('tip');
                         }
                     }]
@@ -204,7 +208,7 @@ function() {
                 }]
             });
 
-            expect(getActionItem(0,1).getAttribute('data-qtip')).toBe('<b>foo</b>');
+            expect(getActionItem(0, 1).getAttribute('data-qtip')).toBe('<b>foo</b>');
         });
 
         it("should not render encoded html as html", function() {
@@ -218,7 +222,7 @@ function() {
                     header: 'Action',
                     items: [{
                         iconCls: 'x-fa fa-cog',
-                        getTip: function (value, metadata, record) {
+                        getTip: function(value, metadata, record) {
                             return record.get('tip');
                         }
                     }]
@@ -230,14 +234,14 @@ function() {
                 }]
             });
 
-            expect(getActionItem(0,1).getAttribute('data-qtip')).toBe('&lt;b&gt;foo&lt;/b&gt;');
+            expect(getActionItem(0, 1).getAttribute('data-qtip')).toBe('&lt;b&gt;foo&lt;/b&gt;');
         });
     });
 
-    describe('events', function () {
+    describe('events', function() {
         var handled = false;
 
-        beforeEach(function () {
+        beforeEach(function() {
             makeGrid({
                 columns: [{
                     dataIndex: 'text',
@@ -247,7 +251,7 @@ function() {
                     dataIndex: 'actionCls',
                     header: 'Action',
                     items: [{
-                        handler: function () {
+                        handler: function() {
                             handled = true;
                         }
                     }]
@@ -255,16 +259,16 @@ function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             handled = false;
         });
 
-        it('should process click events', function () {
+        it('should process click events', function() {
             triggerAction('click');
             expect(handled).toBe(true);
         });
 
-        it('should not process mousedown events', function () {
+        it('should not process mousedown events', function() {
             triggerAction('mousedown');
             expect(handled).toBe(false);
             triggerAction('mouseup');
@@ -283,6 +287,7 @@ function() {
             }]
         });
         var columns = grid.query('gridcolumn');
+
         expect(columns[0].sortable).toBe(true);
         expect(columns[1].sortable).toBe(false);
     });
@@ -313,8 +318,8 @@ function() {
         });
     });
 
-    describe('focus', function () {
-        it('should not select and focus the row when clicking the action item', function () {
+    describe('focus', function() {
+        it('should not select and focus the row when clicking the action item', function() {
             // See EXTJSIV-11177.
             var cell;
 
@@ -367,7 +372,8 @@ function() {
             // Touch events do not cause actionable mode
             if (isTouch) {
                 expect(pos).not.toBeDefined();
-            } else {
+            }
+            else {
                 expect(pos.record).toBe(store.first());
                 expect(pos.column).toBe(grid.down('actioncolumn'));
             }
@@ -376,6 +382,7 @@ function() {
     
     describe("handler", function() {
         var spy1, spy2, col, scope1, scope2;
+
         function makeHandlerGrid(actionCfg) {
             actionCfg = Ext.apply({
                 xtype: 'actioncolumn',
@@ -459,7 +466,7 @@ function() {
                     handler: spy1,
                     items: [{
                         disabled: true,
-                        iconCls : 'icon-pencil'
+                        iconCls: 'icon-pencil'
                     }]
                 });
 
@@ -478,7 +485,7 @@ function() {
                     handler: spy1,
                     items: [{
                         disabled: true,
-                        iconCls : 'icon-pencil'
+                        iconCls: 'icon-pencil'
                     }]
                 });
 
@@ -678,6 +685,7 @@ function() {
                     col.resolveListenerScope = function() {
                         return scope2;
                     };
+
                     triggerAction();
                     expect(scope2.foo).toHaveBeenCalled();
                 });
@@ -690,6 +698,7 @@ function() {
             });
             triggerAction();
             var args = spy1.mostRecentCall.args;
+
             expect(args[0]).toBe(grid.getView());
             expect(args[1]).toBe(0);
             expect(args[2]).toBe(1);
@@ -752,11 +761,11 @@ function() {
         });
     });
 
-    describe('callbacks', function () {
-        describe('when the model is updated', function () {
-            describe('renderers', function () {
+    describe('callbacks', function() {
+        describe('when the model is updated', function() {
+            describe('renderers', function() {
                 function runTest(method) {
-                    it('should call ' + method, function () {
+                    it('should call ' + method, function() {
                         makeGrid();
                         spyOn(actionColumn, method).andCallThrough();
                         store.getAt(0).set('text', 'Kilgore Trout');
@@ -769,8 +778,8 @@ function() {
                 runTest('defaultRenderer');
             });
 
-            describe('isActionDisabled on items', function () {
-                it('should call isActionDisabled', function () {
+            describe('isActionDisabled on items', function() {
+                it('should call isActionDisabled', function() {
                     var item;
 
                     makeGrid();

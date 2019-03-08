@@ -19,7 +19,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
     });
 
     it("should be registered with the 'checkboxfield' xtype", function() {
-        component = Ext.create("Ext.form.field.Checkbox", {name: 'test'});
+        component = Ext.create("Ext.form.field.Checkbox", { name: 'test' });
         expect(component instanceof Ext.form.field.Checkbox).toBe(true);
         expect(Ext.getClass(component).xtype).toBe("checkboxfield");
     });
@@ -28,9 +28,9 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
         it("should accept a value config", function() {
             makeComponent({
                 value: true
-            });    
+            });
             expect(component.checked).toBe(true);
-        });  
+        });
     });
 
     describe("rendering", function() {
@@ -38,7 +38,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
 
         describe("bodyEl", function() {
             beforeEach(function() {
-                makeComponent({value: 'foo'});
+                makeComponent({ value: 'foo' });
             });
 
             it("should exist", function() {
@@ -56,7 +56,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
 
         describe("inputEl (checkbox element)", function() {
             beforeEach(function() {
-                makeComponent({value: 'foo'});
+                makeComponent({ value: 'foo' });
             });
 
             it("should exist", function() {
@@ -110,58 +110,58 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
             });
 
             it("should be created if the boxLabel config is defined", function() {
-                makeComponent({boxLabel: 'the box label'});
+                makeComponent({ boxLabel: 'the box label' });
                 expect(component.bodyEl.down('label')).not.toBeNull();
             });
 
             it("should be stored as a 'boxLabelEl' reference", function() {
-                makeComponent({boxLabel: 'the box label'});
+                makeComponent({ boxLabel: 'the box label' });
                 expect(component.bodyEl.down('label').dom).toBe(component.boxLabelEl.dom);
             });
 
             it("should have the class 'x-form-cb-label' by default", function() {
-                makeComponent({boxLabel: 'the box label'});
+                makeComponent({ boxLabel: 'the box label' });
                 expect(component.boxLabelEl.hasCls('x-form-cb-label')).toBe(true);
             });
 
             it("should be given the configured boxLabelCls", function() {
-                makeComponent({boxLabel: 'the box label', boxLabelCls: 'my-custom-boxLabelCls'});
+                makeComponent({ boxLabel: 'the box label', boxLabelCls: 'my-custom-boxLabelCls' });
                 expect(component.boxLabelEl.hasCls('my-custom-boxLabelCls')).toBe(true);
             });
 
             it("should have a 'for' attribute set to the inputId", function() {
-                makeComponent({boxLabel: 'the box label'});
+                makeComponent({ boxLabel: 'the box label' });
                 expect(component.boxLabelEl.getAttribute('for')).toEqual(component.inputId);
             });
 
             it("should contain the boxLabel as its inner text node", function() {
-                makeComponent({boxLabel: 'the box label'});
+                makeComponent({ boxLabel: 'the box label' });
                 expect(component.boxLabelEl.dom).hasHTML('the box label');
             });
 
             describe('boxLabelAlign', function() {
                 it("should render the label after the checkbox by default", function() {
-                    makeComponent({boxLabel: 'the box label'});
+                    makeComponent({ boxLabel: 'the box label' });
                     expect(component.boxLabelEl.prev()).toBe(component.displayEl);
                 });
                 
                 it("should render the label after the checkbox when boxLabelAlign='after'", function() {
-                    makeComponent({boxLabel: 'the box label', boxLabelAlign: 'after'});
+                    makeComponent({ boxLabel: 'the box label', boxLabelAlign: 'after' });
                     expect(component.boxLabelEl.prev()).toBe(component.displayEl);
                 });
                 
                 it("should give the 'after' label a class of {boxLabelCls}-after", function() {
-                    makeComponent({boxLabel: 'the box label', boxLabelAlign: 'after'});
+                    makeComponent({ boxLabel: 'the box label', boxLabelAlign: 'after' });
                     expect(component.boxLabelEl.hasCls(component.boxLabelCls + '-after')).toBe(true);
                 });
                 
                 it("should render the label before the checkbox when boxLabelAlign='before'", function() {
-                    makeComponent({boxLabel: 'the box label', boxLabelAlign: 'before'});
+                    makeComponent({ boxLabel: 'the box label', boxLabelAlign: 'before' });
                     expect(component.boxLabelEl.next()).toBe(component.displayEl);
                 });
                 
                 it("should give the 'before' label a class of {boxLabelCls}-before", function() {
-                    makeComponent({boxLabel: 'the box label', boxLabelAlign: 'before'});
+                    makeComponent({ boxLabel: 'the box label', boxLabelAlign: 'before' });
                     expect(component.boxLabelEl.hasCls(component.boxLabelCls + '-before')).toBe(true);
                 });
             });
@@ -382,7 +382,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
             });
         });
         
-        describe("handler", function () {
+        describe("handler", function() {
             var spy, scope;
             
             beforeEach(function() {
@@ -420,7 +420,9 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
     
             it("should allow the handler to route to a view controller", function() {
                 var ctrl = new Ext.app.ViewController();
+
                 ctrl.someMethod = function() {};
+
                 spyOn(ctrl, 'someMethod');
     
                 var ct = new Ext.container.Container({
@@ -486,7 +488,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
                 inputValue: 'the-input-value',
                 checked: true
             });
-            expect(component.getSubmitData()).toEqual({'cb-name': 'the-input-value'});
+            expect(component.getSubmitData()).toEqual({ 'cb-name': 'the-input-value' });
         });
 
         it("should submit nothing when unchecked", function() {
@@ -505,7 +507,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
                 uncheckedValue: 'the-unchecked-value',
                 checked: false
             });
-            expect(component.getSubmitData()).toEqual({'cb-name': 'the-unchecked-value'});
+            expect(component.getSubmitData()).toEqual({ 'cb-name': 'the-unchecked-value' });
         });
     });
 
@@ -555,6 +557,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
         // Synthetic click events do not cause default action in IE8/9 :(
         (Ext.isIE9m ? xit : it)("should be able to fire the change event when checking after calling setRawValue", function() {
             var val;
+
             makeComponent();
             component.setRawValue(true);
             component.on('change', function(arg1, arg2) {
@@ -562,7 +565,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
             });
             jasmine.fireMouseEvent(component.inputEl.dom, 'click');
             expect(val).toBe(false);
-        });  
+        });
         
         it("should be dirty after calling setRawValue", function() {
             makeComponent();
@@ -750,6 +753,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
                         liquidLayout: false // Use false so layouts run
                     });
                     var count = component.componentLayoutCounter;
+
                     component.setBoxLabel('');
                     expect(component.getWidth()).toBe(boxOnlyWidth);
                     expect(component.componentLayoutCounter).toBe(count + 1);
@@ -761,6 +765,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
                         liquidLayout: false // Use false so layouts run
                     });
                     var count = component.componentLayoutCounter;
+
                     component.setBoxLabel(label);
                     expect(component.getWidth()).toBe(withLabelWidth);
                     expect(component.componentLayoutCounter).toBe(count + 1);
@@ -773,6 +778,7 @@ topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
                         liquidLayout: false // Use false so layouts run
                     });
                     var count = component.componentLayoutCounter;
+
                     component.setBoxLabel(label);
                     expect(component.getWidth()).toBe(withLabelWidth);
                     expect(component.componentLayoutCounter).toBe(count + 1);

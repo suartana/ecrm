@@ -1,5 +1,3 @@
-/* global Ext, jasmine, expect, spyOn */
-
 topSuite("grid-events",
     [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.grid.feature.GroupingSummary',
      'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text'],
@@ -32,6 +30,7 @@ function() {
                 if (type === 'mouseup' && jasmine.supportsTouch) {
                     jasmine.fireMouseEvent(target, 'mousedown', x, y, button);
                 }
+                
                 jasmine.fireMouseEvent(target, type, x, y, button);
             }
             
@@ -42,11 +41,13 @@ function() {
                 if (type === 'mouseup' && jasmine.supportsTouch) {
                     jasmine.fireMouseEvent(target, 'mousedown', x, y, button);
                 }
+                
                 jasmine.fireMouseEvent(target, type, x, y, button);
             }
             
             function triggerCellKeyEvent(type, rowIdx, cellIdx, key) {
                 var target = findCell(rowIdx, cellIdx);
+                
                 jasmine.fireKeyEvent(target, type, key);
             }
             
@@ -63,11 +64,13 @@ function() {
             
             function getRowPosition(el) {
                 var parent = Ext.fly(el).up('table');
+                
                 return Ext.Array.indexOf(parent.dom.rows, el);
             }
             
             function getCellPosition(el) {
                 var parent = Ext.fly(el).up('tr');
+                
                 return Ext.Array.indexOf(parent.dom.cells, el);
             }
             
@@ -147,7 +150,7 @@ function() {
                 selModel = view.getSelectionModel();
             }
             
-            afterEach(function(){
+            afterEach(function() {
                 Ext.destroy(grid, store);
                 grid = store = view = args = null;
                 called = false;
@@ -155,8 +158,8 @@ function() {
             });
             
             describe("all grid events", function() {
-                describe("buffered", function () {
-                    beforeEach(function(){
+                describe("buffered", function() {
+                    beforeEach(function() {
                         makeGrid(null, null, {
                             viewConfig: {
                                 mouseOverOutBuffer: 1
@@ -175,6 +178,7 @@ function() {
                         
                         describe('longpresses', function() {
                             var timeout = Ext.event.gesture.LongPress.instance.getMinDuration() + 200;
+
                             it('should fire beforeitemlongpress', function() {
                                 var test = {
                                     setArgs: setArgs
@@ -187,7 +191,7 @@ function() {
 
                                 waitsForEvent(grid, 'beforeitemlongpress', null, timeout);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'longpress');
                                     triggerCellMouseEvent('mouseup', 1, 3);
                                 });
@@ -205,7 +209,7 @@ function() {
 
                                 waitsForEvent(grid, 'itemlongpress', null, timeout);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'longpress');
                                     triggerCellMouseEvent('mouseup', 1, 3);
                                 });
@@ -213,29 +217,29 @@ function() {
                         });
                         // For mouseenter the view uses mouseover
                         describeNotTouch("itemmouseenter", function() {
-                            it("should fire the beforeitemmouseenter event", function(){
+                            it("should fire the beforeitemmouseenter event", function() {
                                 grid.on('beforeitemmouseenter', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'mouseover');
                                 });
                             });
                         
-                            it("should fire the itemmouseenter event", function(){
+                            it("should fire the itemmouseenter event", function() {
                                 grid.on('itemmouseenter', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'mouseover');
                                 });
                             });
                         
-                            it("should not trigger itemmouseenter if beforeitemmouseenter is vetoed", function(){
+                            it("should not trigger itemmouseenter if beforeitemmouseenter is vetoed", function() {
                                 grid.on({
                                     beforeitemmouseenter: retFalse,
                                     itemmouseenter: setCalled
@@ -247,31 +251,31 @@ function() {
                         
                         // For mouseenter the view uses mouseout
                         describeNotTouch("itemmouseleave", function() {
-                            it("should fire the beforeitemmouseleave event", function(){
+                            it("should fire the beforeitemmouseleave event", function() {
                                 grid.on('beforeitemmouseleave', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 triggerItemMouseEvent('mouseout', 1, 3);
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'mouseout');
                                 });
                             });
                         
-                            it("should fire the itemmouseleave event", function(){
+                            it("should fire the itemmouseleave event", function() {
                                 grid.on('itemmouseleave', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 triggerItemMouseEvent('mouseout', 1, 3);
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs(1, 'mouseout');
                                 });
                             });
                         
-                            it("should not trigger itemmouseleave if beforeitemmouseleave is vetoed", function(){
+                            it("should not trigger itemmouseleave if beforeitemmouseleave is vetoed", function() {
                                 grid.on({
                                     beforeitemmouseleave: retFalse,
                                     itemmouseleave: setCalled
@@ -285,7 +289,7 @@ function() {
                     
                     describe("container events", function() {
                         function triggerContainerMouseEvent(type, button) {
-                            jasmine.fireMouseEvent(view.el.dom, type, 5, 495, button); 
+                            jasmine.fireMouseEvent(view.el.dom, type, 5, 495, button);
                         }
                         
                         function triggerContainerKeyEvent(type, key) {
@@ -298,29 +302,29 @@ function() {
                         }
                         
                         describeNotTouch("containermouseout", function() {
-                            it("should fire the beforecontainermouseout event", function(){
+                            it("should fire the beforecontainermouseout event", function() {
                                 grid.on('beforecontainermouseout', setArgs);
                                 triggerContainerMouseEvent('mouseout');
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs('mouseout');
                                 });
                             });
                     
-                            it("should fire the containermouseout event", function(){
+                            it("should fire the containermouseout event", function() {
                                 grid.on('containermouseout', setArgs);
                                 triggerContainerMouseEvent('mouseout');
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs('mouseout');
                                 });
                             });
                 
-                            it("should not trigger containermouseout if beforecontainermouseout is vetoed", function(){
+                            it("should not trigger containermouseout if beforecontainermouseout is vetoed", function() {
                                 grid.on({
                                     beforecontainermouseout: retFalse,
                                     containermouseout: setCalled
@@ -329,36 +333,36 @@ function() {
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expect(called).toBe(false);
                                 });
                             });
                         });
                         
                         describeNotTouch("containermouseover", function() {
-                            it("should fire the beforecontainermouseover event", function(){
+                            it("should fire the beforecontainermouseover event", function() {
                                 grid.on('beforecontainermouseover', setArgs);
                                 triggerContainerMouseEvent('mouseover');
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs('mouseover');
                                 });
                             });
                     
-                            it("should fire the containermouseover event", function(){
+                            it("should fire the containermouseover event", function() {
                                 grid.on('containermouseover', setArgs);
                                 triggerContainerMouseEvent('mouseover');
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expectArgs('mouseover');
                                 });
                             });
                 
-                            it("should not trigger containermouseover if beforecontainermouseover is vetoed", function(){
+                            it("should not trigger containermouseover if beforecontainermouseover is vetoed", function() {
                                 grid.on({
                                     beforecontainermouseover: retFalse,
                                     containermouseover: setCalled
@@ -367,7 +371,7 @@ function() {
 
                                 waits(1);
 
-                                runs(function () {
+                                runs(function() {
                                     expect(called).toBe(false);
                                 });
                             });
@@ -375,8 +379,8 @@ function() {
                     });
                 });
 
-                describe("not buffered", function () {
-                    beforeEach(function(){
+                describe("not buffered", function() {
+                    beforeEach(function() {
                         makeGrid();
                     });
                 
@@ -390,19 +394,19 @@ function() {
                         }
                         
                         describe("itemclick", function() {
-                            it("should fire the beforeitemclick event", function(){
+                            it("should fire the beforeitemclick event", function() {
                                 grid.on('beforeitemclick', setArgs);
                                 triggerCellMouseEvent('click', 2, 4);
                                 expectArgs(2, 'click');
                             });
                     
-                            it("should fire the itemclick event", function(){
+                            it("should fire the itemclick event", function() {
                                 grid.on('itemclick', setArgs);
                                 triggerCellMouseEvent('click', 2, 4);
                                 expectArgs(2, 'click');
                             });
                     
-                            it("should not trigger itemclick if beforeitemclick is vetoed", function(){
+                            it("should not trigger itemclick if beforeitemclick is vetoed", function() {
                                 grid.on({
                                     beforeitemclick: retFalse,
                                     itemclick: setCalled
@@ -413,19 +417,19 @@ function() {
                         });
                     
                         describe("itemcontextmenu", function() {
-                            it("should fire the beforeitemcontextmenu event", function(){
+                            it("should fire the beforeitemcontextmenu event", function() {
                                 grid.on('beforeitemcontextmenu', setArgs);
                                 triggerCellMouseEvent('contextmenu', 2, 4, 2);
                                 expectArgs(2, 'contextmenu');
                             });
                         
-                            it("should fire the itemcontextmenu event", function(){
+                            it("should fire the itemcontextmenu event", function() {
                                 grid.on('itemcontextmenu', setArgs);
                                 triggerCellMouseEvent('contextmenu', 2, 4, 2);
                                 expectArgs(2, 'contextmenu');
                             });
                         
-                            it("should not trigger itemcontextmenu if beforeitemcontextmenu is vetoed", function(){
+                            it("should not trigger itemcontextmenu if beforeitemcontextmenu is vetoed", function() {
                                 grid.on({
                                     beforeitemcontextmenu: retFalse,
                                     itemcontextmenu: setCalled
@@ -436,19 +440,19 @@ function() {
                         });
                     
                         describe("itemdblclick", function() {
-                            it("should fire the beforeitemdblclick event", function(){
+                            it("should fire the beforeitemdblclick event", function() {
                                 grid.on('beforeitemdblclick', setArgs);
                                 triggerCellMouseEvent('dblclick', 2, 4);
                                 expectArgs(2, 'dblclick');
                             });
                         
-                            it("should fire the itemdblclick event", function(){
+                            it("should fire the itemdblclick event", function() {
                                 grid.on('itemdblclick', setArgs);
                                 triggerCellMouseEvent('dblclick', 2, 4);
                                 expectArgs(2, 'dblclick');
                             });
                         
-                            it("should not trigger itemdblclick if beforeitemdblclick is vetoed", function(){
+                            it("should not trigger itemdblclick if beforeitemdblclick is vetoed", function() {
                                 grid.on({
                                     beforeitemdblclick: retFalse,
                                     itemdblclick: setCalled
@@ -459,19 +463,19 @@ function() {
                         });
                         
                         describe("itemkeydown", function() {
-                            it("should fire the beforeitemkeydown event", function(){
+                            it("should fire the beforeitemkeydown event", function() {
                                 grid.on('beforeitemkeydown', setArgs);
                                 triggerCellKeyEvent('keydown', 1, 3);
                                 expectArgs(1, 'keydown');
                             });
                         
-                            it("should fire the itemkeydown event", function(){
+                            it("should fire the itemkeydown event", function() {
                                 grid.on('itemkeydown', setArgs);
                                 triggerCellKeyEvent('keydown', 1, 3);
                                 expectArgs(1, 'keydown');
                             });
                         
-                            it("should not trigger itemkeydown if beforeitemkeydown is vetoed", function(){
+                            it("should not trigger itemkeydown if beforeitemkeydown is vetoed", function() {
                                 grid.on({
                                     beforeitemkeydown: retFalse,
                                     itemkeydown: setCalled
@@ -482,21 +486,21 @@ function() {
                         });
                     
                         describe("itemmousedown", function() {
-                            it("should fire the beforeitemmousedown event", function(){
+                            it("should fire the beforeitemmousedown event", function() {
                                 grid.on('beforeitemmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 1, 3);
                                 expectArgs(1, 'mousedown');
                                 triggerCellMouseEvent('mouseup', 1, 3);
                             });
                         
-                            it("should fire the itemmousedown event", function(){
+                            it("should fire the itemmousedown event", function() {
                                 grid.on('itemmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 1, 3);
                                 expectArgs(1, 'mousedown');
                                 triggerCellMouseEvent('mouseup', 1, 3);
                             });
                         
-                            it("should not trigger itemmousedown if beforeitemmousedown is vetoed", function(){
+                            it("should not trigger itemmousedown if beforeitemmousedown is vetoed", function() {
                                 grid.on({
                                     beforeitemmousedown: retFalse,
                                     itemmousedown: setCalled
@@ -509,19 +513,19 @@ function() {
                         
                         // For mouseenter the view uses mouseover
                         describeNotTouch("itemmouseenter", function() {
-                            it("should fire the beforeitemmouseenter event", function(){
+                            it("should fire the beforeitemmouseenter event", function() {
                                 grid.on('beforeitemmouseenter', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 expectArgs(1, 'mouseover');
                             });
                         
-                            it("should fire the itemmouseenter event", function(){
+                            it("should fire the itemmouseenter event", function() {
                                 grid.on('itemmouseenter', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 expectArgs(1, 'mouseover');
                             });
                         
-                            it("should not trigger itemmouseenter if beforeitemmouseenter is vetoed", function(){
+                            it("should not trigger itemmouseenter if beforeitemmouseenter is vetoed", function() {
                                 grid.on({
                                     beforeitemmouseenter: retFalse,
                                     itemmouseenter: setCalled
@@ -533,21 +537,21 @@ function() {
                         
                         // For mouseenter the view uses mouseout
                         describeNotTouch("itemmouseleave", function() {
-                            it("should fire the beforeitemmouseleave event", function(){
+                            it("should fire the beforeitemmouseleave event", function() {
                                 grid.on('beforeitemmouseleave', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 triggerItemMouseEvent('mouseout', 1, 3);
                                 expectArgs(1, 'mouseout');
                             });
                         
-                            it("should fire the itemmouseleave event", function(){
+                            it("should fire the itemmouseleave event", function() {
                                 grid.on('itemmouseleave', setArgs);
                                 triggerItemMouseEvent('mouseover', 1, 3);
                                 triggerItemMouseEvent('mouseout', 1, 3);
                                 expectArgs(1, 'mouseout');
                             });
                         
-                            it("should not trigger itemmouseleave if beforeitemmouseleave is vetoed", function(){
+                            it("should not trigger itemmouseleave if beforeitemmouseleave is vetoed", function() {
                                 grid.on({
                                     beforeitemmouseleave: retFalse,
                                     itemmouseleave: setCalled
@@ -559,19 +563,19 @@ function() {
                         });
                         
                         describe("itemmouseup", function() {
-                            it("should fire the beforeitemmouseup event", function(){
+                            it("should fire the beforeitemmouseup event", function() {
                                 grid.on('beforeitemmouseup', setArgs);
                                 triggerCellMouseEvent('mouseup', 1, 3);
                                 expectArgs(1, 'mouseup');
                             });
                         
-                            it("should fire the itemmouseup event", function(){
+                            it("should fire the itemmouseup event", function() {
                                 grid.on('itemmouseup', setArgs);
                                 triggerCellMouseEvent('mouseup', 1, 3);
                                 expectArgs(1, 'mouseup');
                             });
                         
-                            it("should not trigger itemmouseup if beforeitemmouseup is vetoed", function(){
+                            it("should not trigger itemmouseup if beforeitemmouseup is vetoed", function() {
                                 grid.on({
                                     beforeitemmouseup: retFalse,
                                     itemmouseup: setCalled
@@ -582,9 +586,10 @@ function() {
                         });
                     });
                     
-                    describe("cell events", function(){
+                    describe("cell events", function() {
                         function expectArgs(rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
+
                             expect(args[0]).toBe(view);
                             expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)));
                             expect(args[2]).toBe(colIndex);
@@ -595,19 +600,19 @@ function() {
                         }
                         
                         describe("cellclick", function() {
-                            it("should fire the beforecellclick event", function(){
+                            it("should fire the beforecellclick event", function() {
                                 grid.on('beforecellclick', setArgs);
                                 triggerCellMouseEvent('click', 3, 6);
                                 expectArgs(3, 6, 'click');
                             });
                     
-                            it("should fire the cellclick event", function(){
+                            it("should fire the cellclick event", function() {
                                 grid.on('cellclick', setArgs);
                                 triggerCellMouseEvent('click', 3, 6);
                                 expectArgs(3, 6, 'click');
                             });
                 
-                            it("should not trigger cellclick if beforecellclick is vetoed", function(){
+                            it("should not trigger cellclick if beforecellclick is vetoed", function() {
                                 grid.on({
                                     beforecellclick: retFalse,
                                     cellclick: setCalled
@@ -618,19 +623,19 @@ function() {
                         });
                         
                         describe("cellcontextmenu", function() {
-                            it("should fire the beforecellcontextmenu event", function(){
+                            it("should fire the beforecellcontextmenu event", function() {
                                 grid.on('beforecellcontextmenu', setArgs);
                                 triggerCellMouseEvent('contextmenu', 3, 6);
                                 expectArgs(3, 6, 'contextmenu');
                             });
                     
-                            it("should fire the cellcontextmenu event", function(){
+                            it("should fire the cellcontextmenu event", function() {
                                 grid.on('cellcontextmenu', setArgs);
                                 triggerCellMouseEvent('contextmenu', 3, 6);
                                 expectArgs(3, 6, 'contextmenu');
                             });
                 
-                            it("should not trigger cellcontextmenu if beforecellcontextmenu is vetoed", function(){
+                            it("should not trigger cellcontextmenu if beforecellcontextmenu is vetoed", function() {
                                 grid.on({
                                     beforecellcontextmenu: retFalse,
                                     cellcontextmenu: setCalled
@@ -641,19 +646,19 @@ function() {
                         });
                         
                         describe("celldblclick", function() {
-                            it("should fire the beforecelldblclick event", function(){
+                            it("should fire the beforecelldblclick event", function() {
                                 grid.on('beforecelldblclick', setArgs);
                                 triggerCellMouseEvent('dblclick', 3, 6);
                                 expectArgs(3, 6, 'dblclick');
                             });
                     
-                            it("should fire the celldblclick event", function(){
+                            it("should fire the celldblclick event", function() {
                                 grid.on('celldblclick', setArgs);
                                 triggerCellMouseEvent('dblclick', 3, 6);
                                 expectArgs(3, 6, 'dblclick');
                             });
                 
-                            it("should not trigger celldblclick if beforecelldblclick is vetoed", function(){
+                            it("should not trigger celldblclick if beforecelldblclick is vetoed", function() {
                                 grid.on({
                                     beforecelldblclick: retFalse,
                                     celldblclick: setCalled
@@ -663,20 +668,20 @@ function() {
                             });
                         });
                         
-                        describe("cellkeydown", function(){
-                            it("should fire the beforecellkeydown event", function(){
+                        describe("cellkeydown", function() {
+                            it("should fire the beforecellkeydown event", function() {
                                 grid.on('beforecellkeydown', setArgs);
                                 triggerCellKeyEvent('keydown', 3, 6);
                                 expectArgs(3, 6, 'keydown');
                             });
                     
-                            it("should fire the cellkeydown event", function(){
+                            it("should fire the cellkeydown event", function() {
                                 grid.on('cellkeydown', setArgs);
                                 triggerCellKeyEvent('keydown', 3, 6);
                                 expectArgs(3, 6, 'keydown');
                             });
                 
-                            it("should not trigger cellkeydown if beforecellkeydown is vetoed", function(){
+                            it("should not trigger cellkeydown if beforecellkeydown is vetoed", function() {
                                 grid.on({
                                     beforecellkeydown: retFalse,
                                     cellkeydown: setCalled
@@ -687,21 +692,21 @@ function() {
                         });
                         
                         describe("cellmousedown", function() {
-                            it("should fire the beforecellmousedown event", function(){
+                            it("should fire the beforecellmousedown event", function() {
                                 grid.on('beforecellmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 3, 6);
                                 expectArgs(3, 6, 'mousedown');
                                 triggerCellMouseEvent('mouseup', 3, 6);
                             });
                     
-                            it("should fire the cellmousedown event", function(){
+                            it("should fire the cellmousedown event", function() {
                                 grid.on('cellmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 3, 6);
                                 expectArgs(3, 6, 'mousedown');
                                 triggerCellMouseEvent('mouseup', 3, 6);
                             });
                 
-                            it("should not trigger cellmousedown if beforecellmousedown is vetoed", function(){
+                            it("should not trigger cellmousedown if beforecellmousedown is vetoed", function() {
                                 grid.on({
                                     beforecellmousedown: retFalse,
                                     cellmousedown: setCalled
@@ -713,19 +718,19 @@ function() {
                         });
                         
                         describe("cellmouseup", function() {
-                            it("should fire the beforecellmouseup event", function(){
+                            it("should fire the beforecellmouseup event", function() {
                                 grid.on('beforecellmouseup', setArgs);
                                 triggerCellMouseEvent('mouseup', 3, 6);
                                 expectArgs(3, 6, 'mouseup');
                             });
                     
-                            it("should fire the cellmouseup event", function(){
+                            it("should fire the cellmouseup event", function() {
                                 grid.on('cellmouseup', setArgs);
                                 triggerCellMouseEvent('mouseup', 3, 6);
                                 expectArgs(3, 6, 'mouseup');
                             });
                 
-                            it("should not trigger cellmouseup if beforecellmouseup is vetoed", function(){
+                            it("should not trigger cellmouseup if beforecellmouseup is vetoed", function() {
                                 grid.on({
                                     beforecellmouseup: retFalse,
                                     cellmouseup: setCalled
@@ -742,7 +747,8 @@ function() {
                             if (type === 'mouseup') {
                                 jasmine.fireMouseEvent(view.el.dom, 'mousedown', 5, 495, button);
                             }
-                            jasmine.fireMouseEvent(view.el.dom, type, 5, 495, button); 
+
+                            jasmine.fireMouseEvent(view.el.dom, type, 5, 495, button);
                         }
                         
                         function triggerContainerKeyEvent(type, key) {
@@ -755,19 +761,19 @@ function() {
                         }
                         
                         describe("containerclick", function() {
-                            it("should fire the beforecontainerclick event", function(){
+                            it("should fire the beforecontainerclick event", function() {
                                 grid.on('beforecontainerclick', setArgs);
                                 triggerContainerMouseEvent('click');
                                 expectArgs('click');
                             });
                     
-                            it("should fire the containerclick event", function(){
+                            it("should fire the containerclick event", function() {
                                 grid.on('containerclick', setArgs);
                                 triggerContainerMouseEvent('click');
                                 expectArgs('click');
                             });
                 
-                            it("should not trigger containerclick if beforecontainerclick is vetoed", function(){
+                            it("should not trigger containerclick if beforecontainerclick is vetoed", function() {
                                 grid.on({
                                     beforecontainerclick: retFalse,
                                     containerclick: setCalled
@@ -778,19 +784,19 @@ function() {
                         });
                         
                         describe("containercontextmenu", function() {
-                            it("should fire the beforecontainercontextmenu event", function(){
+                            it("should fire the beforecontainercontextmenu event", function() {
                                 grid.on('beforecontainercontextmenu', setArgs);
                                 triggerContainerMouseEvent('contextmenu', 2);
                                 expectArgs('contextmenu');
                             });
                     
-                            it("should fire the containercontextmenu event", function(){
+                            it("should fire the containercontextmenu event", function() {
                                 grid.on('containercontextmenu', setArgs);
                                 triggerContainerMouseEvent('contextmenu', 2);
                                 expectArgs('contextmenu');
                             });
                 
-                            it("should not trigger containercontextmenu if beforecontainercontextmenu is vetoed", function(){
+                            it("should not trigger containercontextmenu if beforecontainercontextmenu is vetoed", function() {
                                 grid.on({
                                     beforecontainercontextmenu: retFalse,
                                     containercontextmenu: setCalled
@@ -801,19 +807,19 @@ function() {
                         });
                         
                         describe("containerdblclick", function() {
-                            it("should fire the beforecontainerdblclick event", function(){
+                            it("should fire the beforecontainerdblclick event", function() {
                                 grid.on('beforecontainerdblclick', setArgs);
                                 triggerContainerMouseEvent('dblclick');
                                 expectArgs('dblclick');
                             });
                     
-                            it("should fire the containerdblclick event", function(){
+                            it("should fire the containerdblclick event", function() {
                                 grid.on('containerdblclick', setArgs);
                                 triggerContainerMouseEvent('dblclick');
                                 expectArgs('dblclick');
                             });
                 
-                            it("should not trigger containerdblclick if beforecontainerdblclick is vetoed", function(){
+                            it("should not trigger containerdblclick if beforecontainerdblclick is vetoed", function() {
                                 grid.on({
                                     beforecontainerdblclick: retFalse,
                                     containerdblclick: setCalled
@@ -824,19 +830,19 @@ function() {
                         });
                         
                         describe("containerkeydown", function() {
-                            it("should fire the beforecontainerkeydown event", function(){
+                            it("should fire the beforecontainerkeydown event", function() {
                                 grid.on('beforecontainerkeydown', setArgs);
                                 triggerContainerKeyEvent('keydown');
                                 expectArgs('keydown');
                             });
                     
-                            it("should fire the containerkeydown event", function(){
+                            it("should fire the containerkeydown event", function() {
                                 grid.on('containerkeydown', setArgs);
                                 triggerContainerKeyEvent('keydown');
                                 expectArgs('keydown');
                             });
                 
-                            it("should not trigger containerkeydown if beforecontainerkeydown is vetoed", function(){
+                            it("should not trigger containerkeydown if beforecontainerkeydown is vetoed", function() {
                                 grid.on({
                                     beforecontainerkeydown: retFalse,
                                     containerkeydown: setCalled
@@ -847,21 +853,21 @@ function() {
                         });
                         
                         describe("containermousedown", function() {
-                            it("should fire the beforecontainermousedown event", function(){
+                            it("should fire the beforecontainermousedown event", function() {
                                 grid.on('beforecontainermousedown', setArgs);
                                 triggerContainerMouseEvent('mousedown');
                                 expectArgs('mousedown');
                                 triggerContainerMouseEvent('mouseup');
                             });
                     
-                            it("should fire the containermousedown event", function(){
+                            it("should fire the containermousedown event", function() {
                                 grid.on('containermousedown', setArgs);
                                 triggerContainerMouseEvent('mousedown');
                                 expectArgs('mousedown');
                                 triggerContainerMouseEvent('mouseup');
                             });
                 
-                            it("should not trigger containermousedown if beforecontainermousedown is vetoed", function(){
+                            it("should not trigger containermousedown if beforecontainermousedown is vetoed", function() {
                                 grid.on({
                                     beforecontainermousedown: retFalse,
                                     containermousedown: setCalled
@@ -873,19 +879,19 @@ function() {
                         });
                         
                         describeNotTouch("containermouseout", function() {
-                            it("should fire the beforecontainermouseout event", function(){
+                            it("should fire the beforecontainermouseout event", function() {
                                 grid.on('beforecontainermouseout', setArgs);
                                 triggerContainerMouseEvent('mouseout');
                                 expectArgs('mouseout');
                             });
                     
-                            it("should fire the containermouseout event", function(){
+                            it("should fire the containermouseout event", function() {
                                 grid.on('containermouseout', setArgs);
                                 triggerContainerMouseEvent('mouseout');
                                 expectArgs('mouseout');
                             });
                 
-                            it("should not trigger containermouseout if beforecontainermouseout is vetoed", function(){
+                            it("should not trigger containermouseout if beforecontainermouseout is vetoed", function() {
                                 grid.on({
                                     beforecontainermouseout: retFalse,
                                     containermouseout: setCalled
@@ -896,19 +902,19 @@ function() {
                         });
                         
                         describeNotTouch("containermouseover", function() {
-                            it("should fire the beforecontainermouseover event", function(){
+                            it("should fire the beforecontainermouseover event", function() {
                                 grid.on('beforecontainermouseover', setArgs);
                                 triggerContainerMouseEvent('mouseover');
                                 expectArgs('mouseover');
                             });
                     
-                            it("should fire the containermouseover event", function(){
+                            it("should fire the containermouseover event", function() {
                                 grid.on('containermouseover', setArgs);
                                 triggerContainerMouseEvent('mouseover');
                                 expectArgs('mouseover');
                             });
                 
-                            it("should not trigger containermouseover if beforecontainermouseover is vetoed", function(){
+                            it("should not trigger containermouseover if beforecontainermouseover is vetoed", function() {
                                 grid.on({
                                     beforecontainermouseover: retFalse,
                                     containermouseover: setCalled
@@ -919,19 +925,19 @@ function() {
                         });
                         
                         describeNotTouch("containermouseup", function() {
-                            it("should fire the beforecontainermouseup event", function(){
+                            it("should fire the beforecontainermouseup event", function() {
                                 grid.on('beforecontainermouseup', setArgs);
                                 triggerContainerMouseEvent('mouseup');
                                 expectArgs('mouseup');
                             });
                     
-                            it("should fire the containermouseup event", function(){
+                            it("should fire the containermouseup event", function() {
                                 grid.on('containermouseup', setArgs);
                                 triggerContainerMouseEvent('mouseup');
                                 expectArgs('mouseup');
                             });
                 
-                            it("should not trigger containermouseup if beforecontainermouseup is vetoed", function(){
+                            it("should not trigger containermouseup if beforecontainermouseup is vetoed", function() {
                                 grid.on({
                                     beforecontainermouseup: retFalse,
                                     containermouseup: setCalled
@@ -945,6 +951,7 @@ function() {
                     describe("column events", function() {
                         function expectArgs(rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
+
                             expect(args[0]).toBe(view);
                             expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)));
                             expect(args[2]).toBe(rowIndex);
@@ -954,38 +961,38 @@ function() {
                             expect(args[6] === view.getRow(rowIndex)).toBe(true);
                         }
                         
-                        it("should relay click events", function(){
+                        it("should relay click events", function() {
                             grid.headerCt.getComponent(6).on('click', setArgs);
                             triggerCellMouseEvent('click', 3, 6);
                             expectArgs(3, 6, 'click');
                         });
                         
-                        it("should relay contextmenu events", function(){
+                        it("should relay contextmenu events", function() {
                             grid.headerCt.getComponent(6).on('contextmenu', setArgs);
                             triggerCellMouseEvent('contextmenu', 3, 6);
                             expectArgs(3, 6, 'contextmenu');
                         });
                         
-                        it("should relay dblclick events", function(){
+                        it("should relay dblclick events", function() {
                             grid.headerCt.getComponent(6).on('dblclick', setArgs);
                             triggerCellMouseEvent('dblclick', 3, 6);
                             expectArgs(3, 6, 'dblclick');
                         });
                         
-                        it("should relay keydown events", function(){
+                        it("should relay keydown events", function() {
                             grid.headerCt.getComponent(6).on('keydown', setArgs);
                             triggerCellKeyEvent('keydown', 3, 6);
                             expectArgs(3, 6, 'keydown');
                         });
                         
-                        it("should relay mousedown events", function(){
+                        it("should relay mousedown events", function() {
                             grid.headerCt.getComponent(6).on('mousedown', setArgs);
                             triggerCellMouseEvent('mousedown', 3, 6);
                             expectArgs(3, 6, 'mousedown');
                             triggerCellMouseEvent('mouseup', 3, 6);
                         });
                         
-                        it("should relay mouseup events", function(){
+                        it("should relay mouseup events", function() {
                             grid.headerCt.getComponent(6).on('mouseup', setArgs);
                             triggerCellMouseEvent('mouseup', 3, 6);
                             expectArgs(3, 6, 'mouseup');
@@ -1011,6 +1018,7 @@ function() {
                 describe("row model", function() {
                     function get(indexes) {
                         var recs = [];
+
                         if (!Ext.isArray(indexes)) {
                             indexes = [indexes];
                         }
@@ -1018,6 +1026,7 @@ function() {
                         Ext.Array.forEach(indexes, function(index) {
                             recs.push(store.getAt(index));
                         });
+
                         return recs;
                     }
 
@@ -1133,21 +1142,27 @@ function() {
 
                             sm.select(get([1, 4, 8]));
                             expect(spy.callCount).toBe(1);
+                            
                             var args = spy.mostRecentCall.args;
+                            
                             expect(args[0]).toBe(sm);
                             expect(args[1]).toEqual(get([1, 4, 8]));
                             spy.reset();
 
                             sm.select(9, true);
                             expect(spy.callCount).toBe(1);
-                            var args = spy.mostRecentCall.args;
+                            
+                            args = spy.mostRecentCall.args;
+                            
                             expect(args[0]).toBe(sm);
                             expect(args[1]).toEqual(get([1, 4, 8, 9]));
                             spy.reset();
 
                             sm.select(2);
                             expect(spy.callCount).toBe(1);
-                            var args = spy.mostRecentCall.args;
+                            
+                            args = spy.mostRecentCall.args;
+                            
                             expect(args[0]).toBe(sm);
                             expect(args[1]).toEqual(get([2]));
                         });
@@ -1157,7 +1172,7 @@ function() {
             
             describe("locking", function() {
                 describe("events", function() {
-                    beforeEach(function(){
+                    beforeEach(function() {
                         makeGrid([{
                             locked: true,
                             text: 'F1',
@@ -1204,6 +1219,7 @@ function() {
                                 callCount++;
                             });
                         }
+
                         function createTest(eventName) {
                             it('should fire the ' + eventName + ' event once', function() {
                                 selModel.select(0);
@@ -1223,7 +1239,7 @@ function() {
                         createTest('selectionchange');
                     });
 
-                    describe('row events', function () {
+                    describe('row events', function() {
                         function expectArgs(view, index, type) {
                             expect(args[0] === view).toBe(true);
                             expect(args[1] === getRec(index)).toBe(true);
@@ -1232,13 +1248,13 @@ function() {
                             expect(args[4].type).toBe(type);
                         }
 
-                        it('should fire the itemclick event when clicking on the locked side', function () {
+                        it('should fire the itemclick event when clicking on the locked side', function() {
                             grid.on('rowclick', setArgs);
                             triggerCellMouseEvent('click', 2, 4);
                             expectArgs(grid.lockedGrid.getView(), 2, 'click');
                         });
 
-                        it('should fire the itemclick event when clicking on the unlocked side', function () {
+                        it('should fire the itemclick event when clicking on the unlocked side', function() {
                             grid.on('rowcontextmenu', setArgs);
                             triggerCellMouseEvent('contextmenu', 3, 7, 2);
                             expectArgs(grid.normalGrid.getView(), 3, 'contextmenu');
@@ -1267,9 +1283,10 @@ function() {
                         });
                     });
 
-                    describe("cell events", function(){
+                    describe("cell events", function() {
                         function expectArgs(view, rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
+
                             expect(args[0] === view).toBe(true);
                             expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex))).toBe(true);
                             expect(args[2]).toBe(colIndex);
@@ -1279,23 +1296,24 @@ function() {
                             expect(args[6].type).toBe(type);
                         }
 
-                        it("should fire the cellclick event when clicking on the locked side", function(){
-                            grid.on('cellclick', setArgs); 
-                            triggerCellMouseEvent('click', 1, 0); 
+                        it("should fire the cellclick event when clicking on the locked side", function() {
+                            grid.on('cellclick', setArgs);
+                            triggerCellMouseEvent('click', 1, 0);
                             expectArgs(grid.lockedGrid.getView(), 1, 0, 'click');
                         });
 
-                        it("should fire the cellclick event when clicking on the unlocked side", function(){
-                            grid.on('cellclick', setArgs); 
-                            triggerCellMouseEvent('click', 1, 6); 
+                        it("should fire the cellclick event when clicking on the unlocked side", function() {
+                            grid.on('cellclick', setArgs);
+                            triggerCellMouseEvent('click', 1, 6);
                             expectArgs(grid.normalGrid.getView(), 1, 1, 'click');
                         });
                     });
                 });
 
-                describe("viewready event", function () {
+                describe("viewready event", function() {
                     var spy;
-                    beforeEach(function () {
+
+                    beforeEach(function() {
                         spy = jasmine.createSpy();
 
                         makeGrid([{
@@ -1319,31 +1337,32 @@ function() {
                         });
                     });
 
-                    it("should relay the event from the child grid", function () {
-                        waitsFor(function () {
+                    it("should relay the event from the child grid", function() {
+                        waitsFor(function() {
                             return spy.callCount > 0;
                         });
 
-                        runs(function () {
+                        runs(function() {
                             expect(spy).toHaveBeenCalled();
                         });
                     });
 
-                    it("should add a gridRelayers property to the owner lockable grid", function () {
-                        waitsFor(function () {
+                    it("should add a gridRelayers property to the owner lockable grid", function() {
+                        waitsFor(function() {
                             return spy.callCount > 0;
                         });
 
-                        runs(function () {
+                        runs(function() {
                             expect(grid.gridRelayers).toBeDefined();
                         });
                     });
                 });
             });
 
-            describe("hidden columns", function(){
+            describe("hidden columns", function() {
                 function expectArgs(view, rowIndex, colIndex, visibleColIndex, type) {
                     var record = getRec(rowIndex);
+
                     expect(args[0] === view).toBe(true);
                     expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex))).toBe(true);
                     expect(args[2]).toBe(visibleColIndex);
@@ -1353,8 +1372,8 @@ function() {
                     expect(args[6].type).toBe(type);
                 }
                 
-                describe("unlocked", function(){
-                    beforeEach(function(){
+                describe("unlocked", function() {
+                    beforeEach(function() {
                         makeGrid([{
                             text: 'F1',
                             dataIndex: 'field1'
@@ -1379,27 +1398,27 @@ function() {
                         }]);
                     });
                     
-                    it("should fire the events taking into account hidden columns before hidden columns", function(){
-                        grid.on('cellclick', setArgs); 
-                        triggerCellMouseEvent('click', 1, 0); 
+                    it("should fire the events taking into account hidden columns before hidden columns", function() {
+                        grid.on('cellclick', setArgs);
+                        triggerCellMouseEvent('click', 1, 0);
                         expectArgs(view, 1, 0, 0, 'click');
                     });
                     
-                    it("should fire the events taking into account hidden columns in between hidden columns", function(){
-                        grid.on('cellclick', setArgs); 
+                    it("should fire the events taking into account hidden columns in between hidden columns", function() {
+                        grid.on('cellclick', setArgs);
                         triggerCellMouseEvent('click', 1, 3);
                         expectArgs(view, 1, 1, 3, 'click');
                     });
                     
-                    it("should fire the events taking into account hidden columns at the last column", function(){
-                        grid.on('cellclick', setArgs); 
+                    it("should fire the events taking into account hidden columns at the last column", function() {
+                        grid.on('cellclick', setArgs);
                         triggerCellMouseEvent('click', 1, 5);
                         expectArgs(view, 1, 2, 5, 'click');
                     });
                 });
                 
-                describe("with locking", function(){
-                    beforeEach(function(){
+                describe("with locking", function() {
+                    beforeEach(function() {
                         makeGrid([{
                             locked: true,
                             text: 'F1',
@@ -1442,13 +1461,13 @@ function() {
                         }]);
                     });
                     
-                    it("should fire the events taking into account hidden columns from the locked part", function(){
-                        grid.on('cellclick', setArgs); 
+                    it("should fire the events taking into account hidden columns from the locked part", function() {
+                        grid.on('cellclick', setArgs);
                         triggerCellMouseEvent('click', 1, 3);
                         expectArgs(grid.lockedGrid.getView(), 1, 1, 3, 'click');
                     });
                     
-                    it("should fire the events taking into account hidden columns from the unlocked part", function(){
+                    it("should fire the events taking into account hidden columns from the unlocked part", function() {
                         grid.on('cellclick', setArgs);
                         triggerCellMouseEvent('click', 1, 5);
                         expectArgs(grid.normalGrid.getView(), 1, 0, 0, 'click');
@@ -1531,6 +1550,7 @@ function() {
             });
         });
     }
+
     createSuite(false);
     createSuite(true);
 });

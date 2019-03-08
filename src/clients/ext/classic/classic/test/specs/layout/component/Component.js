@@ -30,8 +30,11 @@ topSuite("Ext.layout.component.Component", ['Ext.Window'], function() {
                     flex: 1
                 }]
             });
+            
             var child = c.items.first();
+            
             expect(child.getWidth()).toBe(150);
+            
             // Changing the html of the docked item will never change the size
             // of "child", so child will run as a top level layout. Ensure that
             // we retain the width previously calculated.
@@ -63,8 +66,11 @@ topSuite("Ext.layout.component.Component", ['Ext.Window'], function() {
                     flex: 1
                 }]
             });
+            
             var child = c.items.first();
+            
             expect(child.getHeight()).toBe(150);
+            
             // Changing the html of the docked item will never change the size
             // of "child", so child will run as a top level layout. Ensure that
             // we retain the height previously calculated.

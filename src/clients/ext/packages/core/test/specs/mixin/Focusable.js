@@ -1,7 +1,8 @@
 // Focusable mixin lives in the core but is tested in the context of either
 // Modern or Classic component
 topSuite("Ext.mixin.Focusable",
-    Ext.isModern ? ['Ext.Panel', 'Ext.Button', 'Ext.form.Text']
+    Ext.isModern
+        ? ['Ext.Panel', 'Ext.Button', 'Ext.form.Text']
         : ['Ext.Panel', 'Ext.Button', 'Ext.form.Text', 'Ext.form.FieldSet'],
 function() {
     var isModern = Ext.toolkit === 'modern',
@@ -50,7 +51,7 @@ function() {
         
         function makeComponent(config) {
             var renderTo = Ext.getBody(),
-                renderTo, html;
+                html;
             
             if (config) {
                 html = config.html;
@@ -727,7 +728,7 @@ function() {
                             runs(function() {
                                 expect(focusSpy).toHaveBeenCalled();
                             });
-                        });  
+                        });
                         
                         it("should not fire the focus event if the component has focus", function() {
                             runs(function() {

@@ -1916,27 +1916,81 @@ topSuite("Ext.Button", [
     });
 
     describe("focusing", function() {
+        var blurEvents, focusEvents, onBlurCalls, onFocusCalls;
+
         beforeEach(function() {
+            blurEvents = focusEvents = onBlurCalls = onFocusCalls = 0;
+
             createButton({
                 text: 'blergo',
                 renderTo: Ext.getBody()
             });
-            
+
+            button.on({
+                blur: function() {
+                    ++blurEvents;
+                },
+
+                focus: function() {
+                    ++focusEvents;
+                }
+            });
+
+            Ext.Function.interceptAfter(button, 'onFocus', function() {
+                ++onFocusCalls;
+            });
+
+            Ext.Function.interceptAfter(button, 'onBlur', function() {
+                ++onBlurCalls;
+            });
+        });
+
+        it('should call onFocus once upon focus', function() {
             focusAndWait(button);
+
+            runs(function() {
+                // Ideally the focus event fires just once but the iframe/jazzman
+                // focus stuff can cause one extra...
+                expect(focusEvents).toBeIn([1, 2]);
+                expect(onFocusCalls).toBeIn([1, 2]);
+            });
         });
         
         it("should be able to focus", function() {
-            expectFocused(button);
+            focusAndWait(button);
+
+            runs(function() {
+                expectFocused(button);
+            });
         });
         
         it("should apply focusCls", function() {
-            expect(button.getFocusClsEl().hasCls(button.focusCls)).toBe(true);
+            focusAndWait(button);
+
+            runs(function() {
+                expect(button.getFocusClsEl().hasCls(button.focusCls)).toBe(true);
+            });
         });
         
         it("should remove focusCls on blur", function() {
-            button.blur();
-            
-            expect(button.getFocusClsEl().hasCls(button.focusCls)).toBe(false);
+            focusAndWait(button);
+
+            runs(function() {
+                button.blur();
+                
+                expect(button.getFocusClsEl().hasCls(button.focusCls)).toBe(false);
+            });
+
+            // The bug we are testing for involves extra, spurious calls
+            // so we must give it a chance to make these extra calls
+            waits(100);
+
+            runs(function() {
+                // Ideally the blur event fires just once but the iframe/jazzman
+                // focus stuff can cause one extra...
+                expect(blurEvents).toBeIn([1, 2]);
+                expect(onBlurCalls).toBeIn([1, 2]);
+            });
         });
     });
     

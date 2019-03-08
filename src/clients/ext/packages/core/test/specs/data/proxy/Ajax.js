@@ -26,9 +26,9 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
 
         it("should have correct actionMethods", function() {
             expect(proxy.getActionMethods()).toEqual({
-                create : "POST",
-                read   : "GET",
-                update : "POST",
+                create: "POST",
+                read: "GET",
+                update: "POST",
                 destroy: "POST"
             });
         });
@@ -36,6 +36,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
     
     describe("parameters", function() {
         var ajax, operation;
+
         beforeEach(function() {
             spyOn(Ext.Ajax, 'request').andCallFake(function(o) {
                 ajax = o;
@@ -43,7 +44,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             operation = new Ext.data.operation.Read();
         });
         
-        afterEach(function(){
+        afterEach(function() {
             ajax = operation = null;
         });
         
@@ -135,8 +136,8 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             });
         });
         
-        describe("paramsAsJson", function(){
-            it("should always send as params when using get", function(){
+        describe("paramsAsJson", function() {
+            it("should always send as params when using get", function() {
                 proxy = new Ext.data.proxy.Ajax({
                     url: 'fake',
                     paramsAsJson: true
@@ -149,7 +150,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.jsonData).toBeUndefined();
             });
 
-            it("should send as params when paramsAsJson is false", function(){
+            it("should send as params when paramsAsJson is false", function() {
                 proxy = new Ext.data.proxy.Ajax({
                     url: 'fake',
                     paramsAsJson: false
@@ -163,7 +164,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.jsonData).toBeUndefined();
             });
 
-            it("should send as jsonData with non-get action and paramsAsJson: true", function(){
+            it("should send as jsonData with non-get action and paramsAsJson: true", function() {
                 proxy = new Ext.data.proxy.Ajax({
                     url: 'fake',
                     paramsAsJson: true
@@ -212,6 +213,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
     
     describe("request result", function() {
         var operation, request;
+
         function complete(status, statusText, responseText) {
             Ext.Ajax.mockComplete({
                 status: status || 200,
@@ -273,6 +275,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 
                 it("should not fire the exception event", function() {
                     var spy = jasmine.createSpy();
+
                     proxy.on('exception', spy);
                     proxy.read(operation);
                     complete(200);
@@ -290,10 +293,12 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 
                 it("should fire the exception event", function() {
                     var spy = jasmine.createSpy();
+
                     proxy.on('exception', spy);
                     proxy.read(operation);
                     complete(200, '', '{"success": false}');
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(proxy);
                     expect(args[1].responseText).toBe('{"success": false}');
                     expect(args[2]).toBe(operation);
@@ -326,9 +331,11 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 
                 it("should fire the exception event and pass the proxy, response & operation", function() {
                     var spy = jasmine.createSpy();
+
                     proxy.on('exception', spy);
                     complete(500, '', 'someResponse');
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(proxy);
                     expect(args[1].responseText).toBe('someResponse');
                     expect(args[2]).toBe(operation);
@@ -355,6 +362,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 
                 it("should fire the exception event and pass the proxy, response & operation", function() {
                     var spy = jasmine.createSpy();
+
                     proxy.on('exception', spy);
                     
                     proxy.setTimeout(1);
@@ -366,6 +374,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     
                     runs(function() {
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(proxy);
                         expect(args[1].statusText).toBe('communication failure');
                         expect(args[2]).toBe(operation);
@@ -375,8 +384,9 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
         });
     });
 
-    describe("getMethod", function(){
+    describe("getMethod", function() {
         var request;
+
         beforeEach(function() {
             makeProxy();
             request = new Ext.data.Request({
@@ -391,7 +401,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
         
         it("should return a the default action method if the actionMethods property is overridden", function() {
             proxy.setActionMethods({
-                update: 'PUT'    
+                update: 'PUT'
             });
             expect(proxy.getMethod(request)).toBe('GET');
         });

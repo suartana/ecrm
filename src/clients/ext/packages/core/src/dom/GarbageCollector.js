@@ -45,7 +45,7 @@ Ext.define('Ext.dom.GarbageCollector', {
             eid, dom, el, t, isGarbage, tagName;
         
         //<debug>
-        var collectedIds = [];
+        var collectedIds = []; // eslint-disable-line vars-on-top, one-var
         //</debug>
 
         for (eid in cache) {
@@ -75,7 +75,8 @@ Ext.define('Ext.dom.GarbageCollector', {
                 // of an iframe (documentElement and body become orphaned when the iframe
                 // contentWindow is unloaded)
                 isGarbage = Ext.isGarbage(dom);
-            } catch (e) {
+            }
+            catch (e) {
                 // if an error was thrown in isGarbage it is most likely because we are
                 // dealing with an inaccessible window or documentElement inside an orphaned
                 // iframe in IE.  In this case we can't do anything except remove the
@@ -89,26 +90,32 @@ Ext.define('Ext.dom.GarbageCollector', {
             
             if (isGarbage) {
                 isGarbage = false;
+                
                 if (el && el.dom) {
                     //<debug>
                     tagName = el.dom.tagName;
                     //</debug>
+                    
                     el.collect();
+                    
                     //<debug>
                     collectedIds.push((tagName ? tagName : '') + '#' + el.id);
                     //</debug>
                 }
             }
         }
+        
         //<feature legacyBrowser>
         // Cleanup IE Object leaks
         if (Ext.isIE9m) {
             t = {};
+            
             for (eid in cache) {
                 if (cache.hasOwnProperty(eid)) {
                     t[eid] = cache[eid];
                 }
             }
+            
             Ext.cache = Ext.dom.Element.cache = t;
         }
         //</feature>
@@ -120,7 +127,7 @@ Ext.define('Ext.dom.GarbageCollector', {
         //</debug>
     },
 
-    onTick: function () {
+    onTick: function() {
         this.timerId = null;
 
         if (Ext.enableGarbageCollector) {
@@ -145,7 +152,7 @@ Ext.define('Ext.dom.GarbageCollector', {
     /**
      * Resumes garbage collection at the specified {@link #interval}
      */
-    resume: function () {
+    resume: function() {
         var me = this,
             lastTime = me.lastTime;
 

@@ -1,9 +1,11 @@
 /**
- * This is a multi-pane, application-oriented UI layout style that supports multiple nested panels, automatic bars
- * between regions and built-in {@link Ext.panel.Panel#collapsible expanding and collapsing} of regions.
+ * This is a multi-pane, application-oriented UI layout style that supports multiple nested panels,
+ * automatic bars between regions and built-in
+ * {@link Ext.panel.Panel#collapsible expanding and collapsing} of regions.
  *
- * This class is intended to be extended or created via the `layout:'border'` {@link Ext.container.Container#layout}
- * config, and should generally not need to be created directly via the new keyword.
+ * This class is intended to be extended or created via the `layout: 'border'`
+ * {@link Ext.container.Container#layout} config, and should generally not need to be created
+ * directly via the new keyword.
  *
  *     @example
  *     Ext.create('Ext.panel.Panel', {
@@ -40,8 +42,8 @@
  *
  * # Notes
  * 
- *   - When using the split option, the layout will automatically insert a {@link Ext.resizer.Splitter}
- *     into the appropriate place. This will modify the underlying
+ *   - When using the split option, the layout will automatically insert a
+ *     {@link Ext.resizer.Splitter} into the appropriate place. This will modify the underlying
  *     {@link Ext.container.Container#property-items items} collection in the container.
  *
  *   - Any Container using the Border layout **must** have a child item with `region:'center'`.
@@ -61,7 +63,6 @@
  *   - **There is no BorderLayout.Region class in ExtJS 4.0+**
  */
 Ext.define('Ext.layout.container.Border', {
-
     extend: 'Ext.layout.container.Container',
     alias: 'layout.border',
     alternateClassName: 'Ext.layout.BorderLayout',
@@ -73,7 +74,6 @@ Ext.define('Ext.layout.container.Border', {
         // Overrides for Panel that provide border layout features
         'Ext.layout.container.border.Region'
     ],
-
 
     targetCls: Ext.baseCSSPrefix + 'border-layout-ct',
 
@@ -89,8 +89,8 @@ Ext.define('Ext.layout.container.Border', {
      * Each region with `split:true` will get a {@link Ext.resizer.BorderSplitter Splitter} that
      * allows for manual resizing of the container. Except for the `center` region.
      *
-     * This option can also accept an object of configurations from the {@link Ext.resizer.BorderSplitter}.
-     * An example of this would be:
+     * This option can also accept an object of configurations from the
+     * {@link Ext.resizer.BorderSplitter}. An example of this would be:
      *
      *     {
      *         title: 'North',
@@ -105,9 +105,10 @@ Ext.define('Ext.layout.container.Border', {
     
     /**
      * @cfg {Boolean} [splitterResize=true]
-     * This configuration option is to be applied to the **child `items`** managed by this layout and
-     * is used in conjunction with {@link #split}. By default, when specifying {@link #split}, the region
-     * can be dragged to be resized. Set this option to false to show the split bar but prevent resizing.
+     * This configuration option is to be applied to the **child `items`** managed by this layout
+     * and is used in conjunction with {@link #split}. By default, when specifying {@link #split},
+     * the region can be dragged to be resized. Set this option to false to show the split bar
+     * but prevent resizing.
      */
 
     /**
@@ -209,7 +210,7 @@ Ext.define('Ext.layout.container.Border', {
      * which is added during {@link #calculate}.
      * @private
      */
-    beginAxis: function (ownerContext, regions, name) {
+    beginAxis: function(ownerContext, regions, name) {
         var me = this,
             props = me.axisProps[name],
             isVert = !props.horizontal,
@@ -217,7 +218,8 @@ Ext.define('Ext.layout.container.Border', {
             totalFlex = 0,
             childItems = ownerContext.childItems,
             length = childItems.length,
-            center, i, childContext, centerFlex, comp, region, match, size, type, target, placeholder;
+            center, i, childContext, centerFlex, comp, region, match, size, type, target,
+            placeholder;
 
         for (i = 0; i < length; ++i) {
             childContext = childItems[i];
@@ -259,7 +261,8 @@ Ext.define('Ext.layout.container.Border', {
                 if (!comp.collapsed) {
                     if (type === 'string' && (match = me.percentageRe.exec(size))) {
                         childContext.percentage = parseInt(match[1], 10);
-                    } else if (comp.flex) {
+                    }
+                    else if (comp.flex) {
                         totalFlex += childContext.flex = comp.flex;
                     }
                 }
@@ -276,7 +279,8 @@ Ext.define('Ext.layout.container.Border', {
                     centerFlex = 0;
                     center.collapseAxis = name;
                 }
-            } else if (target.collapsed && (isVert === target.collapsedVertical())) {
+            }
+            else if (target.collapsed && (isVert === target.collapsedVertical())) {
                 // The center region is a collapsed header, collapsed in this axis
                 centerFlex = 0;
                 center.collapseAxis = name;
@@ -291,12 +295,12 @@ Ext.define('Ext.layout.container.Border', {
         totalFlex += centerFlex;
 
         return Ext.apply({
-            before         : isVert ? 'top' : 'left',
-            totalFlex      : totalFlex
+            before: isVert ? 'top' : 'left',
+            totalFlex: totalFlex
         }, props);
     },
 
-    beginLayout: function (ownerContext) {
+    beginLayout: function(ownerContext) {
         var me = this,
             items = me.getLayoutItems(),
             pad = me.padding,
@@ -312,6 +316,7 @@ Ext.define('Ext.layout.container.Border', {
                 "Please specify a height on component: " + me.owner.id +
                 ", or use a container layout that sets the component's height.");
         }
+        
         if (ownerContext.widthModel.shrinkWrap) {
             Ext.raise("Border layout does not currently support shrinkWrap width. " +
                 "Please specify a width on component: " + me.owner.id +
@@ -324,30 +329,36 @@ Ext.define('Ext.layout.container.Border', {
             if (type === 'string' || type === 'number') {
                 pad = Ext.util.Format.parseBox(pad);
             }
-        } else {
+        }
+        else {
             pad = ownerContext.getEl('getTargetEl').getPaddingInfo();
             padOnContainer = true;
         }
+
         ownerContext.outerPad = pad;
         ownerContext.padOnContainer = padOnContainer;
 
         for (i = 0, length = items.length; i < length; ++i) {
             item = items[i];
             collapseTarget = me.getSplitterTarget(item);
+
             if (collapseTarget) {  // if (splitter)
                 doShow = undefined;
                 hidden = !!item.hidden;
+
                 if (!collapseTarget.split) {
                     if (collapseTarget.isCollapsingOrExpanding) {
                         doShow = !!collapseTarget.collapsed;
                     }
-                } else if (hidden !== collapseTarget.hidden) {
+                }
+                else if (hidden !== collapseTarget.hidden) {
                     doShow = !collapseTarget.hidden;
                 }
 
                 if (doShow) {
                     item.show();
-                } else if (doShow === false) {
+                }
+                else if (doShow === false) {
                     item.hide();
                 }
             }
@@ -374,13 +385,15 @@ Ext.define('Ext.layout.container.Border', {
 
             if (collapseTarget) { // if (splitter)
                 region = regions[collapseTarget.id];
+                
                 if (!region) {
-                        // if the region was hidden it will not be part of childItems, and
-                        // so beginAxis() won't add it to the regions object, so we have
-                        // to create the context item here.
-                        region = ownerContext.getEl(collapseTarget.el, me);
-                        region.region = collapseTarget.region;
+                    // if the region was hidden it will not be part of childItems, and
+                    // so beginAxis() won't add it to the regions object, so we have
+                    // to create the context item here.
+                    region = ownerContext.getEl(collapseTarget.el, me);
+                    region.region = collapseTarget.region;
                 }
+                
                 childContext.collapseTarget = collapseTarget = region;
                 childContext.weight = collapseTarget.weight;
                 childContext.reverseWeighting = collapseTarget.reverseWeighting;
@@ -395,7 +408,7 @@ Ext.define('Ext.layout.container.Border', {
         me.setupSplitterNeighbors(items);
     },
 
-    calculate: function (ownerContext) {
+    calculate: function(ownerContext) {
         var me = this,
             containerSize = me.getContainerSize(ownerContext),
             childItems = ownerContext.childItems,
@@ -411,8 +424,12 @@ Ext.define('Ext.layout.container.Border', {
         // If the padding is already on the container we need to add it to the space
         // If not on the container, it's "virtual" padding.
         
-        horzPercentTotal = horz.end = horz.flexSpace = containerSize.width + (padOnContainer ? pad[me.padOnContainerProp] : -pad[me.padNotOnContainerProp]);
-        vertPercentTotal = vert.end = vert.flexSpace = containerSize.height + (padOnContainer ? pad.top : -pad.bottom);
+        horzPercentTotal = horz.end = horz.flexSpace =
+            containerSize.width +
+            (padOnContainer ? pad[me.padOnContainerProp] : -pad[me.padNotOnContainerProp]);
+        
+        vertPercentTotal = vert.end = vert.flexSpace =
+            containerSize.height + (padOnContainer ? pad.top : -pad.bottom);
 
         // Reduce flexSpace on each axis by the fixed/auto sized dimensions of items that
         // aren't flexed along that axis.
@@ -420,7 +437,8 @@ Ext.define('Ext.layout.container.Border', {
             childContext = childItems[i];
             childMargins = childContext.getMarginInfo();
 
-            // Margins are always fixed size and must be removed from the space used for percentages and flexes
+            // Margins are always fixed size and must be removed from the space
+            // used for percentages and flexes
             if (childContext.isHorz || childContext.isCenter) {
                 horz.addUnflexed(childMargins.width);
                 horzPercentTotal -= childMargins.width;
@@ -433,7 +451,8 @@ Ext.define('Ext.layout.container.Border', {
 
             // Fixed size components must have their sizes removed from the space used for flex
             if (!childContext.flex && !childContext.percentage) {
-                if (childContext.isHorz || (childContext.isCenter && childContext.collapseAxis === 'horz')) {
+                if (childContext.isHorz ||
+                    (childContext.isCenter && childContext.collapseAxis === 'horz')) {
                     size = childContext.getProp('width');
 
                     horz.addUnflexed(size);
@@ -442,7 +461,9 @@ Ext.define('Ext.layout.container.Border', {
                     if (childContext.collapseTarget) {
                         horzPercentTotal -= size;
                     }
-                } else if (childContext.isVert || (childContext.isCenter && childContext.collapseAxis === 'vert')) {
+                }
+                else if (childContext.isVert ||
+                         (childContext.isCenter && childContext.collapseAxis === 'vert')) {
                     size = childContext.getProp('height');
 
                     vert.addUnflexed(size);
@@ -460,13 +481,15 @@ Ext.define('Ext.layout.container.Border', {
             childContext = childItems[i];
             childMargins = childContext.getMarginInfo();
 
-            // Calculate the percentage sizes. After this calculation percentages are very similar to fixed sizes
+            // Calculate the percentage sizes. After this calculation percentages
+            // are very similar to fixed sizes
             if (childContext.percentage) {
                 if (childContext.isHorz) {
                     size = Math.ceil(horzPercentTotal * childContext.percentage / 100);
                     size = childContext.setWidth(size);
                     horz.addUnflexed(size);
-                } else if (childContext.isVert) {
+                }
+                else if (childContext.isVert) {
                     size = Math.ceil(vertPercentTotal * childContext.percentage / 100);
                     size = childContext.setHeight(size);
                     vert.addUnflexed(size);
@@ -493,7 +516,8 @@ Ext.define('Ext.layout.container.Border', {
         // avoid short-circuiting (we want to call both):
         if (me.finishAxis(ownerContext, vert) + me.finishAxis(ownerContext, horz) < 2) {
             me.done = false;
-        } else {
+        }
+        else {
             // Size information is published as we place regions but position is hard to do
             // that way (while avoiding published multiple times) so we publish all the
             // positions at the end.
@@ -505,7 +529,7 @@ Ext.define('Ext.layout.container.Border', {
      * Performs the calculations for a region on a specified axis.
      * @private
      */
-    calculateChildAxis: function (childContext, axis) {
+    calculateChildAxis: function(childContext, axis) {
         var collapseTarget = childContext.collapseTarget,
             setSizeMethod = 'set' + axis.sizePropCap,
             sizeProp = axis.sizeProp,
@@ -514,7 +538,8 @@ Ext.define('Ext.layout.container.Border', {
 
         if (collapseTarget) { // if (splitter)
             region = collapseTarget.region;
-        } else {
+        }
+        else {
             region = childContext.region;
             flex = childContext.flex;
         }
@@ -526,14 +551,18 @@ Ext.define('Ext.layout.container.Border', {
             // vertical axis: stretch to fill remaining space:
             childContext[setSizeMethod](axis.end - axis.begin - childMarginSize);
             pos = axis.begin;
-        } else {
+        }
+        else {
             if (flex) {
                 size = Math.ceil(axis.flexSpace * (flex / axis.totalFlex));
                 size = childContext[setSizeMethod](size);
-            } else if (childContext.percentage) {
-                // Like getProp but without registering a dependency - we calculated the size, we don't depend on it
+            }
+            else if (childContext.percentage) {
+                // Like getProp but without registering a dependency - we calculated the size,
+                // we don't depend on it
                 size = childContext.peek(sizeProp);
-            } else {
+            }
+            else {
                 size = childContext.getProp(sizeProp);
             }
 
@@ -542,7 +571,8 @@ Ext.define('Ext.layout.container.Border', {
             if (isBegin) {
                 pos = axis.begin;
                 axis.begin += size;
-            } else {
+            }
+            else {
                 axis.end = pos = axis.end - size;
             }
         }
@@ -550,7 +580,7 @@ Ext.define('Ext.layout.container.Border', {
         childContext.layoutPos[axis.posProp] = pos;
     },
     
-    eachItem: function (region, fn, scope) {
+    eachItem: function(region, fn, scope) {
         var me = this,
             items = me.getLayoutItems(),
             i = 0,
@@ -577,7 +607,7 @@ Ext.define('Ext.layout.container.Border', {
      * space to the center region.
      * @private
      */
-    finishAxis: function (ownerContext, axis) {
+    finishAxis: function(ownerContext, axis) {
         var size = axis.end - axis.begin,
             center = ownerContext.centerRegion;
 
@@ -593,7 +623,7 @@ Ext.define('Ext.layout.container.Border', {
      * Finishes by setting the positions on the child items.
      * @private
      */
-    finishPositions: function (childItems) {
+    finishPositions: function(childItems) {
         var length = childItems.length,
             index, childContext,
             marginProp = this.horzPositionProp;
@@ -601,8 +631,13 @@ Ext.define('Ext.layout.container.Border', {
         for (index = 0; index < length; ++index) {
             childContext = childItems[index];
 
-            childContext.setProp('x', childContext.layoutPos.x + childContext.marginInfo[marginProp]);
-            childContext.setProp('y', childContext.layoutPos.y + childContext.marginInfo.top);
+            childContext.setProp(
+                'x', childContext.layoutPos.x + childContext.marginInfo[marginProp]
+            );
+            
+            childContext.setProp(
+                'y', childContext.layoutPos.y + childContext.marginInfo.top
+            );
         }
     },
 
@@ -617,6 +652,7 @@ Ext.define('Ext.layout.container.Border', {
         for (; i < length; i++) {
             ownerItem = ownerItems[i];
             placeholderFor = ownerItem.placeholderFor;
+            
             // There are a couple of scenarios where we do NOT want an item to
             // be included in the layout items:
             //
@@ -638,32 +674,33 @@ Ext.define('Ext.layout.container.Border', {
             // items because it will not be once the panel has finished expanding.
             //
             // If the component is hidden, we need none of these shenanigans
-            if (ownerItem.hidden || ((!ownerItem.floated || ownerItem.isCollapsingOrExpanding === 2) &&
+            if (ownerItem.hidden ||
+                ((!ownerItem.floated || ownerItem.isCollapsingOrExpanding === 2) &&
                 !(placeholderFor && placeholderFor.isCollapsingOrExpanding === 2))) {
                 items.push(ownerItem);
-            } 
+            }
         }
 
         return items;
     },
 
-    getPlaceholder: function (comp) {
+    getPlaceholder: function(comp) {
         return comp.getPlaceholder && comp.getPlaceholder();
     },
     
-    getMaxWeight: function (region) {
+    getMaxWeight: function(region) {
         return this.getMinMaxWeight(region);
     },
         
-    getMinWeight: function (region) {
+    getMinWeight: function(region) {
         return this.getMinMaxWeight(region, true);
     },
     
-    getMinMaxWeight: function (region, min) {
+    getMinMaxWeight: function(region, min) {
         var me = this,
             weight = null;
         
-        me.eachItem(region, function (item) {
+        me.eachItem(region, function(item) {
             if (item.hasOwnProperty('weight')) {
                 if (weight === null) {
                     weight = item.weight;
@@ -680,7 +717,7 @@ Ext.define('Ext.layout.container.Border', {
         return weight;
     },
     
-    getSplitterTarget: function (splitter) {
+    getSplitterTarget: function(splitter) {
         var collapseTarget = splitter.collapseTarget;
 
         if (collapseTarget && collapseTarget.collapsed) {
@@ -690,11 +727,11 @@ Ext.define('Ext.layout.container.Border', {
         return collapseTarget;
     },
 
-    isItemBoxParent: function (itemContext) {
+    isItemBoxParent: function(itemContext) {
         return true;
     },
 
-    isItemShrinkWrap: function (item) {
+    isItemShrinkWrap: function(item) {
         return true;
     },
 
@@ -706,7 +743,7 @@ Ext.define('Ext.layout.container.Border', {
      * on the component as "splitter".
      * @private
      */
-    insertSplitter: function (item, index, hidden, splitterCfg) {
+    insertSplitter: function(item, index, hidden, splitterCfg) {
         var region = item.region,
             splitter = Ext.apply({
                 xtype: 'bordersplitter',
@@ -726,7 +763,7 @@ Ext.define('Ext.layout.container.Border', {
         item.splitter = this.owner.add(at, splitter);
     },
     
-    getMoveAfterIndex: function (after) {
+    getMoveAfterIndex: function(after) {
         var index = this.callParent(arguments);
         
         if (after.splitter) {
@@ -736,7 +773,7 @@ Ext.define('Ext.layout.container.Border', {
         return index;
     },
     
-    moveItemBefore: function (item, before) {
+    moveItemBefore: function(item, before) {
         var beforeRegion;
             
         if (before && before.splitter) {
@@ -756,7 +793,7 @@ Ext.define('Ext.layout.container.Border', {
      * splitter is added if its "split" property is true.
      * @private
      */
-    onAdd: function (item, index) {
+    onAdd: function(item, index) {
         var me = this,
             placeholderFor = item.placeholderFor,
             region = item.region,
@@ -781,14 +818,17 @@ Ext.define('Ext.layout.container.Border', {
             }
 
             isCenter = region === 'center';
+
             if (isCenter) {
                 //<debug>
                 if (me.centerRegion) {
                     Ext.raise("Cannot have multiple center regions in a BorderLayout.");
                 }
                 //</debug>
+                
                 me.centerRegion = item;
-            } else {
+            }
+            else {
                 split = item.split;
                 hidden = !!item.hidden;
                 
@@ -818,7 +858,8 @@ Ext.define('Ext.layout.container.Border', {
                     // other collapse modes do not animate nicely in a border layout, so
                     // default them to off:
                     item.animCollapse = false;
-                } else {
+                }
+                else {
                     item.animCollapse = me.panelCollapseAnimate;
                 }
             }
@@ -827,7 +868,8 @@ Ext.define('Ext.layout.container.Border', {
             if (hidden && item.placeholder && item.placeholder.isVisible()) {
                 me.owner.insert(index, item.placeholder);
             }
-        } else if (placeholderFor) {
+        }
+        else if (placeholderFor) {
             Ext.apply(item, me.regionFlags[placeholderFor.region]);
             item.region = placeholderFor.region;
             item.weight = placeholderFor.weight;
@@ -839,7 +881,7 @@ Ext.define('Ext.layout.container.Border', {
         this.callParent();
     },
 
-    onRemove: function (comp, isDestroying) {
+    onRemove: function(comp, isDestroying) {
         var me = this,
             region = comp.region,
             splitter = comp.splitter,
@@ -860,6 +902,7 @@ Ext.define('Ext.layout.container.Border', {
             if (splitter && !owner.destroying) {
                 owner.doRemove(splitter, true); // avoid another layout
             }
+
             delete comp.splitter;
         }
 
@@ -868,6 +911,7 @@ Ext.define('Ext.layout.container.Border', {
         if (!destroying && !isDestroying && comp.rendered) {
             // Clear top/left styles
             el = comp.getEl();
+
             if (el) {
                 el.setStyle('top', '');
                 el.setStyle(me.horzPositionProp, '');
@@ -881,11 +925,11 @@ Ext.define('Ext.layout.container.Border', {
     regionMeta: {
         center: { splitterDelta: 0 },
 
-        north: { splitterDelta:  1 },
+        north: { splitterDelta: 1 },
         south: { splitterDelta: -1 },
 
-        west:  { splitterDelta:  1 },
-        east:  { splitterDelta: -1 }
+        west: { splitterDelta: 1 },
+        east: { splitterDelta: -1 }
     },
 
     /**
@@ -912,12 +956,12 @@ Ext.define('Ext.layout.container.Border', {
         }
     },
 
-    setupSplitterNeighbors: function (items) {
+    setupSplitterNeighbors: function(items) {
         var edgeRegions = {
-                //north: null,
-                //south: null,
-                //east: null,
-                //west: null
+                // north: null,
+                // south: null,
+                // east: null,
+                // west: null
             },
             length = items.length,
             touchedRegions = this.touchedRegions,
@@ -929,11 +973,13 @@ Ext.define('Ext.layout.container.Border', {
 
             if (comp.isCenter) {
                 center = comp;
-            } else if (region) {
+            }
+            else if (region) {
                 touched = touchedRegions[region];
 
                 for (j = 0, count = touched.length; j < count; ++j) {
                     edge = edgeRegions[touched[j]];
+
                     if (edge) {
                         edge.neighbors.push(comp);
                     }
@@ -942,9 +988,11 @@ Ext.define('Ext.layout.container.Border', {
                 if (comp.placeholderFor) {
                     // placeholder, so grab the splitter for the actual panel
                     splitter = comp.placeholderFor.splitter;
-                } else {
+                }
+                else {
                     splitter = comp.splitter;
                 }
+
                 if (splitter) {
                     splitter.neighbors = [];
                 }
@@ -958,6 +1006,7 @@ Ext.define('Ext.layout.container.Border', {
 
             for (j = 0, count = touched.length; j < count; ++j) {
                 edge = edgeRegions[touched[j]];
+
                 if (edge) {
                     edge.neighbors.push(center);
                 }
@@ -972,12 +1021,12 @@ Ext.define('Ext.layout.container.Border', {
      * @private
      */
     touchedRegions: {
-        center: [ 'north', 'south', 'east',  'west' ],
+        center: [ 'north', 'south', 'east', 'west' ],
 
-        north:  [ 'north', 'east',  'west'  ],
-        south:  [ 'south', 'east',  'west'  ],
-        east:   [ 'east',  'north', 'south' ],
-        west:   [ 'west',  'north', 'south' ]
+        north: [ 'north', 'east', 'west' ],
+        south: [ 'south', 'east', 'west' ],
+        east: [ 'east', 'north', 'south' ],
+        west: [ 'west', 'north', 'south' ]
     },
 
     sizePolicies: {
@@ -1001,7 +1050,7 @@ Ext.define('Ext.layout.container.Border', {
         }
     },
 
-    getItemSizePolicy: function (item) {
+    getItemSizePolicy: function(item) {
         var me = this,
             policies = this.sizePolicies,
             collapseTarget, size, policy, placeholderFor;
@@ -1013,14 +1062,18 @@ Ext.define('Ext.layout.container.Border', {
                 if (placeholderFor.collapsedVertical()) {
                     return policies.vert;
                 }
+
                 return policies.horz;
             }
+
             if (item.collapsed) {
                 if (item.collapsedVertical()) {
                     return policies.vert;
                 }
+
                 return policies.horz;
             }
+
             return policies.flexAll;
         }
 
@@ -1034,7 +1087,8 @@ Ext.define('Ext.layout.container.Border', {
             if (item.isVert) {
                 size = item.height;
                 policy = policies.vert;
-            } else {
+            }
+            else {
                 size = item.width;
                 policy = policies.horz;
             }
@@ -1048,13 +1102,13 @@ Ext.define('Ext.layout.container.Border', {
 
         return me.autoSizePolicy;
     }
-}, function () {
+}, function() {
     var methods = {
-        addUnflexed: function (px) {
-            this.flexSpace = Math.max(this.flexSpace - px, 0);
-        }
-    },
-    props = this.prototype.axisProps;
+            addUnflexed: function(px) {
+                this.flexSpace = Math.max(this.flexSpace - px, 0);
+            }
+        },
+        props = this.prototype.axisProps;
 
     Ext.apply(props.horz, methods);
     Ext.apply(props.vert, methods);

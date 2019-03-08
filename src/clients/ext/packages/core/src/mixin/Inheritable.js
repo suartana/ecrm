@@ -92,7 +92,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @return {Object} The `inheritedState` object containing inherited properties.
      * @since 5.0.0
      */
-    getInherited: function (inner) {
+    getInherited: function(inner) {
         var me = this,
             inheritedState = (inner && me.inheritedStateInner) || me.inheritedState,
             ownerCt = me.getRefOwner(),
@@ -108,8 +108,8 @@ Ext.define('Ext.mixin.Inheritable', {
             ownerLayout = me.ownerLayout;
 
             if (ownerCt) {
-                // For classic, this will only be true if the item is a "child" of its owning container
-                // For example, a docked item will not get the inner inheritedState.
+                // For classic, this will only be true if the item is a "child" of its owning
+                // container. For example, a docked item will not get the inner inheritedState.
                 
                 // For modern, we currently don't have a decent way of telling the difference
                 // between a child item, or an item that belongs to the component. We may
@@ -123,8 +123,7 @@ Ext.define('Ext.mixin.Inheritable', {
                 // done so that when there is a viewport, all component's will inherit
                 // from its inheritedState, even components that are not descendants of
                 // the viewport.
-                Ext.Object.chain(parent ? parent.getInherited(getInner)
-                                        : Ext.rootInheritedState);
+                Ext.Object.chain(parent ? parent.getInherited(getInner) : Ext.rootInheritedState);
 
             if (isContainer) {
                 me.inheritedStateInner = inheritedStateInner = Ext.Object.chain(inheritedState);
@@ -156,7 +155,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @return {Mixed} The value of the requested `property`.
      * @since 5.0.0
      */
-    getInheritedConfig: function (property, skipThis) {
+    getInheritedConfig: function(property, skipThis) {
         var state = this.inheritedState,
             old, ret;
 
@@ -189,7 +188,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @protected
      * @since 5.0.0
      */
-    resolveListenerScope: function (defaultScope, skipThis) {
+    resolveListenerScope: function(defaultScope, skipThis) {
         var me = this,
             hasSkipThis = (typeof skipThis === 'boolean'),
             namedScope = Ext._namedScopes[defaultScope],
@@ -200,8 +199,10 @@ Ext.define('Ext.mixin.Inheritable', {
             // declared on the class body (i.e. !namedScope.isSelf) and so we can skip
             // this instance and resolve to defaultListenerScope upward in the hierarchy.
             // scope: not a named scope so we default to this
-            ret = me.getInheritedConfig('defaultListenerScope', hasSkipThis ? skipThis : true) || defaultScope || me;
-        } else if (namedScope.isController) {
+            ret = me.getInheritedConfig('defaultListenerScope', hasSkipThis ? skipThis : true) ||
+                  defaultScope || me;
+        }
+        else if (namedScope.isController) {
             // scope:'controller' declared on the class body must include our own
             // controller before ascending the hierarchy, but scope:'controller' declared
             // on the instance must skip our own controller and search only for an
@@ -215,7 +216,8 @@ Ext.define('Ext.mixin.Inheritable', {
             // scope:'self' indicates listeners declared on the class body with unspecified
             // scope. Include this instance when searching for an inherited default scope.
             ret = me.getInheritedConfig('defaultListenerScope', hasSkipThis && skipThis) || me;
-        } else if (namedScope.isThis) {
+        }
+        else if (namedScope.isThis) {
             // scope:'this' always resolves to this instance, regardless of whether the
             // listener was declared on the class or instance
             ret = me;
@@ -249,11 +251,14 @@ Ext.define('Ext.mixin.Inheritable', {
         //    its component/component's controller as candidates for listener scope
         if (!namedScope) {
             ret = me.getInheritedConfig('defaultListenerScope') || defaultScope || me;
-        } else if (namedScope.isController) {
+        }
+        else if (namedScope.isController) {
             ret = me.getInheritedConfig('controller');
-        } else if (namedScope.isSelf) {
+        }
+        else if (namedScope.isSelf) {
             ret = me.getInheritedConfig('defaultListenerScope') || satellite;
-        } else if (namedScope.isThis) {
+        }
+        else if (namedScope.isThis) {
             ret = satellite;
         }
 
@@ -274,7 +279,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @private
      * @since 6.5.0
      */
-    lookupNameHolder: function (skipThis) {
+    lookupNameHolder: function(skipThis) {
         return this.getInheritedConfig('nameHolder', skipThis !== false) || null;
     },
 
@@ -292,7 +297,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @private
      * @since 5.0.0
      */
-    lookupReferenceHolder: function (skipThis) {
+    lookupReferenceHolder: function(skipThis) {
         return this.getInheritedConfig('referenceHolder', skipThis !== false) || null;
     },
 
@@ -307,7 +312,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * being owned by Buttons.
      * @protected
      */
-    getRefOwner: function () {
+    getRefOwner: function() {
         var me = this;
         
         // Look for both ownerCt (classic toolkit) and parent (modern toolkit)
@@ -327,10 +332,13 @@ Ext.define('Ext.mixin.Inheritable', {
      *
      * @param {Function} fn The function to call
      * @param {Object} [scope] The scope of the function. Defaults to current node.
-     * @param {Array} [args] The args to call the function with. Defaults to passing the current component.
+     * @param {Array} [args] The args to call the function with. Defaults to passing the current
+     * component.
      */
     bubble: function(fn, scope, args) {
-        for (var target = this; target; target = target.getRefOwner()) {
+        var target;
+        
+        for (target = this; target; target = target.getRefOwner()) {
             if (fn.apply(scope || target, args || [target]) === false) {
                 break;
             }
@@ -359,8 +367,10 @@ Ext.define('Ext.mixin.Inheritable', {
             if (possibleDescendant.getRefOwner() === this) {
                 return true;
             }
+            
             possibleDescendant = possibleDescendant.getRefOwner();
         }
+        
         return false;
     },
 
@@ -382,7 +392,7 @@ Ext.define('Ext.mixin.Inheritable', {
      * @private
      * @since 5.0.0
      */
-    invalidateInheritedState: function () {
+    invalidateInheritedState: function() {
         var inheritedState = this.inheritedState;
 
         if (inheritedState) {
@@ -401,7 +411,7 @@ Ext.define('Ext.mixin.Inheritable', {
     },
 
     privates: {
-        _fixName: function () {
+        _fixName: function() {
             var me = this,
                 owner;
 
@@ -425,6 +435,7 @@ Ext.define('Ext.mixin.Inheritable', {
 
             if (me.reference) {
                 refHolder = me.lookupReferenceHolder();
+                
                 if (refHolder) {
                     refHolder.attachReference(me);
                 }
@@ -468,7 +479,8 @@ Ext.define('Ext.mixin.Inheritable', {
         }
     }
 },
-function () {
+/* eslint-disable indent */
+function() {
     /**
      * @property {Object} rootInheritedState
      * The top level inheritedState to which all other inheritedStates are chained. If

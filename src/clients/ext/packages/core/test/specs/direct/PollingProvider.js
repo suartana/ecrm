@@ -2,7 +2,7 @@ topSuite("Ext.direct.PollingProvider", ['Ext.direct.*'], function() {
     var provider, remotingProvider;
     
     function createProvider(config) {
-        config = Ext.apply({}, config , {
+        config = Ext.apply({}, config, {
             url: '/foo',
             baseParams: { foo: 'bar' }
         });
@@ -24,7 +24,7 @@ topSuite("Ext.direct.PollingProvider", ['Ext.direct.*'], function() {
             type: event.type,
             name: event.name,
             data: event.data
-        }
+        };
     }
     
     beforeEach(function() {

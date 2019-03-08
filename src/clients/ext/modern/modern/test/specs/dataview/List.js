@@ -842,7 +842,7 @@ topSuite("Ext.dataview.List", [
                 });
             });
             
-            it('should have single select record', function () {
+            it('should have single select record', function() {
                 var record = store.getAt(0),
                     spy = spyOn({
                         testFn: Ext.emptyFn
@@ -855,7 +855,7 @@ topSuite("Ext.dataview.List", [
                 expect(spy).toHaveBeenCalledWith(list, [ record ]);
             });
 
-            it('should have multiple selected records', function () {
+            it('should have multiple selected records', function() {
                 var records = store.getRange(0, 2),
                     spy = spyOn({
                         testFn: Ext.emptyFn
@@ -866,6 +866,22 @@ topSuite("Ext.dataview.List", [
                 list.select(records);
 
                 expect(spy).toHaveBeenCalledWith(list, records);
+            });
+
+            it('should fire deselect', function() {
+                var records = store.getRange(0, 2),
+                    spy = spyOn({
+                        testFn: Ext.emptyFn
+                    }, 'testFn');
+
+                list.on('deselect', spy);
+
+                list.select(records);
+                // select again to toggle selection
+                list.select(records);
+
+                expect(spy).toHaveBeenCalledWith(list, records);
+
             });
 
             it("should select records with tap", function() {
@@ -893,18 +909,19 @@ topSuite("Ext.dataview.List", [
             });
         });
 
-        describe('simple mode', function () {
-            it('should have single select record', function () {
+        describe('simple mode', function() {
+            it('should have single select record', function() {
+                var record, spy;
                 makeList({
                     selectable: {
                         mode: 'simple'
                     }
                 });
 
-                var record = store.getAt(0),
-                    spy = spyOn({
-                        testFn: Ext.emptyFn
-                    }, 'testFn');
+                record = store.getAt(0);
+                spy = spyOn({
+                    testFn: Ext.emptyFn
+                }, 'testFn');
 
                 list.on('select', spy);
 
@@ -913,17 +930,18 @@ topSuite("Ext.dataview.List", [
                 expect(spy).toHaveBeenCalledWith(list, [ record ]);
             });
 
-            it('should have multiple selected records', function () {
+            it('should have multiple selected records', function() {
+                var records, spy;
                 makeList({
                     selectable: {
                         mode: 'simple'
                     }
                 });
 
-                var records = store.getRange(0, 2),
-                    spy = spyOn({
-                        testFn: Ext.emptyFn
-                    }, 'testFn');
+                records = store.getRange(0, 2);
+                spy = spyOn({
+                    testFn: Ext.emptyFn
+                }, 'testFn');
 
                 list.on('select', spy);
 

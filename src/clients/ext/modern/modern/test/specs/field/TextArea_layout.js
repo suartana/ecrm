@@ -1,4 +1,4 @@
-describe('Ext.field.TextArea_layout', function () {
+topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function () {
     var labelHtml = '<span style="display:inline-block;width:50px;background:green;">&nbsp;</span>',
         pctBug = Ext.supports.PercentageSizeFlexBug,
         container, field;

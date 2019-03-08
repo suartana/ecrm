@@ -92,7 +92,7 @@ Ext.define('Ext.data.virtual.Page', {
      */
     state: null,
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this,
             pageSize;
 
@@ -109,7 +109,7 @@ Ext.define('Ext.data.virtual.Page', {
         };
     },
 
-    destroy: function () {
+    destroy: function() {
         var me = this,
             operation = me.operation;
 
@@ -129,7 +129,7 @@ Ext.define('Ext.data.virtual.Page', {
      * @param {"active"/"prefetch"} kind The type of lock.
      * @param {Number} delta A value of `1` to lock or `-1` to release.
      */
-    adjustLock: function (kind, delta) {
+    adjustLock: function(kind, delta) {
         var me = this,
             locks = me.locks,
             pageMap = me.pageMap,
@@ -140,6 +140,7 @@ Ext.define('Ext.data.virtual.Page', {
         if (!(kind in locks)) {
             Ext.raise('Bad lock type (expected "active" or "prefetch"): "' + kind + '"');
         }
+        
         if (delta !== 1 && delta !== -1) {
             Ext.raise('Invalid lock count delta (should be 1 or -1): ' + delta);
         }
@@ -163,7 +164,7 @@ Ext.define('Ext.data.virtual.Page', {
         }
     },
 
-    clearRecords: function (out, by) {
+    clearRecords: function(out, by) {
         var me = this,
             begin = me.begin,
             records = me.records,
@@ -186,7 +187,7 @@ Ext.define('Ext.data.virtual.Page', {
         }
     },
 
-    fillRecords: function (out, by, withIndex) {
+    fillRecords: function(out, by, withIndex) {
         var me = this,
             records = me.records,
             begin = me.begin,
@@ -211,19 +212,19 @@ Ext.define('Ext.data.virtual.Page', {
         }
     },
 
-    isInitial: function () {
+    isInitial: function() {
         return this.state === null;
     },
 
-    isLoaded: function () {
+    isLoaded: function() {
         return this.state === 'loaded';
     },
 
-    isLoading: function () {
+    isLoading: function() {
         return this.state === 'loading';
     },
 
-    load: function () {
+    load: function() {
         var me = this,
             operation;
 
@@ -237,7 +238,7 @@ Ext.define('Ext.data.virtual.Page', {
     },
 
     privates: {
-        onLoad: function (operation) {
+        onLoad: function(operation) {
             var me = this;
 
             me.operation = null;
@@ -249,7 +250,7 @@ Ext.define('Ext.data.virtual.Page', {
                 }
                 else {
                     me.state = 'error';
-                    //TODO fireEvent or something from the store?
+                    // TODO fireEvent or something from the store?
                 }
 
                 me.pageMap.onPageLoad(me);

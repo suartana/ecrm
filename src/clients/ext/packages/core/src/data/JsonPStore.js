@@ -16,17 +16,24 @@
  *
  *         // reader configs
  *         root: 'images',
- *         fields: ['name', 'url', {name:'size', type: 'float'}, {name:'lastmod', type:'date'}]
+ *         fields: ['name', 'url', {name: 'size', type: 'float'}, {name: 'lastmod', type: 'date'}]
  *     });
  *
  *
  * This store is configured to consume a returned object of the form:
  *
  *     stcCallback({
- *         images: [
- *             {name: 'Image one', url:'/GetImage.php?id=1', size:46.5, lastmod: new Date(2007, 10, 29)},
- *             {name: 'Image Two', url:'/GetImage.php?id=2', size:43.2, lastmod: new Date(2007, 10, 30)}
- *         ]
+ *         images: [{
+ *             name: 'Image one',
+ *             url: '/GetImage.php?id=1',
+ *             size: 46.5,
+ *             lastmod: new Date(2007, 10, 29)
+ *         }, {
+ *             name: 'Image Two',
+ *             url: '/GetImage.php?id=2',
+ *             size: 43.2,
+ *             lastmod: new Date(2007, 10, 30)
+ *         }]
  *     })
  *
  * Where stcCallback is the callback name passed in the request to the remote domain. See
@@ -36,7 +43,7 @@
  */
 Ext.define('Ext.data.JsonPStore', {
     extend: 'Ext.data.Store',
-    alias : 'store.jsonp',
+    alias: 'store.jsonp',
     requires: [
         'Ext.data.proxy.JsonP',
         'Ext.data.reader.Json'
@@ -49,6 +56,7 @@ Ext.define('Ext.data.JsonPStore', {
                 reader: 'json'
             }
         }, config);
+        
         this.callParent([config]);
     }
 });

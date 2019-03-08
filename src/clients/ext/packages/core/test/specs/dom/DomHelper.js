@@ -1,88 +1,91 @@
-xdescribe("Ext.core.DomHelper", function(){
+xdescribe("Ext.core.DomHelper", function() {
     // TODO this spec is just unmaintanable, because of subtleGradient magic...
-    // no dynamic spec generation !
+    // no dynamic spec generation!
     var TestHelper = {
-        dom:{
-            cleanBody: function(){
+        dom: {
+            cleanBody: function() {
                 document.getElementsByTagName('body')[0].innerHTML = '';
             },
 
             parentNodeName: {
-                '*'      : 'div',
-                frame    : 'frameset',
-                col      : 'colgroup',
-                colgroup : 'table',
-                option   : 'select',
-                optgroup : 'select',
-                tbody    : 'table',
-                thead    : 'table',
-                tfoot    : 'table',
-                tr       : 'tbody',
-                td       : 'tr'
+                '*': 'div',
+                frame: 'frameset',
+                col: 'colgroup',
+                colgroup: 'table',
+                option: 'select',
+                optgroup: 'select',
+                tbody: 'table',
+                thead: 'table',
+                tfoot: 'table',
+                tr: 'tbody',
+                td: 'tr'
             },
 
             voidNode: {
-                area   : true,
-                br     : true,
-                col    : true,
-                frame  : true,
-                hr     : true,
-                img    : true,
-                input  : true,
-                link   : true,
-                meta   : true,
-                param  : true,
-                range  : true,
-                spacer : true,
-                wbr    : true
+                area: true,
+                br: true,
+                col: true,
+                frame: true,
+                hr: true,
+                img: true,
+                input: true,
+                link: true,
+                meta: true,
+                param: true,
+                range: true,
+                spacer: true,
+                wbr: true
             }
 
         },
-        String:{
-            html: function(tagName, className){
-                var HTML = '<'+tagName+' class='+className+'>';
-                if (!TestHelper.dom.voidNode[tagName]) HTML += '</'+tagName+'>';
+        String: {
+            html: function(tagName, className) {
+                var HTML = '<' + tagName + ' class=' + className + '>';
+
+                if (!TestHelper.dom.voidNode[tagName]) { HTML += '</' + tagName + '>'; }
+
                 // console.log(HTML);
                 return HTML;
             }
         }
-    };    
+    };
     
-    xdescribe('useDom = false', function(){
-        beforeEach(function(){
+    xdescribe('useDom = false', function() {
+        beforeEach(function() {
             Ext.core.DomHelper.useDom = false;
         });
-        //Ext_core_DomHelper_Tests.apply(this, arguments);
+        // Ext_core_DomHelper_Tests.apply(this, arguments);
     });
     
-    xdescribe('useDom = true', function(){
-        beforeEach(function(){
+    xdescribe('useDom = true', function() {
+        beforeEach(function() {
             Ext.core.DomHelper.useDom = false;
         });
-        afterEach(function(){
+        afterEach(function() {
             Ext.core.DomHelper.useDom = true;
         });
-        //Ext_core_DomHelper_Tests.apply(this, arguments);
+        // Ext_core_DomHelper_Tests.apply(this, arguments);
     });
    
    
 function Ext_core_DomHelper_Tests() {
     var dh = Ext.core.DomHelper,
         el, els;
-    beforeEach(function(){
+
+    beforeEach(function() {
         el = Ext.getBody().createChild({
-            id      : 'DomHelperHelper',
+            id: 'DomHelperHelper',
             children: [
-                {cls: 'child', id: 'firstChild'},
-                {cls: 'child'},
-                {cls: 'child'},
-                {cls: 'child'},
-                {cls: 'child'},
-                {cls: 'child2'},
-                {cls: 'child2'},
-                {cls: 'child'},
-                {cls: 'child'},
-                {cls: 'child'}
+                { cls: 'child', id: 'firstChild' },
+                { cls: 'child' },
+                { cls: 'child' },
+                { cls: 'child' },
+                { cls: 'child' },
+                { cls: 'child2' },
+                { cls: 'child2' },
+                { cls: 'child' },
+                { cls: 'child' },
+                { cls: 'child' }
             ]
         });
         
@@ -104,13 +107,13 @@ function Ext_core_DomHelper_Tests() {
                     cls: 'class',
                     children: [
                         {
-                            tag : 'span',
+                            tag: 'span',
                             html: 'test',
                             style: {
                                 padding: '10px'
                             }
                         },
-                        {tag: 'br'}
+                        { tag: 'br' }
                     ]
                 };
             
@@ -170,6 +173,7 @@ function Ext_core_DomHelper_Tests() {
         
         it("should use a passed buffer", function() {
             var buffer = [];
+
             dh.generateStyles({
                 color: 'red'
             }, buffer);
@@ -190,16 +194,17 @@ function Ext_core_DomHelper_Tests() {
     });
     
     describe("insertHtml", function() {
+        var testEl,
+            HTML = '<div id="newChild"></div>';
         
-        var testEl, HTML = '<div id="newChild"></div>';
-        
-        describe("basic",function(){
-            beforeEach(function(){
+        describe("basic", function() {
+            beforeEach(function() {
                 testEl = Ext.getDom(els.first());
                 expect(Ext.get('newChild')).toBeNull();
             });
-            afterEach(function(){
+            afterEach(function() {
                 var el = document.getElementById('newChild');
+
                 expect(el).toBeDefined();
                 testEl.innerHTML = '';
             });
@@ -209,15 +214,17 @@ function Ext_core_DomHelper_Tests() {
             it("should insert a new element beforeEnd", function() { dh.insertHtml('beforeEnd', testEl, HTML); });
             it("should insert a new element afterEnd", function() { dh.insertHtml('afterEnd', testEl, HTML); });
             
-            describe("textNode", function(){
-                var UID=0, text, textNode;
-                beforeEach(function(){
+            describe("textNode", function() {
+                var UID = 0,
+                    text, textNode;
+                
+                beforeEach(function() {
                     textNode = document.createTextNode(text = "howdy" + (UID++));
                     testEl.appendChild(textNode);
                     expect(testEl.firstChild).toEqual(textNode);
                     expect(testEl.firstChild.nodeValue).toEqual(text);
                 });
-                afterEach(function(){
+                afterEach(function() {
                     expect(testEl.childNodes.length).toEqual(2);
                     testEl.removeChild(textNode);
                     expect(testEl.childNodes.length).toEqual(1);
@@ -235,10 +242,10 @@ function Ext_core_DomHelper_Tests() {
 
         });
         
-        describe("details", function(){
-            var outside = {afterEnd:true, beforeBegin:true},
-                inside = {afterBegin:true, beforeEnd:true},
-                everywhere = {afterEnd:true, beforeBegin:true, afterBegin:true, beforeEnd:true};
+        describe("details", function() {
+            var outside = { afterEnd: true, beforeBegin: true },
+                inside = { afterBegin: true, beforeEnd: true },
+                everywhere = { afterEnd: true, beforeBegin: true, afterBegin: true, beforeEnd: true };
             
             for (var tagName in TestHelper.dom.voidNode) {
                 insertHtml_shouldSupport(outside, tagName, tagName);
@@ -266,19 +273,23 @@ function Ext_core_DomHelper_Tests() {
             insertHtml_shouldSupport(outside, 'thead', 'tfoot');
             
             
-            function insertHtml_shouldSupport(where, tagName, tagNameToInsert){
-                if (where.afterBegin) insertHtml_shouldSupport_inside('afterBegin', tagName, tagNameToInsert);
-                if (where.beforeEnd) insertHtml_shouldSupport_inside('beforeEnd', tagName, tagNameToInsert);
-                if (where.afterEnd) insertHtml_shouldSupport_outside('afterEnd', tagName, tagNameToInsert);
-                if (where.beforeBegin) insertHtml_shouldSupport_outside('beforeBegin', tagName, tagNameToInsert);
+            function insertHtml_shouldSupport(where, tagName, tagNameToInsert) {
+                if (where.afterBegin) { insertHtml_shouldSupport_inside('afterBegin', tagName, tagNameToInsert); }
+
+                if (where.beforeEnd) { insertHtml_shouldSupport_inside('beforeEnd', tagName, tagNameToInsert); }
+
+                if (where.afterEnd) { insertHtml_shouldSupport_outside('afterEnd', tagName, tagNameToInsert); }
+
+                if (where.beforeBegin) { insertHtml_shouldSupport_outside('beforeBegin', tagName, tagNameToInsert); }
                 
-                if (where.afterBegin || where.beforeEnd){
+                if (where.afterBegin || where.beforeEnd) {
                     it(["should overwrite the HTML",
-                        "of a", tagName.toUpperCase(), "Element"].join(' '), function(){
+                        "of a", tagName.toUpperCase(), "Element"].join(' '), function() {
                         
                         var html = TestHelper.String.html(tagNameToInsert, 'overwrite');
                         
                         var target = document.createElement(tagName);
+
                         expect(target.parentNode).toBeNull();
                         expect(target.childNodes.length).toBe(0);
                         expect(target.firstChild).toBeNull();
@@ -290,32 +301,33 @@ function Ext_core_DomHelper_Tests() {
                     });
                     
                     
-                    if (Ext.core.Element.prototype.setHTML) it(["should set the HTML",
-                        "of a", tagName.toUpperCase(), "Element"].join(' '), function(){
-                        
-                        var html = TestHelper.String.html(tagNameToInsert, 'overwrite');
-                        
-                        var target = document.createElement(tagName);
-                        expect(target.parentNode).toBeNull();
-                        expect(target.childNodes.length).toBe(0);
-                        expect(target.firstChild).toBeNull();
-                        
-                        Ext.fly(target).setHTML(html);
-                        expect(target.childNodes.length).toBe(1);
-                        expect(target.firstChild).toBeDefined();
-                        expect(target.firstChild.className).toBe('overwrite');
-                    });
+                    if (Ext.core.Element.prototype.setHTML) {
+                        it(["should set the HTML", "of a", tagName.toUpperCase(), "Element"].join(' '), function() {
+                            var html = TestHelper.String.html(tagNameToInsert, 'overwrite'),
+                                target = document.createElement(tagName);
+    
+                            expect(target.parentNode).toBeNull();
+                            expect(target.childNodes.length).toBe(0);
+                            expect(target.firstChild).toBeNull();
+                            
+                            Ext.fly(target).setHTML(html);
+                            expect(target.childNodes.length).toBe(1);
+                            expect(target.firstChild).toBeDefined();
+                            expect(target.firstChild.className).toBe('overwrite');
+                        });
+                    }
                 }
             }
             
-            function insertHtml_shouldSupport_inside(where, tagName, tagNameToInsert){
+            function insertHtml_shouldSupport_inside(where, tagName, tagNameToInsert) {
                 it(["should insertHtml", tagNameToInsert.toUpperCase(), where,
                     "of a " + tagName.toUpperCase() + " Element",
-                    "when it has no parentNode"].join(' '), function(){
+                    "when it has no parentNode"].join(' '), function() {
                     
                     var html = TestHelper.String.html(tagNameToInsert, where);
                     
                     var target = document.createElement(tagName);
+
                     expect(target.parentNode).toBeNull();
                     expect(target.childNodes.length).toBe(0);
                     expect(target.firstChild).toBeNull();
@@ -327,13 +339,14 @@ function Ext_core_DomHelper_Tests() {
                 });
             }
             
-            function insertHtml_shouldSupport_outside(where, tagName, tagNameToInsert){
+            function insertHtml_shouldSupport_outside(where, tagName, tagNameToInsert) {
                 it(["should insertHtml", tagNameToInsert.toUpperCase(), where,
-                    "of a " + tagName.toUpperCase() + " Element"].join(' '), function(){
+                    "of a " + tagName.toUpperCase() + " Element"].join(' '), function() {
                     
                     var html = TestHelper.String.html(tagNameToInsert, where);
                     
                     var target = document.createElement(tagName);
+
                     document.createElement(TestHelper.dom.parentNodeName[tagName] || TestHelper.dom.parentNodeName['*']).appendChild(target);
                     var parentNode = target.parentNode;
                     
@@ -361,16 +374,17 @@ function Ext_core_DomHelper_Tests() {
             expect(node.innerHTML).toEqual('');
             
             dh.overwrite(node, {
-                tag : 'span',
+                tag: 'span',
                 html: 'hello'
             });
             
             expect(node.innerHTML.toLowerCase()).toEqual('<span>hello</span>');
         });
         
-        describe("table innerHTML bug", function(){
-            it("should set the html of a tr Element, even when it has no parentNode", function(){
+        describe("table innerHTML bug", function() {
+            it("should set the html of a tr Element, even when it has no parentNode", function() {
                 var tr = document.createElement('tr');
+
                 expect(tr.parentNode).toEqual(null);
                 expect(tr.childNodes.length).toEqual(0);
                 
@@ -384,24 +398,30 @@ function Ext_core_DomHelper_Tests() {
                 
             });
             
-            it("should set the html of an Element", function(){
+            it("should set the html of an Element", function() {
                 var html = '<a href="http://mootools.net/">Link</a>';
+
                 var parent = document.createElement('div');
+
                 dh.overwrite(parent, html);
                 expect(parent.innerHTML.toLowerCase()).toEqual(html.toLowerCase());
             });
             
-            it("should set the html of an Element with multiple arguments", function(){
+            it("should set the html of an Element with multiple arguments", function() {
                 var html = ['<p>Paragraph</p>', '<a href="http://mootools.net/">Link</a>'];
+
                 var parent = document.createElement('div');
+
                 dh.overwrite(parent, html);
                 
                 expect(parent.innerHTML.toLowerCase()).toEqual(html.join('').toLowerCase());
             });
             
-            it("should set the html of a select Element", function(){
+            it("should set the html of a select Element", function() {
                 var html = '<option>option 1</option><option selected="selected">option 2</option>';
+
                 var select = document.createElement('select');
+
                 dh.overwrite(select, html);
                 
                 expect(select.childNodes.length).toEqual(2);
@@ -409,8 +429,9 @@ function Ext_core_DomHelper_Tests() {
                 expect(select.selectedIndex).toEqual(1);
             });
             
-            it("should set the html of a table Element", function(){
+            it("should set the html of a table Element", function() {
                 var html = '<tbody><tr><td>cell 1</td><td>cell 2</td></tr><tr><td class="cell">cell 1</td><td>cell 2</td></tr></tbody>';
+
                 var table = document.createElement('table');
                 
                 dh.overwrite(table, html);
@@ -420,9 +441,11 @@ function Ext_core_DomHelper_Tests() {
                 expect(table.firstChild.lastChild.firstChild.className).toEqual('cell');
             });
             
-            it("should set the html of a tbody Element", function(){
+            it("should set the html of a tbody Element", function() {
                 var html = '<tr><td>cell 1</td><td>cell 2</td></tr><tr><td class="cell">cell 1</td><td>cell 2</td></tr>';
+
                 var tbody = document.createElement('tbody');
+
                 document.createElement('table').appendChild(tbody);
                 dh.overwrite(tbody, html);
                 
@@ -430,9 +453,11 @@ function Ext_core_DomHelper_Tests() {
                 expect(tbody.lastChild.firstChild.className).toEqual('cell');
             });
             
-            it("should set the html of a thead Element", function(){
+            it("should set the html of a thead Element", function() {
                 var html = '<tr><td>cell 1</td><td>cell 2</td></tr><tr><td class="cell">cell 1</td><td>cell 2</td></tr>';
+
                 var thead = document.createElement('thead');
+
                 document.createElement('table').appendChild(thead);
                 dh.overwrite(thead, html);
                 
@@ -440,9 +465,11 @@ function Ext_core_DomHelper_Tests() {
                 expect(thead.lastChild.firstChild.className).toEqual('cell');
             });
             
-            it("should set the html of a tfoot Element", function(){
+            it("should set the html of a tfoot Element", function() {
                 var html = '<tr><td>cell 1</td><td>cell 2</td></tr><tr><td class="cell">cell 1</td><td>cell 2</td></tr>';
+
                 var tfoot = document.createElement('tfoot');
+
                 document.createElement('table').appendChild(tfoot);
                 dh.overwrite(tfoot, html);
                 
@@ -450,9 +477,11 @@ function Ext_core_DomHelper_Tests() {
                 expect(tfoot.lastChild.firstChild.className).toEqual('cell');
             });
             
-            it("should set the html of a tr Element", function(){
+            it("should set the html of a tr Element", function() {
                 var html = '<td class="cell">cell 1</td><td>cell 2</td>';
+
                 var tr = document.createElement('tr');
+
                 document.createElement('tbody').appendChild(tr);
                 document.createElement('table').appendChild(tr.parentNode);
                 dh.overwrite(tr, html);
@@ -461,9 +490,11 @@ function Ext_core_DomHelper_Tests() {
                 expect(tr.firstChild.className).toEqual('cell');
             });
             
-            it("should set the html of a td Element", function(){
+            it("should set the html of a td Element", function() {
                 var html = '<span class="span">Some Span</span><a href="#">Some Link</a>';
+
                 var td = document.createElement('td');
+
                 document.createElement('tr').appendChild(td);
                 document.createElement('tbody').appendChild(td.parentNode);
                 document.createElement('table').appendChild(td.parentNode.parentNode);

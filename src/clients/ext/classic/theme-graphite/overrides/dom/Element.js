@@ -1,7 +1,6 @@
 Ext.define('Ext.theme.graphite.dom.Element', {
     override: 'Ext.dom.Element'
-},
-function() {
+}, function() {
     Ext.onDocumentReady(function() {
         Ext.getBody().addCls([
             Ext.baseCSSPrefix + 'dark-mode',

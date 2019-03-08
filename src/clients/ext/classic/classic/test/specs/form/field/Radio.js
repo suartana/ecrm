@@ -87,7 +87,7 @@ topSuite("Ext.form.field.Radio", function() {
             });
         });
         
-        it("should get the correct group value", function(){
+        it("should get the correct group value", function() {
             expect(radios[0].getGroupValue()).toEqual(3);
         });
     });
@@ -109,7 +109,7 @@ topSuite("Ext.form.field.Radio", function() {
             expect(radios[2].getValue()).toBeTruthy();
         });
 
-        it("should check the sibling radio matching a passed string value", function(){
+        it("should check the sibling radio matching a passed string value", function() {
             makeRadios(3);
 
             radios[0].setValue(2);
@@ -123,14 +123,14 @@ topSuite("Ext.form.field.Radio", function() {
             expect(radios[2].getValue()).toBeTruthy();
         });
 
-        it("should call handlers for all items in a group", function(){
+        it("should call handlers for all items in a group", function() {
             var handlers = [],
                 spies = [],
                 i = 0;
 
-            for(i = 0; i < 3; ++i){
+            for (i = 0; i < 3; ++i) {
                 handlers.push({
-                    fn: function(){}
+                    fn: function() {}
                 });
                 spies.push(spyOn(handlers[i], 'fn'));
                 radios.push(new Ext.form.field.Radio({
@@ -158,6 +158,7 @@ topSuite("Ext.form.field.Radio", function() {
                 inputValue: 'the-input-value',
                 renderTo: Ext.getBody()
             });
+
             radios = [component];
             expect(component.getModelData().test).toBe('the-input-value');
         });
@@ -167,6 +168,7 @@ topSuite("Ext.form.field.Radio", function() {
                 inputValue: 'the-input-value',
                 renderTo: Ext.getBody()
             });
+
             radios = [component];
             expect(component.getModelData().test).toBeNull();
         });

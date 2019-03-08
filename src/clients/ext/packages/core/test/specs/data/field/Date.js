@@ -1,5 +1,4 @@
 topSuite("Ext.data.field.Date", function() {
-    
     var field;
     
     function make(cfg) {
@@ -17,22 +16,22 @@ topSuite("Ext.data.field.Date", function() {
         
         it("should configure the type", function() {
             expect(field.getType()).toBe('date');
-        }); 
+        });
         
         it("should default dateFormat to null", function() {
-            expect(field.getDateFormat()).toBeNull();    
+            expect(field.getDateFormat()).toBeNull();
         });
         
         it("should default dateReadFormat to null", function() {
-            expect(field.getDateReadFormat()).toBeNull();    
+            expect(field.getDateReadFormat()).toBeNull();
         });
         
         it("should default dateWriteFormat to timestamp", function() {
-            expect(field.getDateWriteFormat()).toBe('timestamp');    
-        });     
+            expect(field.getDateWriteFormat()).toBe('timestamp');
+        });
         
         it("should default the sorting to date", function() {
-            expect(field.getSortType()).toBe(Ext.data.SortTypes.asDate);    
+            expect(field.getSortType()).toBe(Ext.data.SortTypes.asDate);
         });
     });
     
@@ -40,21 +39,21 @@ topSuite("Ext.data.field.Date", function() {
         it("should configure dateFormat", function() {
             make({
                 dateFormat: 'Y/m/d'
-            });    
+            });
             expect(field.getDateFormat()).toBe('Y/m/d');
         });
         
         it("should configure dateReadFormat", function() {
             make({
                 dateReadFormat: 'Y-m-d'
-            });    
+            });
             expect(field.getDateReadFormat()).toBe('Y-m-d');
         });
         
         it("should configure dateWriteFormat", function() {
             make({
                 dateWriteFormat: 'Y m d'
-            });    
+            });
             expect(field.getDateWriteFormat()).toBe('Y m d');
         });
     });
@@ -68,40 +67,41 @@ topSuite("Ext.data.field.Date", function() {
             make();
         });
            
-        describe("mixed types", function() { 
+        describe("mixed types", function() {
             it("should return 0 if both values are not dates", function() {
                 expect(field.compare(null, null)).toBe(0);
             });
         
             it("should return -1 if a is not a date and b is a date", function() {
-                expect(field.compare(null, d1)).toBe(-1);    
+                expect(field.compare(null, d1)).toBe(-1);
             });
         
             it("should return 1 if a is a date and b is not a date", function() {
-                expect(field.compare(d1, null)).toBe(1);    
+                expect(field.compare(d1, null)).toBe(1);
             });
         });
         
         describe("2 dates", function() {
             it("should return 0 if the date values are equal", function() {
-                expect(field.compare(d1, d1)).toBe(0);    
+                expect(field.compare(d1, d1)).toBe(0);
             });
             
             it("should return -1 a < b", function() {
-                expect(field.compare(d1, d2)).toBe(-1);    
+                expect(field.compare(d1, d2)).toBe(-1);
             });
             
             it("should return 1 a > b", function() {
-                expect(field.compare(d3, d2)).toBe(1);    
+                expect(field.compare(d3, d2)).toBe(1);
             });
         });
     });
     
-    describe("convert", function() { 
+    describe("convert", function() {
         it("should return the same date instance if passed", function() {
             make();
             var d = new Date();
-            expect(field.convert(d)).toBe(d);    
+
+            expect(field.convert(d)).toBe(d);
         });
         
         describe("falsy values", function() {
@@ -110,38 +110,40 @@ topSuite("Ext.data.field.Date", function() {
             });
             
             it("should return null if false is passed", function() {
-                expect(field.convert(false)).toBeNull();  
+                expect(field.convert(false)).toBeNull();
             });
             
             it("should return null if undefined is passed", function() {
-                expect(field.convert(undefined)).toBeNull();  
-            });  
+                expect(field.convert(undefined)).toBeNull();
+            });
             
             it("should return null if null is passed", function() {
-                expect(field.convert(null)).toBeNull();  
+                expect(field.convert(null)).toBeNull();
             });
             
             it("should return null if '' is passed", function() {
-                expect(field.convert('')).toBeNull();  
+                expect(field.convert('')).toBeNull();
             });
             
             it("should return null if 0 is passed", function() {
-                expect(field.convert(0)).toBeNull();  
+                expect(field.convert(0)).toBeNull();
             });
         });
         
         describe("with format", function() {
             it("should use the dateFormat", function() {
                 var d = new Date();
+
                 make({
                     dateFormat: 'Y-m-d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'parse').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return d;
                 });
                 
@@ -152,15 +154,17 @@ topSuite("Ext.data.field.Date", function() {
             
             it("should use the dateReadFormat", function() {
                 var d = new Date();
+
                 make({
                     dateReadFormat: 'Y-m-d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'parse').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return d;
                 });
                 
@@ -171,16 +175,18 @@ topSuite("Ext.data.field.Date", function() {
             
             it("should prefer dateReadFormat over dateFormat", function() {
                 var d = new Date();
+
                 make({
                     dateReadFormat: 'Y-m-d',
                     dateFormat: 'Y/m/d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'parse').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return d;
                 });
                 
@@ -192,6 +198,7 @@ topSuite("Ext.data.field.Date", function() {
             it("should return formatted date when useStrict false", function() {
                 var d = new Date(),
                     v, format, useStrict;
+
                 make({
                     dateFormat: 'm/d/Y h:i A',
                     useStrict: false
@@ -201,6 +208,7 @@ topSuite("Ext.data.field.Date", function() {
                     v = arg1;
                     format = arg2;
                     useStrict = arg3;
+
                     return d;
                 });
 
@@ -213,6 +221,7 @@ topSuite("Ext.data.field.Date", function() {
             it("should return null when useStrict true", function() {
                 var d = new Date(),
                     v, format, useStrict;
+
                 make({
                     dateFormat: 'm/d/Y h:i A',
                     useStrict: true
@@ -222,6 +231,7 @@ topSuite("Ext.data.field.Date", function() {
                     v = arg1;
                     format = arg2;
                     useStrict = arg3;
+
                     return d;
                 });
 
@@ -276,73 +286,80 @@ topSuite("Ext.data.field.Date", function() {
     describe("serialize", function() {
         it("should return null if the value is not a date", function() {
             make();
-            expect(field.serialize('')).toBeNull();    
+            expect(field.serialize('')).toBeNull();
         });
         
         it("should use the default if there is no specified format", function() {
             make();
             var d = new Date();
-            expect(field.serialize(d)).toBe(Ext.Date.format(d, 'timestamp'));    
+
+            expect(field.serialize(d)).toBe(Ext.Date.format(d, 'timestamp'));
         });
         
         describe("with format", function() {
             it("should use dateFormat", function() {
                 var d = new Date();
+
                 make({
                     dateFormat: 'Y-m-d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'format').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return 'formatted';
                 });
                 
                 expect(field.serialize(d)).toBe('formatted');
                 expect(v).toBe(d);
                 expect(format).toBe('Y-m-d');
-            }); 
+            });
             
             it("should use dateWriteFormat", function() {
                 var d = new Date();
+
                 make({
                     dateWriteFormat: 'Y-m-d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'format').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return 'formatted';
                 });
                 
                 expect(field.serialize(d)).toBe('formatted');
                 expect(v).toBe(d);
                 expect(format).toBe('Y-m-d');
-            }); 
+            });
             
             it("should should favour dateWriteFormat over dateFormat", function() {
                 var d = new Date();
+
                 make({
                     dateFormat: 'Y/m/d',
                     dateWriteFormat: 'Y-m-d'
-                });    
+                });
                 
                 var v, format;
                 
                 spyOn(Ext.Date, 'format').andCallFake(function(arg1, arg2) {
                     v = arg1;
                     format = arg2;
+
                     return 'formatted';
                 });
                 
                 expect(field.serialize(d)).toBe('formatted');
                 expect(v).toBe(d);
                 expect(format).toBe('Y-m-d');
-            }); 
+            });
         });
     });
         

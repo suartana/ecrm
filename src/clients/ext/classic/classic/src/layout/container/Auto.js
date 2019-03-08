@@ -2,9 +2,9 @@
  * @class Ext.layout.container.Auto
  *
  * The AutoLayout is the default layout manager delegated by {@link Ext.container.Container} to
- * render any child Components when no `{@link Ext.container.Container#layout layout}` is configured into
- * a `{@link Ext.container.Container Container}.` AutoLayout provides only a passthrough of any layout calls
- * to any child containers.
+ * render any child Components when no `{@link Ext.container.Container#layout layout}`
+ * is configured into a `{@link Ext.container.Container Container}.` AutoLayout provides
+ * only a passthrough of any layout calls to any child containers.
  *
  *     @example
  *     Ext.create('Ext.Panel', {
@@ -27,14 +27,8 @@
  *     });
  */
 Ext.define('Ext.layout.container.Auto', {
-
-    /* Begin Definitions */
-
-    alias: ['layout.auto', 'layout.autocontainer'],
-
     extend: 'Ext.layout.container.Container',
-
-    /* End Definitions */
+    alias: ['layout.auto', 'layout.autocontainer'],
 
     type: 'autocontainer',
 
@@ -45,12 +39,13 @@ Ext.define('Ext.layout.container.Auto', {
 
     /**
      * @cfg {Boolean} [reserveScrollbar=false]
-     * Set to `true` to leave space for a vertical scrollbar (if the OS shows space-consuming scrollbars) regardless
-     * of whether a scrollbar is needed.
+     * Set to `true` to leave space for a vertical scrollbar (if the OS shows space-consuming
+     * scrollbars) regardless of whether a scrollbar is needed.
      *
-     * This is useful if content height changes during application usage, but you do not want the calculated width
-     * of child items to change when a scrollbar appears or disappears. The scrollbar will appear in the reserved space,
-     * and the calculated width of child Components will not change.
+     * This is useful if content height changes during application usage, but you do not want
+     * the calculated width of child items to change when a scrollbar appears or disappears.
+     * The scrollbar will appear in the reserved space, and the calculated width
+     * of child Components will not change.
      *
      *     @example
      *     Ext.define('Employee', {
@@ -63,21 +58,24 @@ Ext.define('Ext.layout.container.Auto', {
      *     });
      *
      *     function createFakeData(count) {
-     *         var firstNames   = ['Screech', 'Kelly', 'Zach', 'Jessie', 'Lisa', 'A.C.', 'Richard'],
-     *             lastNames    = ['Powers', 'Kapowski', 'Morris', 'Spano', 'Turtle', 'Slater', 'Belding'],
-     *             ratings      = [1, 2, 3, 4, 5],
-     *             salaries     = [100, 400, 900, 1500, 1000000];
+     *         var firstNames = ['Screech', 'Kelly', 'Zach', 'Jessie', 'Lisa', 'A.C.', 'Richard'],
+     *             lastNames = ['Powers', 'Kapowski', 'Morris', 'Spano', 'Turtle', 'Slater',
+     *                          'Belding'],
+     *             ratings = [1, 2, 3, 4, 5],
+     *             salaries = [100, 400, 900, 1500, 1000000],
+     *             data = [];
      *
-     *         var data = [];
      *         for (var i = 0; i < (count || 25); i++) {
-     *             var ratingId    = Math.floor(Math.random() * ratings.length),
-     *                 salaryId    = Math.floor(Math.random() * salaries.length),
+     *             var ratingId = Math.floor(Math.random() * ratings.length),
+     *                 salaryId = Math.floor(Math.random() * salaries.length),
      *                 firstNameId = Math.floor(Math.random() * firstNames.length),
-     *                 lastNameId  = Math.floor(Math.random() * lastNames.length),
+     *                 lastNameId = Math.floor(Math.random() * lastNames.length),
      *
-     *                 rating      = ratings[ratingId],
-     *                 salary      = salaries[salaryId],
-     *                 name        = Ext.String.format("{0} {1}", firstNames[firstNameId], lastNames[lastNameId]);
+     *                 rating = ratings[ratingId],
+     *                 salary = salaries[salaryId],
+     *                 name = Ext.String.format(
+     *                     "{0} {1}", firstNames[firstNameId], lastNames[lastNameId]
+     *                 );
      *
      *             data.push({
      *                 rating: rating,
@@ -203,6 +201,7 @@ Ext.define('Ext.layout.container.Auto', {
     outerCtCls: Ext.baseCSSPrefix + 'autocontainer-outerCt',
     innerCtCls: Ext.baseCSSPrefix + 'autocontainer-innerCt',
 
+    /* eslint-disable indent, max-len */
     // Auto layout's renderTpl wraps the content in an outerCt which is used to accomplish
     // the following 3 goals:
     // 
@@ -229,13 +228,14 @@ Ext.define('Ext.layout.container.Auto', {
             '</div>',
         '</div>'
     ],
+    /* eslint-enable indent, max-len */
 
     beginLayout: function(ownerContext) {
         this.callParent(arguments);
         this.initContextItems(ownerContext);
     },
     
-    beforeLayoutCycle: function(ownerContext){
+    beforeLayoutCycle: function(ownerContext) {
         var comp = this.owner,
             inheritedState = comp.inheritedState,
             inheritedStateInner = comp.inheritedStateInner;
@@ -244,9 +244,11 @@ Ext.define('Ext.layout.container.Auto', {
             inheritedState = comp.getInherited(); // fixes both
             inheritedStateInner = comp.inheritedStateInner;
         }
+        
         if (ownerContext.widthModel.shrinkWrap) {
             inheritedStateInner.inShrinkWrapTable = true;
-        } else {
+        }
+        else {
             delete inheritedStateInner.inShrinkWrapTable;
         }
     },
@@ -277,12 +279,14 @@ Ext.define('Ext.layout.container.Auto', {
             // unless there is a potential for horizontal overflow, then allow
             // the outerCt to expand to the width of the contents
             overflowXStyle = me.getOverflowXStyle(ownerContext);
-            outerCtTableLayout = (inheritedStateInner.inShrinkWrapTable ||
-                                  overflowXStyle === 'auto' || 
-                                  overflowXStyle === 'scroll') ? '' : 'fixed';
+            outerCtTableLayout =
+                (inheritedStateInner.inShrinkWrapTable || overflowXStyle === 'auto' ||
+                 overflowXStyle === 'scroll')
+                    ? ''
+                    : 'fixed';
         }
 
-        if (!ownerContext.heightModel.shrinkWrap && 
+        if (!ownerContext.heightModel.shrinkWrap &&
             !Ext.supports.PercentageHeightOverflowBug) {
             // if we're not shrink wrapping height, we need to get the outerCt out of the
             // way so that percentage height children will be sized correctly.  We do this
@@ -331,10 +335,12 @@ Ext.define('Ext.layout.container.Auto', {
         var me = this,
             state = ownerContext.state,
             containerSize = me.getContainerSize(ownerContext, true),
-            // If subclass has a calculateItems method, call it and cache the result
-            calculatedItems = state.calculatedItems ||
-                (state.calculatedItems = me.calculateItems ?
-                me.calculateItems(ownerContext, containerSize) : true);
+            calculatedItems;
+            
+        // If subclass has a calculateItems method, call it and cache the result
+        calculatedItems = state.calculatedItems ||
+            (state.calculatedItems =
+                me.calculateItems ? me.calculateItems(ownerContext, containerSize) : true);
 
         me.setCtSizeIfNeeded(ownerContext, containerSize);
 
@@ -346,6 +352,7 @@ Ext.define('Ext.layout.container.Auto', {
                 if (me.manageOverflow && !ownerContext.state.secondPass && !me.reserveScrollbar) {
                     me.calculateOverflow(ownerContext, containerSize);
                 }
+
                 return;
             }
         }
@@ -353,26 +360,29 @@ Ext.define('Ext.layout.container.Auto', {
         me.done = false;
     },
 
-    calculateContentSize: function (ownerContext) {
+    calculateContentSize: function(ownerContext) {
         var me = this,
-            containerDimensions = ((ownerContext.widthModel.shrinkWrap ? 1 : 0) | // jshint ignore:line
-                                   (ownerContext.heightModel.shrinkWrap ? 2 : 0)),
-            calcWidth = (containerDimensions & 1) || undefined, // jshint ignore:line
-            calcHeight = (containerDimensions & 2) || undefined, // jshint ignore:line
+            containerDimensions = ((ownerContext.widthModel.shrinkWrap ? 1 : 0) |
+                                  (ownerContext.heightModel.shrinkWrap ? 2 : 0)),
+            calcWidth = (containerDimensions & 1) || undefined,
+            calcHeight = (containerDimensions & 2) || undefined,
             needed = 0,
             props = ownerContext.props;
 
         if (calcWidth) {
             if (isNaN(props.contentWidth)) {
                 ++needed;
-            } else {
+            }
+            else {
                 calcWidth = undefined;
             }
         }
+
         if (calcHeight) {
             if (isNaN(props.contentHeight)) {
                 ++needed;
-            } else {
+            }
+            else {
                 calcHeight = undefined;
             }
         }
@@ -381,15 +391,17 @@ Ext.define('Ext.layout.container.Auto', {
             if (calcWidth && !ownerContext.setContentWidth(me.measureContentWidth(ownerContext))) {
                 me.done = false;
             }
+            
+            // eslint-disable-next-line max-len
             if (calcHeight && !ownerContext.setContentHeight(me.measureContentHeight(ownerContext))) {
                 me.done = false;
             }
 
-            //if (me.done) {
+            // if (me.done) {
             //    var el = ownerContext.targetContext.el.dom;
             //    Ext.log(this.owner.id, '.contentSize: ', contentWidth, 'x', contentHeight,
             //        ' => scrollSize: ', el.scrollWidth, 'x', el.scrollHeight);
-            //}
+            // }
         }
     },
 
@@ -401,7 +413,7 @@ Ext.define('Ext.layout.container.Auto', {
      * 
      * @param {Ext.layout.ContextItem} ownerContext
      */
-    calculateOverflow: function (ownerContext) {
+    calculateOverflow: function(ownerContext) {
         var me = this,
             width, height, scrollbarSize, scrollbars, xauto, yauto, targetEl;
 
@@ -417,16 +429,16 @@ Ext.define('Ext.layout.container.Auto', {
 
             if (targetEl.scrollWidth > targetEl.clientWidth) {
                 // has horizontal scrollbar
-                scrollbars |= 1; // jshint ignore:line
+                scrollbars |= 1;
             }
 
             if (targetEl.scrollHeight > targetEl.clientHeight) {
                 // has vertical scrollbar
-                scrollbars |= 2; // jshint ignore:line
+                scrollbars |= 2;
             }
 
-            width = (yauto && (scrollbars & 2)) ? scrollbarSize.width : 0; // jshint ignore:line
-            height = (xauto && (scrollbars & 1)) ? scrollbarSize.height : 0; // jshint ignore:line
+            width = (yauto && (scrollbars & 2)) ? scrollbarSize.width : 0;
+            height = (xauto && (scrollbars & 1)) ? scrollbarSize.height : 0;
 
             if (width !== me.lastOverflowAdjust.width || height !== me.lastOverflowAdjust.height) {
                 me.done = false;
@@ -448,10 +460,10 @@ Ext.define('Ext.layout.container.Auto', {
     },
 
     completeLayout: function(ownerContext) {
-       this.lastOverflowAdjust = ownerContext.state.overflowAdjust;
+        this.lastOverflowAdjust = ownerContext.state.overflowAdjust;
     },
 
-    doRenderBody: function (out, renderData) {
+    doRenderBody: function(out, renderData) {
         // Careful! This method is bolted on to the renderTpl so all we get for context is
         // the renderData! The "this" pointer is the renderTpl instance!
         var me = renderData.$layout,
@@ -462,8 +474,10 @@ Ext.define('Ext.layout.container.Auto', {
         if (beforeBodyTpl) {
             XTemplate.getTpl(me, 'beforeBodyTpl').applyOut(renderData, out);
         }
+
         this.renderItems(out, renderData);
         this.renderContent(out, renderData);
+
         if (afterBodyTpl) {
             XTemplate.getTpl(me, 'afterBodyTpl').applyOut(renderData, out);
         }
@@ -482,12 +496,12 @@ Ext.define('Ext.layout.container.Auto', {
         }
     },
 
-    finishedLayout: function (ownerContext) {
+    finishedLayout: function(ownerContext) {
         var innerCt = this.innerCt;
 
         this.callParent(arguments);
 
-        if (Ext.isIE8)  {
+        if (Ext.isIE8) {
             // IE8 needs a repaint to render percentage sized child items.
             innerCt.repaint();
         }
@@ -497,7 +511,7 @@ Ext.define('Ext.layout.container.Auto', {
             // the normal repaint() method doesn't seem to do the trick, but tweaking
             // the position property in combination with reading scrollWidth does.
             innerCt.setStyle('position', 'relative');
-            innerCt.dom.scrollWidth; // jshint ignore:line
+            innerCt.dom.scrollWidth;
             innerCt.setStyle('position', '');
         }
     },
@@ -517,7 +531,7 @@ Ext.define('Ext.layout.container.Auto', {
      * @return {Number} return.height The height
      * @protected
      */
-    getContainerSize : function(ownerContext, inDom) {
+    getContainerSize: function(ownerContext, inDom) {
         // Subtle But Important:
         // 
         // We don't want to call getProp/hasProp et.al. unless we in fact need that value
@@ -535,7 +549,7 @@ Ext.define('Ext.layout.container.Auto', {
         return size;
     },
 
-    getRenderData: function () {
+    getRenderData: function() {
         var me = this,
             data = me.callParent();
 
@@ -552,7 +566,8 @@ Ext.define('Ext.layout.container.Auto', {
     },
 
     // Overridden method from Ext.layout.container.Container.
-    // Used by Container classes to insert special DOM elements which must exist in addition to the child components
+    // Used by Container classes to insert special DOM elements which must exist
+    // in addition to the child components
     getElementTarget: function() {
         return this.innerCt;
     },
@@ -569,7 +584,8 @@ Ext.define('Ext.layout.container.Auto', {
      */
     getOverflowXStyle: function(ownerContext) {
         return ownerContext.overflowXStyle ||
-            (ownerContext.overflowXStyle = this.owner.scrollFlags.overflowX || ownerContext.overflowContext.getStyle('overflow-x'));
+              (ownerContext.overflowXStyle = this.owner.scrollFlags.overflowX ||
+               ownerContext.overflowContext.getStyle('overflow-x'));
     },
 
     /**
@@ -583,8 +599,9 @@ Ext.define('Ext.layout.container.Auto', {
      * @return {String}
      */
     getOverflowYStyle: function(ownerContext) {
-        return ownerContext.overflowYStyle || 
-            (ownerContext.overflowYStyle = this.owner.scrollFlags.overflowY || ownerContext.overflowContext.getStyle('overflow-y'));
+        return ownerContext.overflowYStyle ||
+               (ownerContext.overflowYStyle = this.owner.scrollFlags.overflowY ||
+               ownerContext.overflowContext.getStyle('overflow-y'));
     },
 
     initContextItems: function(ownerContext) {
@@ -594,8 +611,9 @@ Ext.define('Ext.layout.container.Auto', {
 
         ownerContext.outerCtContext = ownerContext.getEl('outerCt', me);
         ownerContext.innerCtContext = ownerContext.getEl('innerCt', me);
-        ownerContext.overflowContext = (overflowEl === ownerContext.el) ? ownerContext :
-            ownerContext.getEl(overflowEl);
+        ownerContext.overflowContext = (overflowEl === ownerContext.el)
+            ? ownerContext
+            : ownerContext.getEl(overflowEl);
 
         if (target[target.contentPaddingProperty] !== undefined) {
             // If padding was defined using the contentPaddingProperty, we render the
@@ -627,7 +645,7 @@ Ext.define('Ext.layout.container.Auto', {
         }
     },
 
-    measureContentHeight: function (ownerContext) {
+    measureContentHeight: function(ownerContext) {
         // contentHeight includes padding, but not border, framing or margins
         var contentHeight = this.outerCt.getHeight(),
             target = ownerContext.target;
@@ -639,10 +657,11 @@ Ext.define('Ext.layout.container.Auto', {
             // targetContext
             contentHeight += ownerContext.targetContext.getPaddingInfo().height;
         }
+
         return contentHeight;
     },
 
-    measureContentWidth: function (ownerContext) {
+    measureContentWidth: function(ownerContext) {
         var dom, style, old, contentWidth, target;
             
         // In the newer Chrome versions, it won't measure the
@@ -655,9 +674,9 @@ Ext.define('Ext.layout.container.Auto', {
             
             if (old === 'table-cell') {
                 style.display = '';
-                dom.offsetWidth; // jshint ignore:line
+                dom.offsetWidth;
                 style.display = old;
-            }    
+            }
         }
 
         if (Ext.isSafari) {
@@ -669,7 +688,7 @@ Ext.define('Ext.layout.container.Auto', {
             dom = this.outerCt.dom;
             style = dom.style;
             style.display = 'table-cell';
-            dom.offsetWidth; // jshint ignore:line
+            dom.offsetWidth;
             dom.style.display = '';
         }
 
@@ -684,6 +703,7 @@ Ext.define('Ext.layout.container.Auto', {
             // targetContext
             contentWidth += ownerContext.targetContext.getPaddingInfo().width;
         }
+
         return contentWidth;
     },
 
@@ -725,13 +745,14 @@ Ext.define('Ext.layout.container.Auto', {
                 // scrollbar when rendering percentage-height elements
                 needsOuterHeight = true;
             }
+
             if (Ext.isIE8) {
                 // When not shrink wrapping, we set a pixel height on the innerCt to
                 // support percentage height children in IE8.
                 needsInnerHeight = true;
             }
 
-            if ((needsOuterHeight || needsInnerHeight) && canOverflowX && 
+            if ((needsOuterHeight || needsInnerHeight) && canOverflowX &&
                 (targetEl.dom.scrollWidth > targetEl.dom.clientWidth)) {
                 // adjust the height for scrollbar size since it's not accounted for
                 // in the containerSize.
@@ -751,18 +772,19 @@ Ext.define('Ext.layout.container.Auto', {
         }
     },
 
-    setupRenderTpl: function (renderTpl) {
+    setupRenderTpl: function(renderTpl) {
         this.callParent(arguments);
 
         renderTpl.renderPadding = this.doRenderPadding;
     },
 
-    getContentTarget: function(){
+    getContentTarget: function() {
         return this.innerCt;
     }
 
 }, function(Cls) {
     var v = Ext.chromeVersion;
+    
     // This was likely fixed much earlier, on the bug tracker marked as fixed on 2014/04/01.
     // 34 was the most recently released version after this date. Google doesn't release older
     // versions to test on so it's not possible to say. However due to the auto update nature it's

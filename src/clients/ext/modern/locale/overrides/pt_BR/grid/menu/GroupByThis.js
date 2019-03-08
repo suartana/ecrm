@@ -1,7 +1,7 @@
 Ext.define("Ext.locale.pt_BR.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
-    config:{
+    config: {
         text: "Agrupar por este campo"
     }
 });

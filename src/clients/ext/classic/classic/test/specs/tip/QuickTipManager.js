@@ -1,5 +1,3 @@
-/* global Ext, expect */
-
 topSuite("Ext.tip.QuickTipManager", function() {
     // QuickTips are very special and persistent; when unit testing we override
     // the Manager to init QuickTips as soon as it's loaded, and add it to the list
@@ -101,6 +99,7 @@ topSuite("Ext.tip.QuickTipManager", function() {
             Ext.tip.QuickTipManager.init();
             var spy = spyOn(Ext.tip.QuickTipManager.getQuickTip(), 'register'),
                 arg = {};
+
             Ext.tip.QuickTipManager.register(arg);
             expect(spy).toHaveBeenCalledWith(arg);
         });
@@ -112,6 +111,7 @@ topSuite("Ext.tip.QuickTipManager", function() {
             Ext.tip.QuickTipManager.init();
             var spy = spyOn(Ext.tip.QuickTipManager.getQuickTip(), 'unregister'),
                 arg = Ext.getBody();
+
             Ext.tip.QuickTipManager.unregister(arg);
             expect(spy).toHaveBeenCalledWith(arg);
         });

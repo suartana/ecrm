@@ -5,7 +5,7 @@
  */
 Ext.define('Ext.data.request.Ajax', {
     extend: 'Ext.data.request.Base',
-    alias:  'request.ajax',
+    alias: 'request.ajax',
     
     requires: [
         'Ext.data.flash.BinaryXhr'
@@ -20,7 +20,7 @@ Ext.define('Ext.data.request.Ajax', {
          * @private
          */
         parseStatus: function(status, response) {
-            var type, len;
+            var type, len, success, isException;
 
             if (response) {
                 // We have to account for binary and other response types
@@ -41,12 +41,13 @@ Ext.define('Ext.data.request.Ajax', {
             }
 
             // see: https://prototype.lighthouseapp.com/projects/8886/tickets/129-ie-mangles-http-response-status-code-204-to-1223
-            status = status == 1223 ? 204 : status;
+            status = status === 1223 ? 204 : status;
 
+            isException = false;
+            
             // Status can be 0 for file:/// requests
-            var success = (status >= 200 && status < 300) || status == 304 ||
-                (status == 0 && Ext.isNumber(len)),
-                isException = false;
+            success = (status >= 200 && status < 300) || status === 304 ||
+                      (status === 0 && Ext.isNumber(len));
 
             if (!success) {
                 switch (status) {
@@ -73,13 +74,13 @@ Ext.define('Ext.data.request.Ajax', {
             options = me.options,
             requestOptions = me.requestOptions,
             isXdr = me.isXdr,
-            xhr, headers;
+            xhr;
         
         xhr = me.xhr = me.openRequest(options, requestOptions, me.async, me.username, me.password);
 
         // XDR doesn't support setting any headers
         if (!isXdr) {
-            headers = me.setupHeaders(xhr, options, requestOptions.data, requestOptions.params);
+            me.setupHeaders(xhr, options, requestOptions.data, requestOptions.params);
         }
 
         if (me.async) {
@@ -169,19 +170,19 @@ Ext.define('Ext.data.request.Ajax', {
      * of the parameters and options and return a suitable, open connection.
      * @private
      */
-    openRequest: function(options, requestOptions, async, username, password) {
+    openRequest: function(options, requestOptions, isAsync, username, password) {
         var me = this,
             xhr = me.newRequest(options);
 
         if (username) {
-            xhr.open(requestOptions.method, requestOptions.url, async, username, password);
+            xhr.open(requestOptions.method, requestOptions.url, isAsync, username, password);
         }
         else {
             if (me.isXdr) {
                 xhr.open(requestOptions.method, requestOptions.url);
             }
             else {
-                xhr.open(requestOptions.method, requestOptions.url, async);
+                xhr.open(requestOptions.method, requestOptions.url, isAsync);
             }
         }
 
@@ -194,7 +195,7 @@ Ext.define('Ext.data.request.Ajax', {
                 // support Uint8Array, a mime type override is required so that
                 // the unprocessed binary data can be read from the responseText
                 // (see createResponse())
-                xhr.overrideMimeType('text\/plain; charset=x-user-defined');
+                xhr.overrideMimeType('text/plain; charset=x-user-defined');
             //<debug>
             }
             else if (!Ext.isIE) {
@@ -300,7 +301,7 @@ Ext.define('Ext.data.request.Ajax', {
                 }
             }
         }
-        catch(e) {
+        catch (e) {
             // TODO Request shouldn't fire events from its owner
             me.owner.fireEvent('exception', key, header);
         }
@@ -319,7 +320,7 @@ Ext.define('Ext.data.request.Ajax', {
         var xdr;
 
         if (Ext.ieVersion >= 8) {
-            xdr = new XDomainRequest();
+            xdr = new XDomainRequest(); // eslint-disable-line no-undef
         }
         else {
             Ext.raise({
@@ -363,11 +364,11 @@ Ext.define('Ext.data.request.Ajax', {
         response.contentType = xhr.contentType || this.defaultXdrContentType;
     },
 
-    bindStateChange: function (xdrResult) {
+    bindStateChange: function(xdrResult) {
         var me = this;
 
-        return function () {
-            Ext.elevate(function () {
+        return function() {
+            Ext.elevate(function() {
                 me.onStateChange(xdrResult);
             });
         };
@@ -378,7 +379,7 @@ Ext.define('Ext.data.request.Ajax', {
             xhr = me.xhr;
 
         // Using CORS with IE doesn't support readyState so we fake it.
-        if ((xhr && xhr.readyState == 4) || me.isXdr) {
+        if ((xhr && xhr.readyState === 4) || me.isXdr) {
             me.clearTimer();
             
             me.onComplete(xdrResult);
@@ -475,7 +476,7 @@ Ext.define('Ext.data.request.Ajax', {
             headers = {},
             lines = isXdr ? [] : xhr.getAllResponseHeaders().replace(/\r\n/g, '\n').split('\n'),
             count = lines.length,
-            line, index, key, response, byteArray;
+            line, index, key, response;
 
         while (count--) {
             line = lines[count];
@@ -484,7 +485,7 @@ Ext.define('Ext.data.request.Ajax', {
             if (index >= 0) {
                 key = line.substr(0, index).toLowerCase();
                 
-                if (line.charAt(index + 1) == ' ') {
+                if (line.charAt(index + 1) === ' ') {
                     ++index;
                 }
                 
@@ -566,6 +567,7 @@ Ext.define('Ext.data.request.Ajax', {
                 // Modern browsers (including IE10) have a native byte array
                 // which can be created by passing the ArrayBuffer (returned as
                 // the xhr.response property) to the Uint8Array constructor.
+                /* eslint-disable-next-line no-undef */
                 byteArray = response ? new Uint8Array(response) : [];
             }
             else if (Ext.isIE9p) {
@@ -574,9 +576,10 @@ Ext.define('Ext.data.request.Ajax', {
                 // In IE9p we can get the bytes by constructing a VBArray
                 // using the responseBody and then converting it to an Array.
                 try {
-                    byteArray = new VBArray(responseBody).toArray(); // jshint ignore:line
+                /* eslint-disable-next-line no-undef */
+                    byteArray = new VBArray(responseBody).toArray();
                 }
-                catch(e) {
+                catch (e) {
                     // If the binary response is empty, the VBArray constructor will
                     // choke on the responseBody.  We can't simply do a null check
                     // on responseBody because responseBody is always falsy when it
@@ -594,7 +597,8 @@ Ext.define('Ext.data.request.Ajax', {
                     this.injectVBScript();
                 }
                 
-                getIEByteArray(xhr.responseBody, byteArray = []); // jshint ignore:line
+                /* eslint-disable-next-line no-undef */
+                getIEByteArray(xhr.responseBody, byteArray = []);
             }
             else {
                 // in other older browsers make a best-effort attempt to read the
@@ -623,6 +627,8 @@ Ext.define('Ext.data.request.Ajax', {
             var scriptTag = document.createElement('script');
             
             scriptTag.type = 'text/vbscript';
+            
+            /* eslint-disable indent */
             scriptTag.text = [
                 'Function getIEByteArray(byteArray, out)',
                     'Dim len, i',
@@ -632,6 +638,7 @@ Ext.define('Ext.data.request.Ajax', {
                     'Next',
                 'End Function'
             ].join('\n');
+            /* eslint-enable indent */
             
             Ext.getHead().dom.appendChild(scriptTag);
             

@@ -27,7 +27,7 @@ Ext.define('Ext.grid.selection.Columns', {
         return result;
     },
 
-    eachRow: function (fn, scope) {
+    eachRow: function(fn, scope) {
         var columns = this.selectedColumns;
 
         if (columns && columns.length) {
@@ -35,7 +35,7 @@ Ext.define('Ext.grid.selection.Columns', {
         }
     },
 
-    eachColumn: function (fn, scope) {
+    eachColumn: function(fn, scope) {
         var me = this,
             columns = me.selectedColumns,
             len, i;
@@ -50,7 +50,7 @@ Ext.define('Ext.grid.selection.Columns', {
         }
     },
 
-    eachCell: function (fn, scope) {
+    eachCell: function(fn, scope) {
         var me = this,
             view = me.view,
             columns = me.selectedColumns,
@@ -62,9 +62,9 @@ Ext.define('Ext.grid.selection.Columns', {
 
             // Use Store#each instead of copying the entire dataset into an array and iterating that.
             view.getStore().each(function(record) {
-                context = context.clone({record: record});
+                context = context.clone({ record: record });
                 for (i = 0; i < len; i++) {
-                    context = context.clone({column: columns[i]});
+                    context = context.clone({ column: columns[i] });
                     if (fn.call(scope || me, context, context.columnIndex, context.recordIndex) === false) {
                         return false;
                     }
@@ -118,14 +118,16 @@ Ext.define('Ext.grid.selection.Columns', {
          * @private
          */
         add: function(column, suppressEvent) {
+            var me = this,
+                selModel;
+
             //<debug>
             if (!column.isGridColumn) {
                 Ext.raise('Column selection must be passed a grid Column header object');
             }
             //</debug>
 
-            var me = this,
-                selModel = me.getSelectionModel();
+            selModel = me.getSelectionModel();
 
             Ext.Array.include((me.selectedColumns || (me.selectedColumns = [])), column);
             me.refreshColumns(column);
@@ -226,7 +228,8 @@ Ext.define('Ext.grid.selection.Columns', {
                         location = location.cloneForColumn(columns[colIdx]);
                         if (selected[colIdx]) {
                             view.onCellSelect(location);
-                        } else {
+                        } 
+                        else {
                             view.onCellDeselect(location);
                         }
                     }
@@ -277,7 +280,7 @@ Ext.define('Ext.grid.selection.Columns', {
         /**
          * @private
          */
-        selectAll: function () {
+        selectAll: function() {
             var me = this;
 
             me.clear();
@@ -320,7 +323,8 @@ Ext.define('Ext.grid.selection.Columns', {
                 end = new Ext.grid.Location(me.view, {record: me.view.getStore().getCount() - 1, column: range[1]});
 
                 me.getSelectionModel().onSelectionFinish(me, start, end);
-            } else {
+            } 
+            else {
                 me.getSelectionModel().onSelectionFinish(me);
             }
         },

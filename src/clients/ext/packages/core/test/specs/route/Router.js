@@ -1,3 +1,4 @@
+/* global undefinedFn */
 topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], function() {
     var Router = Ext.route.Router,
         actionExecuted = false,
@@ -65,7 +66,7 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
                 });
             },
 
-            beforeHandleRouteError: function () {
+            beforeHandleRouteError: function() {
                 undefinedFn();
             },
 
@@ -84,6 +85,7 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
         if (!controller.isDestroyed) {
             controller.destroy();
         }
+
         if (!other.isDestroyed) {
             other.destroy();
         }
@@ -194,7 +196,7 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
     describe("should recognize token", function() {
         it("recognize 'foo/bar'", function() {
             Router.connect(token, 'handleRoute', controller);
-            //connect a route that will not match
+            // connect a route that will not match
             Router.connect(token + '/boom', 'handleRoute', controller);
 
             expect(Router.recognize(token)).toBeDefined();
@@ -217,7 +219,7 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
             runs(function() {
                 expect(fn).toHaveBeenCalledWith('unmatchedroute', 'bar');
 
-                //restore if any were previously set
+                // restore if any were previously set
                 Router.application = app;
             });
         });
@@ -269,10 +271,10 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
     });
 
     it("should execute multiple tokens", function() {
-        //action should have 0 arguments
+        // action should have 0 arguments
         Router.connect(token, 'handleRoute', controller);
 
-        //before should have 2 arguments, action should have 1
+        // before should have 2 arguments, action should have 1
         Router.connect(token2, {
             action: 'handleRoute',
             before: 'beforeHandleRoute'
@@ -844,8 +846,8 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
         });
     });
 
-    describe('handle rejected before', function () {
-        xit('should handle an error thrown in before', function () {
+    describe('handle rejected before', function() {
+        xit('should handle an error thrown in before', function() {
             var before = spyOn(controller, 'beforeHandleRouteError').andCallThrough(),
                 rejector = spyOn(Router, 'onRouteRejection').andCallThrough(),
                 raise = spyOn(Ext, 'raise').andCallThrough(),
@@ -862,7 +864,7 @@ topSuite("Ext.route.Router", ['Ext.app.Controller', 'Ext.util.History'], functio
             waitsForSpy(rejector);
             waitsForSpy(raise);
 
-            runs(function () {
+            runs(function() {
                 expect(action).not.toHaveBeenCalled();
             });
         });

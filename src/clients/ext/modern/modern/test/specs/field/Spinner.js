@@ -182,8 +182,7 @@ topSuite("Ext.field.Spinner", function() {
         });
     });
     
-    TODO(Ext.supports.Touch).
-    describe("keyboard interaction", function() {
+    (Ext.supports.Touch ? xdescribe : describe)("keyboard interaction", function() {
         beforeEach(function() {
             createField({
                 renderTo: document.body,

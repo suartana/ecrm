@@ -372,7 +372,7 @@ topSuite("Ext.Panel", ['Ext.app.ViewModel', 'Ext.Button'], function() {
                     floated: true
                 });
                 panel.showBy(byCmp);
-                expect(panel.el.getX()).toBe(byCmp.el.getAnchorXY('b')[0] - panel.el.getWidth() / 2);
+                expect(panel.el.getX()).toBeApprox(byCmp.el.getAnchorXY('b')[0] - panel.el.getWidth() / 2);
                 expect(panel.el.getY()).toBe(byCmp.el.getRegion().bottom);
             });
 

@@ -1,11 +1,11 @@
 /**
- * A display-only text field which is not validated and not submitted. This is useful for when you want to display a
- * value from a form's {@link Ext.form.Basic#load loaded data} but do not want to allow the user to edit or submit that
- * value. The value can be optionally {@link #htmlEncode HTML encoded} if it contains HTML markup that you do not want
- * to be rendered.
+ * A display-only text field which is not validated and not submitted. This is useful for when
+ * you want to display a value from a form's {@link Ext.form.Basic#load loaded data} but do not want
+ * to allow the user to edit or submit that value. The value can be optionally
+ * {@link #htmlEncode HTML encoded} if it contains HTML markup that you do not want to be rendered.
  *
- * If you have more complex content, or need to include components within the displayed content, also consider using a
- * {@link Ext.form.FieldContainer} instead.
+ * If you have more complex content, or need to include components within the displayed content,
+ * also consider using a {@link Ext.form.FieldContainer} instead.
  *
  * Example:
  *
@@ -33,11 +33,16 @@
  *     });
  */
 Ext.define('Ext.form.field.Display', {
-    extend:'Ext.form.field.Base',
+    extend: 'Ext.form.field.Base',
     alias: 'widget.displayfield',
-    requires: ['Ext.util.Format', 'Ext.XTemplate'],
     alternateClassName: ['Ext.form.DisplayField', 'Ext.form.Display'],
+
+    requires: [
+        'Ext.util.Format',
+        'Ext.XTemplate'
+    ],
     
+    /* eslint-disable indent, max-len */
     /**
      * @cfg fieldSubTpl
      * @inheritdoc
@@ -46,13 +51,14 @@ Ext.define('Ext.form.field.Display', {
         '<div id="{id}" data-ref="inputEl" role="textbox" aria-readonly="true"',
         ' aria-labelledby="{cmpId}-labelEl" {inputAttrTpl}',
         ' tabindex="<tpl if="tabIdx != null">{tabIdx}<tpl else>-1</tpl>"',
-        '<tpl if="fieldStyle"> style="{fieldStyle}"</tpl>', 
+        '<tpl if="fieldStyle"> style="{fieldStyle}"</tpl>',
         ' class="{fieldCls} {fieldCls}-{ui}">{value}</div>',
         {
             compiled: true,
             disableFormats: true
         }
     ],
+    /* eslint-enable indent, max-len */
     
     // We have the ARIA markup pre-rendered so we don't want it to be applied
     /**
@@ -160,12 +166,13 @@ Ext.define('Ext.form.field.Display', {
     valueToRaw: function(value) {
         if (value || value === 0 || value === false) {
             return value;
-        } else {
+        }
+        else {
             return '';
         }
     },
     
-    isDirty: function(){
+    isDirty: function() {
         return false;
     },
 
@@ -182,10 +189,12 @@ Ext.define('Ext.form.field.Display', {
             
         value = Ext.valueFrom(value, '');
         me.rawValue = value;
+
         if (me.rendered) {
             me.inputEl.dom.innerHTML = me.getDisplayValue();
             me.updateLayout();
         }
+
         return value;
     },
 
@@ -200,10 +209,12 @@ Ext.define('Ext.form.field.Display', {
             display;
 
         if (renderer) {
-             display = Ext.callback(renderer, me.scope, [value, me], 0, me);
-        } else {
-             display = me.htmlEncode ? Ext.util.Format.htmlEncode(value) : value;
+            display = Ext.callback(renderer, me.scope, [value, me], 0, me);
         }
+        else {
+            display = me.htmlEncode ? Ext.util.Format.htmlEncode(value) : value;
+        }
+
         return display;
     },
         
@@ -219,14 +230,17 @@ Ext.define('Ext.form.field.Display', {
      * @cfg {String} inputType
      * @private
      */
+    
     /**
      * @cfg {Boolean} disabled
      * @private
      */
+    
     /**
      * @cfg {Number} checkChangeEvents
      * @private
      */
+    
     /**
      * @cfg {Number} checkChangeBuffer
      * @private

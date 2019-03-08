@@ -3,3 +3,4 @@ Ext.define('Ext.classic.toolbar.Toolbar', {
     
     defaultFieldUI: 'toolbar'
 });
+

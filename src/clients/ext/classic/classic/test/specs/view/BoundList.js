@@ -17,8 +17,8 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
     
     beforeEach(function() {
         Ext.define('spec.View', {
-            extend : 'Ext.data.Model',
-            fields : ['name']
+            extend: 'Ext.data.Model',
+            fields: ['name']
         });
     });
 
@@ -27,6 +27,16 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
         Ext.data.Model.schema.clear();
         Ext.destroy(boundList);
         boundList = store = null;
+    });
+
+    describe("alternate class name", function() {
+        it("should have Ext.BoundList as the alternate class name", function() {
+            expect(Ext.view.BoundList.prototype.alternateClassName).toEqual("Ext.BoundList");
+        });
+
+        it("should allow the use of Ext.BoundList", function() {
+            expect(Ext.BoundList).toBeDefined();
+        });
     });
 
     describe("custom tpl", function() {
@@ -46,20 +56,20 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
         });
     });
     
-    describe("default tpl", function () {
-        it("should be an XTemplate", function () {
+    describe("default tpl", function() {
+        it("should be an XTemplate", function() {
             createBoundList();
 
             expect(boundList.tpl.isTemplate).toBe(true);
         });
 
-        it("should generate the correct default tpl", function () {
+        it("should generate the correct default tpl", function() {
             createBoundList();
 
             expect(boundList.tpl.html).toBe('<tpl for="."><li role="option" unselectable="on" class="x-boundlist-item">{name}</li></tpl>');
         });
 
-        it("should correctly render items using the tpl", function () {
+        it("should correctly render items using the tpl", function() {
             createBoundList({}, [{
                 name: 'Item1',
                 id: 'itemone'
@@ -68,7 +78,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
             var nodes = boundList.getNodes(),
                 node = nodes[0];
 
-            expect(Ext.fly(node)).toHaveCls('x-boundlist-item');    
+            expect(Ext.fly(node)).toHaveCls('x-boundlist-item');
             expect(node.innerHTML).toBe('Item1');
         });
     });
@@ -88,6 +98,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 // The <li> items should go indide the <ul>
                 expect(boundList.getNodeContainer().dom.childNodes.length).toBe(1);
                 var nodes = boundList.getNodes();
+
                 expect(nodes.length).toBe(1);
                 expect(nodes[0].innerHTML).toBe('Item1');
             });
@@ -105,6 +116,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 // The <li> items should go indide the <ul>
                 expect(boundList.getNodeContainer().dom.childNodes.length).toBe(2);
                 var nodes = boundList.getNodes();
+
                 expect(nodes.length).toBe(2);
                 expect(nodes[1].innerHTML).toBe('Item2');
             });
@@ -122,6 +134,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 // The <li> items should go indide the <ul>
                 expect(boundList.getNodeContainer().dom.childNodes.length).toBe(2);
                 var nodes = boundList.getNodes();
+
                 expect(nodes.length).toBe(2);
                 expect(nodes[0].innerHTML).toBe('Item2');
             });
@@ -130,7 +143,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 createBoundList({
                 }, [{
                     name: 'Item1'
-                },{
+                }, {
                     name: 'Item2'
                 }, {
                     name: 'Item3'
@@ -147,6 +160,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 // The <li> items should go indide the <ul>
                 expect(boundList.getNodeContainer().dom.childNodes.length).toBe(5);
                 var nodes = boundList.getNodes();
+
                 expect(nodes.length).toBe(5);
                 expect(nodes[2].innerHTML).toBe('new');
             });
@@ -158,8 +172,9 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 });
                 store.first().set('name', 'foo');
                 var nodes = boundList.getNodes();
+
                 expect(nodes.length).toBe(1);
-                expect(nodes[0].innerHTML).toBe('foo');    
+                expect(nodes[0].innerHTML).toBe('foo');
             });
         });
         
@@ -169,8 +184,9 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 });
                 store.removeAt(0);
                 var nodes = boundList.getNodes();
-                expect(nodes.length).toBe(0); 
-            });  
+
+                expect(nodes.length).toBe(0);
+            });
         });
         
         describe("ARIA attributes", function() {
@@ -261,8 +277,8 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
         });
     });
 
-    describe("highlighting", function(){
-        beforeEach(function(){
+    describe("highlighting", function() {
+        beforeEach(function() {
             var nodes = [],
                 i = 1;
             
@@ -280,38 +296,43 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
             }, nodes);
         });
         
-        it("should apply the highlight class to a node", function(){
+        it("should apply the highlight class to a node", function() {
             boundList.highlightItem(boundList.getNode(0));
             var nodes = boundList.getEl().select('.foo');
+
             expect(nodes.item(0).hasCls(boundList.overItemCls)).toBe(true);
         });
         
-        it("should remove the highlight on an item", function(){
+        it("should remove the highlight on an item", function() {
             boundList.highlightItem(boundList.getNode(0));
             boundList.clearHighlight(boundList.getNode(0));
             var nodes = boundList.getEl().select('.foo');
+
             expect(nodes.item(0).hasCls(boundList.overItemCls)).toBe(false);
         });
         
-        it("should only have at most one item highlighted", function(){
+        it("should only have at most one item highlighted", function() {
             boundList.highlightItem(boundList.getNode(0));
             boundList.highlightItem(boundList.getNode(1));
             var nodes = boundList.getEl().select('.foo');
+
             expect(nodes.item(0).hasCls(boundList.overItemCls)).toBe(false);
             expect(nodes.item(1).hasCls(boundList.overItemCls)).toBe(true);
         });
         
-        it("should keep highlight on an item when updated", function(){
+        it("should keep highlight on an item when updated", function() {
             boundList.highlightItem(boundList.getNode(0));
             boundList.getStore().getAt(0).set('name', 'New');
             var nodes = boundList.getEl().select('.foo');
+
             expect(nodes.item(0).hasCls(boundList.overItemCls)).toBe(true);
         });
         
-        it("should clear all highlights on refresh", function(){
+        it("should clear all highlights on refresh", function() {
             boundList.highlightItem(boundList.getNode(0));
             boundList.refresh();
             var nodes = boundList.getEl().select('.foo');
+
             expect(nodes.item(0).hasCls(boundList.overItemCls)).toBe(false);
         });
     });
@@ -358,8 +379,8 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
         });
     });
 
-    describe('setDisplayField', function () {
-        it('should update the displayField', function () {
+    describe('setDisplayField', function() {
+        it('should update the displayField', function() {
             createBoundList({}, [{
                 name: 'Item1',
                 id: 'itemone'
@@ -372,7 +393,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
             expect(boundList.displayField).toBe('id');
         });
 
-        it('should update the tpl', function () {
+        it('should update the tpl', function() {
             createBoundList();
 
             // update boundlist displayField
@@ -382,7 +403,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
             expect(boundList.tpl.html).toBe('<tpl for="."><li role="option" unselectable="on" class="x-boundlist-item">{id}</li></tpl>');
         });
 
-        it('should correctly render items using the updated tpl', function () {
+        it('should correctly render items using the updated tpl', function() {
             var nodes;
 
             createBoundList({}, [{
@@ -399,9 +420,9 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
         });
     });
 
-    describe('masking', function () {
-        describe('disabling the boundlist', function () {
-            it('should mark the boundlist as disabled', function () {
+    describe('masking', function() {
+        describe('disabling the boundlist', function() {
+            it('should mark the boundlist as disabled', function() {
                 createBoundList();
 
                 boundList.setDisabled(true);
@@ -409,7 +430,7 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 expect(boundList.disabled).toBe(true);
             });
 
-            it('should call Element.mask', function () {
+            it('should call Element.mask', function() {
                 // This tests to make sure that the element is being masked by Element.mask and not by the LoadMask component.
                 // See EXTJSIV-11838.
                 createBoundList();
@@ -422,8 +443,8 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
             });
         });
 
-        describe('enabling the boundlist', function () {
-            beforeEach(function () {
+        describe('enabling the boundlist', function() {
+            beforeEach(function() {
                 createBoundList({
                     disabled: true
                 });
@@ -433,11 +454,11 @@ topSuite("Ext.view.BoundList", ['Ext.data.ArrayStore'], function() {
                 boundList.setDisabled(false);
             });
 
-            it('should mark the boundlist as enabled', function () {
+            it('should mark the boundlist as enabled', function() {
                 expect(boundList.disabled).toBe(false);
             });
 
-            it('should call Element.unmask', function () {
+            it('should call Element.unmask', function() {
                 // This tests to make sure that the element is being unmasked by Element.mask and not by the LoadMask component.
                 // See EXTJSIV-11838.
                 expect(Ext.dom.Element.prototype.unmask).toHaveBeenCalled();

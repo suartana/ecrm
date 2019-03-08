@@ -1529,7 +1529,7 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                         expectData(['Item2', 'Item3', 'Item4', 'Item5', 'Item6']);
                     });
 
-                    it("should hode the item when the change excludes it from the filter", function() {
+                    it("should hide the item when the change excludes it from the filter", function() {
                         store.getFilters().add({
                             filterFn: function(rec) {
                                 return rec.get('name') <= 'Item5';
@@ -1689,6 +1689,32 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                     renderIf();
                     expectData(['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7']);
                 });
+
+                it('should update the scrollPosition.y if a filter results in truncation of scroll range while scrollToTopOnRefresh is false', function() {
+                    // This is a DOM test. Must be rendered.
+                    if (renderedFirst) {
+                        makeSuiteView({
+                            scrollToTopOnRefresh: false,
+                            maxHeight: 300
+                        }, 100);
+
+                        var scrollable = view.getScrollable(),
+                            scrollY;
+
+                        scrollable.scrollTo(null, 10000);
+                        scrollY = scrollable.getPosition().y;
+                        expect(scrollY).toBe(scrollable.getMaxPosition().y);
+                        view.hide();
+
+                        // Chop the view down to only 30 items
+                        store.filter(function (r) {
+                            return r.id < 30;
+                        });
+
+                        view.show();
+                        expect(scrollable.getPosition().y).toBeLessThan(scrollY);
+                    }
+                });
             });
         }
 
@@ -1769,7 +1795,7 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
 
                     return location &&
                         navigationModel.getLocation().equals(expectedLocation) &&
-                        document.activeElement === location.getFocusEl(true) &&
+                        document.activeElement === location.getFocusEl('dom') &&
                         location.getFocusEl().hasCls(view.focusedCls);
                 }, 'location to be ' + expected);
             }
@@ -1871,6 +1897,71 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
             });
 
             expectLocation(1);
+        });
+    });
+
+    describe('Store configured with data Collection', function() {
+        var collection;
+
+        beforeEach(function() {
+            var data = makeData(100),
+                i;
+
+            for (i = 0; i < 100; i++) {
+                data[i] = new Model(data[i]);
+            }
+
+            // We don't set the rootProperty here. Part of the test is that
+            // Store does that itself which makes the mutation events work.
+            collection = new Ext.util.Collection();
+            collection.add(data);
+            store = new Ext.data.Store({
+                model: Model,
+                data: collection
+            });
+
+            // Create the view with the store created round the Collection
+            makeView({
+                store: store,
+                maxHeight: 300
+            }, null, {
+                preventStore: true
+            });
+        });
+
+        it('should respond to mutations', function() {
+            var initialStoreSize = store.getCount();
+
+            expect(view.getFastItems().length).toBe(initialStoreSize);
+
+            store.first().set('name', 'New Name');
+
+            // View must respond to record mutations
+            expect(view.getFastItems()[0].innerText).toBe('New Name');
+
+            store.removeAt(0, 50);
+
+            // Must respond to remove.
+            expect(view.getFastItems().length).toBe(initialStoreSize - 50);
+
+            store.add({
+                data: {
+                    id: 1000,
+                    name: 'Item 1000',
+                    age: 1020
+                }
+            });
+
+            // Must respond to add.
+            expect(view.getFastItems().length).toBe(initialStoreSize - 50 + 1);
+
+            // Only include records 61 to 64
+            store.filter(function(rec) {
+                return rec.id > 60 && rec.id < 65;
+            });
+
+            // Must respond to filter
+            expect(view.getFastItems().length).toBe(4);
         });
     });
 });

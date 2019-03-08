@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-classic",
     "SenchaExtName": "@sencha/ext-classic",
     "SenchaExtReactName": "@sencha/ext-react-classic",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "classic",
         "namespace": "Ext",
@@ -16,7 +16,7 @@
         "creator": "Sencha",
         "summary": "The Classic UI Toolkit",
         "detailedDescription": "UI components for desktops and legacy browsers",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${framework.dir}/build",

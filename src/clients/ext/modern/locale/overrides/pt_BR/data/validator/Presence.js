@@ -1,7 +1,7 @@
-Ext.define('Ext.locale.pt_BR.data.validator.Presence',{
+Ext.define('Ext.locale.pt_BR.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
-    config:{
+    config: {
         message: 'Este campo é necessário'
     }
 });

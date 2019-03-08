@@ -23,13 +23,14 @@ Ext.define('Ext.layout.component.field.HtmlEditor', {
             this.lastValue = dom.value;
             dom.value = '';
         }
+
         this.callParent(arguments);
 
-        ownerContext.toolbarContext  = ownerContext.context.getCmp(owner.toolbar);
+        ownerContext.toolbarContext = ownerContext.context.getCmp(owner.toolbar);
         ownerContext.inputCmpContext = ownerContext.context.getCmp(owner.inputCmp);
         ownerContext.bodyCellContext = ownerContext.getEl('bodyEl');
         ownerContext.textAreaContext = ownerContext.getEl('textareaEl');
-        ownerContext.iframeContext   = ownerContext.getEl('iframeEl');
+        ownerContext.iframeContext = ownerContext.getEl('iframeEl');
     },
     
     beginLayoutCycle: function(ownerContext) {
@@ -42,10 +43,12 @@ Ext.define('Ext.layout.component.field.HtmlEditor', {
             height = (heightModel.natural || heightModel.shrinkWrap) ? me.naturalHeight : '';
             
         me.callParent(arguments);
+
         if (widthModel.shrinkWrap) {
             iframeEl.setStyle('width', '');
             textareaEl.setStyle('width', '');
-        } else if (widthModel.natural) {
+        }
+        else if (widthModel.natural) {
             ownerContext.bodyCellContext.setWidth(me.naturalWidth);
         }
         
@@ -53,10 +56,11 @@ Ext.define('Ext.layout.component.field.HtmlEditor', {
         textareaEl.setStyle('height', height);
     },
     
-    finishedLayout: function(){
+    finishedLayout: function() {
         var owner = this.owner;
         
         this.callParent(arguments);
+
         if (Ext.isGecko) {
             owner.textareaEl.dom.value = this.lastValue;
         }

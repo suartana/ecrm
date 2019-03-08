@@ -1,23 +1,21 @@
-/* global Ext, expect, xit */
-
 // false in dependencies to avoid loading "Ext.dom.Element.static"
 topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
     var el, input, child1, child2, child3;
     
     beforeEach(function() {
         el = Ext.getBody().createChild({
-            id      : 'ExtElementHelper',
-            style   : 'position:absolute;',
+            id: 'ExtElementHelper',
+            style: 'position:absolute;',
             children: [
-                {id: 'child1', style: 'position:absolute;'},
-                {id: 'child2', style: 'position:absolute;'},
-                {id: 'child3', style: 'position:absolute;'}
+                { id: 'child1', style: 'position:absolute;' },
+                { id: 'child2', style: 'position:absolute;' },
+                { id: 'child3', style: 'position:absolute;' }
             ]
         });
         
         input = Ext.getBody().createChild({
-            id  : 'ExtElementInputHelper',
-            tag : 'input',
+            id: 'ExtElementInputHelper',
+            tag: 'input',
             type: 'text'
         });
         
@@ -49,10 +47,10 @@ topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
             describe("when 1 argument", function() {
                 it("should return an object with correct values", function() {
                     expect(Ext.Element.parseBox(10)).toEqual({
-                        top   : 10,
-                        right : 10,
+                        top: 10,
+                        right: 10,
                         bottom: 10,
-                        left  : 10
+                        left: 10
                     });
                 });
             });
@@ -62,10 +60,10 @@ topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
             describe("when 1 argument", function() {
                 it("should return an object with correct values", function() {
                     expect(Ext.Element.parseBox("10")).toEqual({
-                        top   : 10,
-                        right : 10,
+                        top: 10,
+                        right: 10,
                         bottom: 10,
-                        left  : 10
+                        left: 10
                     });
                 });
             });
@@ -73,10 +71,10 @@ topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
             describe("when 2 arguments", function() {
                 it("should return an object with correct values", function() {
                     expect(Ext.Element.parseBox("10 5")).toEqual({
-                        top   : 10,
-                        right : 5,
+                        top: 10,
+                        right: 5,
                         bottom: 10,
-                        left  : 5
+                        left: 5
                     });
                 });
             });
@@ -84,10 +82,10 @@ topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
             describe("when 3 arguments", function() {
                 it("should return an object with correct values", function() {
                     expect(Ext.Element.parseBox("10 5 15")).toEqual({
-                        top   : 10,
-                        right : 5,
+                        top: 10,
+                        right: 5,
                         bottom: 15,
-                        left  : 5
+                        left: 5
                     });
                 });
             });
@@ -95,10 +93,10 @@ topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
             describe("when 4 arguments", function() {
                 it("should return an object with correct values", function() {
                     expect(Ext.Element.parseBox("10 5 15 0")).toEqual({
-                        top   : 10,
-                        right : 5,
+                        top: 10,
+                        right: 5,
                         bottom: 15,
-                        left  : 0
+                        left: 0
                     });
                 });
             });

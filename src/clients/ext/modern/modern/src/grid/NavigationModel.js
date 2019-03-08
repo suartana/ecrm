@@ -323,23 +323,13 @@ Ext.define('Ext.grid.NavigationModel', {
             var me = this,
                 view = me.getView(),
                 location = me.location,
-                navigate;
+                navigate, futureLocation;
 
             if (location.actionable) {
                 navigate = function() {
                     me.location = e.shiftKey ? location.previous() : location.next();
                 };
-                // Now ensure that item is visible beore tabbing.
-                view.ensureVisible(location.record).then(function() {
-                    // TODO: ensureVisible does not ensure the item is present - it just scrolls
-                    // and does not wait for the resulting List adjustment.
-                    // TODO: workaround is a 100ms delay. Remove this when ensureVisible guarantees item presence.
-                    if (view.mapToItem(location.record)) {
-                        navigate();
-                    } else {
-                        Ext.defer(navigate, 100);
-                    }
-                });
+                navigate();
             }
             // Navigation mode - return true to *not* stop the event
             else {

@@ -5,6 +5,7 @@ topSuite("Ext.data.validator.Format", function() {
         v = new Ext.data.validator.Format({
             matcher: matcher
         });
+
         return v.validate(value);
     }
     
@@ -15,7 +16,7 @@ topSuite("Ext.data.validator.Format", function() {
     it("should throw an exception if a matcher is not configured", function() {
         expect(function() {
             v = new Ext.data.validator.Format();
-        }).toThrow();    
+        }).toThrow();
     });
     
     describe("invalid values", function() {

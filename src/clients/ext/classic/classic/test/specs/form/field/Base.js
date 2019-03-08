@@ -472,20 +472,20 @@ topSuite("Ext.form.field.Base", ['Ext.button.Button'], function() {
                 });
             });
             
-            it("should remove any active errors during a disable", function(){
+            it("should remove any active errors during a disable", function() {
                 c.validate();
                 c.disable();
                 expect(c.hasActiveError()).toBe(false);
             });
             
-            it("should should revalidate when enabled if invalid when disabled", function(){
+            it("should should revalidate when enabled if invalid when disabled", function() {
                 c.validate();
                 c.disable();
                 c.enable();
                 expect(c.hasActiveError()).toBe(true);
             });
             
-            it("should should not revalidate when enabled if clearInvalid is called", function(){
+            it("should should not revalidate when enabled if clearInvalid is called", function() {
                 c.validate();
                 c.disable();
                 c.clearInvalid();

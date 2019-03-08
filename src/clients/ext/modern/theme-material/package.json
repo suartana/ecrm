@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-modern-theme-material",
     "SenchaExtName": "@sencha/ext-modern-theme-material",
     "SenchaExtReactName": "@sencha/ext-react-modern-theme-material",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "theme-material",
         "namespace": "Ext",
@@ -15,7 +15,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Modern Material Design Theme",
         "detailedDescription": "Material Design theme for modern browsers",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.2.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

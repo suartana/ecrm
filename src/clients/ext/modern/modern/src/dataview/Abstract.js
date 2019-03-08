@@ -12,7 +12,7 @@ Ext.define('Ext.dataview.Abstract', {
 
     /**
      * @property {Boolean} isDataView
-     * `true` to identify an object as an instantiated DataView, or subclass thereof.
+     * `true` in this class to identify an object this type, or subclass thereof.
      */
     isDataView: true,
 
@@ -363,11 +363,13 @@ Ext.define('Ext.dataview.Abstract', {
             // check derived classes before adding new event handlers
         },
 
+        /* eslint-disable max-len */
         /**
          * @cfg {'childtap'/'childsingletap'/'childdoubletap'/'childswipe'/'childtaphold'/'childlongpress'} triggerEvent
          * Determines what type of touch event causes an item to be selected.
          */
         triggerEvent: 'childtap',
+        /* eslint-enable max-len */
 
         /**
          * @cfg {'tap'/'singletap'} triggerCtEvent
@@ -462,16 +464,17 @@ Ext.define('Ext.dataview.Abstract', {
         },
 
         /**
-         * @cfg {Object} selectable
+         * @cfg {Object/Ext.dataview.selection.Model} selectable
          * A configuration object which allows passing of configuration options to create or
          * reconfigure a {@link Ext.dataview.selection.Model selection model}.
          *
-         * May contain the following options:
+         * @cfg {'single','simple','multi'} selectable.mode
+         * Simple and Multi are similar in that click toggle selection. Multi allows
+         * SHIFT+click and CTRL+click. Single simply  toggles an item between selected
+         * and unselected (unless `deselectable` is set to `false`).
          *
-         *     - mode `'single'`, '`simple'` or `'multi'` Simple and Multi are similar in that
-         *     click toggle selection. Multi allows SHIFT+click and CTRL+click. Single simply
-         *     toggles an item between selected and unselected (unless `deselectable` is set to `false`)
-         *     - deselectable Configure as false to disallow deselecting down to zero selections.
+         * @cfg {Boolean} selectable.deselectable
+         * Set to `false` to disallow deselecting down to zero selections.
          */
         selectable: true
     },
@@ -571,13 +574,14 @@ Ext.define('Ext.dataview.Abstract', {
 
     /**
      * @property {Boolean} restoreFocus
-     * By default, using the TAB key to *re*enter a grid restores focus to the cell which was last focused.
+     * By default, using the TAB key to *re*enter a grid restores focus to the cell
+     * which was last focused.
      *
-     * Setting this to `false` means that `TAB` from above focuses the first *rendered* cell
-     * and `TAB` from below focuses the last *rendered* cell.
+     * Setting this to `false` means that `TAB` from above focuses the first *rendered*
+     * cell and `TAB` from below focuses the last *rendered* cell.
      *
-     * Be aware that due to buffered rendering, the last row of a 1,000,000 row grid may not
-     * be available to receive immediate focus.
+     * Be aware that due to buffered rendering, the last row of a 1,000,000 row grid may
+     * not be available to receive immediate focus.
      */
     restoreFocus: true,
 
@@ -637,7 +641,7 @@ Ext.define('Ext.dataview.Abstract', {
 
     scrollDockedItems: null,
 
-    beforeInitialize: function (config) {
+    beforeInitialize: function(config) {
         /**
          * @property {Ext.dom.Element[]/Ext.Component[]} dataItems
          * The array of data items. This array is maintained in store order. The type of
@@ -661,8 +665,8 @@ Ext.define('Ext.dataview.Abstract', {
         me.generateSelectorFunctions();
         me.callParent();
 
-        // Must use the bodyElement here, because we may want to listen to things like pinned headers or
-        // other floating pieces.
+        // Must use the bodyElement here, because we may want to listen to things like
+        // pinned headers or other floating pieces.
         me.bodyElement.on({
             touchstart: '_onChildTouchStart',
             touchend: '_onChildTouchEnd',
@@ -694,9 +698,11 @@ Ext.define('Ext.dataview.Abstract', {
         var me = this;
 
         me.callParent();
+
         if (me.forceRefreshOnRender) {
             me.runRefresh();
-        } else {
+        }
+        else {
             me.refresh();
         }
     },
@@ -714,7 +720,7 @@ Ext.define('Ext.dataview.Abstract', {
         me.callParent();
     },
 
-    createEmptyText: function (emptyText) {
+    createEmptyText: function(emptyText) {
         var ret = Ext.apply({}, this.getEmptyTextDefaults());
 
         if (typeof emptyText === 'string') {
@@ -752,12 +758,12 @@ Ext.define('Ext.dataview.Abstract', {
      *
      * @param {Boolean} [options.select] Pass as `true` to select the specified row.
      */
-    ensureVisible: function (record, options) {
+    ensureVisible: function(record, options) {
         var me = this,
             plan = me.ensureVisiblePlan(record, options),
             step;
 
-        //TODO highlight
+        // TODO highlight
         for (;;) {
             if (!(step = plan.steps.pop())) {
                 break;
@@ -769,7 +775,7 @@ Ext.define('Ext.dataview.Abstract', {
         return plan.promise;
     },
 
-    gatherData: function (record, recordIndex) {
+    gatherData: function(record, recordIndex) {
         var me = this,
             data = record && record.getData(me.associatedData);
 
@@ -809,7 +815,7 @@ Ext.define('Ext.dataview.Abstract', {
      * @param {Number} index The index of the item in the view.
      * @return {HTMLElement/Ext.Component}
      */
-    getItemAt: function (index) {
+    getItemAt: function(index) {
         var items = this.getFastItems();
 
         if (index < 0) {
@@ -829,11 +835,11 @@ Ext.define('Ext.dataview.Abstract', {
      * which index is being requested, new code should instead call `mapToViewIndex` or
      * `mapToRecordIndex`.
      *
-     * @param {Ext.dom.Element/HTMLElement/Ext.Component} item The item to locate.
+     * @param {HTMLElement/Ext.dom.Element/Ext.Component} item The item to locate.
      * @return {Number} Index for the specified item.
      * @deprecated 6.5.0 Use `mapToViewIndex` or `mapToRecordIndex` instead.
      */
-    getItemIndex: function (item) {
+    getItemIndex: function(item) {
         return this.mapToRecordIndex(item);
     },
 
@@ -843,6 +849,7 @@ Ext.define('Ext.dataview.Abstract', {
 
         if (record) {
             idx = record.isEntity ? this.store.indexOf(record) : record;
+
             if (idx > -1) {
                 ret = this.getItemAt(idx);
             }
@@ -859,6 +866,7 @@ Ext.define('Ext.dataview.Abstract', {
 
     getLastItem: function() {
         var items = this.getFastItems();
+
         return items[items.length - 1];
     },
 
@@ -867,7 +875,7 @@ Ext.define('Ext.dataview.Abstract', {
      * @param {'start'/'end'} which The set of desired `scrollDock` items.
      * @return {Ext.Component[]} An array of the `scrollDock` items.
      */
-    getScrollDockedItems: function (which) {
+    getScrollDockedItems: function(which) {
         var scrollDock = this.scrollDockedItems;
 
         if (scrollDock) {
@@ -884,14 +892,15 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     /**
-     * Returns an array of the current items in the DataView. Depends on the {@link #cfg-useComponents}
-     * configuration.
+     * Returns an array of the current items in the DataView. Depends on the
+     * {@link #cfg-useComponents} configuration.
      * @return {HTMLElement[]/Ext.dataview.DataItem[]} The items.
      * @method getViewItems
      */
 
     isItemSelected: function(item) {
         var record = this.mapToRecord(item);
+
         return record ? this.isSelected(record) : false;
     },
 
@@ -954,7 +963,7 @@ Ext.define('Ext.dataview.Abstract', {
      * @return {HTMLElement/Ext.dom.Element/Ext.Component}
      * @since 6.5.0
      */
-    mapToItem: function (value, as) {
+    mapToItem: function(value, as) {
         var me = this,
             el = me.element,
             item, items;
@@ -1010,7 +1019,7 @@ Ext.define('Ext.dataview.Abstract', {
      * @return {Ext.data.Model} The associated record or `null` if there is none.
      * @since 6.5.0
      */
-    mapToRecord: function (value) {
+    mapToRecord: function(value) {
         var me = this,
             item = value,
             el = me.element,
@@ -1040,6 +1049,7 @@ Ext.define('Ext.dataview.Abstract', {
         return rec || null;
     },
 
+    /* eslint-disable max-len */
     /**
      * Converts the given parameter to the record's index in the `store`. Not all items
      * in a dataview correspond to records (such as group headers in `Ext.List`). In these
@@ -1059,7 +1069,8 @@ Ext.define('Ext.dataview.Abstract', {
      * @return {Number} The record's index in the store or -1 if not found.
      * @since 6.5.0
      */
-    mapToRecordIndex: function (value) {
+    mapToRecordIndex: function(value) {
+        /* eslint-enable max-len */
         var me = this,
             item = value,
             index = -1,
@@ -1096,6 +1107,7 @@ Ext.define('Ext.dataview.Abstract', {
         return index;
     },
 
+    /* eslint-disable max-len */
     /**
      * Converts the given parameter to the equivalent record index in the `store`.
      *
@@ -1120,7 +1132,8 @@ Ext.define('Ext.dataview.Abstract', {
      * @return {Number} The view index or -1 if not found.
      * @since 6.5.0
      */
-    mapToViewIndex: function (value, indexOffset) {
+    mapToViewIndex: function(value, indexOffset) {
+        /* eslint-enable max-len */
         var me = this,
             index = -1,
             item = value,
@@ -1204,8 +1217,9 @@ Ext.define('Ext.dataview.Abstract', {
      *
      * @return {Number/HTMLElement/Ext.dom.Element/Ext.Component}
      */
-    nextItem: function (item, as) {
+    nextItem: function(item, as) {
         var next = this.traverseItem(item, 1);
+
         return as ? this.itemAs(next, as) : next;
     },
 
@@ -1228,8 +1242,9 @@ Ext.define('Ext.dataview.Abstract', {
      *
      * @return {Number/HTMLElement/Ext.dom.Element/Ext.Component}
      */
-    previousItem: function (item, as) {
+    previousItem: function(item, as) {
         var prev = this.traverseItem(item, -1);
+
         return as ? this.itemAs(prev, as) : prev;
     },
 
@@ -1243,14 +1258,14 @@ Ext.define('Ext.dataview.Abstract', {
      * {@link #tpl template}'s `overwrite()` method.
      * (either an array if your params are numeric (i.e. `{0}`) or an object (i.e. `{foo: 'bar'}`))
      */
-    prepareData: function (data, index, record) {
+    prepareData: function(data, index, record) {
         return data;
     },
 
     /**
      * Refreshes the view by reloading the data from the store and re-rendering the template.
      */
-    refresh: function () {
+    refresh: function() {
         this.whenVisible('runRefresh');
     },
 
@@ -1293,6 +1308,7 @@ Ext.define('Ext.dataview.Abstract', {
         // TAB onto the view
         if (e.target === me.getFocusEl().dom) {
             focusPosition = me.restoreFocus && navigationModel.getPreviousLocation();
+
             if (focusPosition) {
                 // In case the record has been moved or deleted, refresh resyncs the location
                 // with reality. In the case of a gone record, this reorientates on the
@@ -1322,7 +1338,7 @@ Ext.define('Ext.dataview.Abstract', {
         // Disable tabbability of elements within this view.
         me.toggleChildrenTabbability(false);
 
-        itemCount = me.getFastItems().length;  //TODO should this be dataItems?
+        itemCount = me.getFastItems().length;  // TODO should this be dataItems?
 
         if (itemCount) {
             // If useComponents is set, an item will be a component.
@@ -1395,18 +1411,21 @@ Ext.define('Ext.dataview.Abstract', {
         if (!el.contains(e.toElement)) {
             return me.callParent([e]);
         }
+
         // Focus moved out of row container into docked items.
         // The toElement may be outside of this.el, in a descendant floated.
         // This would represent an internal focusMove.
-        if (el.contains(e.toElement) && !renderTarget.contains(e.toElement) && 
-                renderTarget.contains(e.fromElement)) {
+        if (el.contains(e.toElement) && !renderTarget.contains(e.toElement) &&
+            renderTarget.contains(e.fromElement)) {
             return me.onInnerFocusLeave(e.event);
         }
+
         // Focus from docked items into row container.
         if (el.contains(e.fromElement) && !renderTarget.contains(e.fromElement) &&
                 renderTarget.contains(e.toElement)) {
             return me.onInnerFocusEnter(e.event);
         }
+
         // Focus move within docked items
         if (!renderTarget.contains(e.fromElement) && !renderTarget.contains(e.toElement)) {
             return me.callParent([e]);
@@ -1419,10 +1438,11 @@ Ext.define('Ext.dataview.Abstract', {
             (fromComponent === me || fromComponent.up('dataview,componentdataview') === me)) {
             me.getNavigationModel().onFocusMove(e.event);
         }
+
         return me.callParent([e]);
     },
 
-    onItemAdd: function (item, index) {
+    onItemAdd: function(item, index) {
         var me = this,
             scrollDock = item.scrollDock,
             scrollDockCls = me.scrollDockCls,
@@ -1434,7 +1454,7 @@ Ext.define('Ext.dataview.Abstract', {
                 scrollDock = scrollDock || 'end';
             }
 
-            if(scrollDock) {
+            if (scrollDock) {
                 if (!(scrollDockedItems = me.scrollDockedItems)) {
                     me.scrollDockedItems = scrollDockedItems = {
                         start: {
@@ -1494,8 +1514,8 @@ Ext.define('Ext.dataview.Abstract', {
                 me.setItemSelection(records, false);
             }
             else {
-                me.fireEventedAction('deselect', [me, records], 'setItemSelection',
-                    me, [records, false]);
+                me.fireEventedAction('deselect', [me, records], 'setItemSelection', me,
+                                     [ records, false ]);
             }
         }
     },
@@ -1506,13 +1526,14 @@ Ext.define('Ext.dataview.Abstract', {
 
         if (suppressEvent) {
             me.setItemSelection(records, true);
-        } else {
-            me.fireEventedAction('select', [me, records], 'setItemSelection',
-                me, [records, true]);
+        }
+        else {
+            me.fireEventedAction('select', [me, records], 'setItemSelection', me,
+                                 [ records, true ]);
         }
     },
 
-    onChildTouchStart: function (location) {
+    onChildTouchStart: function(location) {
         var me = this,
             child = location.item,
             e = location.event,
@@ -1530,6 +1551,7 @@ Ext.define('Ext.dataview.Abstract', {
         // Because this has to fire both the deprecated/new events we can't use fireEventedAction
         name = 'beforechildtouchstart';
         skip = hasListeners[name] && me.fireEvent(name, me, location) === false;
+
         if (!skip) {
             name = 'beforeitemtouchstart';
             skip = hasListeners[name] &&
@@ -1541,6 +1563,7 @@ Ext.define('Ext.dataview.Abstract', {
             if (!actionable) {
                 me.doChildTouchStart(location);
             }
+
             me.fireChildEvent('touchstart', location);
         }
     },
@@ -1555,7 +1578,8 @@ Ext.define('Ext.dataview.Abstract', {
         if (!(curLocation && curLocation.actionable)) {
             me.rippleItem(child, e);
         }
-        this.clearPressedCls('touchend', location);
+
+        me.clearPressedCls('touchend', location);
     },
 
     onChildTouchCancel: function(location) {
@@ -1631,9 +1655,11 @@ Ext.define('Ext.dataview.Abstract', {
 
             if (!itemButtonMode) {
                 this.clearPressedCls('mouseleave', location);
-            } else {
+            }
+            else {
                 me.fireChildEvent('mouseleave', location);
             }
+
             me.mouseOverItem = null;
         }
     },
@@ -1660,10 +1686,11 @@ Ext.define('Ext.dataview.Abstract', {
         }
     },
 
-    shouldSelectItem: function (e) {
+    shouldSelectItem: function(e) {
         var me = this,
             selectable = me.getSelectable(),
-            no = e.stopSelection || !selectable || selectable.getDisabled(),
+            no = e.stopSelection || !selectable || selectable.getDisabled() ||
+                (e.isNavKeyPress() && e.ctrlKey),
             target = !no && e.getTarget('.' + Ext.baseCSSPrefix + 'item-no-select,.' +
                 Ext.baseCSSPrefix + 'item-no-tap', this.element);
 
@@ -1676,33 +1703,33 @@ Ext.define('Ext.dataview.Abstract', {
 
     // Store events
 
-    onStoreAdd: function () {
+    onStoreAdd: function() {
         this.syncEmptyState();
     },
 
-    onStoreBeforeLoad: function () {
+    onStoreBeforeLoad: function() {
         this.handleBeforeLoad();
     },
 
-    onStoreClear: function () {
+    onStoreClear: function() {
         this.doClear();
     },
 
-    onStoreLoad: function () {
+    onStoreLoad: function() {
         this.hasLoadedStore = true;
         this.clearMask();
         this.syncEmptyState();
     },
 
-    onStoreRefresh: function () {
+    onStoreRefresh: function() {
         this.refresh();
     },
 
-    onStoreRemove: function () {
+    onStoreRemove: function() {
         this.syncEmptyState();
     },
 
-    onStoreUpdate: function (store, record, type, modifiedFieldNames, info) {
+    onStoreUpdate: function(store, record, type, modifiedFieldNames, info) {
         var me = this,
             item;
 
@@ -1732,31 +1759,33 @@ Ext.define('Ext.dataview.Abstract', {
 
     // associatedData
 
-    updateAssociatedData: function (assocData) {
+    updateAssociatedData: function(assocData) {
         this.associatedData = {
             associated: assocData
         };
     },
 
     // data
-    updateData: function (data) {
-        var store = this.store;
+    updateData: function(data) {
+        var me = this,
+            store = me.store;
 
         if (!store) {
-            this.settingStoreFromData = true;
-            this.setStore({
+            me.settingStoreFromData = true;
+            me.setStore({
                 data: data,
                 autoDestroy: true
             });
-            this.settingStoreFromData = false;
-        } else {
+            me.settingStoreFromData = false;
+        }
+        else {
             store.loadData(data);
         }
     },
 
     // disableSelection
 
-    updateDisableSelection: function (value) {
+    updateDisableSelection: function(value) {
         var el = this.getRenderTarget();
 
         el.toggleCls(this.showSelectionCls, !value);
@@ -1764,7 +1793,7 @@ Ext.define('Ext.dataview.Abstract', {
 
     // emptyText
 
-    updateEmptyText: function (emptyText) {
+    updateEmptyText: function(emptyText) {
         var me = this,
             config = emptyText,
             emptyTextCmp = me.emptyTextCmp;
@@ -1777,6 +1806,7 @@ Ext.define('Ext.dataview.Abstract', {
 
             emptyTextCmp.setConfig(config);
         }
+
         if (!me.isConfiguring) {
             me.syncEmptyState();
         }
@@ -1784,12 +1814,12 @@ Ext.define('Ext.dataview.Abstract', {
     
     // enableTextSelection
 
-    updateEnableTextSelection: function (enableTextSelection) {
+    updateEnableTextSelection: function(enableTextSelection) {
         this.setUserSelectable({ bodyElement: !!enableTextSelection });
     },
 
     // inline
-    updateInline: function (inline) {
+    updateInline: function(inline) {
         var me = this;
 
         me.toggleCls(me.inlineCls, !!inline);
@@ -1797,9 +1827,10 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     // itemCls
-    updateItemCls: function (newCls, oldCls) {
+    updateItemCls: function(newCls, oldCls) {
         if (!this.isConfiguring) {
-            var items = this.dataItems,  //TODO confirm - was getFastItems()
+            // eslint-disable-next-line vars-on-top
+            var items = this.dataItems,  // TODO confirm - was getFastItems()
                 len = items.length,
                 i, item;
 
@@ -1813,11 +1844,11 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     // itemTpl
-    applyItemTpl: function (config) {
+    applyItemTpl: function(config) {
         return Ext.XTemplate.get(config);
     },
 
-    updateItemTpl: function () {
+    updateItemTpl: function() {
         if (!this.isConfiguring) {
             this.refresh();
         }
@@ -1825,11 +1856,12 @@ Ext.define('Ext.dataview.Abstract', {
 
     // markDirty
 
-    updateMarkDirty: function (markDirty) {
+    updateMarkDirty: function(markDirty) {
         var dataItems = this.dataItems,
             i, ln, dataItem;
 
         markDirty = !!markDirty;
+
         for (i = 0, ln = dataItems.length; i < ln; i++) {
             dataItem = dataItems[i];
             (dataItem.el || Ext.fly(dataItem)).toggleCls(this.markDirtyCls, markDirty);
@@ -1837,7 +1869,7 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     // masked
-    updateMasked: function (masked) {
+    updateMasked: function(masked) {
         var me = this,
             loadingHeight = me.getLoadingHeight();
 
@@ -1847,7 +1879,8 @@ Ext.define('Ext.dataview.Abstract', {
                 me.oldMinHeight = me.getMinHeight();
                 me.setMinHeight(loadingHeight);
             }
-        } else {
+        }
+        else {
             if (!me.destroying && me.hasLoadingHeight) {
                 me.setMinHeight(me.oldMinHeight);
                 delete me.hasLoadingHeight;
@@ -1859,6 +1892,10 @@ Ext.define('Ext.dataview.Abstract', {
 
     applySelectable: function(selectable, oldSelectable) {
         var me = this,
+            config = {
+                type: me.selectionModel,
+                view: me
+            },
             record = me.selection;
 
         if (selectable === false) {
@@ -1866,6 +1903,7 @@ Ext.define('Ext.dataview.Abstract', {
                 disabled: true
             };
         }
+
         if (selectable) {
             if (typeof selectable === 'string') {
                 selectable = {
@@ -1873,11 +1911,12 @@ Ext.define('Ext.dataview.Abstract', {
                     mode: selectable.toLowerCase(),
                     view: me
                 };
-            } else {
-                selectable = Ext.apply({
-                    type: me.selectionModel,
-                    view: me
-                }, selectable);
+            }
+            else if (selectable.isSelectionModel) {
+                return selectable.setConfig(config);
+            }
+            else {
+                selectable = Ext.apply(config, selectable);
             }
 
             // If we already have a Selectable, reconfigure it with incoming values
@@ -1887,6 +1926,7 @@ Ext.define('Ext.dataview.Abstract', {
                     Ext.raise('Switching out selectables dynamically is not supported');
                 }
                 //</debug>
+
                 selectable = oldSelectable.setConfig(selectable);
             }
             // Create a Selectable
@@ -1903,10 +1943,12 @@ Ext.define('Ext.dataview.Abstract', {
                 if (!record.isEntity) {
                     Ext.raise('DataView selection config must be single record');
                 }
+
                 if (selectable.getRecords && !selectable.getRecords()) {
-                    Ext.raise('DataView configured with selection when selectable not configured to accept records');
+                    Ext.raise('DataView selection model is configured to not accept records');
                 }
                 //</debug>
+
                 selectable.select(record);
             }
         }
@@ -1915,13 +1957,13 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     // store
-    applyStore: function (store) {
+    applyStore: function(store) {
         return store ? Ext.data.StoreManager.lookup(store) : null;
     },
 
-    updateStore: function (newStore, oldStore) {
+    updateStore: function(newStore, oldStore) {
         var me = this,
-            storeEvents = Ext.apply({scope: me}, me.getStoreEventListeners()),
+            storeEvents = Ext.apply({ scope: me }, me.getStoreEventListeners()),
             mask = me.autoMask,
             newLoad;
 
@@ -1929,7 +1971,8 @@ Ext.define('Ext.dataview.Abstract', {
             if (!oldStore.destroyed) {
                 if (oldStore.getAutoDestroy()) {
                     oldStore.destroy();
-                } else {
+                }
+                else {
                     oldStore.un(storeEvents);
                 }
             }
@@ -1944,11 +1987,13 @@ Ext.define('Ext.dataview.Abstract', {
 
         if (newStore) {
             me.store = newStore;
+
             if (me.destroying) {
                 return;
             }
 
             newStore.on(storeEvents);
+
             if (newStore.isLoaded()) {
                 me.hasLoadedStore = true;
             }
@@ -1972,12 +2017,13 @@ Ext.define('Ext.dataview.Abstract', {
         if (mask && !newLoad) {
             me.setMasked(false);
             me.autoMask = false;
-        } else if (!mask && newLoad) {
+        }
+        else if (!mask && newLoad) {
             me.handleBeforeLoad();
         }
     },
 
-    updateHidden: function (hidden, oldHidden) {
+    updateHidden: function(hidden, oldHidden) {
         this.callParent([hidden, oldHidden]);
         this.destroyAllRipples();
     },
@@ -1991,6 +2037,7 @@ Ext.define('Ext.dataview.Abstract', {
         showSelectionCls: Ext.baseCSSPrefix + 'show-selection',
         multiSelectCls: Ext.baseCSSPrefix + 'multi-select',
         markDirtyCls: Ext.baseCSSPrefix + 'mark-dirty',
+        scrollbarSelector: '.' + Ext.baseCSSPrefix + 'scrollbar',
 
         scrollDockAliases: {
             top: 'start',
@@ -2021,18 +2068,18 @@ Ext.define('Ext.dataview.Abstract', {
             // to the level of granularity needed. At the DataView level, this means item elements.
             // At the Grid level, this will be cell elements.
             //
-            // itemSelector is used by the Navigation and Location classes to find a dataview item from
-            // a passed element.
+            // itemSelector is used by the Navigation and Location classes to find a
+            // dataview item from a passed element.
             // They are identical at this level
-            this.eventDelegate = this.itemSelector = function (candidate) {
+            this.eventDelegate = this.itemSelector = function(candidate) {
                 return candidate && (
-                        candidate.parentNode === bodyElement.dom ||
-                        candidate.parentNode === renderTarget.dom
-                    );
+                    candidate.parentNode === bodyElement.dom ||
+                    candidate.parentNode === renderTarget.dom
+                );
             };
         },
 
-        bindStore: function (store) {
+        bindStore: function(store) {
             this.dataRange = store.createActiveRange();
         },
 
@@ -2090,14 +2137,16 @@ Ext.define('Ext.dataview.Abstract', {
 
             if (record) {
                 if (pressedDelay > 0) {
-                    me.pressedTimeout = Ext.defer(me.doAddPressedCls, pressedDelay,
-                        me, [record]);
-                } else {
+                    me.pressedTimeout = Ext.defer(me.doAddPressedCls, pressedDelay, me,
+                                                  [ record ]);
+                }
+                else {
                     me.doAddPressedCls(record);
                 }
 
                 if (itemButtonMode) {
                     me.lastPressedLocation = location;
+
                     Ext.GlobalEvents.setPressedComponent(me, location);
                 }
             }
@@ -2114,12 +2163,14 @@ Ext.define('Ext.dataview.Abstract', {
             if (me.lastPressedLocation) {
                 me.clearPressedCls('release', me.lastPressedLocation);
             }
+
             me.lastPressedLocation = null;
         },
 
         /**
          * This method builds up a plan object with flags and a pop-off "steps" array of
-         * method names to be called in order to fullfil the passed options of an ensureVisible call.
+         * method names to be called in order to fullfil the passed options of an
+         * ensureVisible call.
          *
          * @param {Number/Ext.data.Model} [record] The record or the 0-based position
          * to which to scroll. If this parameter is not passed, the `options` argument must
@@ -2141,7 +2192,7 @@ Ext.define('Ext.dataview.Abstract', {
          * @param {Boolean} [plan.select] Pass as `true` to select the specified row.
          * @private
          */
-        ensureVisiblePlan: function (record, plan) {
+        ensureVisiblePlan: function(record, plan) {
             var store = this.store,
                 recIndex;
 
@@ -2150,7 +2201,8 @@ Ext.define('Ext.dataview.Abstract', {
                 plan = Ext.apply({}, record);
                 record = plan.record;
                 delete plan.record;
-            } else {
+            }
+            else {
                 plan = Ext.apply({}, plan);
             }
 
@@ -2197,31 +2249,39 @@ Ext.define('Ext.dataview.Abstract', {
             return plan;
         },
 
-        ensureVisibleFocus: function (plan) {
+        ensureVisibleFocus: function(plan) {
             if (plan.focus) {
-                var item = plan.item;
+                // eslint-disable-next-line vars-on-top
+                var me = this,
+                    isGrid = me.isGrid;
 
+                // If we are a grid, we must focus a cell, so include the column
+                // property in the plan, because it's used as the parameter to
+                // Ext.grid.Location.attach
+                if (isGrid && !('column' in plan)) {
+                    plan.column = 0;
+                }
+
+                // We use the navigation model to focus because that will scroll a grid cell into
+                // view programmatically *before* focusing so that scrolling is precise rather than
+                // focus-driven which browsers overdo.
                 if (plan.async) {
-                    plan.promise = plan.promise.then(function (o) {
-                        item = o.item;
-
-                        if (item) {
-                            item.focus();
-                        }
+                    plan.promise = plan.promise.then(function(o) {
+                        me.getNavigationModel().setLocation(isGrid ? plan : plan.record);
 
                         return o;
                     });
                 }
-                else if (item) {
-                    item.focus();
+                else {
+                    me.getNavigationModel().setLocation(isGrid ? plan : plan.record);
                 }
             }
         },
 
-        ensureVisiblePrep: function (plan) {
+        ensureVisiblePrep: function(plan) {
             var me = this,
                 dataRange = me.dataRange,
-                cleanup = function () {
+                cleanup = function() {
                     delete dataRange.goto;
 
                     if (args) {
@@ -2234,7 +2294,7 @@ Ext.define('Ext.dataview.Abstract', {
                 // We do *not* want the spray goto() calls all down the virtual store
                 // as we animate, so replace the method and capture the most current
                 // call arguments...
-                dataRange.goto = function (begin, end) {
+                dataRange.goto = function(begin, end) {
                     if (args) {
                         args[0] = begin;
                         args[1] = end;
@@ -2249,10 +2309,11 @@ Ext.define('Ext.dataview.Abstract', {
                 // Once the scroll is done, we can allow the last goto() call through.
                 // This method is called to add the range unlock at the proper point
                 // in the promise chain.
-                promise = promise.then(function (v) {
+                promise = promise.then(function(v) {
                     cleanup();
+
                     return v;
-                }, function (ex) {
+                }, function(ex) {
                     cleanup();
                     throw ex;
                 });
@@ -2272,45 +2333,60 @@ Ext.define('Ext.dataview.Abstract', {
             });
         },
 
-        ensureVisibleSelect: function (plan) {
+        ensureVisibleSelect: function(plan) {
             if (plan.select) {
-                var me = this;
+                // eslint-disable-next-line vars-on-top
+                var me = this,
+                    selectable = me.getSelectable(),
+                    cell;
 
                 if (plan.async) {
-                    plan.promise = plan.promise.then(function (o) {
-                        //TODO select rec
-                        //TODO we may need to wait for it unless we can select by index
-                        //TODO if (o.record) ...
-                        //TODO if (o.recordIndex) ...
+                    plan.promise = plan.promise.then(function(o) {
+                        // We're being called as a Grid with a column, so select the cell.
+                        if (plan.column) {
+                            cell = me.getNavigationModel().createLocation(plan);
+                            selectable.selectCells(cell, cell);
+                        }
+                        else {
+                            selectable.select(plan.record);
+                        }
+
                         return o;
                     });
                 }
                 else {
-                    //TODO select opts.record or opts.recordIndex
+                    // We're being called as a Grid with a column, so select the cell.
+                    if (plan.column) {
+                        cell = me.getNavigationModel().createLocation(plan);
+                        selectable.selectCells(cell, cell);
+                    }
+                    else {
+                        selectable.select(plan.record);
+                    }
                 }
             }
         },
 
-        filterScrollDockStart: function (item) {
+        filterScrollDockStart: function(item) {
             var scrollDock = item.scrollDock;
 
             return scrollDock === 'start' || scrollDock === 'top';
         },
 
-        filterScrollDockEnd: function (item) {
+        filterScrollDockEnd: function(item) {
             var scrollDock = item.scrollDock;
 
             return scrollDock === 'end' || scrollDock === 'bottom';
         },
 
-        findTailItem: function (rawElements) {
+        findTailItem: function(rawElements) {
             var me = this,
                 items = rawElements ? me.innerItems : me.items.items,
                 at = -1,
                 tail = null,
                 i, item, scrollDock;
 
-            for (i = items.length; i-- > 0; ) {
+            for (i = items.length; i-- > 0; /* empty */) {
                 item = items[i];
                 scrollDock = item.scrollDock;
 
@@ -2337,12 +2413,12 @@ Ext.define('Ext.dataview.Abstract', {
 
             // Deprecated style only fire for things backed by records.
             if (hasListeners[deprecatedName] && location.record) {
-                me.fireEvent(deprecatedName, me, location.viewIndex, location.item, 
+                me.fireEvent(deprecatedName, me, location.viewIndex, location.item,
                              location.record, location.event);
             }
         },
 
-        getEmptyTextCmp: function () {
+        getEmptyTextCmp: function() {
             var me = this,
                 cmp = me.emptyTextCmp;
 
@@ -2353,13 +2429,20 @@ Ext.define('Ext.dataview.Abstract', {
             return cmp;
         },
 
-        getRecordIndexFromPoint: function (x, y) {
+        getRecordIndexFromPoint: function(x, y) {
             var item = this.getItemFromPoint(x, y);
 
             return item ? this.mapToRecordIndex(item) : -1;
         },
 
-        getItemFromPoint: function (x, y) {
+        /**
+         * Returns the item (an element or widget) at the given client coordinates.
+         * @param {Number} x
+         * @param {Number} y
+         * @return {Ext.dom.Element|Ext.Widget}
+         * @private
+         */
+        getItemFromPoint: function(x, y) {
             var me = this,
                 scroller = me.getScrollable(),
                 scrollPosition = scroller.getPosition(),
@@ -2372,6 +2455,13 @@ Ext.define('Ext.dataview.Abstract', {
             );
         },
 
+        /**
+         * Returns the item (an element or widget) at the given page coordinates.
+         * @param {Number} x
+         * @param {Number} y
+         * @return {Ext.dom.Element|Ext.Widget}
+         * @private
+         */
         getItemFromPagePoint: function(x, y) {
             var items = this.getFastItems(),
                 len = items.length,
@@ -2382,8 +2472,9 @@ Ext.define('Ext.dataview.Abstract', {
             for (i = 0; i < len; i++) {
                 item = items[i];
                 el = item.isWidget ? item.element : Ext.fly(item);
+
                 if (el.getRegion().contains(point)) {
-                    ret = item;
+                    ret = item.isWidget ? item : Ext.get(el);
                     break;
                 }
             }
@@ -2408,6 +2499,7 @@ Ext.define('Ext.dataview.Abstract', {
 
         hideEmptyText: function() {
             var cmp = this.emptyTextCmp;
+
             if (cmp) {
                 cmp.hide();
             }
@@ -2425,7 +2517,7 @@ Ext.define('Ext.dataview.Abstract', {
          * @private
          * @since 6.5.1
          */
-        indexModifiedFields: function (modified) {
+        indexModifiedFields: function(modified) {
             return modified;
         },
 
@@ -2442,7 +2534,7 @@ Ext.define('Ext.dataview.Abstract', {
          * @return {Number/HTMLElement/Ext.dom.Element/Ext.Component}
          * @private
          */
-        itemAs: function (item, as) {
+        itemAs: function(item, as) {
             var ret = item;
 
             //<debug>
@@ -2482,7 +2574,7 @@ Ext.define('Ext.dataview.Abstract', {
             return ret;
         },
 
-        itemFromRecord: function (rec) {
+        itemFromRecord: function(rec) {
             var index = rec.isEntity ? this.store.indexOf(rec) : rec;
 
             // Only valid if the store contains the record
@@ -2501,24 +2593,34 @@ Ext.define('Ext.dataview.Abstract', {
 
         runRefresh: function() {
             var me = this,
-                store = me.store;
+                store = me.store,
+                scrollToTopOnRefresh = me.getScrollToTopOnRefresh(),
+                scroller = !scrollToTopOnRefresh && me.getScrollable(),
+                maxY = scroller && scroller.getMaxPosition().y;
 
             me.syncEmptyState();
 
             // Ignore TreeStore loading state. They kick off loads while
             // content is still perfecty valid and renderable.
             if (store && !me.isConfiguring && (store.isTreeStore || !store.hasPendingLoad())) {
-                me.fireEventedAction('refresh', [me], 'doRefresh', me, [me.getScrollToTopOnRefresh()]);
+                me.fireEventedAction('refresh', [me], 'doRefresh', me, [scrollToTopOnRefresh]);
+
+                // If we've just refreshed with fewer items, and *not* scrolled to the top,
+                // then the scrollPosition needs to be refreshed.
+                if (scroller && scroller.getMaxPosition().y < maxY) {
+                    scroller.refresh();
+                }
             }
         },
 
         /**
          * @private
-         * Called prior to an operation which mey remove focus from this view by some kind of DOM operation.
+         * Called prior to an operation which mey remove focus from this view by some kind of
+         * DOM operation.
          *
          * If this view contains focus, this method returns a function which, when called after
-         * the disruptive DOM operation will restore focus to the same record, or, if the record has
-         * been removed to the same item index..
+         * the disruptive DOM operation will restore focus to the same record, or, if the
+         * record has been removed to the same item index..
          *
          * @returns {Function} A function that will restore focus if focus was within this view,
          * or a function which does nothing is focus is not in this view.
@@ -2550,7 +2652,8 @@ Ext.define('Ext.dataview.Abstract', {
                         }
 
                         if (!focusItem) {
-                            focusItem = me.mapToItem(Math.min(lastFocusedViewIndex || 0, itemCount - 1));
+                            focusItem = me.mapToItem(Math.min(lastFocusedViewIndex || 0,
+                                                              itemCount - 1));
                         }
 
                         navModel.setLocation(null);
@@ -2558,10 +2661,11 @@ Ext.define('Ext.dataview.Abstract', {
                     }
                 };
             }
+
             return Ext.emptyFn;
         },
 
-        setItemHidden: function (item, hide) {
+        setItemHidden: function(item, hide) {
             if (hide) {
                 if (!item.$hidden) {
                     item.hide();
@@ -2578,6 +2682,7 @@ Ext.define('Ext.dataview.Abstract', {
             // Ensure it's an array.
             records = Ext.Array.from(records);
 
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 len = records.length,
                 pressedCls = me.pressedCls,
@@ -2587,7 +2692,8 @@ Ext.define('Ext.dataview.Abstract', {
 
             if (!selected) {
                 toRemove = [pressedCls, selectedCls];
-            } else {
+            }
+            else {
                 toAdd = selectedCls;
             }
 
@@ -2599,6 +2705,7 @@ Ext.define('Ext.dataview.Abstract', {
                     if (item) {
                         item = item.isWidget ? item.element : Ext.fly(item);
                         item.removeCls(toRemove);
+
                         if (toAdd) {
                             item.addCls(toAdd);
                         }
@@ -2607,8 +2714,9 @@ Ext.define('Ext.dataview.Abstract', {
             }
         },
 
-        shouldRippleItem: function (item, e) {
+        shouldRippleItem: function(item, e) {
             var disableSelection = this.getDisableSelection();
+
             if (!disableSelection && this.isItemSelected(item)) {
                 return false;
             }
@@ -2627,7 +2735,8 @@ Ext.define('Ext.dataview.Abstract', {
                     emptyTextCmp.hide();
                 }
             }
-            else if ((me.hasLoadedStore || !me.getDeferEmptyText()) && !(store && store.hasPendingLoad())) {
+            else if ((me.hasLoadedStore || !me.getDeferEmptyText()) &&
+                !(store && store.hasPendingLoad())) {
                 emptyTextCmp = emptyTextCmp || me.getEmptyTextCmp();
                 emptyTextCmp.show();
             }
@@ -2644,7 +2753,8 @@ Ext.define('Ext.dataview.Abstract', {
                 focusEl.restoreTabbableState({
                     skipSelf: true
                 });
-            } else {
+            }
+            else {
                 // Do NOT includeSaved
                 // Once an item has had tabbability saved, do not increment its save level
                 focusEl.saveTabbableState({
@@ -2655,12 +2765,10 @@ Ext.define('Ext.dataview.Abstract', {
         },
 
         toggleHoverCls: function(on) {
-            var target = this.mouseOverItem,
-                el;
+            var target = this.mouseOverItem;
 
-            if (target) {
-                el = target.isWidget ? target.element : Ext.fly(target);
-                el.toggleCls(this.hoveredCls, on);
+            if (target && !target.destroyed) {
+                target.toggleCls(this.hoveredCls, on);
             }
         },
 
@@ -2763,13 +2871,25 @@ Ext.define('Ext.dataview.Abstract', {
         },
 
         _onContainerTouchStart: function(e) {
-            // If it's not a click within an item, then it's a click on the scrollbar
-            if (!e.getTarget(this.itemSelector)) {
+            var me = this,
+                isWithinScrollbar;
+
+            if (e.getTarget(me.scrollbarSelector)) {
+                // target is a scrollbar in a VirtualScroller
+                e.preventDefault();
+                isWithinScrollbar = true;
+            }
+            else if (!e.getTarget(me.itemSelector)) {
                 e.preventDefault();
 
-                if (!this.bodyElement.getClientRegion().contains(e.getPoint())) {
-                    this.getNavigationModel().lastLocation = 'scrollbar';
+                if (!me.bodyElement.getClientRegion().contains(e.getPoint())) {
+                    // target is a native scrollbar
+                    isWithinScrollbar = true;
                 }
+            }
+
+            if (isWithinScrollbar) {
+                me.getNavigationModel().lastLocation = 'scrollbar';
             }
         },
 
@@ -2780,7 +2900,7 @@ Ext.define('Ext.dataview.Abstract', {
 
         // emptyState
 
-        updateEmptyState: function (empty) {
+        updateEmptyState: function(empty) {
             var me = this,
                 items = me.items.items,
                 showInEmptyState, hide, i, item, show;
@@ -2797,6 +2917,7 @@ Ext.define('Ext.dataview.Abstract', {
                 else if (showInEmptyState) {
                     if (typeof showInEmptyState === 'function') {
                         hide = !(show = item.showInEmptyState(empty));
+
                         if (show == null) {
                             continue;
                         }
@@ -2838,6 +2959,7 @@ Ext.define('Ext.dataview.Abstract', {
                     view: this
                 }, navigationModel));
             }
+
             return navigationModel;
         },
 
@@ -2845,7 +2967,7 @@ Ext.define('Ext.dataview.Abstract', {
             Ext.destroy(oldNavigationModel);
         },
 
-        getUseComponents: function () {
+        getUseComponents: function() {
             return this.isComponentDataView;  // for backwards compat
         }
     } // privates

@@ -22,14 +22,14 @@ topSuite("Ext.form.field.File", function() {
         
         it("should default to readOnly", function() {
             expect(field.readOnly).toBe(true);
-        });   
+        });
         
         it("should default to have a button", function() {
             expect(field.buttonOnly).toBe(false);
         });
         
         it("should tell us it's an upload field", function() {
-            expect(field.isFileUpload()).toBe(true);    
+            expect(field.isFileUpload()).toBe(true);
         });
     });
     
@@ -37,7 +37,7 @@ topSuite("Ext.form.field.File", function() {
         it("should respect the buttonText config", function() {
             makeField({
                 buttonText: 'Foo'
-            });    
+            });
             expect(field.button.text).toBe('Foo');
         });
     
@@ -55,7 +55,7 @@ topSuite("Ext.form.field.File", function() {
         it("should respect the buttonOnly config", function() {
             makeField({
                 buttonOnly: true
-            });    
+            });
             expect(field.inputWrap.getStyle('display')).toBe('none');
         });
         
@@ -180,6 +180,7 @@ topSuite("Ext.form.field.File", function() {
                 name: 'foo'
             });
             var input = field.extractFileInput();
+
             expect(input.name).toBe('foo');
             expect(input.type).toBe('file');
         });

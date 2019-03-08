@@ -3,7 +3,7 @@ Ext.define('Ext.ux.gauge.needle.Wedge', {
     alias: 'gauge.needle.wedge',
 
     config: {
-        path: function (ir, or) {
+        path: function(ir, or) {
             return or - ir > 10 ? "M-4," + ir + " L0," + or + " L4," + ir + " Z" : '';
         }
     }

@@ -14,7 +14,7 @@
  * @abstract
  */
 Ext.define('Ext.direct.Provider', {
-   alias: 'direct.provider',
+    alias: 'direct.provider',
 
     mixins: [
         'Ext.mixin.Observable'
@@ -28,7 +28,8 @@ Ext.define('Ext.direct.Provider', {
     $configPrefixed: false,
     $configStrict: false,
 
-   /**
+    /* eslint-disable max-len */
+    /**
      * @cfg {String} id
      * The unique id of the provider (defaults to an {@link Ext#id auto-assigned id}).
      * You should assign an id if you need to be able to access the provider later and you do
@@ -39,10 +40,13 @@ Ext.define('Ext.direct.Provider', {
      *          url:  'php/poll.php',
      *          id:   'poll-provider'
      *      });
+     *      
      *      var p = {@link Ext.direct.Manager}.{@link Ext.direct.Manager#getProvider getProvider}('poll-provider');
-     *     p.disconnect();
+     *      
+     *      p.disconnect();
      *
      */
+    /* eslint-enable max-len */
     
     /**
      * @cfg {String[]} relayedEvents
@@ -94,14 +98,14 @@ Ext.define('Ext.direct.Provider', {
 
     constructor: function(config) {
         var me = this;
-        
+
         me.mixins.observable.constructor.call(me, config);
 
         me.requests = {};
 
-        Ext.applyIf(me, {
-            id: Ext.id(null, 'provider-')
-        });
+        if (me.id == null) {
+            me.id = Ext.id(null, 'provider-');
+        }
     },
     
     destroy: function() {

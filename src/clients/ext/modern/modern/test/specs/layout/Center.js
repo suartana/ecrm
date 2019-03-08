@@ -1,4 +1,4 @@
-describe("Ext.layout.Center", function() {
+topSuite("Ext.layout.Center", function() {
     var ct;
 
     afterEach(function() {

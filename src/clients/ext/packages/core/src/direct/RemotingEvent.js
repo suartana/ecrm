@@ -5,7 +5,7 @@
  */
 Ext.define('Ext.direct.RemotingEvent', {
     extend: 'Ext.direct.Event',
-    alias:  'direct.rpc',
+    alias: 'direct.rpc',
     
     /**
      * Get the transaction associated with this event.

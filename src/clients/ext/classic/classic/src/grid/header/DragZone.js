@@ -11,7 +11,7 @@ Ext.define('Ext.grid.header.DragZone', {
         var me = this;
         
         me.headerCt = headerCt;
-        me.ddGroup =  me.getDDGroup();
+        me.ddGroup = me.getDDGroup();
         me.autoGroup = true;
         me.callParent([headerCt.el]);
         me.proxy.el.addCls(Ext.baseCSSPrefix + 'grid-col-dd');
@@ -23,16 +23,20 @@ Ext.define('Ext.grid.header.DragZone', {
 
     getDragData: function(e) {
         if (e.getTarget(this.colInnerSelector)) {
+            // eslint-disable-next-line vars-on-top
             var header = e.getTarget(this.colHeaderSelector),
                 headerCmp,
                 ddel;
 
             if (header) {
                 headerCmp = Ext.getCmp(header.id);
-                if (!this.headerCt.dragging && headerCmp.draggable && !(headerCmp.isAtStartEdge(e) || headerCmp.isAtEndEdge(e))) {
+                
+                if (!this.headerCt.dragging && headerCmp.draggable &&
+                    !(headerCmp.isAtStartEdge(e) || headerCmp.isAtEndEdge(e))) {
                     ddel = document.createElement('div');
                     ddel.role = 'presentation';
                     ddel.innerHTML = headerCmp.text;
+                    
                     return {
                         ddel: ddel,
                         header: headerCmp
@@ -40,6 +44,7 @@ Ext.define('Ext.grid.header.DragZone', {
                 }
             }
         }
+        
         return false;
     },
 

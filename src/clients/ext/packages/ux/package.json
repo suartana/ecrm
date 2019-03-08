@@ -3,8 +3,8 @@
     "ext-react-name": "@extjs/ext-react-ux",
     "ext-name": "@extjs/ext-ux",
     "SenchaExtName": "@sencha/ext-ux",
-    "SenchaExtReactName": "@sencha/ext-react-soap",
-    "version": "6.6.0.258",
+    "SenchaExtReactName": "@sencha/ext-react-ux",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "ux",
         "namespace": "Ext",
@@ -16,7 +16,7 @@
         "creator": "Sencha",
         "summary": "User eXtensions",
         "detailedDescription": "This package contains extensions to Ext JS that should be considered as 'beta' or 'work in progress'. We hope they are useful 'as is' or serve as inspiration for more feature-rich work.",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": {

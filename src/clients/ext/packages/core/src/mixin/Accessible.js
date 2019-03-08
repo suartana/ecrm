@@ -92,7 +92,7 @@ Ext.define('Ext.mixin.Accessible', {
          */
         getAriaLabelEl: function(reference) {
             var ids = [],
-                refHolder, i, len, cmp, result;
+                refHolder, i, len, cmp;
             
             if (reference) {
                 if (Ext.isFunction(reference)) {

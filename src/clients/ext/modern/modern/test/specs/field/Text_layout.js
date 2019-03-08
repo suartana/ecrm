@@ -1,4 +1,4 @@
-describe('Ext.field.Text_layout', function () {
+topSuite('Ext.field.Text_layout', [false, 'Ext.field.Text'], function () {
     var labelHtml = '<span style="display:inline-block;width:50px;background:green;">&nbsp;</span>',
         container, field;
 

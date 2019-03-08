@@ -23,11 +23,11 @@ topSuite("Ext.layout.container.Table", 'Ext.Panel', function() {
                     }]
                 }
             });
+            
             // Tolerate 100-104 range due to browser diffs
             expect(ct.down('#item').getWidth()).toBeGreaterThan(99);
             expect(ct.down('#item').getWidth()).toBeLessThan(105);
-            ct.destroy();    
+            ct.destroy();
        });
-        
     });
 });

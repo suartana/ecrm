@@ -4,7 +4,7 @@
 Ext.define('Ext.grid.cell.Tree', {
     extend: 'Ext.grid.cell.Cell',
     xtype: 'treecell',
-    
+
     isTreeCell: true,
 
     /**
@@ -67,17 +67,19 @@ Ext.define('Ext.grid.cell.Tree', {
             }, {
                 reference: 'expanderElement',
                 cls: Ext.baseCSSPrefix + 'expander-el ' +
-                Ext.baseCSSPrefix + 'font-icon'
+                    Ext.baseCSSPrefix + 'font-icon'
             }, {
                 reference: 'iconElement',
                 cls: Ext.baseCSSPrefix + 'icon-el ' +
-                Ext.baseCSSPrefix + 'font-icon'
+                    Ext.baseCSSPrefix + 'font-icon'
             }, {
                 reference: 'bodyElement',
                 cls: Ext.baseCSSPrefix + 'body-el',
                 uiCls: 'body-el'
-            }]
-        }]
+            }
+            ]
+        }
+        ]
     },
 
     /**
@@ -88,8 +90,8 @@ Ext.define('Ext.grid.cell.Tree', {
         zone: 'tail'
     },
 
-    constructor: function (config) {
-        this.callParent([ config ]);
+    constructor: function(config) {
+        this.callParent([config]);
 
         this.element.on({
             scope: this,
@@ -106,7 +108,8 @@ Ext.define('Ext.grid.cell.Tree', {
 
         if (record.isExpanded()) {
             me.collapse();
-        } else if (record.isExpandable()) {
+        }
+        else if (record.isExpandable()) {
             me.expand();
         }
     },
@@ -118,7 +121,8 @@ Ext.define('Ext.grid.cell.Tree', {
         var me = this,
             record = me.getRecord();
 
-        me.getGrid().fireEventedAction('nodecollapse', [me.parent, record, 'collapse'], 'doToggle', this);
+        me.getGrid()
+            .fireEventedAction('nodecollapse', [me.parent, record, 'collapse'], 'doToggle', this);
     },
 
     /**
@@ -135,8 +139,10 @@ Ext.define('Ext.grid.cell.Tree', {
         // Collapse any other expanded sibling if tree is singleExpand
         if (record.isExpanded && !record.isRoot() && tree.getSingleExpand()) {
             siblings = record.parentNode.childNodes;
+
             for (i = 0, len = siblings.length; i < len; ++i) {
                 sibling = siblings[i];
+
                 if (sibling !== record) {
                     sibling.collapse();
                 }
@@ -144,16 +150,19 @@ Ext.define('Ext.grid.cell.Tree', {
         }
     },
 
-    refresh: function (ctx) {
+    refresh: function(ctx) {
+        var record;
+
         this.callParent([ctx]);
 
-        var record = this.getRecord();
+        record = this.getRecord();
+
         if (record) {
             this.doNodeUpdate(record);
         }
     },
 
-    updateIconCls: function (iconCls, oldIconCls) {
+    updateIconCls: function(iconCls, oldIconCls) {
         var me = this,
             el = me.element,
             noIcon = !iconCls;
@@ -164,7 +173,7 @@ Ext.define('Ext.grid.cell.Tree', {
         el.toggleCls(me.withoutIconCls, noIcon);
     },
 
-    updateUi: function (ui, oldUi) {
+    updateUi: function(ui, oldUi) {
         this.callParent([ui, oldUi]);
 
         // ensure indent is measured from the dom when syncIndent() is called
@@ -181,7 +190,7 @@ Ext.define('Ext.grid.cell.Tree', {
          *
          * @private
          */
-        doNodeUpdate: function (record) {
+        doNodeUpdate: function(record) {
             var me = this,
                 iconClsProperty = me.getIconClsProperty(),
                 el = me.element;
@@ -200,15 +209,17 @@ Ext.define('Ext.grid.cell.Tree', {
             return this.row.grid;
         },
 
-        syncExpandCls: function () {
+        syncExpandCls: function() {
+            var me, record, expandable, element, expanded, expandedCls, collapsedCls;
+
             if (!this.updatingExpandCls) {
-                var me = this,
-                    record = me.getRecord(),
-                    expandable = record.isExpandable(),
-                    element = me.element,
-                    expanded = record.isExpanded(),
-                    expandedCls = me.expandedCls,
-                    collapsedCls = me.collapsedCls;
+                me = this;
+                record = me.getRecord();
+                expandable = record.isExpandable();
+                element = me.element;
+                expanded = record.isExpanded();
+                expandedCls = me.expandedCls;
+                collapsedCls = me.collapsedCls;
 
                 me.updatingExpandCls = true;
 
@@ -217,7 +228,8 @@ Ext.define('Ext.grid.cell.Tree', {
                 if (expandable) {
                     element.toggleCls(expandedCls, expanded);
                     element.toggleCls(collapsedCls, !expanded);
-                } else {
+                }
+                else {
                     element.removeCls([expandedCls, collapsedCls]);
                 }
 
@@ -235,12 +247,15 @@ Ext.define('Ext.grid.cell.Tree', {
                 record = me.getRecord();
 
                 if (!indentSize) {
-                    column._indentSize = indentSize = parseInt(me.el.getStyle('background-position'), 10);
+                    column._indentSize = indentSize = parseInt(
+                        me.el.getStyle('background-position'), 10);
                 }
 
                 if (record) {
-                    depth = record.getTreeStore().rootVisible ? record.data.depth : record.data.depth - 1;
-                    me.indentElement.dom.style.width = (depth * indentSize)  + 'px';
+                    depth = record.getTreeStore().rootVisible
+                        ? record.data.depth
+                        : record.data.depth - 1;
+                    me.indentElement.dom.style.width = (depth * indentSize) + 'px';
                 }
             }
         },
@@ -253,7 +268,8 @@ Ext.define('Ext.grid.cell.Tree', {
                 record = me.getRecord(),
                 wasExpanded = record.isExpanded();
 
-            if (!record.isLeaf() && (!me.getGrid().getExpanderOnly() || e.target === me.expanderElement.dom)) {
+            if (!record.isLeaf() && (!me.getGrid()
+                .getExpanderOnly() || e.target === me.expanderElement.dom)) {
                 me.toggle();
             }
 

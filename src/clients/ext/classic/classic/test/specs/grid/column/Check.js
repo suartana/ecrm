@@ -1,8 +1,7 @@
-/* global expect, jasmine, Ext, topSuite, spec */
-
 topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template'], function() {
     var itNotIE9 = Ext.isIE9 ? xit : it,
-        grid, view, store, col, invert = false;
+        grid, view, store, col,
+        invert = false;
 
     function getColCfg(cfg) {
         return Ext.apply({
@@ -58,6 +57,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
     
     function getCellImg(rowIdx) {
         var cell = getCell(rowIdx);
+
         return cell.querySelector('.x-grid-checkcolumn');
     }
     
@@ -85,6 +85,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
 
     it("should be able to create an instance without passing a config", function() {
         var col = new Ext.grid.column.Check();
+
         expect(col.isCheckColumn).toBe(true);
         col.destroy();
     });
@@ -128,6 +129,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         
             it("should include the disabledCls if the column is disabled", function() {
                 var cfg = getColCfg();
+
                 cfg.disabled = true;
                 makeGrid([cfg]);
                 expect(hasCls(getCell(0), col.disabledCls)).toBe(true);
@@ -147,6 +149,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             
             it("should remove the disabledCls if enabling", function() {
                 var cfg = getColCfg();
+
                 cfg.disabled = true;
                 makeGrid([cfg]);
                 col.enable();
@@ -164,6 +167,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             describe("stopSelection: false", function() {
                 it("should select when a full row update is required", function() {
                     var cfg = getColCfg();
+
                     cfg.stopSelection = false;
                     // Template column always required a full update
                     makeGrid([cfg, {
@@ -177,6 +181,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
 
                 it("should select when a full row update is not required", function() {
                     var cfg = getColCfg();
+
                     cfg.stopSelection = false;
                     // Template column always required a full update
                     makeGrid([cfg, {
@@ -190,6 +195,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             describe("stopSelection: true", function() {
                 it("should not select when a full row update is required", function() {
                     var cfg = getColCfg();
+
                     cfg.stopSelection = true;
                     // Template column always required a full update
                     makeGrid([cfg, {
@@ -203,6 +209,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
 
                 it("should not select when a full row update is not required", function() {
                     var cfg = getColCfg();
+
                     cfg.stopSelection = true;
                     // Template column always required a full update
                     makeGrid([cfg, {
@@ -217,6 +224,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         describe("events", function() {
             it("should pass the column, record index, new checked state & record for beforecheckchange", function() {
                 var arg1, arg2, arg3, arg4;
+
                 makeGrid();
                 col.on('beforecheckchange', function(a, b, c, d) {
                     arg1 = a;
@@ -233,6 +241,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             
             it("should pass the column, record index, new checked state & record for checkchange", function() {
                 var arg1, arg2, arg3, arg4;
+
                 makeGrid();
                 col.on('checkchange', function(a, b, c, d) {
                     arg1 = a;
@@ -249,6 +258,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             
             it("should not fire fire checkchange if beforecheckchange returns false", function() {
                 var called = false;
+
                 makeGrid();
                 col.on('checkchange', function() {
                     called = true;
@@ -295,6 +305,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         
         it("should not trigger any changes when disabled", function() {
             var cfg = getColCfg();
+
             cfg.disabled = true;
             makeGrid([cfg]);
             triggerCellMouseEvent(col.triggerEvent, 0);
@@ -343,6 +354,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             // Header checkbox is updated on a timer for efficiency, so must wait
             waitsFor(function() {
                 expect(headercheckchangeCount).toBe(1);
+
                 return col.el.hasCls(col.headerCheckedCls) === true;
             });
             
@@ -357,6 +369,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             // Header checkbox is updated on a timer for efficiency, so must wait
             waitsFor(function() {
                 expect(headercheckchangeCount).toBe(2);
+
                 return col.el.hasCls(col.headerCheckedCls) === false;
             });
         });
@@ -471,6 +484,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
     describe("aria", function() {
         it("should not throw when committing", function() {
             var cfg = getColCfg();
+
             cfg.useAriaElements = true;
             makeGrid([cfg]);
             var rec = store.first(),
@@ -488,6 +502,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
     describe("tips", function() {
         function getTipEl(row) {
             row = grid.getView().getRow(row);
+
             return Ext.fly(row).down('.x-grid-cell', true);
         }
 

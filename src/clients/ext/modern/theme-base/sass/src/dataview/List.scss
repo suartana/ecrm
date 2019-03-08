@@ -11,10 +11,6 @@
         flex: 1 1 auto;
         position: relative;
         width: 100%;
-
-        // We set this in order to lower it and its sub-tree below any positioned
-        // items that we might add to the List.
-        z-index: 0;
     }
 
     .#{$prefix}list-inner-ct {

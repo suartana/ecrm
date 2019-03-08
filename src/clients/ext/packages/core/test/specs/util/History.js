@@ -20,8 +20,7 @@ topSuite('Ext.util.History', function() {
                     });
 
                     function createSpecs(name, input) {
-                        TODO(Ext.isIE8 && fn === 'replace').
-                        it(name, function() {
+                        (Ext.isIE8 && fn === 'replace' ? xit : it)(name, function() {
                             HistoryUtil[fn](input);
 
                             expect(HistoryUtil.win.location.hash).toBe(manualTest);
@@ -62,13 +61,13 @@ topSuite('Ext.util.History', function() {
         });
 
         it('should not return prefixed with #', function() {
-            HistoryUtil.win.location.hash = '#foo'
+            HistoryUtil.win.location.hash = '#foo';
 
             expect(HistoryUtil.getHash()).toBe('foo');
         });
 
         it('should not return prefixed with #!', function() {
-            HistoryUtil.win.location.hash = '#!foo'
+            HistoryUtil.win.location.hash = '#!foo';
 
             expect(HistoryUtil.getHash()).toBe('foo');
         });
@@ -180,8 +179,7 @@ topSuite('Ext.util.History', function() {
         });
     });
 
-    TODO(Ext.isIE8).
-    describe('back', function() {
+    (Ext.isIE8 ? xdescribe : describe)('back', function() {
         it('should not have a hash anymore', function() {
             HistoryUtil.add('foo');
 
@@ -213,8 +211,7 @@ topSuite('Ext.util.History', function() {
         });
     });
 
-    TODO(Ext.isIE8).
-    describe('forward', function() {
+    (Ext.isIE8 ? xdescribe : describe)('forward', function() {
         it('should go forward', function() {
             HistoryUtil.add('foo');
 

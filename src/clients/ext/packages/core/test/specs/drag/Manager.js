@@ -1,7 +1,5 @@
-/* global Ext, jasmine, expect */
-
 // This will test all interaction between drag/drop targets.
-topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scroller'], function() {
+topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.NativeScroller'], function() {
     var helper = Ext.testHelper,
         touchId = 0,
         cursorTrack, source, target,
@@ -55,23 +53,29 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
     function makeSource(cfg) {
         cfg = cfg || {};
+
         if (!cfg.element) {
             if (!dragEl) {
                 makeDragEl();
             }
+
             cfg.element = dragEl;
         }
+
         source = new Ext.drag.Source(cfg);
     }
 
     function makeTarget(cfg) {
         cfg = cfg || {};
+
         if (!cfg.element) {
             if (!dropEl) {
                 makeDropEl();
             }
+
             cfg.element = dropEl;
         }
+
         target = new Ext.drag.Target(cfg);
     }
 
@@ -98,6 +102,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
     function startDrag(x, y, target) {
         runs(function() {
             var xy = source.getElement().getXY();
+
             x = x || xy[0];
             y = y || xy[1];
 
@@ -115,18 +120,20 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
             var el = source.getElement(),
                 xy = source.getElement().getXY(),
                 size = el.getSize(),
-                xOffset = 0, 
+                xOffset = 0,
                 yOffset = 0;
 
             if (xPos === 'middle') {
                 xOffset = size.width / 2;
-            } else if (xPos === 'end') {
+            }
+            else if (xPos === 'end') {
                 xOffset = size.width - 1;
             }
 
             if (yPos === 'middle') {
                 yOffset = size.height / 2;
-            } else if (yPos === 'end') {
+            }
+            else if (yPos === 'end') {
                 yOffset = size.height - 1;
             }
 
@@ -172,6 +179,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
             if (!Ext.isArray(spies)) {
                 spies = [spies];
             }
+
             Ext.Array.forEach(spies, function(spy) {
                 expect(spy.callCount).toBe(n);
             });
@@ -384,6 +392,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
                         backgroundColor: color
                     }
                 });
+
                 return new Ext.drag.Target({
                     element: el
                 });
@@ -577,6 +586,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
                 if (!Ext.isArray(spies)) {
                     spies = [spies];
                 }
+
                 Ext.Array.forEach(spies, function(spy) {
                     expect(spy.mostRecentCall.valid).toBe(valid);
                 });
@@ -605,6 +615,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should not call accept if target is disabled", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -618,6 +629,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should not call accept if groups don't match", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource({
                     groups: 'foo'
                 });
@@ -632,6 +644,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should not enter the target if it doesn't accept the data", function() {
                 var accepts = jasmine.createSpy().andReturn(false);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -643,6 +656,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should pass the info object", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -658,6 +672,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should only call accepts once it enters the target", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -675,6 +690,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should only call accepts once when it enters the target and the source is accepted", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -698,6 +714,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should only call accepts once when it enters the target and the source is not accepted", function() {
                 var accepts = jasmine.createSpy().andReturn(false);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts
@@ -721,6 +738,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scrol
 
             it("should call accepts each time it enters the target", function() {
                 var accepts = jasmine.createSpy().andReturn(true);
+
                 makeSource();
                 makeTarget({
                     accepts: accepts

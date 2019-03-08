@@ -1,7 +1,6 @@
 // Although Ext.form.field.Trigger is deprecated, these specs remain as they were in 4.x
 // so that we can have a reasonable assurance of compatibility
 topSuite("Ext.form.field.Trigger", function() {
-
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         component, makeComponent;
 
@@ -24,6 +23,7 @@ topSuite("Ext.form.field.Trigger", function() {
         if (component) {
             component.destroy();
         }
+
         component = makeComponent = null;
     });
 
@@ -32,6 +32,7 @@ topSuite("Ext.form.field.Trigger", function() {
      */
     function clickOn(el) {
         var xy = Ext.fly(el).getXY();
+
         jasmine.fireMouseEvent(el, 'click', xy[0], xy[1]);
     }
 
@@ -40,7 +41,7 @@ topSuite("Ext.form.field.Trigger", function() {
         // Suppress console warning about Trigger field being deprecated
         spyOn(Ext.log, 'warn');
         
-        component = Ext.create("Ext.form.field.Trigger", {name: 'test'});
+        component = Ext.create("Ext.form.field.Trigger", { name: 'test' });
         expect(component instanceof Ext.form.field.Trigger).toBe(true);
         expect(Ext.getClass(component).xtype).toBe("triggerfield");
     });
@@ -97,7 +98,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 expect(component.getTrigger('trigger1').el).toHaveCls('my-triggerCls');
             });
 
-            //TODO multiple triggers
+            // TODO multiple triggers
         });
     });
 
@@ -133,7 +134,13 @@ topSuite("Ext.form.field.Trigger", function() {
                     renderTo: Ext.getBody()
                 });
                 allTriggersHidden = true;
-                component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (e.isVisible()) {
+                        allTriggersHidden = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersHidden).toBe(true);
             });
             it("should not hide the trigger elements when set to false", function() {
@@ -142,7 +149,13 @@ topSuite("Ext.form.field.Trigger", function() {
                     renderTo: Ext.getBody()
                 });
                 allTriggersHidden = true;
-                component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (e.isVisible()) {
+                        allTriggersHidden = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersHidden).toBe(false);
             });
             it("should override any trigger elements when set to true", function() {
@@ -151,13 +164,19 @@ topSuite("Ext.form.field.Trigger", function() {
                     id: 'foo-field',
                     renderTo: Ext.getBody(),
                     triggers: {
-                        trigger1: {hidden: false},
-                        trigger2: {hidden: false },
-                        trigger3: {hidden: false}
+                        trigger1: { hidden: false },
+                        trigger2: { hidden: false },
+                        trigger3: { hidden: false }
                     }
                 });
                 allTriggersHidden = true;
-                component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (e.isVisible()) {
+                        allTriggersHidden = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersHidden).toBe(true);
             });
             it("should override any trigger elements when set to false", function() {
@@ -166,13 +185,19 @@ topSuite("Ext.form.field.Trigger", function() {
                     id: 'foo-field',
                     renderTo: Ext.getBody(),
                     triggers: {
-                        trigger1: {hidden: true},
-                        trigger2: {hidden: true },
-                        trigger3: {hidden: true}
+                        trigger1: { hidden: true },
+                        trigger2: { hidden: true },
+                        trigger3: { hidden: true }
                     }
                 });
                 allTriggersVisible = true;
-                component.triggerEl.each(function(e){if(!e.isVisible()) {allTriggersVisible = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (!e.isVisible()) {
+                        allTriggersVisible = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersVisible).toBe(true);
             });
         });
@@ -183,13 +208,13 @@ topSuite("Ext.form.field.Trigger", function() {
                     id: 'foo-field',
                     renderTo: Ext.getBody(),
                     triggers: {
-                        trigger1: {hidden: true},
-                        trigger2: {hidden : false },
-                        trigger3: {hidden: true}
+                        trigger1: { hidden: true },
+                        trigger2: { hidden: false },
+                        trigger3: { hidden: true }
                     }
                 });
                 triggerVisible = 'Failed';
-                component.triggerEl.each(function(e){ if(e.isVisible()) { triggerVisible = e.id; }});
+                component.triggerEl.each(function(e) { if (e.isVisible()) { triggerVisible = e.id; } });
                 expect(triggerVisible).toBe('foo-field-trigger-trigger2');
             });
             it("should not hide all the trigger elements except second trigger", function() {
@@ -198,12 +223,12 @@ topSuite("Ext.form.field.Trigger", function() {
                     renderTo: Ext.getBody(),
                     triggers: {
                         trigger1: {},
-                        trigger2: {hidden : true },
+                        trigger2: { hidden: true },
                         trigger3: {}
                     }
                 });
                 triggerHidden = 'Failed';
-                component.triggerEl.each(function(e){ if(!e.isVisible()) { triggerHidden = e.id; }});
+                component.triggerEl.each(function(e) { if (!e.isVisible()) { triggerHidden = e.id; } });
                 expect(triggerHidden).toBe('foo-field-trigger-trigger2');
             });
         });
@@ -216,21 +241,33 @@ topSuite("Ext.form.field.Trigger", function() {
                 });
                 component.setHideTrigger(true);
                 allTriggersHidden = true;
-                component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (e.isVisible()) {
+                        allTriggersHidden = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersHidden).toBe(true);
             });
             it("should hide the trigger elements when passed true, with triggers config", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
-                    triggers : {
-                        trigger1 : {hidden: false},
-                        trigger2 : {hidden : false },
-                        trigger3 : {hidden: false}
+                    triggers: {
+                        trigger1: { hidden: false },
+                        trigger2: { hidden: false },
+                        trigger3: { hidden: false }
                     }
                 });
                 component.setHideTrigger(true);
                 allTriggersHidden = true;
-                component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (e.isVisible()) {
+                        allTriggersHidden = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersHidden).toBe(true);
             });
             it("should unhide the trigger elements when passed false", function() {
@@ -240,16 +277,22 @@ topSuite("Ext.form.field.Trigger", function() {
                 });
                 component.setHideTrigger(false);
                 allTriggersVisible = true;
-                component.triggerEl.each(function(e){if(!e.isVisible()) {allTriggersVisible = false; return false;}});
+                component.triggerEl.each(function(e) {
+                    if (!e.isVisible()) {
+                        allTriggersVisible = false;
+                        
+                        return false;
+                    }
+                });
                 expect(allTriggersVisible).toBe(true);
             });
 
-            describe('before render', function () {
+            describe('before render', function() {
                 it("should hide the trigger if set in initComponent", function() {
                     makeComponent({
                         hideTrigger: false,
                         xhooks: {
-                            initComponent: function () {
+                            initComponent: function() {
                                 this.setHideTrigger(true);
                                 this.callParent();
                             }
@@ -257,7 +300,13 @@ topSuite("Ext.form.field.Trigger", function() {
                         renderTo: Ext.getBody()
                     });
                     allTriggersHidden = true;
-                    component.triggerEl.each(function(e){if(e.isVisible()) {allTriggersHidden = false; return false;}});
+                    component.triggerEl.each(function(e) {
+                        if (e.isVisible()) {
+                            allTriggersHidden = false;
+                            
+                            return false;
+                        }
+                    });
                     expect(allTriggersHidden).toBe(true);
                 });
 
@@ -265,7 +314,7 @@ topSuite("Ext.form.field.Trigger", function() {
                     makeComponent({
                         hideTrigger: true,
                         xhooks: {
-                            initComponent: function () {
+                            initComponent: function() {
                                 this.setHideTrigger(false);
                                 this.callParent();
                             }
@@ -273,7 +322,13 @@ topSuite("Ext.form.field.Trigger", function() {
                         renderTo: Ext.getBody()
                     });
                     allTriggersVisible = true;
-                    component.triggerEl.each(function(e){if(!e.isVisible()) {allTriggersVisible = false; return false;}});
+                    component.triggerEl.each(function(e) {
+                        if (!e.isVisible()) {
+                            allTriggersVisible = false;
+                            
+                            return false;
+                        }
+                    });
                     expect(allTriggersVisible).toBe(true);
                 });
             });
@@ -324,6 +379,7 @@ topSuite("Ext.form.field.Trigger", function() {
 
     describe("readOnly", function() {
         var spy;
+
         describe("readOnly config", function() {
             it("should set the input to readOnly when set to true", function() {
                 makeComponent({
@@ -342,6 +398,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 });
 
                 var trigger = component.getTrigger('trigger1');
+
                 expect(trigger.isVisible()).toBe(false);
                 clickOn(trigger.el.dom);
                 expect(spy).not.toHaveBeenCalled();
@@ -367,8 +424,8 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     readOnly: true,
-                    triggers : {
-                        trigger1 : { hideOnReadOnly : false }
+                    triggers: {
+                        trigger1: { hideOnReadOnly: false }
                     }
                 });
                 expect(component.getTrigger('trigger1').isVisible()).toBe(true);
@@ -421,8 +478,8 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     readOnly: false,
-                    triggers : {
-                        trigger1 : { hideOnReadOnly : false }
+                    triggers: {
+                        trigger1: { hideOnReadOnly: false }
                     }
                 });
                 component.setReadOnly(true);
@@ -497,6 +554,7 @@ topSuite("Ext.form.field.Trigger", function() {
     describe("trigger classes", function() {
         function triggerEvent(type, idx, x, y, button) {
             var el = component.triggerEl.item(idx);
+
             jasmine.fireMouseEvent(el.dom, type, x, y, button);
         }
         
@@ -578,7 +636,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     triggerCls: 'bar'
-                });    
+                });
                 triggerEvent(overEvent, 0);
                 expect(hasCls('bar-over', 0)).toBe(true);
             });
@@ -587,7 +645,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     triggerCls: 'bar'
-                });    
+                });
                 triggerEvent(overEvent, 0);
                 triggerEvent(outEvent, 0);
                 expect(hasCls('bar-over', 0)).toBe(false);
@@ -597,7 +655,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     triggerCls: 'bar'
-                });    
+                });
                 triggerEvent('mousedown', 0);
                 expect(hasCls('bar-click', 0)).toBe(true);
                 triggerEvent('mouseup', 0);
@@ -607,7 +665,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     triggerCls: 'bar'
-                });    
+                });
                 triggerEvent('mousedown', 0);
                 triggerEvent('mouseup', 0);
                 expect(hasCls('bar-click', 0)).toBe(false);
@@ -616,7 +674,7 @@ topSuite("Ext.form.field.Trigger", function() {
             it("should not attempt to add an overCls if none exists", function() {
                 makeComponent({
                     renderTo: Ext.getBody()
-                });    
+                });
                 triggerEvent(overEvent, 0);
                 expect(hasCls('undefined-over', 0)).toBe(false);
             });
@@ -624,12 +682,11 @@ topSuite("Ext.form.field.Trigger", function() {
             it("should not attempt to add a clickCls if none exists", function() {
                 makeComponent({
                     renderTo: Ext.getBody()
-                });    
+                });
                 triggerEvent('mousedown', 0);
                 expect(hasCls('undefined-over', 0)).toBe(false);
                 triggerEvent('mouseup', 0);
             });
         });
     });
-
 });

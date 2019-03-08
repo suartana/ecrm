@@ -39,11 +39,12 @@ Ext.draw.engine.excanvas = true;
 // * Non uniform scaling does not correctly scale strokes.
 // * Optimize. There is always room for speed improvements.
 
+/* eslint-disable */
+
 // Only add this code if we do not already have a canvas implementation
 if (!document.createElement('canvas').getContext) {
 
 (function() {
-
   // alias some functions to make (compiled) code shorter
   var m = Math;
   var mr = m.round;

@@ -33,7 +33,8 @@ Ext.define('Ext.event.publisher.Focus', {
             if (relatedTarget == null) {
                 me.processFocusIn(e, e.target, document.body);
             }
-        } else {
+        }
+        else {
             // IE reports relatedTarget as either an inaccessible object which coercively
             // equates to null, or just a blank object in the case of focusing from nowhere.
             if (relatedTarget == null || !relatedTarget.tagName) {
@@ -46,14 +47,14 @@ Ext.define('Ext.event.publisher.Focus', {
 
     processFocusIn: function(e, fromElement, toElement) {
         var me = this,
-            commonAncestor,
-            node, targets = [],
             focusFly = me.focusFly,
-            backwards, event, focusEnterEvent;
+            targets = [],
+            commonAncestor, node, backwards, event, focusEnterEvent;
 
-        // If we have suspended focus/blur processing due to framework needing to silently manipulate
-        // focus position, then return early.
-        if ((fromElement && focusFly.attach(fromElement).isFocusSuspended()) || (toElement && focusFly.attach(toElement).isFocusSuspended())) {
+        // If we have suspended focus/blur processing due to framework needing to
+        // silently manipulate focus position, then return early.
+        if ((fromElement && focusFly.attach(fromElement).isFocusSuspended()) ||
+            (toElement && focusFly.attach(toElement).isFocusSuspended())) {
             return;
         }
 
@@ -62,33 +63,41 @@ Ext.define('Ext.event.publisher.Focus', {
             backwards = !!(toElement.compareDocumentPosition(fromElement) & 4);
         }
 
-        // Gather targets for focusleave event from the fromElement to the parentNode (not inclusive)
+        // Gather targets for focusleave event from the fromElement to the parentNode
+        // (not inclusive)
+        // eslint-disable-next-line max-len
         for (node = fromElement, commonAncestor = Ext.dom.Element.getCommonAncestor(toElement, fromElement, true);
-             node && node !== commonAncestor; node = node.parentNode) {
-                targets.push(node);
+            node && node !== commonAncestor; node = node.parentNode) {
+            targets.push(node);
         }
 
         // Publish the focusleave event for the bubble hierarchy
         if (targets.length) {
-            event = me.createSyntheticEvent('focusleave', e, fromElement, toElement, fromElement, toElement, backwards);
+            event = me.createSyntheticEvent('focusleave', e, fromElement, toElement, fromElement,
+                                            toElement, backwards);
             me.publish(event, targets);
+            
             if (event.stopped) {
                 return;
             }
         }
 
-        // Gather targets for focusenter event from the focus targetElement to the parentNode (not inclusive)
+        // Gather targets for focusenter event from the focus targetElement to the parentNode
+        // (not inclusive)
         targets.length = 0;
+        
         for (node = toElement; node && node !== commonAncestor; node = node.parentNode) {
             targets.push(node);
         }
 
         // We always need this event; this is what we pass to the global focus event
-        focusEnterEvent = me.createSyntheticEvent('focusenter', e, toElement, fromElement, fromElement, toElement, backwards);
+        focusEnterEvent = me.createSyntheticEvent('focusenter', e, toElement, fromElement,
+                                                  fromElement, toElement, backwards);
 
         // Publish the focusleave event for the bubble hierarchy
         if (targets.length) {
             me.publish(focusEnterEvent, targets);
+            
             if (focusEnterEvent.stopped) {
                 return;
             }
@@ -99,8 +108,10 @@ Ext.define('Ext.event.publisher.Focus', {
 
         // Publish the focusleave event for the bubble hierarchy
         if (targets.length) {
-            event = me.createSyntheticEvent('focusmove', e, toElement, fromElement, fromElement, toElement, backwards);
+            event = me.createSyntheticEvent('focusmove', e, toElement, fromElement, fromElement,
+                                            toElement, backwards);
             me.publish(event, targets);
+            
             if (event.stopped) {
                 return;
             }
@@ -116,7 +127,8 @@ Ext.define('Ext.event.publisher.Focus', {
         }
     },
 
-    createSyntheticEvent: function(eventName, browserEvent, target, relatedTarget, fromElement, toElement, backwards) {
+    createSyntheticEvent: function(eventName, browserEvent, target, relatedTarget, fromElement,
+        toElement, backwards) {
         var event = new Ext.event.Event(browserEvent);
 
         event.type = eventName;
@@ -128,9 +140,7 @@ Ext.define('Ext.event.publisher.Focus', {
 
         return event;
     }
-},
-
-function(Focus) {
+}, function(Focus) {
     var focusTimeout;
 
     Focus.prototype.focusFly = new Ext.dom.Fly();

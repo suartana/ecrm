@@ -1,8 +1,10 @@
 /**
- * This plugin defers the execution cost of the instantiation and initialization of child components of un-rendered items.
+ * This plugin defers the execution cost of the instantiation and initialization of child components
+ * of un-rendered items.
  *
- * For example, in a {@link Ext.tab.Panel#deferredRender deferredRender} {@link Ext.tab.Panel TabPanel}, the un-rendered tabs
- * do not have to incur the cost of instantiating and initializing their descendant components until render.
+ * For example, in a {@link Ext.tab.Panel#deferredRender deferredRender}
+ * {@link Ext.tab.Panel TabPanel}, the un-rendered tabs do not have to incur the cost
+ * of instantiating and initializing their descendant components until render.
  *
  * This plugin allows that.
  *
@@ -44,7 +46,8 @@ Ext.define('Ext.plugin.LazyItems', {
         }
  
         // We need to jump in right before the beforeRender call
-        comp.beforeRender = Ext.Function.createInterceptor(comp.beforeRender, this.beforeComponentRender, this);
+        comp.beforeRender =
+            Ext.Function.createInterceptor(comp.beforeRender, this.beforeComponentRender, this);
     },
  
     // Add the child items at the last possible moment.

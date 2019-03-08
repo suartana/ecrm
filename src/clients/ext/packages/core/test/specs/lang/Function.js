@@ -1,5 +1,3 @@
-/* global jasmine, Ext, expect, xit, xdescribe */
-
 topSuite("Ext.Function", function() {
     var _setTimeout,
         _clearTimeout,
@@ -17,14 +15,18 @@ topSuite("Ext.Function", function() {
             clearedTimeoutIds = [];
             
             _setTimeout = window.setTimeout;
+
             window.setTimeout = function(fn, timeout) {
                 timeouts.push(timeout);
                 var timeoutId = _setTimeout.apply(this, arguments);
+
                 timeoutIds.push(timeoutId);
+
                 return timeoutId;
             };
             
             _clearTimeout = window.clearTimeout;
+
             window.clearTimeout = function(timeoutId) {
                 clearedTimeoutIds.push(timeoutId);
                 _clearTimeout.apply(this, arguments);
@@ -119,6 +121,7 @@ topSuite("Ext.Function", function() {
             var fn = jasmine.createSpy(),
                 args = [0, 1, 2],
                 callback = Ext.Function.pass(fn, args);
+
             callback(3, 4, 5);
             expect(fn).toHaveBeenCalledWith(0, 1, 2, 3, 4, 5);
         });
@@ -126,6 +129,7 @@ topSuite("Ext.Function", function() {
             var fn = jasmine.createSpy(),
                 args = 'a',
                 callback = Ext.Function.pass(fn, args);
+
             callback('b', 'c');
             expect(fn).toHaveBeenCalledWith('a', 'b', 'c');
         });
@@ -133,23 +137,27 @@ topSuite("Ext.Function", function() {
             var fn = jasmine.createSpy(),
                 args = 0,
                 callback = Ext.Function.pass(fn, args);
+
             callback(1);
             expect(fn).toHaveBeenCalledWith(0, 1);
         });
         it("should pass the specified 'arguments' argument as the first argument to the given funciton", function() {
-            var testFunction = function () {
+            var testFunction = function() {
                     var fn = jasmine.createSpy(),
                         args = arguments,
                         callback = Ext.Function.pass(fn, args);
+
                     callback(3, 4, 5);
                     expect(fn).toHaveBeenCalledWith(0, 1, 2, 3, 4, 5);
                 };
+
             testFunction(0, 1, 2);
         });
         it("should discard the argument if it's undefined", function() {
             var fn = jasmine.createSpy(),
                 args = undefined,
                 callback = Ext.Function.pass(fn, args);
+
                 callback(1);
             expect(fn).toHaveBeenCalledWith(1);
         });
@@ -159,6 +167,7 @@ topSuite("Ext.Function", function() {
                    foo = this.foo;
                }),
                callback = Ext.Function.pass(fn, 'c');
+
            callback('d');
            expect(fn).toHaveBeenCalledWith('c', 'd');
            expect(foo).toBeUndefined();
@@ -170,6 +179,7 @@ topSuite("Ext.Function", function() {
                     foo = this.foo;
                 }),
                 callback = Ext.Function.pass(fn, 'c', scope);
+
             callback('d');
             expect(fn).toHaveBeenCalledWith('c', 'd');
             expect(foo).toBe('b');
@@ -181,6 +191,7 @@ topSuite("Ext.Function", function() {
             var fn = jasmine.createSpy().andCallFake(function(arg) { return 'bar'; }),
                 clonedFn = Ext.Function.clone(fn),
                 result = clonedFn('foo');
+
             expect(result).toBe('bar');
             expect(fn).toHaveBeenCalledWith('foo');
         });
@@ -254,38 +265,39 @@ topSuite("Ext.Function", function() {
             });
         });
         
-        describe("returnValue", function(){
-            beforeEach(function(){
-                interceptedFn = function(){
+        describe("returnValue", function() {
+            beforeEach(function() {
+                interceptedFn = function() {
                     return 'Original';
                 };
                 
-                interceptorFn = function(){
+                interceptorFn = function() {
                     return false;
                 };
             });
             
             describe("when interceptorFn returns false", function() {
-                it("should return null as a default", function(){
+                it("should return null as a default", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn);
                     expect(interceptor()).toBeNull();
                 });
             
-                it("should accept a custom returnValue", function(){
+                it("should accept a custom returnValue", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn, null, 'Custom');
                     expect(interceptor()).toBe('Custom');
                 });
             
-                it("should accept a falsy returnValue", function(){
+                it("should accept a falsy returnValue", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn, null, false);
                     expect(interceptor()).toBe(false);
                 });
             });
             
-            it("should return the value of the original function if false is not returned", function(){
-                interceptorFn = function(){
+            it("should return the value of the original function if false is not returned", function() {
+                interceptorFn = function() {
                     return;
                 };
+
                  interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn);
                 expect(interceptor()).toBe('Original');
             });
@@ -312,6 +324,7 @@ topSuite("Ext.Function", function() {
            var scope = { x: 'foo' },
                fn = jasmine.createSpy().andCallFake(function() { this.x = 'bar'; }),
                delayedFn = Ext.Function.createDelayed(fn, 2, scope);
+
            delayedFn();
            expect(fn).not.toHaveBeenCalled();
            expect(scope.x).toBe('foo');
@@ -325,10 +338,11 @@ topSuite("Ext.Function", function() {
                args = [0, 1, 2],
                fn = jasmine.createSpy(),
                delayedFn = Ext.Function.createDelayed(fn, 2, scope, args);
+
            delayedFn(3, 4, 5);
            expect(fn).not.toHaveBeenCalled();
            runAfterInvocation(fn, function() {
-               expect(fn).toHaveBeenCalledWith(0, 1, 2); 
+               expect(fn).toHaveBeenCalledWith(0, 1, 2);
            });
        });
        it("should append the specified arguments to the call arguments when appendArgs is true", function() {
@@ -336,10 +350,11 @@ topSuite("Ext.Function", function() {
                args = [0, 1, 2],
                fn = jasmine.createSpy(),
                delayedFn = Ext.Function.createDelayed(fn, 2, scope, args, true);
+
            delayedFn(3, 4, 5);
            expect(fn).not.toHaveBeenCalled();
            runAfterInvocation(fn, function() {
-               expect(fn).toHaveBeenCalledWith(3, 4, 5, 0, 1, 2); 
+               expect(fn).toHaveBeenCalledWith(3, 4, 5, 0, 1, 2);
            });
        });
        it("should insert the specified arguments into the call arguments at the position specified by appendArgs", function() {
@@ -347,10 +362,11 @@ topSuite("Ext.Function", function() {
            args = [0, 1, 2],
            fn = jasmine.createSpy(),
            delayedFn = Ext.Function.createDelayed(fn, 2, scope, args, 2);
+
            delayedFn(3, 4, 5);
            expect(fn).not.toHaveBeenCalled();
            runAfterInvocation(fn, function() {
-               expect(fn).toHaveBeenCalledWith(3, 4, 0, 1, 2, 5); 
+               expect(fn).toHaveBeenCalledWith(3, 4, 0, 1, 2, 5);
            });
        });
     });
@@ -358,14 +374,14 @@ topSuite("Ext.Function", function() {
     describe("defer", function() {
         var fn;
 
-        beforeEach(function(){
+        beforeEach(function() {
             fn = jasmine.createSpy("deferSpy");
         });
 
         it("should execute the function after the specified number of milliseconds", function() {
             Ext.defer(fn, 10);
 
-            waitsFor(function(){
+            waitsFor(function() {
                 return fn.calls.length === 1;
             }, "fn was never called");
 
@@ -383,7 +399,7 @@ topSuite("Ext.Function", function() {
         it("should set the correct scope", function() {
             Ext.defer(fn, 10, fakeScope);
 
-            waitsFor(function(){
+            waitsFor(function() {
                 return fn.calls.length === 1;
             }, "fn was never called");
 
@@ -395,17 +411,18 @@ topSuite("Ext.Function", function() {
         it("should pass the correct arguments", function() {
             Ext.defer(fn, 10, this, [1, 2, 3]);
 
-            waitsFor(function(){
+            waitsFor(function() {
                 return fn.calls.length === 1;
             }, "fn was never called");
 
             runs(function() {
-                expect(fn).toHaveBeenCalledWith(1,2,3);
+                expect(fn).toHaveBeenCalledWith(1, 2, 3);
             });
         });
 
         it("should return a timeout number", function() {
             var timer = Ext.defer(function() {}, 10);
+
             expect(typeof timer === 'number').toBe(true);
             Ext.undefer(timer);
         });
@@ -483,6 +500,7 @@ topSuite("Ext.Function", function() {
             var scope = { x: 1 },
                 fn = jasmine.createSpy().andCallFake(function() { this.x++; }),
                 bufferedFn = Ext.Function.createBuffered(fn, 20, scope);
+
             bufferedFn();
             expect(scope.x).toBe(1);
             bufferedFn();
@@ -495,6 +513,7 @@ topSuite("Ext.Function", function() {
                 args = ['bar1', 'bar2'],
                 fn = jasmine.createSpy(),
                 bufferedFn = Ext.Function.createBuffered(fn, 20, scope, args);
+
             bufferedFn('foo1', 'foo2');
             expect(fn).not.toHaveBeenCalled();
             runAfterInvocation(fn, function() {
@@ -598,7 +617,7 @@ topSuite("Ext.Function", function() {
         it('should call the passed function', function() {
             var called = false;
 
-            Ext.asap(function(){
+            Ext.asap(function() {
                 called = true;
             });
 
@@ -612,7 +631,7 @@ topSuite("Ext.Function", function() {
             var called = false,
                 timer;
 
-            timer = Ext.asap(function(){
+            timer = Ext.asap(function() {
                 called = true;
             });
             Ext.unasap(timer);
@@ -646,5 +665,5 @@ topSuite("Ext.Function", function() {
                 expect(foundScope).toBe(scope);
             });
         });
-    })
+    });
 });

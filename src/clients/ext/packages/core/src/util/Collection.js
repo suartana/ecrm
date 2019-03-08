@@ -83,8 +83,8 @@ Ext.define('Ext.util.Collection', {
          * results in a new sort position.
          *
          * This does not affect a filtered Collection's reaction to mutations of the source
-         * Collection. If sorters are present when the source Collection is mutated, this Collection's
-         * sort order will always be maintained.
+         * Collection. If sorters are present when the source Collection is mutated,
+         * this Collection's sort order will always be maintained.
          * @private
          */
         autoSort: true,
@@ -638,7 +638,7 @@ Ext.define('Ext.util.Collection', {
      * @since 5.0.0
      */
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this;
         
         //<debug>
@@ -690,7 +690,7 @@ Ext.define('Ext.util.Collection', {
      * collection and potentially leak memory.
      * @since 5.0.0
      */
-    destroy: function () {
+    destroy: function() {
         var me = this,
             filters = me._filters,
             sorters = me._sorters,
@@ -706,6 +706,7 @@ Ext.define('Ext.util.Collection', {
             // the template methods
             me.grouped = me.sorted = false;
             me.setSorters(null);
+
             if (me.manageSorters) {
                 sorters.destroy();
             }
@@ -715,6 +716,7 @@ Ext.define('Ext.util.Collection', {
             groups.destroy();
             me._groups = null;
         }
+
         me.setSource(null);
         me.observers = me.items = me.map = null;
 
@@ -748,7 +750,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object/Object[]} The item or items added.
      * @since 5.0.0
      */
-    add: function (item) {
+    add: function(item) {
         var me = this,
             items = me.decodeItems(arguments, 0),
             ret = items;
@@ -762,7 +764,8 @@ Ext.define('Ext.util.Collection', {
     },
     
     /**
-     * Adds an item to the collection while removing any existing items. Similar to {@link #method-add}.
+     * Adds an item to the collection while removing any existing items.
+     * Similar to {@link #method-add}.
      * @param {Object/Object[]} item The item or items to add.
      * @return {Object/Object[]} The item or items added.
      * @since 5.0.0
@@ -777,7 +780,8 @@ Ext.define('Ext.util.Collection', {
         if (items.length) {
             me.splice(0, me.length, items);
             ret = (items.length === 1) ? items[0] : items;
-        } else {
+        }
+        else {
             me.removeAll();
         }
 
@@ -835,7 +839,7 @@ Ext.define('Ext.util.Collection', {
      * Defaults to this collection.
      * @return {Object}
      */
-    aggregate: function (property, operation, begin, end, scope) {
+    aggregate: function(property, operation, begin, end, scope) {
         var me = this,
             args = Ext.Array.slice(arguments);
 
@@ -860,6 +864,7 @@ Ext.define('Ext.util.Collection', {
      */
     aggregateByGroup: function(property, operation, scope) {
         var groups = this.getGroups();
+
         return this.aggregateGroups(groups, property, operation, scope);
     },
     
@@ -884,7 +889,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @return {Object}
      */
-    aggregateItems: function (items, property, operation, begin, end, scope) {
+    aggregateItems: function(items, property, operation, begin, end, scope) {
         var me = this,
             range = Ext.Number.clipIndices(items.length, [ begin, end ]),
                 
@@ -901,6 +906,7 @@ Ext.define('Ext.util.Collection', {
 
         if (!Ext.isFunction(operation)) {
             operation = me._aggregators[operation];
+
             return operation.call(me, items, begin, end, property, me.getRootProperty());
         }
 
@@ -916,6 +922,7 @@ Ext.define('Ext.util.Collection', {
             if (subsetRequested) {
                 valueItems[j] = value = items[i];
             }
+
             values[j] = (root ? value[root] : value)[property];
         }
 
@@ -941,20 +948,24 @@ Ext.define('Ext.util.Collection', {
      */
     aggregateGroups: function(groups, property, operation, scope) {
         var items = groups.items,
-            len  = items.length,
+            len = items.length,
             callDirect = !Ext.isFunction(operation),
             out = {},
             i, group, result;
         
         for (i = 0; i < len; ++i) {
             group = items[i];
+
             if (!callDirect) {
                 result = this.aggregateItems(group.items, property, operation, null, null, scope);
-            } else {
+            }
+            else {
                 result = group[operation](property);
             }
+
             out[group.getGroupKey()] = result;
         }
+
         return out;
     },
 
@@ -985,7 +996,7 @@ Ext.define('Ext.util.Collection', {
      *
      * @since 5.0.0
      */
-    beginUpdate: function () {
+    beginUpdate: function() {
         if (!this.updating++) { // jshint ignore:line
             this.notify('beginupdate');
         }
@@ -997,7 +1008,7 @@ Ext.define('Ext.util.Collection', {
      * called only when you are sure there are no listeners.
      * @since 5.0.0
      */
-    clear: function () {
+    clear: function() {
         var me = this,
             generation = me.generation,
             ret = generation ? me.items : [],
@@ -1012,6 +1023,7 @@ Ext.define('Ext.util.Collection', {
 
             // Clear any extraKey indices associated with this Collection
             extraKeys = me.getExtraKeys();
+
             if (extraKeys) {
                 for (indexName in extraKeys) {
                     extraKeys[indexName].clear();
@@ -1027,25 +1039,27 @@ Ext.define('Ext.util.Collection', {
      * @return {Ext.util.Collection}
      * @since 5.0.0
      */
-    clone: function () {
+    clone: function() {
         var me = this,
             copy = new me.self(me.initialConfig);
 
         copy.add(me.items);
+
         return copy;
     },
 
     /**
      * Collects unique values of a particular property in this Collection.
      * @param {String} property The property to collect on
-     * @param {String} root (optional) 'root' property to extract the first argument from. This is used mainly when
-     * summing fields in records, where the fields are all stored inside the 'data' object
+     * @param {String} root (optional) 'root' property to extract the first argument from.
+     * This is used mainly when summing fields in records, where the fields are all stored
+     * inside the 'data' object
      * @param {Boolean} [allowNull] Pass `true` to include `null`, `undefined` or empty
      * string values.
      * @return {Array} The unique values
      * @since 5.0.0
      */
-    collect: function (property, root, allowNull) {
+    collect: function(property, root, allowNull) {
         var items = this.items,
             length = items.length,
             map = {},
@@ -1073,7 +1087,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Boolean} `true` if the collection contains the item.
      * @since 5.0.0
      */
-    contains: function (item) {
+    contains: function(item) {
         var ret = false,
             key;
 
@@ -1094,11 +1108,11 @@ Ext.define('Ext.util.Collection', {
      * @return {Boolean} `true` if the collection contains all the items.
      * @since 6.5.2
      */
-    containsAll: function (items) {
+    containsAll: function(items) {
         var all = Ext.isArray(items) ? items : arguments,
             i;
 
-        for (i = all.length; i-- > 0; ) {
+        for (i = all.length; i-- > 0;) {
             if (!this.contains(all[i])) {
                 return false;
             }
@@ -1113,7 +1127,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Boolean} True if the collection contains the Object as a key.
      * @since 5.0.0
      */
-    containsKey: function (key) {
+    containsKey: function(key) {
         return key in this.map;
     },
 
@@ -1167,13 +1181,14 @@ Ext.define('Ext.util.Collection', {
      *
      * @param {Boolean} [caseSensitive=false] True for case sensitive comparison.
      *
-     * @param {Boolean} [exactMatch=false] `true` to force exact match (^ and $ characters added to the regex).
+     * @param {Boolean} [exactMatch=false] `true` to force exact match (^ and $ characters
+     * added to the regex).
      *
      * @return {Ext.util.Collection} The new, filtered collection.
      *
      * @since 5.0.0
      */
-    createFiltered: function (property, value, anyMatch, caseSensitive, exactMatch) {
+    createFiltered: function(property, value, anyMatch, caseSensitive, exactMatch) {
         var me = this,
             ret = new me.self(me.initialConfig),
             root = me.getRootProperty(),
@@ -1183,24 +1198,28 @@ Ext.define('Ext.util.Collection', {
         if (Ext.isFunction(property)) {
             fn = property;
             scope = value;
-        } else {
-            //support for the simple case of filtering by property/value
+        }
+        else {
+            // support for the simple case of filtering by property/value
             if (Ext.isString(property)) {
                 filters = [
                     new Ext.util.Filter({
-                        property     : property,
-                        value        : value,
-                        root         : root,
-                        anyMatch     : anyMatch,
+                        property: property,
+                        value: value,
+                        root: root,
+                        anyMatch: anyMatch,
                         caseSensitive: caseSensitive,
-                        exactMatch   : exactMatch
+                        exactMatch: exactMatch
                     })
                 ];
-            } else if (property instanceof Ext.util.Filter) {
+            }
+            else if (property instanceof Ext.util.Filter) {
                 filters = [ property ];
                 property.setRoot(root);
-            } else if (Ext.isArray(property)) {
+            }
+            else if (Ext.isArray(property)) {
                 filters = property.slice(0);
+
                 for (i = 0, length = filters.length; i < length; ++i) {
                     filters[i].setRoot(root);
                 }
@@ -1252,7 +1271,7 @@ Ext.define('Ext.util.Collection', {
      * is executed. Defaults to this collection.
      * @since 5.0.0
      */
-    each: function (fn, scope) {
+    each: function(fn, scope) {
         var items = this.items,
             len = items.length,
             i, ret;
@@ -1263,6 +1282,7 @@ Ext.define('Ext.util.Collection', {
 
             for (i = 0; i < len; i++) {
                 ret = fn.call(scope, items[i], i, len);
+
                 if (ret === false) {
                     break;
                 }
@@ -1287,7 +1307,7 @@ Ext.define('Ext.util.Collection', {
      * is executed. Defaults to this collection.
      * @since 5.0.0
      */
-    eachKey: function (fn, scope) {
+    eachKey: function(fn, scope) {
         var me = this,
             items = me.items,
             len = items.length,
@@ -1300,6 +1320,7 @@ Ext.define('Ext.util.Collection', {
             for (i = 0; i < len; i++) {
                 key = me.getKey(item = items[i]);
                 ret = fn.call(scope, key, item, i, len);
+
                 if (ret === false) {
                     break;
                 }
@@ -1314,7 +1335,7 @@ Ext.define('Ext.util.Collection', {
      * see `beginUpdate`.
      * @since 5.0.0
      */
-    endUpdate: function () {
+    endUpdate: function() {
         if (! --this.updating) {
             this.notify('endupdate');
         }
@@ -1337,15 +1358,17 @@ Ext.define('Ext.util.Collection', {
      * `null` if none was found.
      * @since 5.0.0
      */
-    find: function (property, value, start, startsWith, endsWith, ignoreCase) {
+    find: function(property, value, start, startsWith, endsWith, ignoreCase) {
+        var regex, root;
+        
         if (Ext.isEmpty(value, false)) {
             return null;
         }
 
-        var regex = Ext.String.createRegex(value, startsWith, endsWith, ignoreCase),
-            root = this.getRootProperty();
+        regex = Ext.String.createRegex(value, startsWith, endsWith, ignoreCase);
+        root = this.getRootProperty();
 
-        return this.findBy(function (item) {
+        return this.findBy(function(item) {
             return item && regex.test((root ? item[root] : item)[property]);
         }, null, start);
     },
@@ -1363,15 +1386,17 @@ Ext.define('Ext.util.Collection', {
      * function, or null if none was found.
      * @since 5.0.0
      */
-    findBy: function (fn, scope, start) {
+    findBy: function(fn, scope, start) {
         var me = this,
             items = me.items,
             len = items.length,
             i, item, key;
 
         scope = scope || me;
+
         for (i = start || 0; i < len; i++) {
             key = me.getKey(item = items[i]);
+
             if (fn.call(scope, item, key)) {
                 return items[i];
             }
@@ -1397,7 +1422,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} The matched index or -1 if not found.
      * @since 5.0.0
      */
-    findIndex: function (property, value, start, startsWith, endsWith, ignoreCase) {
+    findIndex: function(property, value, start, startsWith, endsWith, ignoreCase) {
         var item = this.find(property, value, start, startsWith, endsWith, ignoreCase);
 
         return item ? this.indexOf(item) : -1;
@@ -1415,8 +1440,9 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} The matched index or -1
      * @since 5.0.0
      */
-    findIndexBy: function (fn, scope, start) {
+    findIndexBy: function(fn, scope, start) {
         var item = this.findBy(fn, scope, start);
+
         return item ? this.indexOf(item) : -1;
     },
 
@@ -1428,8 +1454,9 @@ Ext.define('Ext.util.Collection', {
      * see {@link #aggregateByGroup} for information on the return type.
      * @since 5.0.0
      */
-    first: function (grouped) {
+    first: function(grouped) {
         var groups = grouped ? this.getGroups() : undefined;
+
         return groups ? this.aggregateGroups(groups, null, 'first') : this.items[0];
     },
     
@@ -1441,8 +1468,9 @@ Ext.define('Ext.util.Collection', {
      * see {@link #aggregateByGroup} for information on the return type.
      * @since 5.0.0
      */
-    last: function (grouped) {
+    last: function(grouped) {
         var groups = grouped ? this.getGroups() : undefined;
+
         return groups ? this.aggregateGroups(groups, null, 'last') : this.items[this.length - 1];
     },
 
@@ -1452,7 +1480,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object} The item associated with the passed key.
      * @since 5.0.0
      */
-    get: function (key) {
+    get: function(key) {
         return this.map[key];
     },
 
@@ -1462,7 +1490,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object} The item at the specified index.
      * @since 5.0.0
      */
-    getAt: function (index) {
+    getAt: function(index) {
         return this.items[index];
     },
 
@@ -1472,7 +1500,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object} The item associated with the passed key.
      * @since 5.0.0
      */
-    getByKey: function (key) {
+    getByKey: function(key) {
         return this.map[key];
     },
 
@@ -1481,7 +1509,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} the number of items in the collection.
      * @since 5.0.0
      */
-    getCount: function () {
+    getCount: function() {
         return this.length;
     },
 
@@ -1514,10 +1542,10 @@ Ext.define('Ext.util.Collection', {
      * @return {Object} The key for the passed item.
      * @since 5.0.0
      */
-    getKey: function (item) {
+    getKey: function(item) {
         var id = item.id;
-        return (id === 0 || id) ? id :
-              ((id = item._id) === 0 || id) ? id : item.getId();
+
+        return (id === 0 || id) ? id : ((id = item._id) === 0 || id) ? id : item.getId();
     },
 
     /**
@@ -1527,7 +1555,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Array} An array of items
      * @since 5.0.0
      */
-    getRange: function (begin, end) {
+    getRange: function(begin, end) {
         var items = this.items,
             length = items.length,
             range;
@@ -1541,7 +1569,8 @@ Ext.define('Ext.util.Collection', {
 
         if (!length) {
             range = [];
-        } else {
+        }
+        else {
             range = Ext.Number.clipIndices(length, [begin, end]);
             range = items.slice(range[0], range[1]);
         }
@@ -1575,7 +1604,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object[]} The array of values.
      * @since 5.0.0
      */
-    getValues: function (property, root, start, end) {
+    getValues: function(property, root, start, end) {
         var items = this.items,
             range = Ext.Number.clipIndices(items.length, [start, end]),
             ret = [],
@@ -1596,12 +1625,15 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} The index of the item or -1 if not found.
      * @since 5.0.0
      */
-    indexOf: function (item) {
+    indexOf: function(item) {
+        var key;
+        
         if (!item) {
             return -1;
         }
         
-        var key = this.getKey(item);
+        key = this.getKey(item);
+
         return this.indexOfKey(key);
     },
 
@@ -1611,7 +1643,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} The index of the item or -1 if not found.
      * @since 5.0.0
      */
-    indexOfKey: function (key) {
+    indexOfKey: function(key) {
         var me = this,
             indices = me.indices;
 
@@ -1619,6 +1651,7 @@ Ext.define('Ext.util.Collection', {
             if (!indices) {
                 indices = me.getIndices();
             }
+
             return indices[key];
         }
 
@@ -1635,7 +1668,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object/Object[]} The item or items added.
      * @since 5.0.0
      */
-    insert: function (index, item) {
+    insert: function(index, item) {
         var me = this,
             items = me.decodeItems(arguments, 1),
             ret = items;
@@ -1660,7 +1693,7 @@ Ext.define('Ext.util.Collection', {
      * @param {Object} meta (private)
      * @since 5.0.0
      */
-    itemChanged: function (item, modified, oldKey, meta) {
+    itemChanged: function(item, modified, oldKey, meta) {
         var me = this,
             keyChanged = oldKey !== undefined,
             filtered = me.filtered && me.getAutoFilter(),
@@ -1668,10 +1701,11 @@ Ext.define('Ext.util.Collection', {
             itemMovement = 0,
             items = me.items,
             last = me.length - 1,
-            sorted = me.sorted && last > 0 && me.getAutoSort(), // one or zero items is not really sorted
-                                                                // CAN be called on an empty Collection
-                                                                // A TreeStore can call afterEdit on a hidden root before
-                                                                // any child nodes exist in the store.
+            // one or zero items is not really sorted
+            // CAN be called on an empty Collection
+            // A TreeStore can call afterEdit on a hidden root before
+            // any child nodes exist in the store.
+            sorted = me.sorted && last > 0 && me.getAutoSort(),
             source = me.getSource(),
             toRemove = 0,
             itemFiltered = false,
@@ -1702,12 +1736,14 @@ Ext.define('Ext.util.Collection', {
                 if (itemFiltered) {
                     toRemove = [ item ];
                     newIndex = -1;
-                } else {
+                }
+                else {
                     toAdd = [ item ];
                     newIndex = me.length; // this will be ignored if sorted
                 }
             }
-            // If sorted, the newIndex must be reported correctly in the beforeitemchange and itemchange events.
+            // If sorted, the newIndex must be reported correctly in the beforeitemchange
+            // and itemchange events.
             // Even though splice ignores the parameter and calculates the insertion point
             else if (sorted && !itemFiltered) {
                 // If we are sorted and there are 2 or more items make sure this item is at
@@ -1730,7 +1766,8 @@ Ext.define('Ext.util.Collection', {
                         // We have to bound the binarySearch or else the presence of the
                         // out-of-order "item" would break it.
                         newIndex = Ext.Array.binarySearch(items, item, 0, index, sortFn);
-                    } else if (index < last && sortFn(items[index], items[index + 1]) > 0) {
+                    }
+                    else if (index < last && sortFn(items[index], items[index + 1]) > 0) {
                         // If this item is not the last and the item after it compares as
                         // less-than then item needs to move right since it is greater-than
                         // item[index + 1].
@@ -1751,8 +1788,10 @@ Ext.define('Ext.util.Collection', {
             // are true, *but* the problem with that is that these three changes we care
             // about are only what this collection cares about. Child collections or
             // outside parties still need to know that the item has changed in some way.
-            // We do NOT adjust the newIndex reported here to allow for position *after* the item has been removed
-            // We report the "visual" position at which the item would be inserted as if it were new.
+            // We do NOT adjust the newIndex reported here to allow for position *after*
+            // the item has been removed
+            // We report the "visual" position at which the item would be inserted as if
+            // it were new.
             details = {
                 item: item,
                 key: newKey,
@@ -1772,6 +1811,7 @@ Ext.define('Ext.util.Collection', {
             if (keyChanged) {
                 details.oldKey = oldKey;
             }
+
             if (modified) {
                 details.modified = modified;
             }
@@ -1820,13 +1860,16 @@ Ext.define('Ext.util.Collection', {
             //
             if (itemMovement > 0) {
                 details.newIndex--;
-            } else if (itemMovement < 0) {
+            }
+            else if (itemMovement < 0) {
                 details.oldIndex++;
             }
 
-            // Divergence depending on whether the record if filtered out at this level in a chaining hierarchy.
-            // Child collections of this collection will not care about filtereditemchange because the record is not in them.
-            // Stores however will still need to know because the record *is* in them, just filtered.
+            // Divergence depending on whether the record if filtered out at this level
+            // in a chaining hierarchy. Child collections of this collection will not care
+            // about filtereditemchange because the record is not in them.
+            // Stores however will still need to know because the record *is* in them,
+            // just filtered.
             me.notify(itemFiltered ? 'filtereditemchange' : 'itemchange', [details]);
 
             me.endUpdate();
@@ -1839,7 +1882,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Number} The number of items removed.
      * @since 5.0.0
      */
-    remove: function (item) {
+    remove: function(item) {
         var me = this,
             items = me.decodeRemoveItems(arguments, 0),
             length = me.length;
@@ -1854,7 +1897,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Ext.util.Collection} This object.
      * @since 5.0.0
      */
-    removeAll: function () {
+    removeAll: function() {
         var me = this,
             length = me.length;
 
@@ -1873,7 +1916,7 @@ Ext.define('Ext.util.Collection', {
      * returned. Otherwise the number of items removed is returned.
      * @since 5.0.0
      */
-    removeAt: function (index, count) {
+    removeAt: function(index, count) {
         var me = this,
             length = me.length,
             Num = Ext.Number,
@@ -1898,7 +1941,7 @@ Ext.define('Ext.util.Collection', {
      * `false` if no item was removed.
      * @since 5.0.0
      */
-    removeByKey: function (key) {
+    removeByKey: function(key) {
         var item = this.getByKey(key);
 
         if (!item || !this.remove(item)) {
@@ -1919,7 +1962,8 @@ Ext.define('Ext.util.Collection', {
 
         if (index === -1) {
             this.add(item);
-        } else {
+        }
+        else {
             this.insert(index, item);
         }
     },
@@ -1936,7 +1980,7 @@ Ext.define('Ext.util.Collection', {
      * @param {Object[]} [toAdd] The items to insert at the given `index`.
      * @since 5.0.0
      */
-    splice: function (index, toRemove, toAdd) {
+    splice: function(index, toRemove, toAdd) {
         var me = this,
             autoSort = me.sorted && me.getAutoSort(),
             map = me.map,
@@ -1970,6 +2014,7 @@ Ext.define('Ext.util.Collection', {
             // "removeCount" request into a "removeItems" request.
             if (isRemoveCount) {
                 removeItems = [];
+
                 for (i = 0; i < removeCount; ++i) {
                     removeItems.push(items[begin + i]);
                 }
@@ -1979,15 +2024,18 @@ Ext.define('Ext.util.Collection', {
                 // Map index based on the item at that index since that item will be in
                 // the source collection.
                 i = source.indexOf(items[begin]);
-            } else {
+            }
+            else {
                 // Map end of this collection to end of the source collection.
                 i = source.length;
             }
 
-            // When we react to the source add in onCollectionAdd, we must honour this requested index.
+            // When we react to the source add in onCollectionAdd, we must honour this
+            // requested index.
             me.requestedIndex = index;
             source.splice(i, removeItems, newItems);
             delete me.requestedIndex;
+
             return me;
         }
 
@@ -2012,6 +2060,7 @@ Ext.define('Ext.util.Collection', {
                     if (!addItems.$cloned) {
                         newItems = addItems = addItems.slice(0);
                     }
+
                     me.sortData(addItems);
                 }
             }
@@ -2024,11 +2073,13 @@ Ext.define('Ext.util.Collection', {
                     // last of the duplicates. We add the index of the last duplicate of
                     // this key to the "duplicates" map.
                     (duplicates || (duplicates = {}))[k] = 1;
-                } else {
+                }
+                else {
                     // This item's index is outside the remove range, so we need to remove
                     // some extra stuff. Only the first occurrence of a given key in the
                     // newItems needs this processing.
                     itemIndex = indices[key];
+
                     if (itemIndex < begin || end <= itemIndex) {
                         (removes || (removes = [])).push(itemIndex); // might be the first
                     }
@@ -2056,17 +2107,18 @@ Ext.define('Ext.util.Collection', {
             }
 
             adds = {
-                //at: insertAt, // must fill this in later
-                //next: null,  // only set by spliceMerge
-                //replaced: null,  // must fill this in later
+                // at: insertAt, // must fill this in later
+                // next: null,  // only set by spliceMerge
+                // replaced: null,  // must fill this in later
                 items: addItems,
                 keys: newKeys
             };
         }
 
         // If we are given a set of items to remove, map them to their indices.
-        for (i = removeItems ? removeItems.length : 0; i-- > 0; ) {
+        for (i = removeItems ? removeItems.length : 0; i-- > 0;) {
             key = me.getKey(removeItems[i]);
+
             if ((itemIndex = indices[key]) !== undefined) {
                 // ignore items we don't have (probably due to filtering)
                 (removes || (removes = [])).push(itemIndex); // might be the first remove
@@ -2086,6 +2138,7 @@ Ext.define('Ext.util.Collection', {
             chunk = null;
             chunks = [];
             removeMap = {};
+
             if (removes.length > 1) {
                 removes.sort(Ext.Array.numericSortFn);
             }
@@ -2094,6 +2147,7 @@ Ext.define('Ext.util.Collection', {
             // removal.
             for (i = 0, n = removes.length; i < n; ++i) {
                 key = me.getKey(item = items[itemIndex = removes[i]]);
+
                 if (!(key in map)) {
                     continue;
                 }
@@ -2176,7 +2230,7 @@ Ext.define('Ext.util.Collection', {
 
             // Loop over the chunks in reverse so as to not invalidate index values on
             // earlier chunks.
-            for (k = chunks.length; k-- > 0; ) {
+            for (k = chunks.length; k-- > 0;) {
                 chunk = chunks[k];
                 i = chunk.at;
                 n = chunk.items.length;
@@ -2192,11 +2246,12 @@ Ext.define('Ext.util.Collection', {
                 // We can use splice directly. The IE8 bug which Ext.Array works around
                 // only affects *insertion*
                 // http://social.msdn.microsoft.com/Forums/en-US/iewebdevelopment/thread/6e946d03-e09f-4b22-a4dd-cd5e276bf05a/
-                //Ext.Array.erase(items, i, n);
+                // Ext.Array.erase(items, i, n);
                 items.splice(i, n);
 
                 if (indices) {
                     keys = chunk.keys;
+
                     for (i = 0; i < n; ++i) {
                         delete indices[keys[i]];
                     }
@@ -2210,35 +2265,42 @@ Ext.define('Ext.util.Collection', {
         if (adds) {
             if (autoSort && newCount > 1 && length) {
                 me.spliceMerge(addItems, newKeys);
-            } else {
+            }
+            else {
                 if (autoSort) {
                     if (newCount > 1) {
                         // We have multiple addItems but we are empty, so just add at 0
                         insertAt = 0;
                         me.indices = indices = null;
-                    } else {
+                    }
+                    else {
                         // If we are adding one item we can position it properly now and
                         // avoid a full sort.
-                        insertAt = sorters.findInsertionIndex(adds.items[0], items, me.getSortFn(), index);
+                        insertAt =
+                            sorters.findInsertionIndex(adds.items[0], items, me.getSortFn(), index);
                     }
                 }
 
                 if (insertAt === length) {
                     end = insertAt;
+
                     // Inser items backwards. This way, when the first item is pushed the
                     // array is sized to as large as we're going to need it to be.
                     for (i = addItems.length - 1; i >= 0; --i) {
                         items[end + i] = addItems[i];
                     }
+
                     // The indices may have been regenerated, so we need to check if they have been
                     // and update them 
                     indices = me.indices;
+
                     if (indices) {
                         for (i = 0; i < newCount; ++i) {
                             indices[newKeys[i]] = insertAt + i;
                         }
                     }
-                } else {
+                }
+                else {
                     // inserting
                     me.indices = null;
                     Ext.Array.insert(items, insertAt, addItems);
@@ -2283,7 +2345,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Object} Returns the value returned from `fn` (typically `undefined`).
      * @since 5.0.0
      */
-    update: function (fn, scope) {
+    update: function(fn, scope) {
         var me = this;
 
         me.beginUpdate();
@@ -2313,7 +2375,7 @@ Ext.define('Ext.util.Collection', {
      * @param details
      * @since 5.0.0
      */
-    updateKey: function (item, oldKey, details) {
+    updateKey: function(item, oldKey, details) {
         var me = this,
             map = me.map,
             indices = me.indices,
@@ -2338,6 +2400,7 @@ Ext.define('Ext.util.Collection', {
 
                 me.generation++;
                 map[newKey] = item;
+
                 if (indices) {
                     indices[newKey] = indices[oldKey];
                     delete indices[oldKey];
@@ -2385,11 +2448,14 @@ Ext.define('Ext.util.Collection', {
         while (i > -1) {
             sourceItem = sourceItems[i];
             index = this.indexOf(sourceItem);
+
             if (index > -1) {
                 return index + 1;
             }
+
             --i;
         }
+
         // If we get here we didn't find any item in the parent before us, so insert
         // at the start
         return 0;
@@ -2408,7 +2474,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionAdd: function (source, details) {
+    onCollectionAdd: function(source, details) {
         var me = this,
             atItem = details.atItem,
             items = details.items,
@@ -2422,18 +2488,23 @@ Ext.define('Ext.util.Collection', {
             // use that specified index to do the insertion.
             if (requestedIndex !== undefined) {
                 index = requestedIndex;
-            } else if (atItem) {
+            }
+            else if (atItem) {
                 index = me.indexOf(atItem);
+
                 if (index === -1) {
                     // We can't find the reference item in our collection, which means it's probably
-                    // filtered out, so we need to search for an appropriate index. Pass the first item
-                    // and work back to find
+                    // filtered out, so we need to search for an appropriate index. Pass the first
+                    // item and work back to find
                     index = me.findInsertIndex(items[0]);
-                } else {
-                    // We also have that item in our collection, we need to insert after it, so increment
+                }
+                else {
+                    // We also have that item in our collection, we need to insert after it,
+                    // so increment
                     ++index;
                 }
-            } else {
+            }
+            else {
                 // If there was no atItem, must be at the front of the collection.
                 // atItem is the item after which the upstream Collection inserted
                 // the new item(s) if null, it means at start.
@@ -2444,17 +2515,21 @@ Ext.define('Ext.util.Collection', {
         if (me.getAutoFilter() && me.filtered) {
             for (i = 0, n = items.length; i < n; ++i) {
                 item = items[i];
+
                 if (me.isItemFiltered(item)) {
                     // If we have an item that is filtered out of this collection, we need
                     // to make a copy of the items up to this point.
                     if (!copy) {
                         copy = items.slice(0, i);
                     }
+
                     if (!filtered) {
                         filtered = [];
                     }
+
                     filtered.push(item);
-                } else if (copy) {
+                }
+                else if (copy) {
                     // If we have a copy of the items, we need to put this item in that
                     // copy since it is not being filtered out.
                     copy.push(item);
@@ -2463,6 +2538,7 @@ Ext.define('Ext.util.Collection', {
         }
 
         me.splice((index < 0) ? me.length : index, 0, copy || items);
+
         if (filtered) {
             // Private for now. We may want to let any observers know we just
             // added these items but got filtered out
@@ -2480,7 +2556,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionBeforeItemChange: function (source, details) {
+    onCollectionBeforeItemChange: function(source, details) {
         // Drop the next updatekey event
         this.onCollectionUpdateKey = null;
         
@@ -2499,7 +2575,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionBeginUpdate: function () {
+    onCollectionBeginUpdate: function() {
         this.beginUpdate();
     },
 
@@ -2511,7 +2587,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionEndUpdate: function () {
+    onCollectionEndUpdate: function() {
         this.endUpdate();
     },
 
@@ -2525,7 +2601,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionItemChange: function (source, details) {
+    onCollectionItemChange: function(source, details) {
         // Restore updatekey events
         delete this.onCollectionUpdateKey;
 
@@ -2544,7 +2620,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionRefresh: function (source) {
+    onCollectionRefresh: function(source) {
         var me = this,
             map = {},
             indices = {},
@@ -2562,8 +2638,10 @@ Ext.define('Ext.util.Collection', {
                     items[newLength++] = sourceItems[i];
                 }
             }
+
             items.length = newLength;
-        } else {
+        }
+        else {
             items.length = 0;
             items.push.apply(items, sourceItems);
         }
@@ -2596,7 +2674,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionRemove: function (source, details) {
+    onCollectionRemove: function(source, details) {
         this.splice(0, details.items);
     },
 
@@ -2621,7 +2699,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    onCollectionUpdateKey: function (source, details) {
+    onCollectionUpdateKey: function(source, details) {
         this.updateKey(details.item, details.oldKey, details);
     },
 
@@ -2646,7 +2724,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #average}. The result is partitioned by group.
      *
      * @param {String} property The name of the property to average from each item.
-     * @return {Object} The result of {@link #average}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #average}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2669,7 +2748,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #bounds}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #bounds}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #bounds}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
     
@@ -2685,7 +2765,8 @@ Ext.define('Ext.util.Collection', {
      * @method countByGroup
      * See {@link #count}. The result is partitioned by group.
      *
-     * @return {Object} The result of {@link #count}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #count}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2708,7 +2789,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #extremes}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #extremes}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #extremes}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2730,7 +2812,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #max}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #max}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #max}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2753,7 +2836,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #maxItem}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #maxItem}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #maxItem}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2775,7 +2859,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #min}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #min}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #min}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2798,7 +2883,8 @@ Ext.define('Ext.util.Collection', {
      * See {@link #minItem}. The result is partitioned by group.
      *
      * @param {String} property The name of the property from each item.
-     * @return {Object} The result of {@link #minItem}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #minItem}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
@@ -2820,19 +2906,23 @@ Ext.define('Ext.util.Collection', {
      * See {@link #sum}. The result is partitioned by group.
      *
      * @param {String} property The name of the property to sum from each item.
-     * @return {Object} The result of {@link #sum}, partitioned by group. See {@link #aggregateByGroup}.
+     * @return {Object} The result of {@link #sum}, partitioned by group. See
+     * {@link #aggregateByGroup}.
      * @since 5.0.0
      */
 
     _aggregators: {
-        average: function (items, begin, end, property, root) {
+        average: function(items, begin, end, property, root) {
             var n = end - begin;
+
             return n &&
                    this._aggregators.sum.call(this, items, begin, end, property, root) / n;
         },
 
-        bounds: function (items, begin, end, property, root) {
-            for (var value, max, min, i = begin; i < end; ++i) {
+        bounds: function(items, begin, end, property, root) {
+            var value, max, min, i;
+            
+            for (i = begin; i < end; ++i) {
                 value = items[i];
                 value = (root ? value[root] : value)[property];
 
@@ -2842,6 +2932,7 @@ Ext.define('Ext.util.Collection', {
                 if (!(value < max)) { // jshint ignore:line
                     max = value;
                 }
+
                 if (!(value > min)) { // jshint ignore:line
                     min = value;
                 }
@@ -2854,7 +2945,7 @@ Ext.define('Ext.util.Collection', {
             return items.length;
         },
 
-        extremes: function (items, begin, end, property, root) {
+        extremes: function(items, begin, end, property, root) {
             var most = null,
                 least = null,
                 i, item, max, min, value;
@@ -2868,6 +2959,7 @@ Ext.define('Ext.util.Collection', {
                     max = value;
                     most = item;
                 }
+
                 if (!(value > min)) { // jshint ignore:line
                     min = value;
                     least = item;
@@ -2877,28 +2969,34 @@ Ext.define('Ext.util.Collection', {
             return [least, most];
         },
 
-        max: function (items, begin, end, property, root) {
+        max: function(items, begin, end, property, root) {
             var b = this._aggregators.bounds.call(this, items, begin, end, property, root);
+
             return b[1];
         },
 
-        maxItem: function (items, begin, end, property, root) {
+        maxItem: function(items, begin, end, property, root) {
             var b = this._aggregators.extremes.call(this, items, begin, end, property, root);
+
             return b[1];
         },
 
-        min: function (items, begin, end, property, root) {
+        min: function(items, begin, end, property, root) {
             var b = this._aggregators.bounds.call(this, items, begin, end, property, root);
+
             return b[0];
         },
 
-        minItem: function (items, begin, end, property, root) {
+        minItem: function(items, begin, end, property, root) {
             var b = this._aggregators.extremes.call(this, items, begin, end, property, root);
+
             return b[0];
         },
 
-        sum: function (items, begin, end, property, root) {
-            for (var value, sum = 0, i = begin; i < end; ++i) {
+        sum: function(items, begin, end, property, root) {
+            var value, sum, i;
+            
+            for (sum = 0, i = begin; i < end; ++i) {
                 value = items[i];
                 value = (root ? value[root] : value)[property];
                 sum += value;
@@ -2909,19 +3007,19 @@ Ext.define('Ext.util.Collection', {
     },
 
     _eventToMethodMap: {
-        add:                'onCollectionAdd',
-        beforeitemchange:   'onCollectionBeforeItemChange',
-        beginupdate:        'onCollectionBeginUpdate',
-        endupdate:          'onCollectionEndUpdate',
-        itemchange:         'onCollectionItemChange',
+        add: 'onCollectionAdd',
+        beforeitemchange: 'onCollectionBeforeItemChange',
+        beginupdate: 'onCollectionBeginUpdate',
+        endupdate: 'onCollectionEndUpdate',
+        itemchange: 'onCollectionItemChange',
         filtereditemchange: 'onCollectionFilteredItemChange',
-        refresh:            'onCollectionRefresh',
-        remove:             'onCollectionRemove',
-        beforesort:         'beforeCollectionSort',
-        sort:               'onCollectionSort',
-        filter:             'onCollectionFilter',
-        filteradd:          'onCollectionFilterAdd',
-        updatekey:          'onCollectionUpdateKey'
+        refresh: 'onCollectionRefresh',
+        remove: 'onCollectionRemove',
+        beforesort: 'beforeCollectionSort',
+        sort: 'onCollectionSort',
+        filter: 'onCollectionFilter',
+        filteradd: 'onCollectionFilterAdd',
+        updatekey: 'onCollectionUpdateKey'
     },
 
     /**
@@ -2937,7 +3035,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    addObserver: function (observer) {
+    addObserver: function(observer) {
         var me = this,
             observers = me.observers;
 
@@ -2972,7 +3070,7 @@ Ext.define('Ext.util.Collection', {
         return a - b;
     },
 
-    applyExtraKeys: function (extraKeys, oldExtraKeys) {
+    applyExtraKeys: function(extraKeys, oldExtraKeys) {
         var me = this,
             ret = oldExtraKeys || {},
             config,
@@ -2981,6 +3079,7 @@ Ext.define('Ext.util.Collection', {
 
         for (name in extraKeys) {
             value = extraKeys[name];
+
             if (!value.isCollectionKey) {
                 config = {
                     collection: me
@@ -2988,11 +3087,14 @@ Ext.define('Ext.util.Collection', {
 
                 if (Ext.isString(value)) {
                     config.property = value;
-                } else {
+                }
+                else {
                     config = Ext.apply(config, value);
                 }
+
                 value = new Ext.util.CollectionKey(config);
-            } else {
+            }
+            else {
                 value.setCollection(me);
             }
 
@@ -3003,10 +3105,11 @@ Ext.define('Ext.util.Collection', {
         return ret;
     },
 
-    applyGrouper: function (grouper) {
+    applyGrouper: function(grouper) {
         if (grouper) {
             grouper = this.getSorters().decodeSorter(grouper, Ext.util.Grouper);
         }
+
         return grouper;
     },
 
@@ -3033,28 +3136,31 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    decodeItems: function (args, index) {
+    decodeItems: function(args, index) {
         var me = this,
             ret = (index === undefined) ? args : args[index],
             cloned, decoder, i;
 
         if (!ret || !ret.$cloned) {
             cloned = args.length > index + 1 || !Ext.isIterable(ret);
+
             if (cloned) {
                 ret = Ext.Array.slice(args, index);
+
                 if (ret.length === 1 && ret[0] === undefined) {
                     ret.length = 0;
                 }
             }
 
             decoder = me.getDecoder();
+
             if (decoder) {
                 if (!cloned) {
                     ret = ret.slice(0);
                     cloned = true;
                 }
 
-                for (i = ret.length; i-- > 0; ) {
+                for (i = ret.length; i-- > 0;) {
                     if ((ret[i] = decoder.call(me, ret[i])) === false) {
                         ret.splice(i, 1);
                     }
@@ -3079,7 +3185,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    getIndices: function () {
+    getIndices: function() {
         var me = this,
             indices = me.indices,
             items = me.items,
@@ -3109,7 +3215,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    notify: function (eventName, args) {
+    notify: function(eventName, args) {
         var me = this,
             observers = me.observers,
             methodName = me._eventToMethodMap[eventName],
@@ -3120,15 +3226,19 @@ Ext.define('Ext.util.Collection', {
 
         if (observers && methodName) {
             me.notifying = true;
+
             for (index = 0, length = observers.length; index < length; ++index) {
                 method = (observer = observers[index])[methodName];
+
                 if (method) {
                     if (!added++) { // jshint ignore:line
                         args.unshift(me); // put this Collection as the first argument
                     }
+
                     method.apply(observer, args);
                 }
             }
+
             me.notifying = false;
         }
         
@@ -3141,6 +3251,7 @@ Ext.define('Ext.util.Collection', {
             if (!added) {
                 args.unshift(me); // put this Collection as the first argument
             }
+
             me.fireEventArgs(eventName, args);
         }
     },
@@ -3149,7 +3260,7 @@ Ext.define('Ext.util.Collection', {
      * Returns the filter function.
      * @return {Function} sortFn The sort function.
      */
-    getFilterFn: function () {
+    getFilterFn: function() {
         return this.getFilters().getFilterFn();
     },
 
@@ -3159,7 +3270,7 @@ Ext.define('Ext.util.Collection', {
      * @param [autoCreate=true] Pass `false` to disable auto-creation of the collection.
      * @return {Ext.util.FilterCollection} The collection of filters.
      */
-    getFilters: function (autoCreate) {
+    getFilters: function(autoCreate) {
         var ret = this._filters;
 
         if (!ret && autoCreate !== false) {
@@ -3177,7 +3288,7 @@ Ext.define('Ext.util.Collection', {
      * @return {Boolean} The value `true` if the item would be "removed" from the
      * collection due to filters or `false` otherwise.
      */
-    isItemFiltered: function (item) {
+    isItemFiltered: function(item) {
         return !this.getFilters().filterFn(item);
     },
 
@@ -3198,7 +3309,7 @@ Ext.define('Ext.util.Collection', {
      * @method
      * @param {Ext.util.FilterCollection} filters The filters collection.
      */
-    onFilterChange: function (filters) {
+    onFilterChange: function(filters) {
         var me = this,
             source = me.getSource(),
             extraKeys, newKeys, key;
@@ -3208,12 +3319,15 @@ Ext.define('Ext.util.Collection', {
             // any and we create the source collection as needed that means we are getting
             // our first filter.
             extraKeys = me.getExtraKeys();
+
             if (extraKeys) {
                 newKeys = {};
+
                 for (key in extraKeys) {
                     newKeys[key] = extraKeys[key].clone(me);
                 }
             }
+
             source = new Ext.util.Collection({
                 keyFn: me.getKey,
                 extraKeys: newKeys,
@@ -3226,22 +3340,25 @@ Ext.define('Ext.util.Collection', {
 
             me.setSource(source);
             me.autoSource = source;
-        } else {
+        }
+        else {
             if (source.destroyed) {
                 return;
             }
+
             if (source.length || me.length) {
                 // if both us and the source are empty then we can skip this
                 me.onCollectionRefresh(source);
             }
         }
+
         me.notify('filter');
     },
 
     //-------------------------------------------------------------------------
     // Private
 
-    applyFilters: function (filters, collection) {
+    applyFilters: function(filters, collection) {
         if (!filters || filters.isFilterCollection) {
             return filters;
         }
@@ -3257,14 +3374,15 @@ Ext.define('Ext.util.Collection', {
         return collection;
     },
 
-    updateFilters: function (newFilters, oldFilters) {
+    updateFilters: function(newFilters, oldFilters) {
         var me = this;
 
         if (oldFilters) {
             // Do not disconnect from owning Filterable because
             // default options (eg _rootProperty) are read from there.
-            // FilterCollections are detached from the Collection when the owning Store is remoteFilter: true
-            // or the owning store is a TreeStore and only filters new nodes before filling a parent node.
+            // FilterCollections are detached from the Collection when the owning Store
+            // is remoteFilter: true or the owning store is a TreeStore and only filters
+            // new nodes before filling a parent node.
             oldFilters.un('endupdate', 'onEndUpdateFilters', me);
         }
 
@@ -3280,7 +3398,7 @@ Ext.define('Ext.util.Collection', {
         me.onEndUpdateFilters(newFilters);
     },
 
-    onEndUpdateFilters: function (filters) {
+    onEndUpdateFilters: function(filters) {
         var me = this,
             was = me.filtered,
             is = !!filters && (filters.getFilterCount() > 0); // booleanize filters
@@ -3295,7 +3413,7 @@ Ext.define('Ext.util.Collection', {
      * Returns an up to date sort function.
      * @return {Function} The sort function.
      */
-    getSortFn: function () {
+    getSortFn: function() {
         return this._sortFn || this.createSortFn();
     },
 
@@ -3305,7 +3423,7 @@ Ext.define('Ext.util.Collection', {
      * @param [autoCreate=true] Pass `false` to disable auto-creation of the collection.
      * @return {Ext.util.SorterCollection} The collection of sorters.
      */
-    getSorters: function (autoCreate) {
+    getSorters: function(autoCreate) {
         var ret = this._sorters;
 
         if (!ret && autoCreate !== false) {
@@ -3333,7 +3451,7 @@ Ext.define('Ext.util.Collection', {
      * @method
      * @param {Ext.util.SorterCollection} sorters The sorters collection.
      */
-    onSortChange: function () {
+    onSortChange: function() {
         if (this.sorted) {
             this.sortItems();
         }
@@ -3390,7 +3508,7 @@ Ext.define('Ext.util.Collection', {
      * - **`append`** : The new sorters are added at the end of the collection.
      * @return {Ext.util.Collection} This instance.
      */
-    sort: function (property, direction, mode) {
+    sort: function(property, direction, mode) {
         var sorters = this.getSorters();
 
         sorters.addSort.apply(sorters, arguments);
@@ -3403,8 +3521,9 @@ Ext.define('Ext.util.Collection', {
      * @param {Array} data The array you want to have sorted.
      * @return {Array} The array you passed after it is sorted.
      */
-    sortData: function (data) {
+    sortData: function(data) {
         Ext.Array.sort(data, this.getSortFn());
+
         return data;
     },
 
@@ -3414,7 +3533,7 @@ Ext.define('Ext.util.Collection', {
      * @param {Function} sortFn The function by which to sort the items.
      * @since 5.0.0
      */
-    sortItems: function (sortFn) {
+    sortItems: function(sortFn) {
         var me = this;
 
         if (me.sorted) {
@@ -3422,6 +3541,7 @@ Ext.define('Ext.util.Collection', {
             if (sortFn) {
                 Ext.raise('Collections with sorters cannot resorted');
             }
+
             //</debug>
             sortFn = me.getSortFn();
         }
@@ -3454,10 +3574,11 @@ Ext.define('Ext.util.Collection', {
      * Or can be passed an items array to search in, and may be passed a comparator
      */
     findInsertionIndex: function(item, items, comparatorFn, index) {
-        return Ext.Array.findInsertionIndex(item, items || this.items, comparatorFn || this.getSortFn(), index);
+        return Ext.Array.findInsertionIndex(item, items || this.items,
+                                            comparatorFn || this.getSortFn(), index);
     },
 
-    applySorters: function (sorters, collection) {
+    applySorters: function(sorters, collection) {
         if (!sorters || sorters.isSorterCollection) {
             return sorters;
         }
@@ -3473,7 +3594,7 @@ Ext.define('Ext.util.Collection', {
         return collection;
     },
 
-    createSortFn: function () {
+    createSortFn: function() {
         var me = this,
             grouper = me.getGrouper(),
             sorters = me.getSorters(false),
@@ -3483,16 +3604,18 @@ Ext.define('Ext.util.Collection', {
             return sorterFn;
         }
 
-        return function (lhs, rhs) {
+        return function(lhs, rhs) {
             var ret = grouper.sort(lhs, rhs);
+
             if (!ret && sorterFn) {
                 ret = sorterFn(lhs, rhs);
             }
+
             return ret;
         };
     },
 
-    updateGrouper: function (grouper) {
+    updateGrouper: function(grouper) {
         var me = this,
             groups = me.getGroups(),
             sorters = me.getSorters(),
@@ -3511,14 +3634,17 @@ Ext.define('Ext.util.Collection', {
                     groups.$groupable = me;
                     me.setGroups(groups);
                 }
+
                 groups.setGrouper(grouper);
                 populate = true;
             }
-        } else {
+        }
+        else {
             if (groups) {
                 me.removeObserver(groups);
                 groups.destroy();
             }
+
             me.setGroups(null);
         }
 
@@ -3531,14 +3657,15 @@ Ext.define('Ext.util.Collection', {
         }
     },
 
-    updateSorters: function (newSorters, oldSorters) {
+    updateSorters: function(newSorters, oldSorters) {
         var me = this;
 
         if (oldSorters && !oldSorters.destroyed) {
             // Do not disconnect from owning Filterable because
             // default options (eg _rootProperty) are read from there.
-            // SorterCollections are detached from the Collection when the owning Store is remoteSort: true
-            // or the owning store is a TreeStore and only sorts new nodes before filling a parent node.
+            // SorterCollections are detached from the Collection when the owning Store
+            // is remoteSort: true or the owning store is a TreeStore and only sorts
+            // new nodes before filling a parent node.
             oldSorters.un('endupdate', 'onEndUpdateSorters', me);
         }
 
@@ -3562,14 +3689,14 @@ Ext.define('Ext.util.Collection', {
         this._sortFn = null;
     },
 
-    onEndUpdateSorters: function (sorters) {
+    onEndUpdateSorters: function(sorters) {
         var me = this,
             was = me.sorted,
             is = (me.grouped && me.getAutoGroup()) || (sorters && sorters.length > 0);
 
         if (was || is) {
-             // ensure flag property is a boolean.
-             // sorters && (sorters.length > 0) may evaluate to null
+            // ensure flag property is a boolean.
+            // sorters && (sorters.length > 0) may evaluate to null
             me.sorted = !!is;
             me.onSortChange(sorters);
         }
@@ -3582,7 +3709,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    removeObserver: function (observer) {
+    removeObserver: function(observer) {
         var observers = this.observers;
 
         if (observers) {
@@ -3603,7 +3730,7 @@ Ext.define('Ext.util.Collection', {
      * @private
      * @since 5.0.0
      */
-    spliceMerge: function (newItems, newKeys) {
+    spliceMerge: function(newItems, newKeys) {
         var me = this,
             map = me.map,
             newLength = newItems.length,
@@ -3636,7 +3763,7 @@ Ext.define('Ext.util.Collection', {
             newItem = newItems[newIndex];
 
             // Flush out any oldItems that are <= newItem
-            for ( ; oldIndex < oldLength; ++oldIndex) {
+            for (; oldIndex < oldLength; ++oldIndex) {
                 // Consider above arrays...
                 //  at newIndex == 0 this loop sets oldItem but breaks immediately
                 //  at newIndex == 2 this loop pushes 15 and breaks w/oldIndex=1
@@ -3644,6 +3771,7 @@ Ext.define('Ext.util.Collection', {
                 if (sortFn(newItem, oldItem = oldItems[oldIndex]) < 0) {
                     break;
                 }
+
                 items.push(oldItem);
             }
 
@@ -3657,6 +3785,7 @@ Ext.define('Ext.util.Collection', {
                     itemAt: items[items.length - 1],
                     items: (addItems = [])
                 };
+
                 if (count > 1) {
                     adds[count - 2].next = adds[count - 1];
                 }
@@ -3665,6 +3794,7 @@ Ext.define('Ext.util.Collection', {
                     addItems.push(newItem = newItems[newIndex]);
                     items.push(newItem);
                 }
+                
                 break;
             }
 
@@ -3678,6 +3808,7 @@ Ext.define('Ext.util.Collection', {
                 itemAt: items[items.length - 1],
                 items: (addItems = [ newItem ])
             };
+
             if (count > 1) {
                 adds[count - 2].next = adds[count - 1];
             }
@@ -3691,6 +3822,7 @@ Ext.define('Ext.util.Collection', {
                 if (sortFn(newItem = newItems[end], oldItem) >= 0) {
                     break;
                 }
+
                 items.push(newItem);
                 addItems.push(newItem);
             }
@@ -3726,24 +3858,27 @@ Ext.define('Ext.util.Collection', {
 
     updateAutoGroup: function(autoGroup) {
         var groups = this.getGroups();
+
         if (groups) {
             groups.setAutoGroup(autoGroup);
         }
+
         // Important to call this so it can clear the .sorted flag
         // as needed
         this.onEndUpdateSorters(this._sorters);
     },
 
-    updateGroups: function (newGroups, oldGroups) {
+    updateGroups: function(newGroups, oldGroups) {
         if (oldGroups) {
             this.removeObserver(oldGroups);
         }
+
         if (newGroups) {
             this.addObserver(newGroups);
         }
     },
 
-    updateSource: function (newSource, oldSource) {
+    updateSource: function(newSource, oldSource) {
         var auto = this.autoSource;
         
         if (oldSource) {
@@ -3756,15 +3891,16 @@ Ext.define('Ext.util.Collection', {
                 this.autoSource = null;
             }
         }
+
         if (newSource) {
             newSource.addObserver(this);
+
             if (newSource.length || this.length) {
                 this.onCollectionRefresh(newSource);
             }
         }
     }
-},
-function () {
+}, function() {
     var prototype = this.prototype;
 
     // Minor compat method
@@ -3782,8 +3918,8 @@ function () {
      */
     prototype.decodeRemoveItems = prototype.decodeItems;
 
-    Ext.Object.each(prototype._aggregators, function (name) {
-        prototype[name] = function (property, begin, end) {
+    Ext.Object.each(prototype._aggregators, function(name) {
+        prototype[name] = function(property, begin, end) {
             return this.aggregate(property, name, begin, end);
         };
         

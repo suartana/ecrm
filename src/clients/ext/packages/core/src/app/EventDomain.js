@@ -70,9 +70,10 @@ Ext.define('Ext.app.EventDomain', {
      * 
      * @param {Object} target The firer of the event.
      * @param {String} ev The event being fired.
-     * @param {Array} args The arguments for the event. This array **does not** include the event name.
-     * That has already been sliced off because this class intercepts the {@link Ext.util.Observable#fireEventArgs fireEventArgs}
-     * method which takes an array as the event's argument list.
+     * @param {Array} args The arguments for the event. This array **does not** include the
+     * event name. That has already been sliced off because this class intercepts the
+     * {@link Ext.util.Observable#fireEventArgs fireEventArgs} method which takes an array
+     * as the event's argument list.
      *
      * @return {Boolean} `false` if any listener returned `false`, otherwise `true`.
      *
@@ -81,6 +82,7 @@ Ext.define('Ext.app.EventDomain', {
     dispatch: function(target, ev, args) {
         ev = Ext.canonicalEventName(ev);
         
+        /* eslint-disable-next-line vars-on-top */
         var me = this,
             bus = me.bus,
             selectors = bus[ev],
@@ -102,6 +104,7 @@ Ext.define('Ext.app.EventDomain', {
                 for (id in controllers) {
                     if (controllers.hasOwnProperty(id)) {
                         info = controllers[id];
+                        
                         if (info.controller.isActive()) {
                             // Loop over all the events that are bound to this selector
                             // on the current controller
@@ -115,7 +118,7 @@ Ext.define('Ext.app.EventDomain', {
                                 if (event.fire.apply(event, args) === false) {
                                     return false;
                                 }
-                            } 
+                            }
                         }
                     }
                 }
@@ -191,17 +194,17 @@ Ext.define('Ext.app.EventDomain', {
                 }
                 
                 for (ev in listeners) {
-                    options  = null;
+                    options = null;
                     listener = listeners[ev];
-                    scope    = controller;
+                    scope = controller;
                     ev = Ext.canonicalEventName(ev);
-                    event    = new Ext.util.Event(controller, ev);
+                    event = new Ext.util.Event(controller, ev);
 
                     // Normalize the listener
                     if (Ext.isObject(listener)) {
-                        options  = listener;
+                        options = listener;
                         listener = options.fn;
-                        scope    = options.scope || controller;
+                        scope = options.scope || controller;
 
                         delete options.fn;
                         delete options.scope;
@@ -214,17 +217,21 @@ Ext.define('Ext.app.EventDomain', {
                         if (!scope[listener]) {
                             Ext.raise('Cannot resolve "' + listener + '" on controller.');
                         }
-                        scope = null;    
-                    } else
+                        
+                        scope = null;
+                    }
+                    else
                     //</debug>
 
                     if (typeof listener === 'string') {
                         listener = scope[listener];
                     }
+                    
                     event.addListener(listener, scope, options);
 
                     for (i = 0; i < monitoredClassesCount; ++i) {
                         classHasListeners = monitoredClasses[i].hasListeners;
+                        
                         if (classHasListeners) {
                             // Ext.mixin.Observable doesn't have hasListeners at class level
                             classHasListeners._incr_(ev);
@@ -232,9 +239,9 @@ Ext.define('Ext.app.EventDomain', {
                     }
 
                     // Create the bus tree if it is not there yet
-                    tree = bus[ev]             || (bus[ev] = {});
-                    tree = tree[selector]      || (tree[selector] = {});
-                    info = tree[controllerId]  || (tree[controllerId] = {
+                    tree = bus[ev] || (bus[ev] = {});
+                    tree = tree[selector] || (tree[selector] = {});
+                    info = tree[controllerId] || (tree[controllerId] = {
                         controller: controller,
                         list: []
                     });
@@ -325,18 +332,23 @@ Ext.define('Ext.app.EventDomain', {
 
         for (ev in bus) {
             ev = Ext.canonicalEventName(ev);
+            
             if (bus.hasOwnProperty(ev) && (selectors = bus[ev])) {
                 for (selector in selectors) {
                     controllers = selectors[selector];
                     info = controllers[id];
+                    
                     if (info) {
                         events = info.list;
+                        
                         if (events) {
                             for (i = 0, len = events.length; i < len; ++i) {
                                 item = events[i];
                                 item.clearListeners();
+                                
                                 for (j = 0; j < monitoredClassesCount; ++j) {
                                     classHasListeners = monitoredClasses[j].hasListeners;
+                                    
                                     if (classHasListeners) {
                                         // Ext.mixin.Observable doesn't have hasListeners
                                         // at class level
@@ -344,9 +356,10 @@ Ext.define('Ext.app.EventDomain', {
                                     }
                                 }
                             }
+                            
                             delete controllers[id];
                         }
-                    } 
+                    }
                 }
             }
         }

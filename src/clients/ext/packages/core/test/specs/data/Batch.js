@@ -98,15 +98,16 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
             it("should set the batch on each operation", function() {
                 expect(op1.getBatch()).toBe(batch);
                 expect(op2.getBatch()).toBe(batch);
-                expect(op3.getBatch()).toBe(batch);    
-            });  
+                expect(op3.getBatch()).toBe(batch);
+            });
             
             it("should add them in order", function() {
                 var items = batch.getOperations();
+
                 expect(items[0]).toBe(op1);
                 expect(items[1]).toBe(op2);
                 expect(items[2]).toBe(op3);
-            })
+            });
         });
     });
 
@@ -117,7 +118,7 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
         
         it("should not run if there are no operations", function() {
             batch.start();
-            expect(batch.isRunning()).toBe(false);    
+            expect(batch.isRunning()).toBe(false);
         });
 
         it("should set isRunning to true", function() {
@@ -139,8 +140,9 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
         
         beforeEach(function() {
             ops = [];
+
             for (var i = 1; i <= 4; ++i) {
-                ops.push(makeOperation('destroy', {id: i}));
+                ops.push(makeOperation('destroy', { id: i }));
             }
             
             makeBatch();
@@ -156,11 +158,11 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
                         values.push(this.getId());
                         this.execute.originalValue.apply(this, arguments);
                         this.setSuccessful(true);
-                    });    
+                    });
                 });
                 
                 batch.start();
-                expect(values).toEqual([1, 2, 3, 4]);           
+                expect(values).toEqual([1, 2, 3, 4]);
             });
             
             it("should wait until the previous operation completes before continuing", function() {
@@ -170,21 +172,22 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
                     spyOn(op, 'execute').andCallFake(function() {
                         values.push(this.getId());
                         this.execute.originalValue.apply(this, arguments);
-                    });    
+                    });
                 });
                 
                 batch.start();
                 expect(values).toEqual([1]);
-                ops[0].setSuccessful(true); 
+                ops[0].setSuccessful(true);
                 expect(values).toEqual([1, 2]);
-                ops[1].setSuccessful(true); 
+                ops[1].setSuccessful(true);
                 expect(values).toEqual([1, 2, 3]);
                 ops[2].setSuccessful(true);
-                expect(values).toEqual([1, 2, 3, 4]); 
+                expect(values).toEqual([1, 2, 3, 4]);
             });
             
             it("should be able to run an operation added during the batch start", function() {
                 var other = makeOperation();
+
                 spyOn(other, 'execute');
                 
                 batch.start();
@@ -192,9 +195,9 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
                 ops[1].setSuccessful(true);
                 batch.add(other);
                 ops[2].setSuccessful(true);
-                ops[3].setSuccessful(true)
+                ops[3].setSuccessful(true);
                 
-                expect(other.execute).toHaveBeenCalled();    
+                expect(other.execute).toHaveBeenCalled();
             });
             
             it("should keep track of exceptions and continue on", function() {
@@ -212,31 +215,34 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
         describe("events", function() {
             it("should fire the operationcomplete event when an operation completes", function() {
                 var spy = jasmine.createSpy();
+
                 batch.on('operationcomplete', spy);
                 
                 batch.start();
                 ops[0].setSuccessful(true);
-                expect(spy.mostRecentCall.args[0]).toBe(batch); 
+                expect(spy.mostRecentCall.args[0]).toBe(batch);
                 expect(spy.mostRecentCall.args[1]).toBe(ops[0]);
                 ops[1].setSuccessful(true);
-                expect(spy.mostRecentCall.args[0]).toBe(batch); 
-                expect(spy.mostRecentCall.args[1]).toBe(ops[1]);    
+                expect(spy.mostRecentCall.args[0]).toBe(batch);
+                expect(spy.mostRecentCall.args[1]).toBe(ops[1]);
             });
             
             it("should fire the complete event when we have completed", function() {
                 var spy = jasmine.createSpy();
+
                 batch.on('complete', spy);
                 
                 batch.start();
                 Ext.Array.forEach(ops, function(op) {
-                    op.setSuccessful(true);    
-                });  
+                    op.setSuccessful(true);
+                });
                 expect(spy.mostRecentCall.args[0]).toBe(batch);
                 expect(spy.mostRecentCall.args[1]).toBe(ops[3]);
             });
             
             it("should fire the exception event when an operation fails", function() {
                 var spy = jasmine.createSpy();
+
                 batch.on('exception', spy);
                 
                 batch.start();
@@ -247,16 +253,16 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
                 ops[2].setSuccessful(true);
                 ops[3].setException('Failed2');
                 expect(spy.mostRecentCall.args[0]).toBe(batch);
-                expect(spy.mostRecentCall.args[1]).toBe(ops[3]);   
+                expect(spy.mostRecentCall.args[1]).toBe(ops[3]);
             });
-        });  
+        });
         
     });
     
     describe("getCurrent", function() {
         beforeEach(function() {
             makeBatch();
-        });    
+        });
         
         it("should return null if the batch has not started", function() {
             expect(batch.getCurrent()).toBeNull();
@@ -319,8 +325,8 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
             batch.start();
             batch.pause();
             
-            op1.setSuccessful(true);  
-            expect(op2.execute).not.toHaveBeenCalled();  
+            op1.setSuccessful(true);
+            expect(op2.execute).not.toHaveBeenCalled();
         });
         
         it("should continue on after we start after pausing", function() {
@@ -336,9 +342,9 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
             batch.start();
             batch.pause();
             
-            op1.setSuccessful(true);  
+            op1.setSuccessful(true);
             batch.start();
-            expect(op2.execute).toHaveBeenCalled();  
+            expect(op2.execute).toHaveBeenCalled();
         });
     });
     
@@ -371,7 +377,7 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
             op1.setException('Failed');
             spyOn(op1, 'execute');
             batch.retry();
-            expect(op1.execute).toHaveBeenCalled();    
+            expect(op1.execute).toHaveBeenCalled();
         });
     });
     

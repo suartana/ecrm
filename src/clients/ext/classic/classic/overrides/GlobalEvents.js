@@ -3,7 +3,6 @@
 /**
  * @class Ext.GlobalEvents
  */
-
 Ext.define('Ext.overrides.GlobalEvents', {
     override: 'Ext.GlobalEvents',
 
@@ -29,7 +28,7 @@ Ext.define('Ext.overrides.GlobalEvents', {
             bufferedFn = Ext.Function.createBuffered(me.fireResize, me.resizeBuffer, me);
             
             Ext.getWin().dom.attachEvent('onresize', function() {
-                if (docElement.clientWidth  !== Ext.GlobalEvents.curWidth ||
+                if (docElement.clientWidth !== Ext.GlobalEvents.curWidth ||
                     docElement.clientHeight !== Ext.GlobalEvents.curHeight) {
                     bufferedFn();
                 }
@@ -51,7 +50,8 @@ Ext.define('Ext.overrides.GlobalEvents', {
 
                     if (ename === 'ready') {
                         readyFn = fn;
-                    } else if (typeof ename !== 'string') {
+                    }
+                    else if (typeof ename !== 'string') {
                         for (name in ename) {
                             if (name === 'ready') {
                                 readyFn = ename[name];
@@ -61,8 +61,10 @@ Ext.define('Ext.overrides.GlobalEvents', {
 
                     if (readyFn) {
                         //<debug>
-                        Ext.log.warn("Ext.on('ready', fn) is deprecated.  Please use Ext.onReady(fn) instead.");
+                        Ext.log.warn("Ext.on('ready', fn) is deprecated.  " +
+                                     "Please use Ext.onReady(fn) instead.");
                         //</debug>
+                        
                         Ext.onReady(readyFn);
                     }
 

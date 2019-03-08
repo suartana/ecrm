@@ -3,21 +3,22 @@ topSuite("grid-keys",
 function() {
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
-            var grid, view, store, GridEventModel = Ext.define(null, {
-                extend: 'Ext.data.Model',
-                fields: [
-                    'field1',
-                    'field2',
-                    'field3',
-                    'field4',
-                    'field5',
-                    'field6',
-                    'field7',
-                    'field8',
-                    'field9',
-                    'field10'
-                ]
-            });
+            var grid, view, store,
+                GridEventModel = Ext.define(null, {
+                    extend: 'Ext.data.Model',
+                    fields: [
+                        'field1',
+                        'field2',
+                        'field3',
+                        'field4',
+                        'field5',
+                        'field6',
+                        'field7',
+                        'field8',
+                        'field9',
+                        'field10'
+                    ]
+                });
             
             var TAB = 9,
                 PAGE_UP = 33,
@@ -30,7 +31,7 @@ function() {
                 DOWN = 40;
                 
             function clickAndKey(rowIdx, cellIdx, key, altKey) {
-                var visibleCellIdx = view.getHeaderByCell(view.getCellInclusive({row:rowIdx, column: cellIdx}, true)).getVisibleIndex();
+                var visibleCellIdx = view.getHeaderByCell(view.getCellInclusive({ row: rowIdx, column: cellIdx }, true)).getVisibleIndex();
 
                 view.getNavigationModel().setPosition(rowIdx, visibleCellIdx);
                 triggerCellMouseEvent('click',  rowIdx, cellIdx);
@@ -47,6 +48,7 @@ function() {
             
             function triggerCellKeyEvent(type, rowIdx, cellIdx, key, altKey) {
                 var target = findCell(rowIdx, cellIdx);
+                
                 jasmine.fireKeyEvent(target, type, key, null, null, altKey);
             }
             
@@ -57,7 +59,7 @@ function() {
                 }, true);
             }
             
-            function makeGrid(selModel, columns, rows) {               
+            function makeGrid(selModel, columns, rows) {
                 var data = [],
                     defaultCols = [],
                     i;
@@ -70,6 +72,7 @@ function() {
                 }
                     
                 rows = rows || 5;
+                
                 for (i = 1; i <= rows; ++i) {
                     data.push({
                         field1: i + '.' + 1,
@@ -102,6 +105,7 @@ function() {
                     },
                     renderTo: Ext.getBody()
                 });
+                
                 view = grid.getView();
             }
             
@@ -117,7 +121,7 @@ function() {
                         makeGrid();
                         grid.view.el.dom.focus();
                     });
-                    describe("down", function() { 
+                    describe("down", function() {
                         it("should move down a row when pressing the down key on the first row", function() {
                             clickAndKey(0, 0, DOWN);
                             expect(grid.getSelectionModel().getSelection()[0]).toBe(store.getAt(1));
@@ -134,7 +138,7 @@ function() {
                         });
                     });
                     
-                    describe("up", function() { 
+                    describe("up", function() {
                         it("should move up a row when pressing the up key on the last row", function() {
                             clickAndKey(4, 0, UP);
                             expect(grid.getSelectionModel().getSelection()[0]).toBe(store.getAt(3));
@@ -158,8 +162,8 @@ function() {
                     // is only necessary in this suite since these special keys will
                     // trigger selection of a record not already in view, thus selection
                     // will not immediately occur.
-                    var selectionChange = function (desiredRecord) {
-                        return function () {
+                    var selectionChange = function(desiredRecord) {
+                        return function() {
                             return grid.selModel.getSelection()[0] === desiredRecord;
                         };
                     };
@@ -197,7 +201,8 @@ function() {
             
             describe("cell model", function() {
                 function expectSelection(row, column) {
-                    var pos = grid.getSelectionModel().getCurrentPosition(); 
+                    var pos = grid.getSelectionModel().getCurrentPosition();
+ 
                     expect(pos.row).toBe(row);
                     expect(pos.column).toBe(column);
                 }
@@ -225,7 +230,7 @@ function() {
                         
                         it("should wrap to the previous row where possible", function() {
                             clickAndKey(4, 0, LEFT);
-                            expectSelection(3, 3);    
+                            expectSelection(3, 3);
                         });
                     });
                     
@@ -264,7 +269,7 @@ function() {
                         
                         it("should wrap to the next row where possible", function() {
                             clickAndKey(2, 3, RIGHT);
-                            expectSelection(3, 0);    
+                            expectSelection(3, 0);
                         });
                     });
                     
@@ -442,6 +447,7 @@ function() {
             });
         });
     }
+
     createSuite(false);
     createSuite(true);
 });

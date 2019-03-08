@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-classic-theme-gray",
     "SenchaExtName": "@sencha/ext-classic-theme-gray",
     "SenchaExtReactName": "@sencha/ext-react-classic-theme-gray",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "theme-gray",
         "namespace": "Ext",
@@ -18,7 +18,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Gray Theme",
         "detailedDescription": "The Gray Theme extends the Classic Theme and shifts the color palette to shades of gray",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

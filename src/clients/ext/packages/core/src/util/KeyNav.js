@@ -73,7 +73,8 @@ Ext.define('Ext.util.KeyNav', {
 
     /**
      * @cfg {Ext.Component/Ext.dom.Element/HTMLElement/String} target
-     * The object on which to listen for the event specified by the {@link #eventName} config option.
+     * The object on which to listen for the event specified by the {@link #eventName}
+     * config option.
      */
 
     /**
@@ -156,7 +157,10 @@ Ext.define('Ext.util.KeyNav', {
         keymapCfg = {
             target: config.target,
             ignoreInputFields: config.ignoreInputFields,
-            eventName: me.getKeyEvent('forceKeyDown' in config ? config.forceKeyDown : me.forceKeyDown, config.eventName),
+            eventName: me.getKeyEvent(
+                'forceKeyDown' in config ? config.forceKeyDown : me.forceKeyDown,
+                config.eventName
+            ),
             capture: config.capture
         };
         
@@ -212,7 +216,9 @@ Ext.define('Ext.util.KeyNav', {
             // Allow { A: { ctrl: true, handler: onCtrlA } }
             // Allow { 45: doInsert } to use key codes directly
             // Allow { F2: onKeyF2 }
-            keyCode = keyName.length === 1 ? keyName.charCodeAt(0) : (keyCodes[keyName] || Event[keyName.toUpperCase()]);
+            keyCode = keyName.length === 1
+                ? keyName.charCodeAt(0)
+                : (keyCodes[keyName] || Event[keyName.toUpperCase()]);
             
             if (keyCode != null) {
                 keyName = keyCode;
@@ -222,7 +228,9 @@ Ext.define('Ext.util.KeyNav', {
                 if (typeof binding === 'function') {
                     binding = {
                         handler: binding,
-                        defaultEventAction: (bindings.defaultEventAction !== undefined) ? bindings.defaultEventAction : me.defaultEventAction
+                        defaultEventAction: (bindings.defaultEventAction !== undefined)
+                            ? bindings.defaultEventAction
+                            : me.defaultEventAction
                     };
                 }
                 
@@ -231,8 +239,11 @@ Ext.define('Ext.util.KeyNav', {
                     ctrl: binding.ctrl,
                     shift: binding.shift,
                     alt: binding.alt,
-                    handler: Ext.Function.bind(me.handleEvent, binding.scope || defaultScope, [binding.handler||binding.fn, me], true),
-                    defaultEventAction: (binding.defaultEventAction !== undefined) ? binding.defaultEventAction : me.defaultEventAction
+                    handler: Ext.Function.bind(me.handleEvent, binding.scope || defaultScope,
+                                               [binding.handler || binding.fn, me], true),
+                    defaultEventAction: (binding.defaultEventAction !== undefined)
+                        ? binding.defaultEventAction
+                        : me.defaultEventAction
                 });
             }
         }
@@ -248,6 +259,7 @@ Ext.define('Ext.util.KeyNav', {
      */
     handleEvent: function(keyCode, event, handler, keyNav) {
         keyNav.lastKeyEvent = event;
+
         return handler.call(this, event);
     },
 
@@ -309,8 +321,8 @@ Ext.define('Ext.util.KeyNav', {
 
     /**
      * @private
-     * Determines the event to bind to listen for keys. Defaults to the {@link #eventName} value, but
-     * may be overridden the {@link #forceKeyDown} setting.
+     * Determines the event to bind to listen for keys. Defaults to the {@link #eventName} value,
+     * but may be overridden the {@link #forceKeyDown} setting.
      *
      * @return {String} The type of event to listen for.
      */

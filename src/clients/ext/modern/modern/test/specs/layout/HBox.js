@@ -1,4 +1,4 @@
-describe("Ext.layout.HBox", function(){
+topSuite("Ext.layout.HBox", ['Ext.layout.*', 'Ext.Container'], function() {
     var ct, c;
 
     function getX(index) {

@@ -1,5 +1,3 @@
-/* global Ext, spyOn, expect, jasmine, MockAjaxManager */
-
 topSuite("Ext.data.Store", [
     'Ext.data.BufferedStore',
     'Ext.data.Session',
@@ -21,7 +19,9 @@ topSuite("Ext.data.Store", [
             fn: fn || Ext.emptyFn
         },
         spy = spyOn(obj, "fn");
+
         object.addListener(eventName, obj.fn);
+
         return spy;
     }
 
@@ -40,35 +40,43 @@ topSuite("Ext.data.Store", [
     function makeUser(email, data) {
         if (Ext.isObject(email)) {
             data = email;
-        } else {
+        }
+        else {
             data = data || {};
+
             if (!data.email) {
                 data.email = email;
             }
         }
+        
         return new User(data);
     }
 
     function createStore(cfg, withData) {
         cfg = cfg || {};
+        
         store = new Ext.data.Store(Ext.applyIf(cfg, {
             asynchronousLoad: false,
             model: User,
             data: withData ? [edRaw, abeRaw, aaronRaw, tommyRaw] : null
         }));
+        
         if (withData) {
             assignRecs();
         }
+        
         data = store.data;
     }
 
     function permutator(arr) {
         var result = [],
-            permute = function (arr, m) {
+            permute = function(arr, m) {
                 m = m || [];
+
                 if (!arr.length) {
                     result.push(m);
-                } else {
+                }
+                else {
                     for (var i = 0; i < arr.length; i++) {
                         var curr = arr.slice(),
                             next = curr.splice(i, 1);
@@ -104,12 +112,12 @@ topSuite("Ext.data.Store", [
             idProperty: 'email',
 
             fields: [
-                {name: 'name',      type: 'string'},
-                {name: 'email',     type: 'string'},
-                {name: 'evilness',  type: 'int'},
-                {name: 'group',     type: 'string'},
-                {name: 'old',       type: 'boolean'},
-                {name: 'valid',     type: 'string'},
+                { name: 'name',      type: 'string' },
+                { name: 'email',     type: 'string' },
+                { name: 'evilness',  type: 'int' },
+                { name: 'group',     type: 'string' },
+                { name: 'old',       type: 'boolean' },
+                { name: 'valid',     type: 'string' },
                 {
                     name: 'age',
                     type: 'int',
@@ -121,13 +129,13 @@ topSuite("Ext.data.Store", [
             ]
         });
 
-        edRaw    = {name: 'Ed Spencer',   email: 'ed@sencha.com',    evilness: 100, group: 'code',  old: false, age: 25, valid: 'yes'};
-        abeRaw   = {name: 'Abe Elias',    email: 'abe@sencha.com',   evilness: 70,  group: 'admin', old: false, age: 20, valid: 'yes'};
-        aaronRaw = {name: 'Aaron Conran', email: 'aaron@sencha.com', evilness: 5,   group: 'admin', old: true,  age: 26, valid: 'yes'};
-        tommyRaw = {name: 'Tommy Maintz', email: 'tommy@sencha.com', evilness: -15, group: 'code',  old: true,  age: 70, valid: 'yes'};
-        fredRaw = {name: 'Fred Moseley', email: 'fred.moseley@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes'};
-        kevinRaw = {name: 'Kevin Cassidy', email: 'kevin.cassidy@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes'};
-        scottRaw = {name: 'Scott Martin', email: 'scott.martin@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes'};
+        edRaw    = { name: 'Ed Spencer',   email: 'ed@sencha.com',    evilness: 100, group: 'code',  old: false, age: 25, valid: 'yes' };
+        abeRaw   = { name: 'Abe Elias',    email: 'abe@sencha.com',   evilness: 70,  group: 'admin', old: false, age: 20, valid: 'yes' };
+        aaronRaw = { name: 'Aaron Conran', email: 'aaron@sencha.com', evilness: 5,   group: 'admin', old: true,  age: 26, valid: 'yes' };
+        tommyRaw = { name: 'Tommy Maintz', email: 'tommy@sencha.com', evilness: -15, group: 'code',  old: true,  age: 70, valid: 'yes' };
+        fredRaw = { name: 'Fred Moseley', email: 'fred.moseley@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
+        kevinRaw = { name: 'Kevin Cassidy', email: 'kevin.cassidy@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
+        scottRaw = { name: 'Scott Martin', email: 'scott.martin@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
     });
 
     afterEach(function() {
@@ -165,12 +173,14 @@ topSuite("Ext.data.Store", [
                         }
                     });
                     var proxy = store.getProxy();
+
                     expect(proxy instanceof Ext.data.proxy.Ajax);
                     expect(proxy.getUrl()).toBe('foo');
                 });
                 
                 it("should accept an instance", function() {
                     var proxy = new Ext.data.proxy.Memory();
+
                     createStore({
                         proxy: proxy
                     });
@@ -207,6 +217,7 @@ topSuite("Ext.data.Store", [
                         }
                     });
                     var proxy = new Ext.data.proxy.Ajax();
+
                     createStore({
                         model: 'spec.ProxyWithModel',
                         proxy: proxy
@@ -344,6 +355,7 @@ topSuite("Ext.data.Store", [
                     fields: ['id', 'height', 'width']
                 });
                 var Model = store.getModel();
+
                 expect(Model.$className).toBe(null);
             });
         });
@@ -360,6 +372,7 @@ topSuite("Ext.data.Store", [
 
                 it("should not fire any events", function() {
                     var spy = jasmine.createSpy();
+
                     createStore({
                         listeners: {
                             clear: spy,
@@ -378,6 +391,7 @@ topSuite("Ext.data.Store", [
                 describe("with a memory proxy", function() {
                     it("should load the data and call proxy.read", function() {
                         var proxy = new Ext.data.proxy.Memory();
+
                         spyOn(proxy, 'read').andCallThrough();
                         createStore({
                             proxy: proxy,
@@ -390,7 +404,9 @@ topSuite("Ext.data.Store", [
 
                     it("should not fire any events", function() {
                         var spy = jasmine.createSpy();
+
                         var proxy = new Ext.data.proxy.Memory();
+
                         createStore({
                             proxy: proxy,
                             data: [abeRaw, tommyRaw],
@@ -409,6 +425,7 @@ topSuite("Ext.data.Store", [
                 describe("with a server proxy", function() {
                     it("should load the data and not call proxy.read", function() {
                         var proxy = new Ext.data.proxy.Ajax();
+
                         spyOn(proxy, 'read').andCallThrough();
                         createStore({
                             proxy: proxy,
@@ -421,7 +438,9 @@ topSuite("Ext.data.Store", [
 
                     it("should not fire any events", function() {
                         var spy = jasmine.createSpy();
+
                         var proxy = new Ext.data.proxy.Ajax();
+
                         createStore({
                             proxy: proxy,
                             data: [aaronRaw, edRaw],
@@ -439,8 +458,8 @@ topSuite("Ext.data.Store", [
             });
         });
 
-        describe('buffered stores', function () {
-            it('should create a BufferedStore if given buffered:true', function () {
+        describe('buffered stores', function() {
+            it('should create a BufferedStore if given buffered:true', function() {
                 createStore({
                     buffered: true
                 });
@@ -449,7 +468,7 @@ topSuite("Ext.data.Store", [
                 expect(store instanceof Ext.data.BufferedStore).toBe(true);
             });
 
-            it('should create a BufferedStore if given type:buffered', function () {
+            it('should create a BufferedStore if given type:buffered', function() {
                 // Silence console warning about store created with no model
                 spyOn(Ext.log, 'warn');
                 
@@ -740,7 +759,7 @@ topSuite("Ext.data.Store", [
                 expect(coders.contains(aaronRec)).toBe(false);
                 expect(coders.contains(abeRec)).toBe(false);
             });
-        });        
+        });
     });
     
     describe("finding", function() {
@@ -812,6 +831,7 @@ topSuite("Ext.data.Store", [
                 var index = store.findBy(function(rec) {
                     return rec.get('email') === 'abe@sencha.com';
                 });
+
                 expect(index).toBe(1);
             });
         });
@@ -836,6 +856,7 @@ topSuite("Ext.data.Store", [
     
     describe("iterating", function() {
         var spy;
+
         beforeEach(function() {
             createStore();
             addStoreData();
@@ -852,6 +873,7 @@ topSuite("Ext.data.Store", [
                 store.each(spy);
                 
                 var args = spy.calls[0].args;
+
                 expect(args[0]).toBe(edRec);
                 expect(args[1]).toBe(0);
                 expect(args[2]).toBe(4);
@@ -874,10 +896,12 @@ topSuite("Ext.data.Store", [
             
             it("should stop iterating if false is returned", function() {
                 var count = 0;
+
                 store.each(function(rec, idx) {
                     if (idx > 1) {
                         return false;
                     }
+
                     ++count;
                 });
                 expect(count).toBe(2);
@@ -899,7 +923,8 @@ topSuite("Ext.data.Store", [
 
                 store.each(function(rec, idx) {
                     recs.push(rec);
-                    if(rec.getId().charAt(0) === 'a') {
+
+                    if (rec.getId().charAt(0) === 'a') {
                         store.remove(rec);
                     }
                 });
@@ -921,7 +946,7 @@ topSuite("Ext.data.Store", [
         describe("indexOf", function() {
             it("should return the index of a record that exists in the store", function() {
                 expect(store.indexOf(abeRec)).toBe(1);
-            }); 
+            });
            
             it("should return -1 when the record does not exist in the store", function() {
                 expect(store.indexOf(makeUser('foo@sencha.com'))).toBe(-1);
@@ -997,10 +1022,11 @@ topSuite("Ext.data.Store", [
                 createStore();
             });
             
-            describe("position", function() { 
+            describe("position", function() {
                 it("should add to the end of the store", function() {
                     addStoreData();
                     var rec = makeUser('foo@sencha.com');
+
                     store.add(rec);
                     expect(store.getAt(4)).toBe(rec);
                 });
@@ -1009,6 +1035,7 @@ topSuite("Ext.data.Store", [
             describe("arg values", function() {
                 it("should add a model instance", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     store.add(rec);
                     expect(store.first()).toBe(rec);
                 });
@@ -1019,6 +1046,7 @@ topSuite("Ext.data.Store", [
                         name: 'Foo'
                     });
                     var rec = store.first();
+
                     expect(rec.isModel).toBe(true);
                     expect(rec.get('name')).toBe('Foo');
                 });
@@ -1053,12 +1081,13 @@ topSuite("Ext.data.Store", [
             describe("return value", function() {
                 it("should return an array when adding a single item", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     expect(store.add(rec)).toEqual([rec]);
                 });
                 
                 it("should return an array when adding an array, should not mutate the array", function() {
-                    var rec = makeUser('foo@sencha.com'), 
-                        arr = [rec], 
+                    var rec = makeUser('foo@sencha.com'),
+                        arr = [rec],
                         result = store.add(arr);
                     
                     expect(result).toEqual([rec]);
@@ -1096,6 +1125,7 @@ topSuite("Ext.data.Store", [
                         store.on('add', spy);
                         store.add(rec1);
                         var args = spy.mostRecentCall.args;
+
                         expect(spy.callCount).toBe(1);
                         expect(args[0]).toBe(store);
                         expect(args[1]).toEqual([rec1]);
@@ -1107,6 +1137,7 @@ topSuite("Ext.data.Store", [
                         store.on('datachanged', spy);
                         store.add(rec1, rec2);
                         var args = spy.mostRecentCall.args;
+
                         expect(spy.callCount).toBe(1);
                         expect(args[0]).toBe(store);
                     });
@@ -1118,6 +1149,7 @@ topSuite("Ext.data.Store", [
                             store.on('add', spy);
                             store.add(rec1, rec2);
                             var args = spy.mostRecentCall.args;
+
                             expect(spy.callCount).toBe(1);
                             expect(args[0]).toBe(store);
                             expect(args[1]).toEqual([rec1, rec2]);
@@ -1129,6 +1161,7 @@ topSuite("Ext.data.Store", [
                             store.on('datachanged', spy);
                             store.add(rec1, rec2);
                             var args = spy.mostRecentCall.args;
+
                             expect(spy.callCount).toBe(1);
                             expect(args[0]).toBe(store);
                         });
@@ -1138,6 +1171,7 @@ topSuite("Ext.data.Store", [
                     // require them to be split into different "add" groups
                     describe("discontiguous range", function() {
                         var recs;
+
                         beforeEach(function() {
                             store.removeAll();
                             store.sort('email');
@@ -1180,6 +1214,7 @@ topSuite("Ext.data.Store", [
                             expect(spy.callCount).toBe(4);
                             
                             var args = spy.calls[0].args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toEqual([recs[0], recs[1]]);
                             expect(args[2]).toBe(0);
@@ -1216,6 +1251,7 @@ topSuite("Ext.data.Store", [
                                 recs[0]
                             );
                             var args = spy.mostRecentCall.args;
+
                             expect(spy.callCount).toBe(1);
                             expect(args[0]).toBe(store);
                         });
@@ -1250,16 +1286,18 @@ topSuite("Ext.data.Store", [
                 createStore();
             });
             
-            describe("position", function() { 
+            describe("position", function() {
                 it("should add at the specified position", function() {
                     addStoreData();
                     var rec = makeUser('foo@sencha.com');
+
                     store.insert(2, rec);
                     expect(store.getAt(2)).toBe(rec);
                 });
                 
                 it("should add to the end if the index is larger than the bounds", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     store.insert(100, rec);
                     expect(store.first()).toBe(rec);
                 });
@@ -1268,6 +1306,7 @@ topSuite("Ext.data.Store", [
             describe("arg values", function() {
                 it("should add a model instance", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     store.insert(0, rec);
                     expect(store.first()).toBe(rec);
                 });
@@ -1278,6 +1317,7 @@ topSuite("Ext.data.Store", [
                         name: 'Foo'
                     });
                     var rec = store.first();
+
                     expect(rec.isModel).toBe(true);
                     expect(rec.get('name')).toBe('Foo');
                 });
@@ -1300,12 +1340,13 @@ topSuite("Ext.data.Store", [
             describe("return value", function() {
                 it("should return an array when adding a single item", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     expect(store.insert(0, rec)).toEqual([rec]);
                 });
                 
                 it("should return an array when adding an array, should not mutate the array", function() {
-                    var rec = makeUser('foo@sencha.com'), 
-                        arr = [rec], 
+                    var rec = makeUser('foo@sencha.com'),
+                        arr = [rec],
                         result = store.insert(0, arr);
                     
                     expect(result).toEqual([rec]);
@@ -1332,6 +1373,7 @@ topSuite("Ext.data.Store", [
                         email: 'foo@sencha.com',
                         group: 'code'
                     })[0];
+
                     expect(store.getAt(0)).toBe(rec);
                 });
 
@@ -1341,6 +1383,7 @@ topSuite("Ext.data.Store", [
                         email: 'foo@sencha.com',
                         group: 'code'
                     })[0];
+
                     store.getFilters().removeAll();
                     expect(store.indexOf(rec)).toBe(3);
                 });
@@ -1351,6 +1394,7 @@ topSuite("Ext.data.Store", [
                         email: 'foo@sencha.com',
                         group: 'admin'
                     })[0];
+
                     store.getFilters().removeAll();
                     expect(store.indexOf(rec)).toBe(0);
                 });
@@ -1370,6 +1414,7 @@ topSuite("Ext.data.Store", [
                     store.on('add', spy);
                     store.insert(0, [rec1, rec2]);
                     var args = spy.mostRecentCall.args;
+
                     expect(spy.callCount).toBe(1);
                     expect(args[0]).toBe(store);
                     expect(args[1]).toEqual([rec1, rec2]);
@@ -1380,6 +1425,7 @@ topSuite("Ext.data.Store", [
                     store.on('add', spy);
                     store.insert(50, [rec1, rec2]);
                     var args = spy.mostRecentCall.args;
+
                     expect(args[2]).toBe(4);
                 });
                 
@@ -1387,6 +1433,7 @@ topSuite("Ext.data.Store", [
                     store.on('datachanged', spy);
                     store.insert(0, [rec1, rec2]);
                     var args = spy.mostRecentCall.args;
+
                     expect(spy.callCount).toBe(1);
                     expect(args[0]).toBe(store);
                 });
@@ -1456,6 +1503,7 @@ topSuite("Ext.data.Store", [
                         var expected = {
                             'ed@sencha.com': 1
                         };
+
                         expect(refreshMap).toEqual(expected);
 
                         expect(store.isMoving([edRec])).toBe(0);
@@ -1553,6 +1601,7 @@ topSuite("Ext.data.Store", [
                             var expected = {
                                 'ed@sencha.com': 1
                             };
+
                             expect(refreshMap).toEqual(expected);
 
                             expect(store.isMoving([fooRec, edRec])).toBe(0);
@@ -1576,6 +1625,7 @@ topSuite("Ext.data.Store", [
                         var expected = {
                             'tommy@sencha.com': 1
                         };
+
                         expect(refreshMap).toEqual(expected);
 
                         expect(store.isMoving(tommyRec)).toBe(0);
@@ -1673,6 +1723,7 @@ topSuite("Ext.data.Store", [
                             var expected = {
                                 'ed@sencha.com': 1
                             };
+
                             expect(refreshMap).toEqual(expected);
 
                             expect(store.isMoving([fooRec, edRec])).toBe(0);
@@ -1702,6 +1753,7 @@ topSuite("Ext.data.Store", [
                     var expected = {
                         'tommy@sencha.com': 1
                     };
+
                     expect(refreshMap).toEqual(expected);
 
                     expect(store.isMoving(tommyRec)).toBe(0);
@@ -1795,6 +1847,7 @@ topSuite("Ext.data.Store", [
                 
                 it("should return an empty array if the item is not in the store", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     expect(store.remove(rec)).toEqual([]);
                 });
             });
@@ -1821,6 +1874,7 @@ topSuite("Ext.data.Store", [
                 
                 it("should only return records that could be removed", function() {
                     var rec = makeUser('foo@sencha.com');
+
                     expect(store.remove([edRec, rec, tommyRec])).toEqual([edRec, tommyRec]);
                 });
             });
@@ -1833,6 +1887,7 @@ topSuite("Ext.data.Store", [
             
             describe("events", function() {
                 var spy;
+
                 beforeEach(function() {
                     spy = jasmine.createSpy();
                 });
@@ -1843,6 +1898,7 @@ topSuite("Ext.data.Store", [
                         store.remove(aaronRec);
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                         expect(args[1]).toEqual([aaronRec]);
                         expect(args[2]).toBe(2);
@@ -1853,6 +1909,7 @@ topSuite("Ext.data.Store", [
                         store.remove(edRec);
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                     });
                     
@@ -1878,6 +1935,7 @@ topSuite("Ext.data.Store", [
                             store.remove([abeRec, aaronRec]);
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toEqual([abeRec, aaronRec]);
                             expect(args[2]).toBe(1);
@@ -1888,6 +1946,7 @@ topSuite("Ext.data.Store", [
                             store.remove([abeRec, aaronRec]);
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                         });
                     });
@@ -1902,6 +1961,7 @@ topSuite("Ext.data.Store", [
                             for (var i = 0; i < 10; ++i) {
                                 all.push(makeUser('user' + i + '@sencha.com'));
                             }
+
                             store.add(all);
                         });
                         
@@ -1912,6 +1972,7 @@ topSuite("Ext.data.Store", [
                             expect(spy.callCount).toBe(3);
                             
                             var args = spy.calls[0].args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toEqual([all[6], all[7]]);
                             expect(args[2]).toBe(6);
@@ -2004,6 +2065,7 @@ topSuite("Ext.data.Store", [
                     store.removeAt(1, 2);
                     expect(spy.callCount).toBe(1);
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(store);
                     expect(args[1]).toEqual([abeRec, aaronRec]);
                     expect(args[2]).toBe(1);
@@ -2014,6 +2076,7 @@ topSuite("Ext.data.Store", [
                     store.removeAt(1, 2);
                     expect(spy.callCount).toBe(1);
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(store);
                 });
                 
@@ -2058,6 +2121,7 @@ topSuite("Ext.data.Store", [
             it("should return the removed records", function() {
                 createStore();
                 var records = store.getRange();
+
                 expect(store.removeAll()).toEqual(records);
             });
 
@@ -2069,6 +2133,7 @@ topSuite("Ext.data.Store", [
             
             describe("events", function() {
                 var spy;
+
                 beforeEach(function() {
                     spy = jasmine.createSpy();
                 });
@@ -2081,6 +2146,7 @@ topSuite("Ext.data.Store", [
                 
                 it("should fire the clear event and pass the current records", function() {
                     var range = store.getRange();
+
                     store.on('clear', spy);
                     store.removeAll();
                     expect(spy.callCount).toBe(1);
@@ -2133,6 +2199,7 @@ topSuite("Ext.data.Store", [
                 store.remove(edRec);
                 store.remove(aaronRec);
                 var records = store.getRemovedRecords();
+
                 records.splice(0, 2);
                 expect(records).toEqual([]);
                 expect(store.getRemovedRecords()).toEqual([edRec, aaronRec]);
@@ -2140,6 +2207,7 @@ topSuite("Ext.data.Store", [
 
             it("should exclude phantom records", function() {
                 var rec = new spec.User();
+
                 store.add(rec);
                 store.remove(rec);
                 expect(store.getRemovedRecords()).toEqual([]);
@@ -2186,17 +2254,17 @@ topSuite("Ext.data.Store", [
     });
 
     describe("loading", function() {
-        describe('an empty store', function () {
+        describe('an empty store', function() {
             // Note that we need to test the actual empty store that is registered with the StoreMgr
             // because it neuters several store operations, and this is part of what is being tested.
             // See the StoreManager class callback function.
-            it('should allow an empty store to load', function () {
-                expect(function () {
+            it('should allow an empty store to load', function() {
+                expect(function() {
                     Ext.StoreMgr.get('ext-empty-store').load();
                 }).not.toThrow();
             });
 
-            it('should return an empty result set', function () {
+            it('should return an empty result set', function() {
                 expect(Ext.StoreMgr.get('ext-empty-store').load().getCount()).toBe(0);
             });
         });
@@ -2278,10 +2346,12 @@ topSuite("Ext.data.Store", [
                         url: '/foo'
                     }
                 });
+
                 for (var i = 0; i < 5; ++i) {
                     store.load();
                     completeWithData([]);
                 }
+
                 expect(store.loadCount).toBe(5);
             });
         });
@@ -2389,6 +2459,7 @@ topSuite("Ext.data.Store", [
                 
                 describe("events", function() {
                     var spy;
+
                     beforeEach(function() {
                         spy = jasmine.createSpy();
                     });
@@ -2441,6 +2512,7 @@ topSuite("Ext.data.Store", [
                 it("should clear existing records by default", function() {
                     addStoreData();
                     var rec = makeUser('foo@sencha.com');
+
                     store.loadRecords([rec]);
                     expect(store.first().get('email')).toBe('foo@sencha.com');
                     expect(store.getCount()).toBe(1);
@@ -2449,6 +2521,7 @@ topSuite("Ext.data.Store", [
                 it("should append records to the end when using append: true", function() {
                     addStoreData();
                     var rec = makeUser('foo@sencha.com');
+
                     store.loadRecords([rec], {
                         addRecords: true
                     });
@@ -2510,6 +2583,7 @@ topSuite("Ext.data.Store", [
                 
                 describe("events", function() {
                     var spy;
+
                     beforeEach(function() {
                         spy = jasmine.createSpy();
                     });
@@ -2580,6 +2654,7 @@ topSuite("Ext.data.Store", [
                             }]
                         });
                         var rec = store.first();
+
                         expect(rec.$className).toBe('spec.UserWithReader');
                         expect(rec.get('name')).toBe('The name');
                     });
@@ -2602,6 +2677,7 @@ topSuite("Ext.data.Store", [
                                 person: 'The name'
                             }]
                         });
+
                         expect(result).toBe(true);
                     });
                     
@@ -2613,6 +2689,7 @@ topSuite("Ext.data.Store", [
                                 person: 'Name1'
                             }]
                         });
+
                         expect(result).toBe(false);
                         expect(store.getCount()).toBe(0);
                     });
@@ -2712,6 +2789,7 @@ topSuite("Ext.data.Store", [
                 
                 describe("events", function() {
                     var spy, data;
+
                     beforeEach(function() {
                         spy = jasmine.createSpy();
                         data = {
@@ -2885,6 +2963,7 @@ topSuite("Ext.data.Store", [
                         store.setGrouper(makeGrouper('group', 'ASC'));
                         store.load();
                         var grouper = getOperation().getGrouper();
+
                         expect(grouper.getProperty()).toBe('group');
                         expect(grouper.getDirection()).toBe('ASC');
                     });
@@ -2908,41 +2987,41 @@ topSuite("Ext.data.Store", [
                                 extend: 'Ext.data.Model',
                                 idProperty: 'taskId',
                                 fields: [
-                                    {name: 'projectId', type: 'int'},
-                                    {name: 'project', type: 'string'},
-                                    {name: 'taskId', type: 'int'},
-                                    {name: 'description', type: 'string'},
-                                    {name: 'estimate', type: 'float'},
-                                    {name: 'rate', type: 'float'},
-                                    {name: 'due', type: 'date', dateFormat:'m/d/Y'}
+                                    { name: 'projectId', type: 'int' },
+                                    { name: 'project', type: 'string' },
+                                    { name: 'taskId', type: 'int' },
+                                    { name: 'description', type: 'string' },
+                                    { name: 'estimate', type: 'float' },
+                                    { name: 'rate', type: 'float' },
+                                    { name: 'due', type: 'date', dateFormat: 'm/d/Y' }
                                 ]
                             });
 
                         var data = [
-                            {projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 112, description: 'Integrate 2.0 Forms with 2.0 Layouts', estimate: 6, rate: 150, due:'06/24/2007'},
-                            {projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 113, description: 'Implement AnchorLayout', estimate: 4, rate: 150, due:'06/25/2007'},
-                            {projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 114, description: 'Add support for multiple<br>types of anchors', estimate: 4, rate: 150, due:'06/27/2007'},
-                            {projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 115, description: 'Testing and debugging', estimate: 8, rate: 0, due:'06/29/2007'},
+                            { projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 112, description: 'Integrate 2.0 Forms with 2.0 Layouts', estimate: 6, rate: 150, due: '06/24/2007' },
+                            { projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 113, description: 'Implement AnchorLayout', estimate: 4, rate: 150, due: '06/25/2007' },
+                            { projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 114, description: 'Add support for multiple<br>types of anchors', estimate: 4, rate: 150, due: '06/27/2007' },
+                            { projectId: 100, project: 'Ext Forms: Field Anchoring', taskId: 115, description: 'Testing and debugging', estimate: 8, rate: 0, due: '06/29/2007' },
 
-                            {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 101, description: 'Add required rendering "hooks" to GridView', estimate: 6, rate: 100, due:'07/01/2007'},
-                            {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 102, description: 'Extend GridView and override rendering functions', estimate: 6, rate: 100, due:'07/03/2007'},
-                            {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 103, description: 'Extend Store with grouping functionality', estimate: 4, rate: 100, due:'07/04/2007'},
-                            {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 121, description: 'Default CSS Styling', estimate: 2, rate: 100, due:'07/05/2007'},
-                            {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 104, description: 'Testing and debugging', estimate: 6, rate: 100, due:'07/06/2007'},
+                            { projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 101, description: 'Add required rendering "hooks" to GridView', estimate: 6, rate: 100, due: '07/01/2007' },
+                            { projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 102, description: 'Extend GridView and override rendering functions', estimate: 6, rate: 100, due: '07/03/2007' },
+                            { projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 103, description: 'Extend Store with grouping functionality', estimate: 4, rate: 100, due: '07/04/2007' },
+                            { projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 121, description: 'Default CSS Styling', estimate: 2, rate: 100, due: '07/05/2007' },
+                            { projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 104, description: 'Testing and debugging', estimate: 6, rate: 100, due: '07/06/2007' },
 
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 105, description: 'Ext Grid plugin integration', estimate: 4, rate: 125, due:'07/01/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 106, description: 'Summary creation during rendering phase', estimate: 4, rate: 125, due:'07/02/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 107, description: 'Dynamic summary updates in editor grids', estimate: 6, rate: 125, due:'07/05/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 108, description: 'Remote summary integration', estimate: 4, rate: 125, due:'07/05/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 109, description: 'Summary renderers and calculators', estimate: 4, rate: 125, due:'07/06/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 110, description: 'Integrate summaries with GroupingView', estimate: 10, rate: 125, due:'07/11/2007'},
-                            {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 111, description: 'Testing and debugging', estimate: 8, rate: 125, due:'07/15/2007'}
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 105, description: 'Ext Grid plugin integration', estimate: 4, rate: 125, due: '07/01/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 106, description: 'Summary creation during rendering phase', estimate: 4, rate: 125, due: '07/02/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 107, description: 'Dynamic summary updates in editor grids', estimate: 6, rate: 125, due: '07/05/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 108, description: 'Remote summary integration', estimate: 4, rate: 125, due: '07/05/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 109, description: 'Summary renderers and calculators', estimate: 4, rate: 125, due: '07/06/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 110, description: 'Integrate summaries with GroupingView', estimate: 10, rate: 125, due: '07/11/2007' },
+                            { projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 111, description: 'Testing and debugging', estimate: 8, rate: 125, due: '07/15/2007' }
                         ];
 
                         store = Ext.create('Ext.data.Store', {
                             model: Task,
                             data: data,
-                            sorters: {property: 'due', direction: 'ASC'},
+                            sorters: { property: 'due', direction: 'ASC' },
                             groupField: 'project'
                         });
 
@@ -2987,7 +3066,7 @@ topSuite("Ext.data.Store", [
                                 expect(store.getAt(14).get('taskId')).toBe(111);
                                 expect(store.getAt(15).get('taskId')).toBe(110);
                                 sorted++;
-                            }                            
+                            }
                         });
                         // This should switch the order within the two groups.
                         // This becomes the primary sorter instead of evilness
@@ -3012,6 +3091,7 @@ topSuite("Ext.data.Store", [
                         store.getFilters().add(makeFilter('evilness', 100));
                         store.load();
                         var filters = getOperation().getFilters();
+
                         expect(filters[0].getProperty()).toBe('email');
                         expect(filters[0].getValue()).toBe('ed@sencha.com');
                     
@@ -3176,6 +3256,7 @@ topSuite("Ext.data.Store", [
             
             describe("callbacks", function() {
                 var spy;
+
                 beforeEach(function() {
                     spy = jasmine.createSpy();
                 });
@@ -3240,6 +3321,7 @@ topSuite("Ext.data.Store", [
                                 }]
                             });
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0][0].get('email')).toBe('user1@sencha.com');
                             expect(args[0][1].get('email')).toBe('user2@sencha.com');
                             expect(args[1]).toBe(proxySpy.mostRecentCall.args[0]);
@@ -3254,6 +3336,7 @@ topSuite("Ext.data.Store", [
                                 success: false
                             });
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toEqual([]);
                             expect(args[1]).toBe(proxySpy.mostRecentCall.args[0]);
                             expect(args[2]).toBe(false);
@@ -3264,6 +3347,7 @@ topSuite("Ext.data.Store", [
                 describe("when the callback is triggered", function() {
                     it("should not have the store loading", function() {
                         var loading;
+
                         store.load(function() {
                             loading = store.isLoading();
                         });
@@ -3273,6 +3357,7 @@ topSuite("Ext.data.Store", [
                     
                     it("should have populated the store", function() {
                         var count;
+
                         store.load(function() {
                             count = store.getCount();
                         });
@@ -3333,12 +3418,14 @@ topSuite("Ext.data.Store", [
                         store.on('beforeload', spy);
                         store.load();
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                         expect(args[1] instanceof Ext.data.operation.Read).toBe(true);
                     });
                     
                     it("should not be loading when the beforeload event is fired", function() {
                         var loading;
+
                         store.on('beforeload', function() {
                             loading = store.isLoading();
                         });
@@ -3347,12 +3434,25 @@ topSuite("Ext.data.Store", [
                     });
                     
                     it("should not continue with the load if false is returned", function() {
+                        var keys = 0,
+                            key, pendingOperations;
+
                         store.on('beforeload', function() {
                             return false;
                         });
                         store.load();
                         expect(store.isLoading()).toBe(false);
                         expect(proxySpy).not.toHaveBeenCalled();
+
+                        pendingOperations = store.getProxy().pendingOperations;
+                        
+                        for (key in pendingOperations) {
+                            if (pendingOperations.hasOwnProperty(key)) {
+                                keys++;
+                            }
+                        }
+
+                        expect(keys).toBe(0);
                     });
                 });
                 
@@ -3363,6 +3463,7 @@ topSuite("Ext.data.Store", [
                             store.load();
                             completeWithData(successData);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1][0].get('email')).toBe('foo@sencha.com');
                             expect(args[2]).toBe(true);
@@ -3377,6 +3478,7 @@ topSuite("Ext.data.Store", [
                                 success: false
                             });
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toEqual([]);
                             expect(args[2]).toBe(false);
@@ -3386,6 +3488,7 @@ topSuite("Ext.data.Store", [
                     describe("when the event is triggered", function() {
                         it("should not be loading", function() {
                             var loading;
+
                             store.on('load', function() {
                                 loading = store.isLoading();
                             });
@@ -3396,6 +3499,7 @@ topSuite("Ext.data.Store", [
                         
                         it("should be populated with records", function() {
                             var count;
+
                             store.on('load', function() {
                                 count = store.getCount();
                             });
@@ -3407,7 +3511,7 @@ topSuite("Ext.data.Store", [
                 });
             });
             
-            describe("after the load completes", function() {                
+            describe("after the load completes", function() {
                 it("should clear existing records by default", function() {
                     addStoreData();
                     store.load();
@@ -3428,6 +3532,7 @@ topSuite("Ext.data.Store", [
                 
                 describe("events", function() {
                     var spy;
+
                     beforeEach(function() {
                         spy = jasmine.createSpy();
                     });
@@ -3483,6 +3588,7 @@ topSuite("Ext.data.Store", [
                     });
                     completeWithData(successData);
                     var spy = spyOn(store.getProxy(), 'read').andReturn();
+
                     store.reload();
                     expect(spy.mostRecentCall.args[0].getParams()).toEqual({
                         foo: 'bar'
@@ -3527,6 +3633,7 @@ topSuite("Ext.data.Store", [
         describe("previousPage", function() {
             it("should call loadPage with the current page - 1 and pass the options", function() {
                 var o = {};
+
                 spyOn(store, 'loadPage').andReturn();
                 store.currentPage = 9;
                 store.previousPage(o);
@@ -3538,6 +3645,7 @@ topSuite("Ext.data.Store", [
         describe("nextPage", function() {
             it("should call loadPage with the current page + 1 and pass the options", function() {
                 var o = {};
+
                 spyOn(store, 'loadPage').andReturn();
                 store.currentPage = 3;
                 store.nextPage(o);
@@ -3691,8 +3799,9 @@ topSuite("Ext.data.Store", [
                 expect(store.getSorters().getRootProperty()).not.toBe('data');
             });
 
-            it("should not trigger events when asking for the collection and it has not been created", function () {
+            it("should not trigger events when asking for the collection and it has not been created", function() {
                 var spy = jasmine.createSpy();
+
                 createStore({
                     listeners: {
                         beforesort: spy,
@@ -3824,6 +3933,7 @@ topSuite("Ext.data.Store", [
                         store.getSorters().add('name');
 
                         var loadSpy = spyOn(store, 'load');
+
                         expect(store.getSorters().length).toBe(1);
                         store.getSorters().remove('name');
                         expect(store.getSorters().length).toBe(0);
@@ -3837,6 +3947,7 @@ topSuite("Ext.data.Store", [
                         store.reloadOnClearSorters = true;
 
                         var loadSpy = spyOn(store, 'load');
+
                         expect(store.getSorters().length).toBe(1);
                         store.getSorters().remove('name');
                         expect(store.getSorters().length).toBe(0);
@@ -3877,7 +3988,7 @@ topSuite("Ext.data.Store", [
                         expect(store.getAt(2)).toBe(aaronRec);
                         expect(store.getAt(3)).toBe(tommyRec);
                     });
-                }); 
+                });
             });
         });
         
@@ -3929,54 +4040,57 @@ topSuite("Ext.data.Store", [
                 });
                 
                 it("should ignore invalid fields", function() {
-                    //first we'll sort by name to give some reference sorting
+                    // first we'll sort by name to give some reference sorting
                     store.sort('name', 'ASC');
 
-                    //this field does not exist
+                    // this field does not exist
                     store.sort('someUnknownField');
 
-                    //make sure the original sorting was preserved
+                    // make sure the original sorting was preserved
                     expect(store.getAt(0).get('name')).toBe('Aaron Conran');
                     expect(store.getAt(1).get('name')).toBe('Abe Elias');
                     expect(store.getAt(2).get('name')).toBe('Ed Spencer');
                     expect(store.getAt(3).get('name')).toBe('Tommy Maintz');
                 });
                 
-                describe("sortType", function(){
-                    function createSortStore () {
+                describe("sortType", function() {
+                    function createSortStore() {
                         store = new Ext.data.Store({
                             fields: [
-                                {name: 'name', sortType: 'asText'},
-                                {name: 'salary', sortType: 'asFloat'}
+                                { name: 'name', sortType: 'asText' },
+                                { name: 'salary', sortType: 'asFloat' }
                             ]
                         });
         
                         store.add(
-                            {name: 'Marge', salary: '50,000'},
-                            {name: '<div>Lisa</div>', salary: '90000'},
-                            {name: 'Homer', salary: '25000'},
-                            {name: 'Bart', salary: '100,000'});
+                            { name: 'Marge', salary: '50,000' },
+                            { name: '<div>Lisa</div>', salary: '90000' },
+                            { name: 'Homer', salary: '25000' },
+                            { name: 'Bart', salary: '100,000' });
                     }
                     
-                    it("should not pass the default sortType for the field", function(){
+                    it("should not pass the default sortType for the field", function() {
                         store.sort('name', 'ASC');
                         var sorter = store.getSorters().first();
+
                         expect(sorter.getTransform()).toBe(Ext.data.SortTypes.asUCString);
-                    }); 
+                    });
                 
-                    it("should pass any custom sort for the field", function(){
+                    it("should pass any custom sort for the field", function() {
                         store.sort('age', 'ASC');
                         var sorter = store.getSorters().first();
+
                         expect(sorter.getTransform()).toBe(customSort);
-                    });  
+                    });
                 
-                    it("should not apply a transform if the field doesn't exist", function(){
+                    it("should not apply a transform if the field doesn't exist", function() {
                         store.sort('someUnknownField');
                         var sorter = store.getSorters().first();
+
                         expect(sorter.getTransform()).toBeNull();
                     });
     
-                    it('should ignore tags when sorting', function () {
+                    it('should ignore tags when sorting', function() {
                         createSortStore();
         
                         store.sort('name');
@@ -3987,7 +4101,7 @@ topSuite("Ext.data.Store", [
                         expect(store.getAt(3).get('name')).toEqual('Marge');
                     });
     
-                    it('should ignore commas when sorting', function () {
+                    it('should ignore commas when sorting', function() {
                         createSortStore();
         
                         store.sort('salary');
@@ -4008,6 +4122,7 @@ topSuite("Ext.data.Store", [
                     
                     it("should not fire extra datachanged/refresh events", function() {
                         var spy = jasmine.createSpy();
+
                         store.sort('email');
                         store.on('refresh', spy);
                         store.on('datachanged', spy);
@@ -4035,6 +4150,7 @@ topSuite("Ext.data.Store", [
                     
                     it("should not fire extra datachanged events", function() {
                         var spy = jasmine.createSpy();
+
                         store.sort('email');
                         store.on('datachanged', spy);
                         store.add({
@@ -4056,6 +4172,7 @@ topSuite("Ext.data.Store", [
                     it("should sort the data after toggling an existing sorter", function() {
                         store.getSorters().add('name');
                         var data = store.getRange();
+
                         data.reverse();
                         store.sort('name');
                         // Toggled now
@@ -4080,6 +4197,7 @@ topSuite("Ext.data.Store", [
             describe("during construction", function() {
                 it("should not trigger a load when creating with sorters", function() {
                     var spy = spyOn(Ext.data.ProxyStore.prototype, 'load');
+
                     createStore({
                         remoteSort: true,
                         sorters: [{
@@ -4176,7 +4294,7 @@ topSuite("Ext.data.Store", [
                             type: 'ajax',
                             url: 'fakeurl'
                         }
-                    }); 
+                    });
                     store.load();
                     completeWithData([{
                         name: 'ZZZ'
@@ -4194,7 +4312,7 @@ topSuite("Ext.data.Store", [
                             type: 'ajax',
                             url: 'fakeurl'
                         }
-                    }); 
+                    });
                     store.getSorters().add('name');
                     completeWithData([{
                         name: 'ZZZ'
@@ -4212,7 +4330,7 @@ topSuite("Ext.data.Store", [
                             type: 'ajax',
                             url: 'fakeurl'
                         }
-                    }); 
+                    });
                     store.getSorters().add('name');
                     addStoreData();
                     expect(store.first().get('name')).toBe('Ed Spencer');
@@ -4222,9 +4340,10 @@ topSuite("Ext.data.Store", [
         
         describe("events", function() {
             var spy;
+
             beforeEach(function() {
                 createStore({
-                    proxy:  'memory',
+                    proxy: 'memory',
                     remoteSort: true
                 });
                 spy = jasmine.createSpy();
@@ -4235,6 +4354,7 @@ topSuite("Ext.data.Store", [
                 store.getSorters().add('name');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(1);
                 expect(args[1][0].getProperty()).toBe('name');
@@ -4247,6 +4367,7 @@ topSuite("Ext.data.Store", [
                 store.getSorters().add('evilness');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(2);
                 expect(args[1][0].getProperty()).toBe('name');
@@ -4262,6 +4383,7 @@ topSuite("Ext.data.Store", [
                 store.getSorters().remove('name');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(1);
                 expect(args[1][0].getProperty()).toBe('evilness');
@@ -4274,6 +4396,7 @@ topSuite("Ext.data.Store", [
                 store.getSorters().remove('name');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(0);
             });
@@ -4514,14 +4637,14 @@ topSuite("Ext.data.Store", [
             });
         }
 
-        describe('groupDir and the group() method', function () {
-            it('should default to "ASC"', function () {
+        describe('groupDir and the group() method', function() {
+            it('should default to "ASC"', function() {
                 createStore();
 
                 expect(store.getGroupDir()).toBe('ASC');
             });
 
-            it('should default to "ASC" when calling group()', function () {
+            it('should default to "ASC" when calling group()', function() {
                 createStore();
 
                 store.group('name');
@@ -4529,7 +4652,7 @@ topSuite("Ext.data.Store", [
                 expect(store.getGrouper().getDirection()).toBe('ASC');
             });
 
-            it('should use whatever was set in the config when calling group()', function () {
+            it('should use whatever was set in the config when calling group()', function() {
                 createStore({
                     groupDir: 'DESC'
                 });
@@ -4569,6 +4692,7 @@ topSuite("Ext.data.Store", [
             it("should accept a field name & direction", function() {
                 store.group('group', 'DESC');
                 var grouper = store.getGrouper();
+
                 expect(grouper.getProperty()).toBe('group');
                 expect(grouper.getDirection()).toBe('DESC');
             });
@@ -4578,6 +4702,7 @@ topSuite("Ext.data.Store", [
                 store.group('evilness', 'DESC');
                 
                 var grouper = store.getGrouper();
+
                 expect(grouper.getProperty()).toBe('evilness');
                 expect(grouper.getDirection()).toBe('DESC');
             });
@@ -4651,7 +4776,7 @@ topSuite("Ext.data.Store", [
             describe("clearing groups", function() {
                 it("should return no groups by default", function() {
                     expect(store.getGroups()).toBeNull();
-                }); 
+                });
 
                 it("should return no groups once the grouper has cleared", function() {
                     groupBy();
@@ -4672,18 +4797,20 @@ topSuite("Ext.data.Store", [
                         });
 
                         var admins = store.getGroups().get('admin');
+
                         expect(admins.getCount()).toBe(3);
                         expect(admins.indexOfKey('new@sencha.com')).toBe(2);
                     });
 
                     it("should create a new group", function() {
                         groupBy();
-                        expect(store.getGroups().get('test')).toBeUndefined();                    
+                        expect(store.getGroups().get('test')).toBeUndefined();
                         store.add({
                             email: 'new@sencha.com',
                             group: 'test'
                         });
                         var tests = store.getGroups().get('test');
+
                         expect(tests.getCount()).toBe(1);
                         expect(tests.indexOfKey('new@sencha.com')).toBe(0);
                     });
@@ -4694,7 +4821,7 @@ topSuite("Ext.data.Store", [
                         var admins = store.getGroups().get('admin');
 
                         store.on({
-                            add: function () {
+                            add: function() {
                                 expect(admins.getCount()).toBe(3);
                                 expect(admins.indexOfKey('new@sencha.com')).toBe(2);
                             }
@@ -4708,11 +4835,14 @@ topSuite("Ext.data.Store", [
 
                     it("should position items correctly when adding multiple items", function() {
                         groupBy();
+                        
                         var new1 = makeUser('new1@sencha.com', {
-                            group: 'code'
-                        }), new2 = makeUser('new2@sencha.com', {
-                            group: 'admin'
-                        });
+                                group: 'code'
+                            }),
+                            new2 = makeUser('new2@sencha.com', {
+                                group: 'admin'
+                            });
+                        
                         store.add([new1, new2]);
                         expect(store.indexOf(new1)).toBe(5);
                         expect(store.indexOf(new2)).toBe(2);
@@ -4724,6 +4854,7 @@ topSuite("Ext.data.Store", [
                         groupBy();
                         store.remove(abeRec);
                         var admins = store.getGroups().get('admin');
+
                         expect(admins.getCount()).toBe(1);
                         expect(admins.contains(abeRec)).toBe(false);
                     });
@@ -4741,7 +4872,7 @@ topSuite("Ext.data.Store", [
                         var admins = store.getGroups().get('admin');
 
                         store.on({
-                            remove: function () {
+                            remove: function() {
                                 expect(admins.getCount()).toBe(1);
                                 expect(admins.contains(abeRec)).toBe(false);
                             }
@@ -4750,8 +4881,8 @@ topSuite("Ext.data.Store", [
                         store.remove(abeRec);
                     });
 
-                    describe('using removeAt', function () {
-                        it('should remove the record from its group', function () {
+                    describe('using removeAt', function() {
+                        it('should remove the record from its group', function() {
                             var admins;
 
                             groupBy();
@@ -4764,7 +4895,7 @@ topSuite("Ext.data.Store", [
                             expect(admins.contains(abeRec)).toBe(false);
                         });
 
-                        it('should remove a range of records from their groups', function () {
+                        it('should remove a range of records from their groups', function() {
                             var admins, codes;
 
                             groupBy();
@@ -4786,8 +4917,8 @@ topSuite("Ext.data.Store", [
                         });
                     });
 
-                    describe('using removeAll', function () {
-                        it('should remove the groups', function () {
+                    describe('using removeAll', function() {
+                        it('should remove the groups', function() {
                             var admins, groups;
 
                             groupBy();
@@ -4803,8 +4934,8 @@ topSuite("Ext.data.Store", [
                         });
                     });
 
-                    describe('phantom group records', function () {
-                        it('should remove phantoms from their groups', function () {
+                    describe('phantom group records', function() {
+                        it('should remove phantoms from their groups', function() {
                             var admins;
 
                             groupBy();
@@ -4847,6 +4978,7 @@ topSuite("Ext.data.Store", [
                         groupBy();
 
                         var index = store.indexOf(aaronRec);
+
                         aaronRec.set('group', 'code');
 
                         var admins = store.getGroups().get('admin'),
@@ -4862,6 +4994,7 @@ topSuite("Ext.data.Store", [
                     it("should move the item if the group changes and the record changes position", function() {
                         groupBy();
                         var index = store.indexOf(abeRec);
+
                         abeRec.set('group', 'code');
 
                         var admins = store.getGroups().get('admin'),
@@ -4897,6 +5030,7 @@ topSuite("Ext.data.Store", [
                         i;
 
                     s = s || store;
+
                     for (i = 0; i < len; ++i) {
                         expect(s.getAt(i)).toBe(recs[i]);
                     }
@@ -4922,6 +5056,7 @@ topSuite("Ext.data.Store", [
                     groupBy();
                     expectOrder([aaronRec, abeRec, tommyRec, edRec]);
                     var groups = store.getGroups();
+
                     expectOrder([aaronRec, abeRec], groups.get('admin'));
                     expectOrder([tommyRec, edRec], groups.get('code'));
                 });
@@ -4944,11 +5079,13 @@ topSuite("Ext.data.Store", [
                             if (a === b) {
                                 return 0;
                             }
+
                             // Inverted on purpose to test sorter
                             return a < b ? 1 : -1;
                         }
                     });
                     var groups = store.getGroups();
+
                     expect(groups.getAt(0).getGroupKey()).toBe('code');
                     expect(groups.getAt(1).getGroupKey()).toBe('admin');
                 });
@@ -4964,6 +5101,7 @@ topSuite("Ext.data.Store", [
                         sortBy('evilness', 'DESC');
                         groupBy();
                         var groups = store.getGroups();
+
                         expectOrder([abeRec, aaronRec], groups.get('admin'));
                         expectOrder([edRec, tommyRec], groups.get('code'));
                     });
@@ -4972,6 +5110,7 @@ topSuite("Ext.data.Store", [
                         groupBy();
                         sortBy('evilness', 'DESC');
                         var groups = store.getGroups();
+
                         expectOrder([abeRec, aaronRec], groups.get('admin'));
                         expectOrder([edRec, tommyRec], groups.get('code'));
                     });
@@ -5077,6 +5216,7 @@ topSuite("Ext.data.Store", [
                 it("should add groups when required", function() {
                     groupBy();
                     var filters = store.getFilters();
+
                     filters.add({
                         filterFn: function(rec) {
                             return Ext.Array.indexOf(['Ed Spencer', 'Aaron Conran'], rec.get('name')) > -1;
@@ -5103,9 +5243,10 @@ topSuite("Ext.data.Store", [
         
         describe("remote", function() {
             describe("during construction", function() {
-                it("should trigger a load", function () {
+                it("should trigger a load", function() {
                     var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
                         flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad');
+
                     createStore({
                         autoLoad: true,
                         remoteSort: true,
@@ -5119,9 +5260,10 @@ topSuite("Ext.data.Store", [
                     expect(flushLoadSpy).not.toHaveBeenCalled();
                 });
     
-                it("should not trigger a load", function () {
+                it("should not trigger a load", function() {
                     var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
                         flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad');
+
                     createStore({
                         remoteSort: true,
                         asynchronousLoad: true,
@@ -5288,6 +5430,7 @@ topSuite("Ext.data.Store", [
                             store.group('group');
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1].getProperty()).toBe('group');
                             expect(args[1].getDirection()).toBe('ASC');
@@ -5324,6 +5467,7 @@ topSuite("Ext.data.Store", [
                             store.group('group');
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1].getProperty()).toBe('group');
                             expect(args[1].getDirection()).toBe('ASC');
@@ -5359,6 +5503,7 @@ topSuite("Ext.data.Store", [
                             store.group(null);
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toBeNull();
                         });
@@ -5396,6 +5541,7 @@ topSuite("Ext.data.Store", [
                             store.group(null);
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(store);
                             expect(args[1]).toBeNull();
                         });
@@ -5440,6 +5586,7 @@ topSuite("Ext.data.Store", [
                     describe("during construction", function() {
                         it("should not trigger a load when applying initial sorters", function() {
                             var spy = spyOn(Ext.data.ProxyStore.prototype, 'load');
+
                             createStore({
                                 remoteSort: true,
                                 sorters: [{
@@ -5459,6 +5606,7 @@ topSuite("Ext.data.Store", [
                                 store.group('group');
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1].getProperty()).toBe('group');
                                 expect(args[1].getDirection()).toBe('ASC');
@@ -5495,6 +5643,7 @@ topSuite("Ext.data.Store", [
                                 store.group('group');
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1].getProperty()).toBe('group');
                                 expect(args[1].getDirection()).toBe('ASC');
@@ -5530,6 +5679,7 @@ topSuite("Ext.data.Store", [
                                 store.group(null);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1]).toBeNull();
                             });
@@ -5567,6 +5717,7 @@ topSuite("Ext.data.Store", [
                                 store.group(null);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1]).toBeNull();
                             });
@@ -5616,6 +5767,7 @@ topSuite("Ext.data.Store", [
                                 completeWithData([]);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1].getProperty()).toBe('group');
                                 expect(args[1].getDirection()).toBe('ASC');
@@ -5661,6 +5813,7 @@ topSuite("Ext.data.Store", [
                                 completeWithData([]);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1].getProperty()).toBe('group');
                                 expect(args[1].getDirection()).toBe('ASC');
@@ -5705,6 +5858,7 @@ topSuite("Ext.data.Store", [
                                 store.group(null);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1]).toBeNull();
                             });
@@ -5741,6 +5895,7 @@ topSuite("Ext.data.Store", [
                                 completeWithData([]);
                                 expect(spy.callCount).toBe(1);
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[0]).toBe(store);
                                 expect(args[1]).toBeNull();
                             });
@@ -5800,6 +5955,7 @@ topSuite("Ext.data.Store", [
                     }]
                 });
                 var filter = store.getFilters().getAt(0);
+
                 expect(filter.getProperty()).toBe('foo');
                 expect(filter.getValue()).toBe('a');
 
@@ -5813,8 +5969,9 @@ topSuite("Ext.data.Store", [
                 expect(store.getFilters().getRootProperty()).not.toBe('data');
             });
 
-            it("should not trigger events when asking for the collection and it has not been created", function () {
+            it("should not trigger events when asking for the collection and it has not been created", function() {
                 var spy = jasmine.createSpy();
+
                 createStore({
                     listeners: {
                         filterchange: spy
@@ -5833,6 +5990,7 @@ topSuite("Ext.data.Store", [
             it("should accept a field name & value", function() {
                 store.filter('name', 'Ed Spencer');
                 var filter = store.getFilters().first();
+
                 expect(filter.getProperty()).toBe('name');
                 expect(filter.getValue()).toBe('Ed Spencer');
             });
@@ -5842,7 +6000,7 @@ topSuite("Ext.data.Store", [
                 store.filter('evilness', 100);
                 var filter = store.getFilters().first();
                 
-                expect(store.getFilters().getCount()).toBe(2); 
+                expect(store.getFilters().getCount()).toBe(2);
                 expect(filter.getProperty()).toBe('group');
                 expect(filter.getValue()).toBe('code');
                 
@@ -5854,6 +6012,7 @@ topSuite("Ext.data.Store", [
         
         describe("filterBy", function() {
             var spy;
+
             beforeEach(function() {
                 createStore();
                 addStoreData();
@@ -5911,6 +6070,7 @@ topSuite("Ext.data.Store", [
             describe("events", function() {
                 it("should not fire datachanged and refresh when suppress is passed", function() {
                     var spy = jasmine.createSpy();
+
                     store.filter('evilness', 100);
                     store.on('refresh', spy);
                     store.on('datachanged', spy);
@@ -6030,6 +6190,7 @@ topSuite("Ext.data.Store", [
                         it("should only iterate the filtered items", function() {
                             store.filter('evilness', 100);
                             var spy = jasmine.createSpy();
+
                             store.each(spy);
                             expect(spy.callCount).toBe(1);
                         });
@@ -6047,6 +6208,7 @@ topSuite("Ext.data.Store", [
                         
                         it("should not be included in the active set if it doesn't match the filter or fire the add event", function() {
                             var spy = jasmine.createSpy();
+
                             store.filter('group', 'code');
                             store.on('add', spy);
                             store.add(makeUser('foo@sencha.com', {
@@ -6152,6 +6314,7 @@ topSuite("Ext.data.Store", [
                     var rec = makeUser('new@sencha.com', {
                         group: 'admin'
                     });
+
                     store.add(rec);
                     expect(rec.joined).toEqual([store]);
                 });
@@ -6193,6 +6356,7 @@ topSuite("Ext.data.Store", [
             describe("during construction", function() {
                 it("should not trigger a load when applying initial filters", function() {
                     var spy = spyOn(Ext.data.ProxyStore.prototype, 'load');
+
                     createStore({
                         remoteFilter: true,
                         filters: [{
@@ -6268,7 +6432,7 @@ topSuite("Ext.data.Store", [
                             type: 'ajax',
                             url: 'fakeurl'
                         }
-                    });    
+                    });
                 });
                 
                 it("should not filter the data when the store load has completed", function() {
@@ -6300,6 +6464,7 @@ topSuite("Ext.data.Store", [
 
             it("should fire when adding a filter to an empty collection", function() {
                 var spy = jasmine.createSpy();
+
                 store.on('filterchange', spy);
                 store.getFilters().add({
                     property: 'group',
@@ -6307,6 +6472,7 @@ topSuite("Ext.data.Store", [
                 });
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(1);
                 expect(args[1][0].getProperty()).toBe('group');
@@ -6315,6 +6481,7 @@ topSuite("Ext.data.Store", [
 
             it("should fire when adding a filter to existing filters", function() {
                 var spy = jasmine.createSpy();
+
                 store.getFilters().add({
                     property: 'group',
                     value: 'code'
@@ -6326,6 +6493,7 @@ topSuite("Ext.data.Store", [
                 });
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(2);
                 expect(args[1][0].getProperty()).toBe('group');
@@ -6336,6 +6504,7 @@ topSuite("Ext.data.Store", [
 
             it("should fire when removing a filter from existing filter", function() {
                 var spy = jasmine.createSpy();
+
                 store.getFilters().add({
                     property: 'group',
                     value: 'code'
@@ -6348,6 +6517,7 @@ topSuite("Ext.data.Store", [
                 store.getFilters().remove('group');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(1);
                 expect(args[1][0].getProperty()).toBe('evilness');
@@ -6356,6 +6526,7 @@ topSuite("Ext.data.Store", [
 
             it("should fire when removing the last sorter", function() {
                 var spy = jasmine.createSpy();
+
                 store.getFilters().add({
                     property: 'group',
                     value: 'admin'
@@ -6364,6 +6535,7 @@ topSuite("Ext.data.Store", [
                 store.getFilters().remove('group');
                 expect(spy.callCount).toBe(1);
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1].length).toBe(0);
             });
@@ -6376,6 +6548,7 @@ topSuite("Ext.data.Store", [
                 describe("adding", function() {
                     it("should fire the refresh event", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('refresh', spy);
                         store.getFilters().add({
                             property: 'group',
@@ -6383,11 +6556,13 @@ topSuite("Ext.data.Store", [
                         });
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                     });
 
                     it("should fire the datachanged event", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('datachanged', spy);
                         store.getFilters().add({
                             property: 'group',
@@ -6395,6 +6570,7 @@ topSuite("Ext.data.Store", [
                         });
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                     });
                 });
@@ -6402,6 +6578,7 @@ topSuite("Ext.data.Store", [
                 describe("removing", function() {
                     it("should fire the refresh event", function() {
                         var spy = jasmine.createSpy();
+
                         store.getFilters().add({
                             property: 'group',
                             value: 'code'
@@ -6410,11 +6587,13 @@ topSuite("Ext.data.Store", [
                         store.getFilters().remove('group');
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                     });
 
                     it("should fire the datachanged event", function() {
                         var spy = jasmine.createSpy();
+
                         store.getFilters().add({
                             property: 'group',
                             value: 'code'
@@ -6423,6 +6602,7 @@ topSuite("Ext.data.Store", [
                         store.getFilters().remove('group');
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(store);
                     });
                 });
@@ -6430,7 +6610,7 @@ topSuite("Ext.data.Store", [
         });
     });
     
-    describe("aggregation", function(){     
+    describe("aggregation", function() {
     
         beforeEach(function() {
             createStore({
@@ -6449,237 +6629,242 @@ topSuite("Ext.data.Store", [
             tommyRec = store.getAt(3);
         });
        
-        describe("first", function(){            
-            it("should ignore the grouped parameter if there's no group field", function(){
+        describe("first", function() {
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.first(true)).toBe(aaronRec);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.first(true)).toEqual({
                     admin: aaronRec,
                     code: edRec
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.first(true)).toEqual({});
             });
         });
         
-        describe("last", function(){
-            it("should ignore the grouped parameter if there's no group field", function(){
+        describe("last", function() {
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.last(true)).toBe(tommyRec);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.last(true)).toEqual({
                     admin: abeRec,
                     code: tommyRec
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.last(true)).toEqual({});
             });
         });
         
-        describe("sum", function(){
-            it("should return 0 if the store is empty", function(){
+        describe("sum", function() {
+            it("should return 0 if the store is empty", function() {
                 store.removeAll();
                 expect(store.sum('evilness')).toBe(0);
             });
             
-            it("should sum the values specified by the property", function(){
+            it("should sum the values specified by the property", function() {
                 expect(store.sum('evilness')).toBe(160);
             });
             
-            it("should ignore the grouped parameter if there's no group field", function(){
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.sum('evilness', true)).toBe(160);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.sum('evilness', true)).toEqual({
                     admin: 75,
                     code: 85
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.sum('evilness', true)).toEqual({});
             });
         });
         
-        describe("count", function(){
-            it("should return 0 if the store is empty", function(){
+        describe("count", function() {
+            it("should return 0 if the store is empty", function() {
                 store.removeAll();
                 expect(store.count()).toBe(0);
             });
             
-            it("should count the values in the store", function(){
+            it("should count the values in the store", function() {
                 expect(store.count()).toBe(4);
             });
             
-            it("should ignore the grouped parameter if there's no group field", function(){
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.count(true)).toBe(4);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.count(true)).toEqual({
                     admin: 2,
                     code: 2
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.count(true)).toEqual({});
             });
         });
         
-        describe("min", function(){
-            it("should return undefined if there are no items", function(){
+        describe("min", function() {
+            it("should return undefined if there are no items", function() {
                 store.removeAll();
                 expect(store.min('age')).toBeUndefined();
             });
             
-            it("should return the minimum value", function(){
+            it("should return the minimum value", function() {
                 expect(store.min('age')).toBe(20);
             });
             
-            it("should ignore the grouped parameter if there's no group field", function(){
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.min('age', true)).toBe(20);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.min('age', true)).toEqual({
                     admin: 20,
                     code: 25
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.min('age', true)).toEqual({});
             });
         });
         
-        describe("max", function(){
-            it("should return undefined if there are no items", function(){
+        describe("max", function() {
+            it("should return undefined if there are no items", function() {
                 store.removeAll();
                 expect(store.max('age')).toBeUndefined();
             });
             
-            it("should return the maximum value", function(){
+            it("should return the maximum value", function() {
                 expect(store.max('age')).toBe(70);
             });
             
-            it("should ignore the grouped parameter if there's no group field", function(){
+            it("should ignore the grouped parameter if there's no group field", function() {
                 store.clearGrouping();
                 expect(store.max('age', true)).toBe(70);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.max('age', true)).toEqual({
                     admin: 26,
                     code: 70
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.max('age', true)).toEqual({});
             });
         });
         
-        describe("average", function(){
-            it("should return 0 if there are no items", function(){
+        describe("average", function() {
+            it("should return 0 if there are no items", function() {
                 store.removeAll();
                 expect(store.average('evilness')).toBe(0);
             });
             
-            it("should return the correct average", function(){
+            it("should return the correct average", function() {
                 expect(store.average('evilness')).toBe(40);
             });
             
-            it("should ignore the grouped parameter if there's no groupField", function(){
+            it("should ignore the grouped parameter if there's no groupField", function() {
                 store.clearGrouping();
                 expect(store.average('evilness')).toBe(40);
             });
             
-            it("should return in the correct grouped format", function(){
+            it("should return in the correct grouped format", function() {
                 expect(store.average('evilness', true)).toEqual({
                     admin: 37.5,
                     code: 42.5
                 });
             });
             
-            it("should return an empty object if grouped and no items", function(){
+            it("should return an empty object if grouped and no items", function() {
                 store.removeAll();
                 expect(store.average('evilness', true)).toEqual({});
             });
         });
         
-        describe("aggregate", function(){
-            it("should default the scope to the store", function(){
+        describe("aggregate", function() {
+            it("should default the scope to the store", function() {
                 var spy = jasmine.createSpy();
+
                 store.aggregate(spy);
                 expect(spy.mostRecentCall.object).toBe(store);
             });
             
-            it("should use any custom scope", function(){
+            it("should use any custom scope", function() {
                 var spy = jasmine.createSpy();
+
                 store.aggregate(spy, fakeScope);
                 expect(spy.mostRecentCall.object).toBe(fakeScope);
             });
             
-            it("should call the custom function with an array of values & records", function(){
+            it("should call the custom function with an array of values & records", function() {
                 var isArray = true;
-                store.aggregate(function(records, values){
+
+                store.aggregate(function(records, values) {
                     isArray = isArray && Ext.isArray(values) && Ext.isArray(records);
                 }, null, false, 'email');
                 expect(isArray).toBe(true);
             });
             
-            it("should allow the field parameter to be optional", function(){
+            it("should allow the field parameter to be optional", function() {
                 var value;
                     
-                store.aggregate(function(records, values){
+                store.aggregate(function(records, values) {
                     value = values[0];
                 });
                 expect(value).toBeUndefined();
             });
             
-            it("should pass the field values", function(){
+            it("should pass the field values", function() {
                 var emails;
+
                 store.aggregate(function(records, values) {
                     emails = values;
                 }, null, true, 'email');
                 expect(emails).toEqual(['ed@sencha.com', 'tommy@sencha.com']);
             });
             
-            describe("grouped", function(){
-                it("should return an empty object if there are no groups", function(){
+            describe("grouped", function() {
+                it("should return an empty object if there are no groups", function() {
                     store.removeAll();
                     expect(store.aggregate(Ext.emptyFn, null, true)).toEqual({});
                 });
             
-                it("should return undefined if there is no groupField", function(){
+                it("should return undefined if there is no groupField", function() {
                     store.clearGrouping();
                     expect(store.aggregate(Ext.emptyFn, null, true)).toBeUndefined();
                 });
 
-                it("should return the groups with the aggregated value", function(){
-                    var result = store.aggregate(function(records, values){
+                it("should return the groups with the aggregated value", function() {
+                    var result = store.aggregate(function(records, values) {
                         return values.join('');
                     }, null, true, 'email');
+
                     expect(result).toEqual({
                         admin: 'aaron@sencha.comabe@sencha.com',
                         code: 'ed@sencha.comtommy@sencha.com'
@@ -6691,6 +6876,7 @@ topSuite("Ext.data.Store", [
     
     describe("updating records", function() {
         var spy;
+
         beforeEach(function() {
             createStore();
             addStoreData();
@@ -6713,6 +6899,7 @@ topSuite("Ext.data.Store", [
                     store.on('update', spy);
                     edRec.set('name', 'Ned Spencer');
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(store);
                     expect(args[1]).toBe(edRec);
                     expect(args[2]).toBe(Ext.data.Model.EDIT);
@@ -6748,6 +6935,7 @@ topSuite("Ext.data.Store", [
                         evilness: 9000
                     });
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(store);
                     expect(args[1]).toBe(edRec);
                     expect(args[2]).toBe(Ext.data.Model.EDIT);
@@ -6859,6 +7047,7 @@ topSuite("Ext.data.Store", [
                 store.on('update', spy);
                 edRec.commit();
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1]).toBe(edRec);
                 expect(args[2]).toBe(Ext.data.Model.COMMIT);
@@ -6896,6 +7085,7 @@ topSuite("Ext.data.Store", [
                 store.on('update', spy);
                 edRec.reject();
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(store);
                 expect(args[1]).toBe(edRec);
                 expect(args[2]).toBe(Ext.data.Model.REJECT);
@@ -6962,6 +7152,7 @@ topSuite("Ext.data.Store", [
                 var phantom = store.add({
                     validField: 'Foo'
                 })[0];
+
                 spyOn(phantom, 'commit');
                 store.commitChanges();
                 expect(phantom.commit.callCount).toBe(1);
@@ -6971,6 +7162,7 @@ topSuite("Ext.data.Store", [
                 var phantom = store.add({
                     validField: null
                 })[0];
+
                 spyOn(phantom, 'commit');
                 store.commitChanges();
                 expect(phantom.commit).not.toHaveBeenCalled();
@@ -7015,6 +7207,7 @@ topSuite("Ext.data.Store", [
         describe("events", function() {
             it("should fire an update event for each record", function() {
                 var spy = jasmine.createSpy();
+
                 edRec.set('validField', 'A');
                 aaronRec.set('validField', 'B');
                 tommyRec.set('validField', 'C');
@@ -7038,6 +7231,7 @@ topSuite("Ext.data.Store", [
             it("should reject dirty records", function() {
                 edRec.set('name', 'Foo');
                 var spy = spyOn(edRec, 'reject');
+
                 store.rejectChanges();
                 expect(spy.callCount).toBe(1);
             });
@@ -7046,7 +7240,9 @@ topSuite("Ext.data.Store", [
                 var phantom = store.add({
                     name: 'X'
                 })[0];
+
                 var spy = spyOn(phantom, 'reject');
+
                 store.rejectChanges();
                 expect(spy.callCount).toBe(1);
             });
@@ -7055,8 +7251,10 @@ topSuite("Ext.data.Store", [
                 var phantom = store.add({
                     name: 'X'
                 })[0];
+
                 phantom.set('name', 'Y');
                 var spy = spyOn(phantom, 'reject');
+
                 store.rejectChanges();
                 expect(spy.callCount).toBe(1);
             });
@@ -7075,7 +7273,7 @@ topSuite("Ext.data.Store", [
             });
         });
 
-        describe('rejecting non-filtered records', function () {
+        describe('rejecting non-filtered records', function() {
             it('should reject dirty records', function() {
                 store.filter('name', 'Ed Spencer');
                 expect(data.getAt(0)).toBe(edRec);
@@ -7088,7 +7286,7 @@ topSuite("Ext.data.Store", [
                 expect(data.getAt(0)).toBe(edRec);
             });
 
-            it('should reject phantom records', function () {
+            it('should reject phantom records', function() {
                 var len = store.getDataSource().length,
                     phantom = store.add({
                         name: 'X'
@@ -7101,7 +7299,7 @@ topSuite("Ext.data.Store", [
                 expect(store.getDataSource().length).toBe(len);
             });
 
-            it('should reject phantom + dirty records', function () {
+            it('should reject phantom + dirty records', function() {
                 var len = store.getDataSource().length,
                     phantom = store.add({
                         name: 'X'
@@ -7212,7 +7410,7 @@ topSuite("Ext.data.Store", [
 
                 it("should work when removing in random order", function() {
                     var a1 = permutator([edRec, aaronRec, fredRec]),
-                        a2 = permutator([abeRec, tommyRec, kevinRec, scottRec]), 
+                        a2 = permutator([abeRec, tommyRec, kevinRec, scottRec]),
                         i, j;
 
                     var test = function(a1, a2) {
@@ -7229,7 +7427,7 @@ topSuite("Ext.data.Store", [
                     };
 
                     for (i = 0; i < a1.length; i++) {
-                        for (j=0; j < a2.length; j++) {
+                        for (j = 0; j < a2.length; j++) {
                             test(a1, a2);
                             test(a2, a1);
                         }
@@ -7237,11 +7435,11 @@ topSuite("Ext.data.Store", [
                 });
             });
 
-            describe('with and without sorters', function () {
+            describe('with and without sorters', function() {
                 function doTests(sorter) {
                     var count;
 
-                    beforeEach(function () {
+                    beforeEach(function() {
                         if (sorter) {
                             store.sort(sorter);
                         }
@@ -7250,17 +7448,17 @@ topSuite("Ext.data.Store", [
                     });
                     
                     describe(sorter ? 'with sorter' : 'without sorter', function() {
-                        afterEach(function () {
+                        afterEach(function() {
                             count = null;
                         });
 
-                        it('should reject dropped records', function () {
+                        it('should reject dropped records', function() {
                             store.getAt(0).drop();
                             store.rejectChanges();
                             expect(store.count).toBe(count);
                         });
 
-                        it('should reject erased records', function () {
+                        it('should reject erased records', function() {
                             store.getAt(0).erase();
                             store.rejectChanges();
                             expect(store.count).toBe(count);
@@ -7269,7 +7467,7 @@ topSuite("Ext.data.Store", [
                 }
 
                 doTests(null);
-                doTests({property: 'name', direction: 'DESC'});
+                doTests({ property: 'name', direction: 'DESC' });
             });
         });
 
@@ -7278,7 +7476,9 @@ topSuite("Ext.data.Store", [
                 var phantom1 = store.insert(2, {
                     name: 'X'
                 })[0];
+
                 var spy = jasmine.createSpy();
+
                 store.on('update', spy);
                 store.rejectChanges();
                 expect(spy).not.toHaveBeenCalled();
@@ -7292,7 +7492,9 @@ topSuite("Ext.data.Store", [
                 var phantom2 = store.add({
                     name: 'Y'
                 })[0];
+
                 var spy = jasmine.createSpy();
+
                 store.on('remove', spy);
                 store.rejectChanges();
                 expect(spy.callCount).toBe(2);
@@ -7304,6 +7506,7 @@ topSuite("Ext.data.Store", [
                 edRec.set('name', 'A');
                 tommyRec.set('name', 'B');
                 var spy = jasmine.createSpy();
+
                 store.on('update', spy);
                 store.rejectChanges();
                 expect(spy.callCount).toBe(2);
@@ -7313,6 +7516,7 @@ topSuite("Ext.data.Store", [
 
             it("should not fire an update event for removed records", function() {
                 var spy = jasmine.createSpy();
+
                 store.remove(edRec);
                 store.on('update', spy);
                 store.rejectChanges();
@@ -7321,6 +7525,7 @@ topSuite("Ext.data.Store", [
 
             it("should not fire an update event for removed records, with sorters", function() {
                 var spy = jasmine.createSpy();
+
                 store.sort('name', 'DESC');
                 store.remove(edRec);
                 store.on('update', spy);
@@ -7330,6 +7535,7 @@ topSuite("Ext.data.Store", [
 
             it("should fire add events for readded records", function() {
                 var spy = jasmine.createSpy();
+
                 store.remove(edRec);
                 store.on('add', spy);
                 store.rejectChanges();
@@ -7339,17 +7545,17 @@ topSuite("Ext.data.Store", [
         });
     });
 
-    describe("metachange event", function () {
+    describe("metachange event", function() {
         var wasCalled = false,
             successData = {
                 success: true,
                 data: [
-                    {name: 'alex'},
-                    {name: 'ben'},
-                    {name: 'don'},
-                    {name: 'evan'},
-                    {name: 'nige'},
-                    {name: 'phil'}
+                    { name: 'alex' },
+                    { name: 'ben' },
+                    { name: 'don' },
+                    { name: 'evan' },
+                    { name: 'nige' },
+                    { name: 'phil' }
                 ],
                 metaData: {
                     root: 'data'
@@ -7357,14 +7563,14 @@ topSuite("Ext.data.Store", [
             },
             args, storeArg, metaArg;
 
-        beforeEach(function () {
+        beforeEach(function() {
             createStore({
                 proxy: {
                     type: "ajax",
                     url: "foo"
                 },
                 listeners: {
-                    metachange: function (store, meta) {
+                    metachange: function(store, meta) {
                         wasCalled = true;
                         args = arguments;
                         storeArg = store;
@@ -7377,46 +7583,46 @@ topSuite("Ext.data.Store", [
             completeWithData(successData);
         });
 
-        afterEach(function () {
+        afterEach(function() {
             wasCalled = false;
             args = storeArg = metaArg = null;
         });
 
-        it("should call the listener", function () {
+        it("should call the listener", function() {
             expect(wasCalled).toBe(true);
         });
 
-        it("should return the store", function () {
+        it("should return the store", function() {
             expect(storeArg).toBe(store);
         });
 
-        it("should return the meta data", function () {
+        it("should return the meta data", function() {
             expect(metaArg).toEqual(successData.metaData);
         });
 
-        it("should return the store as the first arg", function () {
+        it("should return the store as the first arg", function() {
             expect(args[0]).toBe(store);
         });
 
-        it("should return the meta data as the second arg", function () {
+        it("should return the meta data as the second arg", function() {
             expect(args[1]).toBe(metaArg);
         });
 
-        describe("disableMetaChangeEvent (for associated models)", function () {
+        describe("disableMetaChangeEvent (for associated models)", function() {
             var wasCalled = false;
 
-            afterEach(function () {
+            afterEach(function() {
                 wasCalled = false;
             });
 
-            it("should not be set by default", function () {
+            it("should not be set by default", function() {
                 createStore({
                     proxy: {
                         type: "ajax",
                         url: "foo"
                     },
                     listeners: {
-                        metachange: function (store, meta) {
+                        metachange: function(store, meta) {
                             wasCalled = true;
                         }
                     }
@@ -7428,7 +7634,7 @@ topSuite("Ext.data.Store", [
                 expect(wasCalled).toBe(true);
             });
 
-            it("should not fire the event if `true`", function () {
+            it("should not fire the event if `true`", function() {
                 createStore({
                     disableMetaChangeEvent: true,
                     proxy: {
@@ -7436,7 +7642,7 @@ topSuite("Ext.data.Store", [
                         url: "foo"
                     },
                     listeners: {
-                        metachange: function (store, meta) {
+                        metachange: function(store, meta) {
                             wasCalled = true;
                         }
                     }
@@ -7448,7 +7654,7 @@ topSuite("Ext.data.Store", [
                 expect(wasCalled).toBe(false);
             });
 
-            it("should fire the event if `false`", function () {
+            it("should fire the event if `false`", function() {
                 createStore({
                     disableMetaChangeEvent: false,
                     proxy: {
@@ -7456,7 +7662,7 @@ topSuite("Ext.data.Store", [
                         url: "foo"
                     },
                     listeners: {
-                        metachange: function (store, meta) {
+                        metachange: function(store, meta) {
                             wasCalled = true;
                         }
                     }
@@ -7501,11 +7707,13 @@ topSuite("Ext.data.Store", [
                 if (doSync) {
                     store.self.prototype.sync.apply(store, arguments);
                     doSync = false;
-                } else {
+                }
+                else {
                     store.needsSync = false;
                 }
             });
         });
+        
         describe("adding", function() {
             it("should trigger a sync if the record is a phantom", function() {
                 store.add({});
@@ -7514,6 +7722,7 @@ topSuite("Ext.data.Store", [
 
             it("should trigger a sync if the record is dirty", function() {
                 var rec = makeUser('foo@sencha.com');
+
                 rec.set('name', 'foo');
                 store.add(rec);
                 expect(store.sync.callCount).toBe(1);
@@ -7521,6 +7730,7 @@ topSuite("Ext.data.Store", [
 
             it("should not trigger a sync if the record is not a phantom or dirty", function() {
                 var rec = makeUser('foo@sencha.com');
+
                 store.add(rec);
                 expect(store.sync).not.toHaveBeenCalled();
             });
@@ -7534,6 +7744,7 @@ topSuite("Ext.data.Store", [
                 it("should only trigger a single sync when adding multiple records in a discontiguous range", function() {
                     store.sort('email');
                     var recs = [makeUser('aaa@sencha.com'), makeUser('foo@sencha.com'), makeUser('zzz@sencha.com')];
+
                     Ext.Array.forEach(recs, function(rec, i) {
                         rec.set('name', 'foo' + i);
                     });
@@ -7556,6 +7767,7 @@ topSuite("Ext.data.Store", [
         describe("removing", function() {
             it("should not trigger a sync if the record is a phantom", function() {
                 var rec = store.add({})[0];
+
                 store.sync.reset();
                 store.remove(rec);
                 expect(store.sync).not.toHaveBeenCalled();
@@ -7598,7 +7810,7 @@ topSuite("Ext.data.Store", [
                 completeWithData({
                     success: true,
                     records: [{
-                        id:'ed@sencha.com'
+                        id: 'ed@sencha.com'
                     }]
                 });
 
@@ -7619,7 +7831,7 @@ topSuite("Ext.data.Store", [
                     records: [{
                         id: 'tommy@sencha.com'
                     }, {
-                        id:'ed@sencha.com'
+                        id: 'ed@sencha.com'
                     }]
                 });
 
@@ -7632,19 +7844,21 @@ topSuite("Ext.data.Store", [
     describe("joining/unjoining the the store", function() {
         function expectJoined(rec) {
             var joined = rec.joined || [];
+
             expect(Ext.Array.indexOf(joined, store)).not.toBe(-1);
         }
 
         function expectNotJoined(rec) {
             var joined = rec.joined || [];
+
             expect(Ext.Array.indexOf(joined, store)).toBe(-1);
         }
 
-        describe("loading", function () {
+        describe("loading", function() {
             it("should join when loaded as part of the constructor", function() {
                 createStore({
                     data: [abeRaw]
-                });    
+                });
                 expectJoined(store.getAt(0));
             });
 
@@ -7717,6 +7931,7 @@ topSuite("Ext.data.Store", [
 
                 it("should unjoin when removing a phantom", function() {
                     var rec = store.add({})[0];
+
                     store.remove(rec);
                     // Won't be in the removed collection
                     expectNotJoined(rec);
@@ -7724,6 +7939,7 @@ topSuite("Ext.data.Store", [
 
                 it("should only unjoin items not in the removed collection when calling removeAll", function() {
                     var rec = store.add({})[0];
+
                     store.removeAll();
                     expectJoined(edRec);
                     expectJoined(abeRec);
@@ -7748,12 +7964,14 @@ topSuite("Ext.data.Store", [
 
                 it("should unjoin when removing a phantom", function() {
                     var rec = store.add({})[0];
+
                     store.remove(rec);
                     expectNotJoined(rec);
                 });
 
                 it("should unjoin when calling removeAll", function() {
                     var rec = store.add({})[0];
+
                     store.removeAll();
                     expectNotJoined(edRec);
                     expectNotJoined(abeRec);
@@ -7827,7 +8045,7 @@ topSuite("Ext.data.Store", [
             session = new Ext.data.Session();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             session.destroy();
             session = null;
         });
@@ -7847,6 +8065,7 @@ topSuite("Ext.data.Store", [
                     }
                 });
                 var spy = spyOn(store.getProxy(), 'read').andReturn();
+
                 store.load();
                 expect(spy.mostRecentCall.args[0].getRecordCreator()).toBe(session.recordCreator);
             });
@@ -7858,6 +8077,7 @@ topSuite("Ext.data.Store", [
                     }
                 });
                 var spy = spyOn(store.getProxy().getReader(), 'read').andCallThrough();
+
                 store.loadRawData([]);
                 expect(spy.mostRecentCall.args[1].recordCreator).toBe(session.recordCreator);
             });
@@ -7868,11 +8088,11 @@ topSuite("Ext.data.Store", [
                 expect(rec.session).toBe(session);
             }
 
-            describe("loading", function () {
+            describe("loading", function() {
                 it("should set the session when loaded as part of the constructor", function() {
                     createSessionStore({
                         data: [abeRaw]
-                    });    
+                    });
                     expectSession(store.getAt(0));
                 });
 
@@ -7963,7 +8183,7 @@ topSuite("Ext.data.Store", [
                 });
             });
         });
-    }); 
+    });
 
     describe("destroying", function() {
         it("should cancel a pending autoLoad", function() {
@@ -7983,6 +8203,7 @@ topSuite("Ext.data.Store", [
             addStoreData();
 
             var spy = jasmine.createSpy();
+
             store.on('remove', spy);
             store.on('clear', spy);
             store.destroy();
@@ -8000,6 +8221,7 @@ topSuite("Ext.data.Store", [
                         o[key] = items[key];
                     }
                 }
+
                 return o;
             }
 
@@ -8289,18 +8511,19 @@ topSuite("Ext.data.Store", [
 
     describe("summaries", function() {
         var M = Ext.define(null, {
-            extend: 'Ext.data.Model',
-            fields: ['group', {
-                name: 'rate',
-                summary: 'average'
-            }],
-            summary: {
-                maxRate: {
-                    summary: 'max',
-                    field: 'rate'
+                extend: 'Ext.data.Model',
+                fields: ['group', {
+                    name: 'rate',
+                    summary: 'average'
+                }],
+                summary: {
+                    maxRate: {
+                        summary: 'max',
+                        field: 'rate'
+                    }
                 }
-            }
-        }), data;
+            }),
+            data;
 
         beforeEach(function() {
             data = [
@@ -8331,6 +8554,7 @@ topSuite("Ext.data.Store", [
 
                 it("should return the calculated values", function() {
                     var r = getSummaryFor('g1');
+
                     expect(r.get('rate')).toBe(10);
                     expect(r.get('maxRate')).toBe(12);
 
@@ -8351,6 +8575,7 @@ topSuite("Ext.data.Store", [
                             store.add({ group: 'g3', rate: 100 });
 
                             var r = getSummaryFor('g1');
+
                             expect(r.get('rate')).toBe(10);
                             expect(r.get('maxRate')).toBe(12);
 
@@ -8367,6 +8592,7 @@ topSuite("Ext.data.Store", [
                             store.add({ group: 'g1', rate: 100 });
 
                             var r = getSummaryFor('g1');
+
                             expect(r.get('rate')).toBe(40);
                             expect(r.get('maxRate')).toBe(100);
 
@@ -8381,6 +8607,7 @@ topSuite("Ext.data.Store", [
                             store.getAt(0).set('rate', 200);
 
                             var r = getSummaryFor('g1');
+
                             expect(r.get('rate')).toBe(106);
                             expect(r.get('maxRate')).toBe(200);
 
@@ -8393,6 +8620,7 @@ topSuite("Ext.data.Store", [
                             store.getAt(0).set('group', 'g2');
 
                             var r = getSummaryFor('g1');
+
                             expect(r.get('rate')).toBe(12);
                             expect(r.get('maxRate')).toBe(12);
 
@@ -8406,6 +8634,7 @@ topSuite("Ext.data.Store", [
                         store.removeAt(1);
 
                         var r = getSummaryFor('g1');
+
                         expect(r.get('rate')).toBe(8);
                         expect(r.get('maxRate')).toBe(8);
 
@@ -8418,11 +8647,13 @@ topSuite("Ext.data.Store", [
                         store.getFilters().add({
                             filterFn: function(rec) {
                                 var rate = rec.get('rate');
+
                                 return rate === 12 || rate === 13;
                             }
                         });
 
                         var r = getSummaryFor('g1');
+
                         expect(r.get('rate')).toBe(12);
                         expect(r.get('maxRate')).toBe(12);
 
@@ -8450,6 +8681,7 @@ topSuite("Ext.data.Store", [
                         ]);
                         
                         var r = getSummaryFor('g1');
+
                         expect(r.get('rate')).toBe(81.5);
                         expect(r.get('maxRate')).toBe(82);
 
@@ -8492,6 +8724,7 @@ topSuite("Ext.data.Store", [
 
                 it("should return the summary records", function() {
                     var r = getSummaryFor('g1');
+
                     expect(r.get('rate')).toBe(5000);
                     expect(r.get('maxRate')).toBe(999998);
 
@@ -8520,6 +8753,7 @@ topSuite("Ext.data.Store", [
                     });
 
                     var r = getSummaryFor('g1');
+
                     expect(r.get('rate')).toBe(1);
                     expect(r.get('maxRate')).toBe(2);
 
@@ -8541,6 +8775,7 @@ topSuite("Ext.data.Store", [
 
                 it("should return the calculated values", function() {
                     var r = store.getSummaryRecord();
+
                     expect(r.get('rate')).toBe(12);
                     expect(r.get('maxRate')).toBe(15);
                 });
@@ -8555,6 +8790,7 @@ topSuite("Ext.data.Store", [
                     it("should react to an add", function() {
                         store.add({ rate: 20 });
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBe(13.6);
                         expect(r.get('maxRate')).toBe(20);
                     });
@@ -8562,6 +8798,7 @@ topSuite("Ext.data.Store", [
                     it("should react to a remove", function() {
                         store.removeAt(2);
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBe(11);
                         expect(r.get('maxRate')).toBe(13);
                     });
@@ -8569,6 +8806,7 @@ topSuite("Ext.data.Store", [
                     it("should react to a removeAll", function() {
                         store.removeAll();
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBeUndefined();
                         expect(r.get('maxRate')).toBeUndefined();
                     });
@@ -8576,6 +8814,7 @@ topSuite("Ext.data.Store", [
                     it("should react to an update", function() {
                         store.getAt(2).set('rate', 1);
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBe(8.5);
                         expect(r.get('maxRate')).toBe(13);
                     });
@@ -8587,6 +8826,7 @@ topSuite("Ext.data.Store", [
                             }
                         });
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBe(10);
                         expect(r.get('maxRate')).toBe(12);
 
@@ -8602,6 +8842,7 @@ topSuite("Ext.data.Store", [
                             { rate: 30 }
                         ]);
                         var r = store.getSummaryRecord();
+
                         expect(r.get('rate')).toBe(25);
                         expect(r.get('maxRate')).toBe(30);
                     });
@@ -8634,6 +8875,7 @@ topSuite("Ext.data.Store", [
 
                 it("should return the summary record", function() {
                     var r = store.getSummaryRecord();
+
                     expect(r.get('rate')).toBe(5000);
                     expect(r.get('maxRate')).toBe(999998);
                 });
@@ -8651,10 +8893,89 @@ topSuite("Ext.data.Store", [
                         }
                     });
                     var r = store.getSummaryRecord();
+
                     expect(r.get('rate')).toBe(5001);
                     expect(r.get('maxRate')).toBe(999999);
                 });
             });
+        });
+    });
+
+    describe('Store configured with data Collection', function() {
+        var loadSpy = jasmine.createSpy(),
+            addSpy = jasmine.createSpy(),
+            removeSpy = jasmine.createSpy(),
+            updateSpy = jasmine.createSpy(),
+            datachangedSpy = jasmine.createSpy(),
+            filterchangeSpy = jasmine.createSpy(),
+            allJoined = true,
+            data, dataLength, collection;
+
+        beforeEach(function() {
+            data = [
+                new User(edRaw),
+                new User(abeRaw),
+                new User(aaronRaw),
+                new User(tommyRaw)
+            ];
+            dataLength = data.length;
+
+            // We don't set the rootProperty here. Part of the test is that
+            // Store does that itself which makes the mutation events work.
+            collection = new Ext.util.Collection();
+
+            collection.add(data);
+            store = new Ext.data.Store({
+                model: User,
+                data: collection,
+                listeners: {
+                    load: loadSpy,
+                    add: addSpy,
+                    remove: removeSpy,
+                    update: updateSpy,
+                    datachanged: datachangedSpy,
+                    filterchange: filterchangeSpy
+                }
+            });
+
+            store.each(function(r) {
+                if (!r.joined || r.joined.length !== 1 || r.joined[0] !== store) {
+                    return allJoined = false;
+                }
+            });
+        });
+
+        it('should fire all expected events', function() {
+            expect(store.isLoaded()).toBe(true);
+            expect(allJoined).toBe(true);
+            expect(loadSpy.callCount).toBe(1);
+            expect(datachangedSpy.callCount).toBe(1);
+            expect(addSpy.callCount).toBe(0);
+            expect(removeSpy.callCount).toBe(0);
+            expect(updateSpy.callCount).toBe(0);
+            expect(filterchangeSpy.callCount).toBe(0);
+            expect(store.getCount()).toBe(dataLength);
+
+            store.first().set('name', 'New Name');
+            expect(updateSpy.callCount).toBe(1);
+
+            var newRec = new User(fredRaw);
+
+            store.add(newRec);
+
+            expect(addSpy.callCount).toBe(1);
+
+            store.remove(newRec);
+            expect(removeSpy.callCount).toBe(1);
+
+            // Only include evil Ed!
+            store.filter(function(rec) {
+                return rec.get('evilness') > 90;
+            });
+
+            // Must respond to filter
+            expect(store.getCount()).toBe(1);
+            expect(filterchangeSpy.callCount).toBe(1);
         });
     });
 });

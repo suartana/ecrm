@@ -30,7 +30,8 @@
  *                 arrowAlign:'bottom',
  *                 menu: [{ text: 'Menu Item 1' }]
  *             },{
- *                 xtype:'splitbutton', text: 'Cut', iconCls: 'add16', menu: [{text: 'Cut Menu Item'}]
+ *                 xtype:'splitbutton', text: 'Cut', iconCls: 'add16',
+ *                 menu: [{ text: 'Cut Menu Item' }]
  *             },{
  *                 text: 'Copy', iconCls: 'add16'
  *             },{
@@ -120,7 +121,7 @@ Ext.define('Ext.container.ButtonGroup', {
             cols = me.columns;
 
         if (cols) {
-            me.layout = Ext.apply({columns: cols}, me.layout);
+            me.layout = Ext.apply({ columns: cols }, me.layout);
         }
 
         if (!me.title) {
@@ -138,10 +139,12 @@ Ext.define('Ext.container.ButtonGroup', {
             if (this.defaultButtonUI && component.ui === 'default' &&
                 !component.hasOwnProperty('ui')) {
                 component.ui = this.defaultButtonUI;
-            } else {
+            }
+            else {
                 component.ui = component.ui + '-toolbar';
             }
         }
+        
         this.callParent(arguments);
     },
     
@@ -192,10 +195,11 @@ Ext.define('Ext.container.ButtonGroup', {
     },
 
     privates: {
-        applyDefaults: function (c) {
+        applyDefaults: function(c) {
             if (!Ext.isString(c)) {
                 c = this.callParent(arguments);
             }
+            
             return c;
         }
     }

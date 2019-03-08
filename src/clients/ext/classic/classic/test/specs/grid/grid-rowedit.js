@@ -1,18 +1,16 @@
-/* global expect, jasmine, Ext, xit, it, topSuite */
-/* eslint indent: off */
-
 topSuite("grid-rowedit",
     [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.grid.plugin.RowEditing',
      'Ext.form.field.ComboBox', 'Ext.form.FieldContainer', 'Ext.grid.column.Action',
      'Ext.form.field.Trigger'],
 function() {
     var itNotIE8 = Ext.isIE8 ? xit : it;
+
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
             var ENTER = 13,
                 ESC = 27;
 
-            var grid, view, scroller, store, plugin, editor, colRef, 
+            var grid, view, scroller, store, plugin, editor, colRef,
                 GridEventModel = Ext.define(null, {
                 extend: 'Ext.data.Model',
                 fields: [
@@ -37,11 +35,13 @@ function() {
             
             function triggerCellKeyEvent(type, rowIdx, cellIdx, key) {
                 var target = findCell(rowIdx, cellIdx);
+                
                 jasmine.fireKeyEvent(target, type, key);
             }
             
             function triggerEditorKey(key) {
                 var target = plugin.getEditor().items.first().inputEl.dom;
+                
                 jasmine.fireKeyEvent(target, 'keydown', key);
                 jasmine.fireKeyEvent(target, 'keyup', key);
                 jasmine.fireKeyEvent(target, 'keypress', key);
@@ -62,13 +62,14 @@ function() {
                 if (!rec || !rec.isModel) {
                     rec = store.getAt(rec || 0);
                 }
+                
                 if (column == null) {
                     column = 0;
                 }
 
                 if (typeof column === 'number') {
                     // Ensure it's an editable column so that focus happens.
-                    while (colRef[column] && !(colRef[column].getEditor&& colRef[column].getEditor() && colRef[column].getEditor().focusable)) {
+                    while (colRef[column] && !(colRef[column].getEditor && colRef[column].getEditor() && colRef[column].getEditor().focusable)) {
                         ++column;
                     }
 
@@ -77,7 +78,8 @@ function() {
                     // but will not focus
                     if (column === colRef.length) {
                         column = null;
-                    } else {
+                    }
+                    else {
                         column = colRef[column];
                     }
                 }
@@ -113,8 +115,10 @@ function() {
                     if (locked && i < 3) {
                         colConfig.locked = true;
                     }
+
                     columns[i - 1] = new Ext.grid.column.Column(colConfig);
                 }
+
                 return columns;
             }
 
@@ -174,6 +178,7 @@ function() {
                 if (!hasCols) {
                     colRef = grid.getColumnManager().getColumns();
                 }
+
                 view = grid.getView();
                 scroller = view.getScrollable ? view.getScrollable() : grid.normalGrid.view.getScrollable();
                 editor = plugin.getEditor();
@@ -197,15 +202,17 @@ function() {
                             'beforeedit': 'someFn'
                         }
                     });
+
                     grid.resolveSatelliteListenerScope = function() {
                         return fooScope;
                     };
+
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(fooScope.someFn).toHaveBeenCalled();
                 });
             });
 
-            (Ext.isIE8 ? xdescribe :describe)("Editing in a locked grid", function() {
+            (Ext.isIE8 ? xdescribe : describe)("Editing in a locked grid", function() {
                 beforeEach(function() {
                     makeGrid(null, null, true);
                 });
@@ -259,6 +266,7 @@ function() {
                             field10: i + '.' + 10
                         });
                     }
+
                     store.add(data);
                     startEdit(900);
                     
@@ -268,7 +276,7 @@ function() {
                     });
                 });
 
-                it("should trigger the edit on cell interaction", function(){
+                it("should trigger the edit on cell interaction", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.editing).toBe(true);
@@ -281,13 +289,15 @@ function() {
                     expect(plugin.editing).toBe(true);
                     expect(plugin.getEditor().isVisible()).toBe(true);
                     var toFocus = plugin.getEditor().items.getAt(3);
+
                     jasmine.waitForFocus(toFocus);
                     jasmine.expectFocused(toFocus);
                 });
 
-                it("should be able to be trigger by record", function(){
+                it("should be able to be trigger by record", function() {
                     makeGrid();
                     var rec = store.first();
+
                     startEdit(rec);
                     
                     runs(function() {
@@ -310,13 +320,15 @@ function() {
                     expect(plugin.getEditor().isVisible()).toBe(true);
                 });
 
-                it("should focus the first visible column if not passed", function(){
+                it("should focus the first visible column if not passed", function() {
                     makeGrid();
                     var rec = store.first();
+
                     startEdit(rec);
 
                     runs(function() {
                         var toFocus = plugin.getEditor().items.getAt(0);
+
                         jasmine.waitForFocus(toFocus);
                         jasmine.expectFocused(toFocus);
                     });
@@ -338,13 +350,15 @@ function() {
                     }]);
                     triggerCellMouseEvent('dblclick', 0, 0);
                     var toFocus = plugin.getEditor().items.getAt(3);
+
                     jasmine.waitForFocus(toFocus);
                     jasmine.expectFocused(toFocus);
                 });
 
-                it("should focus the passed column", function () {
+                it("should focus the passed column", function() {
                     makeGrid();
                     var rec = store.first();
+
                     plugin.startEdit(rec, colRef[2]);
                     
                     runs(function() {
@@ -352,13 +366,14 @@ function() {
                         expect(plugin.getEditor().getRecord() === rec).toBe(true);
 
                         var toFocus = plugin.getEditor().items.getAt(2);
+
                         jasmine.waitForFocus(toFocus);
                         jasmine.expectFocused(toFocus);
                     });
                 });
 
                 it("should scroll horizontally to display the field being edited", function() {
-                    makeGrid(null,null,null,{
+                    makeGrid(null, null, null, {
                         width: 300
                     });
                     var rec = store.first(),
@@ -372,11 +387,12 @@ function() {
                     // TOOD: Revisit when https://sencha.jira.com/browse/EXTJS-23182 is closed.
                     waitsFor(function() {
                         var viewX = view.getScrollable().getScrollElement().dom.scrollLeft;
+
                         return viewX >= 200 &&
                                view.grid.headerCt.getScrollable().getScrollElement().dom.scrollLeft === viewX;
                     });
 
-                    runs(function(){
+                    runs(function() {
                         x = view.getScrollX();
                         plugin.startEdit(rec, colRef[4]);
                     });
@@ -544,7 +560,7 @@ function() {
                         lastField = plugin.getEditor().items.getAt(4);
 
                         runs(function() {
-                            pressTabKey(firstField, false); 
+                            pressTabKey(firstField, false);
                         });
                        
                         waitForFocus(lastField);
@@ -571,7 +587,7 @@ function() {
                         it("should shift-tab to Update button from first field", function() {
                             startEdit(0, 0);
 
-                            runs(function() {                           
+                            runs(function() {
                                 editor.activeField.setValue('throbbe');
                                 pressTabKey(editor.activeField, false);
                             });
@@ -623,6 +639,7 @@ function() {
                     
                     runs(function() {
                         var field = plugin.getEditor().items.getAt(0);
+
                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                     });
                 });
@@ -639,6 +656,7 @@ function() {
                             
                             runs(function() {
                                 var field = plugin.getEditor().items.getAt(0);
+
                                 expect(field.inputEl.getStyle('text-align')).toBe('right');
                             });
                         });
@@ -660,6 +678,7 @@ function() {
                                     
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
+
                                         expect(field.inputEl.getStyle('text-align')).toBe('left');
                                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                                     });
@@ -680,6 +699,7 @@ function() {
                                     
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
+
                                         expect(field.inputEl.getStyle('text-align')).toBe('right');
                                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                                     });
@@ -705,6 +725,7 @@ function() {
                                     
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
+
                                         expect(field.inputEl.getStyle('text-align')).toBe('left');
                                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                                     });
@@ -726,6 +747,7 @@ function() {
                                     
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
+
                                         expect(field.inputEl.getStyle('text-align')).toBe('left');
                                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                                     });
@@ -748,6 +770,7 @@ function() {
                                     
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
+
                                         expect(field.inputEl.getStyle('text-align')).toBe('right');
                                         expect(field.inputEl.getStyle('text-transform')).toBe('uppercase');
                                     });
@@ -763,6 +786,7 @@ function() {
                 it("should position buttons correctly for the first row when content does not overflow", function() {
                     makeGrid();
                     var records = store.getRange();
+
                     records.shift();
                     store.remove(records);
                     // Only 1 record, not scrolling
@@ -799,10 +823,10 @@ function() {
                         dataIndex: 'field4',
                         field: 'textfield',
                         sortable: true
-                    }],{
+                    }], {
                         clicksToMoveEditor: 1,
-                        autoCancel: false 
-                    },null,{
+                        autoCancel: false
+                    }, null, {
                         trailingBufferZone: 10,
                         leadingBufferZone: 10
                     });
@@ -823,7 +847,7 @@ function() {
                         });
                     }
     
-                    store.insert(10,data);
+                    store.insert(10, data);
                 });
 
                 it('should keep the editor active if scrolling out of view', function() {
@@ -836,16 +860,17 @@ function() {
                     // this will scroll the grid view down
                     // to a point where rows get de-rendered
                     // if the grid has a bufferedRenderer plugin
-                    jasmine.waitsForScroll(view.getScrollable(), function (scroller, x, y) {
+                    jasmine.waitsForScroll(view.getScrollable(), function(scroller, x, y) {
                         // Wait until a record begin edit is cached
                         // or verified if it is not a grid with bufferedRenderer
                         if (plugin.editor._cachedNode || !grid.bufferedRenderer) {
                             return true;
                         }
+
                         scroller.scrollBy(0, 100);
                     }, 'scroll to the bottom', 10000);
 
-                    runs(function(){
+                    runs(function() {
                         // if this is a grid with bufferedRenderer
                         // the record editor should be hidden at Y = -400;
                         if (grid.bufferedRenderer) {
@@ -861,7 +886,7 @@ function() {
                         scroller.scrollBy(0, -100);
                     }, 'view to scroll to top and RowEditor to reappear', 10000, 50);
 
-                    runs(function(){
+                    runs(function() {
                         // the cached record should have been erased
                         // or it should never existed if this is not a grid with bufferedRenderer
                         // the editor also should not be hidden anymore
@@ -874,6 +899,7 @@ function() {
                 
                 it('should scroll to edited item if it is out of view and the column is sorted', function() {
                     var columns = grid.getColumns();
+
                     columns[3].sort();
 
                     startEdit();
@@ -888,7 +914,7 @@ function() {
 
             // https://sencha.jira.com/browse/EXTJSIV-11364
             describe("destroying a grid before editing starts", function() {
-                beforeEach(function(){
+                beforeEach(function() {
                     makeGrid([{
                         name: 'F0',
                         dataIndex: 'field0',
@@ -914,12 +940,13 @@ function() {
             describe("setting widths", function() {
                 function expectWidth(field, width) {
                     width -= field._marginWidth;
-                    expect(field.getWidth()).toBe(width);    
+                    expect(field.getWidth()).toBe(width);
                 }
                 
                 function expectWidths() {
                     runs(function() {
                         var items = plugin.getEditor().items;
+
                         items.each(function(item, index) {
                             expectWidth(item, colRef[index].getWidth());
                         });
@@ -935,7 +962,7 @@ function() {
                         dataIndex: 'field2',
                         width: 200,
                         field: 'textfield'
-                    }]);    
+                    }]);
                     startEdit();
                     expectWidths();
                 });
@@ -949,7 +976,7 @@ function() {
                         dataIndex: 'field2',
                         flex: 1,
                         field: 'textfield'
-                    }]);    
+                    }]);
                     startEdit();
                     expectWidths();
                 });
@@ -967,7 +994,7 @@ function() {
                         dataIndex: 'field3',
                         width: 400,
                         field: 'textfield'
-                    }]);    
+                    }]);
                     startEdit();
                     expectWidths();
                 });
@@ -1019,10 +1046,11 @@ function() {
                 beforeEach(function() {
                     makeGrid();
                 });
-                describe("beforeedit", function(){
+                describe("beforeedit", function() {
                     it("should fire the event", function() {
                         var called = false;
-                        plugin.on('beforeedit', function(){
+
+                        plugin.on('beforeedit', function() {
                             called = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1031,7 +1059,8 @@ function() {
                     
                     it("should fire the event with the plugin & an event context", function() {
                         var p, context;
-                        plugin.on('beforeedit', function(a1, a2){
+
+                        plugin.on('beforeedit', function(a1, a2) {
                             p = a1;
                             context = a2;
                         });
@@ -1046,27 +1075,28 @@ function() {
                         expect(context.store === store).toBe(true);
                     });
                     
-                    it("should prevent editing if false is returned", function(){
-                        plugin.on('beforeedit', function(a1, a2){
+                    it("should prevent editing if false is returned", function() {
+                        plugin.on('beforeedit', function(a1, a2) {
                             return false;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.editing).toBeFalsy();
                     });
                     
-                    it("should prevent editing if context.cancel is set", function(){
-                        plugin.on('beforeedit', function(p, context){
+                    it("should prevent editing if context.cancel is set", function() {
+                        plugin.on('beforeedit', function(p, context) {
                             context.cancel = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.editing).toBeFalsy();
                     });
-                });  
+                });
                 
-                describe("canceledit", function(){
-                    it("should fire the event when editing is cancelled", function(){
+                describe("canceledit", function() {
+                    it("should fire the event when editing is cancelled", function() {
                         var called = false;
-                        plugin.on('canceledit', function(p, context){
+
+                        plugin.on('canceledit', function(p, context) {
                             called = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1075,9 +1105,10 @@ function() {
                         expect(plugin.editing).toBe(false);
                     });
                     
-                    it("should pass the plugin and the context", function(){
+                    it("should pass the plugin and the context", function() {
                         var p, context;
-                        plugin.on('canceledit', function(a1, a2){
+
+                        plugin.on('canceledit', function(a1, a2) {
                             p = a1;
                             context = a2;
                         });
@@ -1094,26 +1125,26 @@ function() {
                     });
                 });
                 
-                describe("validateedit", function(){
-                    it("should fire the validateedit event before edit", function(){
+                describe("validateedit", function() {
+                    it("should fire the validateedit event before edit", function() {
                         var calledFirst = false,
                             called = false;
 
-                        plugin.on('validateedit', function(){
+                        plugin.on('validateedit', function() {
                             calledFirst = !called;
                         });
-                        plugin.on('edit', function(p, context){
+                        plugin.on('edit', function(p, context) {
                             calledFirst = !called;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
                         plugin.completeEdit();
                         expect(calledFirst).toBe(true);
-                    });  
+                    });
                     
-                    it("should pass the plugin and the context", function(){
+                    it("should pass the plugin and the context", function() {
                         var p, context;
 
-                        plugin.on('validateedit', function(a1, a2){
+                        plugin.on('validateedit', function(a1, a2) {
                             p = a1;
                             context = a2;
                         });
@@ -1127,15 +1158,15 @@ function() {
                         expect(context.row === view.getRow(view.all.first())).toBe(true);
                         expect(context.rowIdx).toBe(0);
                         expect(context.store === store).toBe(true);
-                    }); 
+                    });
                     
-                    it("should veto the completeEdit if we return false", function(){
+                    it("should veto the completeEdit if we return false", function() {
                         var called = false;
 
-                        plugin.on('validateedit', function(){
+                        plugin.on('validateedit', function() {
                             return false;
                         });
-                        plugin.on('edit', function(p, context){
+                        plugin.on('edit', function(p, context) {
                             called = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1144,13 +1175,13 @@ function() {
                         expect(called).toBe(false);
                     });
                     
-                    it("should veto the completeEdit if we set context.cancel", function(){
+                    it("should veto the completeEdit if we set context.cancel", function() {
                         var called = false;
 
-                        plugin.on('validateedit', function(p, context){
+                        plugin.on('validateedit', function(p, context) {
                             context.cancel = true;
                         });
-                        plugin.on('edit', function(p, context){
+                        plugin.on('edit', function(p, context) {
                             called = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1160,23 +1191,23 @@ function() {
                     });
                 });
                 
-                describe("edit", function(){
-                    it("should fire the edit event", function(){
+                describe("edit", function() {
+                    it("should fire the edit event", function() {
                         var called = false;
 
-                        plugin.on('edit', function(p, context){
+                        plugin.on('edit', function(p, context) {
                             called = true;
                         });
                         triggerCellMouseEvent('dblclick', 0, 0);
                         plugin.completeEdit();
                         expect(plugin.editing).toBe(false);
                         expect(called).toBe(true);
-                    });  
+                    });
                     
-                    it("should pass the plugin and the context", function(){
+                    it("should pass the plugin and the context", function() {
                         var p, context;
 
-                        plugin.on('edit', function(a1, a2){
+                        plugin.on('edit', function(a1, a2) {
                             p = a1;
                             context = a2;
                         });
@@ -1192,7 +1223,7 @@ function() {
                         expect(context.store === store).toBe(true);
                     });
                     
-                    it("should update the value in the model", function(){
+                    it("should update the value in the model", function() {
 
                         triggerCellMouseEvent('dblclick', 0, 0);
                         plugin.getEditor().items.first().setValue('foo');
@@ -1208,8 +1239,9 @@ function() {
                     spyOn(Ext.log, 'warn');
                 });
                 
-                it("should allow the editor to change dynamically", function(){
+                it("should allow the editor to change dynamically", function() {
                     var field = new Ext.form.field.Trigger();
+
                     makeGrid();
                     colRef[0].setEditor(field);
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1218,16 +1250,18 @@ function() {
                 
                 it("should allow the editor to change in the beforeedit event", function() {
                     var field = new Ext.form.field.Trigger();
+
                     makeGrid();
-                    plugin.on('beforeedit', function(){
+                    plugin.on('beforeedit', function() {
                         colRef[0].setEditor(field);
-                    });  
+                    });
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first() === field).toBe(true);
                 });
 
                 it("should correct the width when setting the editor during beforeedit after rendering", function() {
                     var field = new Ext.form.field.Trigger();
+
                     makeGrid([{
                         width: 500,
                         field: 'textfield'
@@ -1236,19 +1270,20 @@ function() {
                     plugin.cancelEdit();
                     plugin.on('beforeedit', function() {
                         colRef[0].setEditor(field);
-                    });  
+                    });
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().getWidth()).toBe(500);
                 });
                 
                 it("should allow us to set an editor if one wasn't there before", function() {
                     var field = new Ext.form.field.Text();
+
                     makeGrid([{
                         dataIndex: 'field1'
                     }, {
                         dataIndex: 'field2',
                         field: 'textfield'
-                    }]);    
+                    }]);
                     colRef = grid.getColumnManager().getColumns();
                     colRef[0].setEditor(field);
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1268,7 +1303,7 @@ function() {
                     makeGrid([{
                         dataIndex: 'field1',
                         field: field
-                    }]);    
+                    }]);
                     colRef = grid.getColumnManager().getColumns();
                     colRef[0].setEditor(new Ext.form.field.Text());
                     expect(field.destroyed).toBe(true);
@@ -1276,7 +1311,7 @@ function() {
             });
             
             describe("hidden columns", function() {
-                beforeEach(function(){
+                beforeEach(function() {
                     makeGrid([{
                         dataIndex: 'field1',
                         hidden: true,
@@ -1315,6 +1350,7 @@ function() {
                     
                     runs(function() {
                         var toFocus = plugin.getEditor().items.getAt(1);
+
                         jasmine.waitForFocus(toFocus);
                         jasmine.expectFocused(toFocus);
                     });
@@ -1341,12 +1377,13 @@ function() {
             
             describe("reconfigure", function() {
                 var old;
+
                 describe("original editor not rendered", function() {
                     beforeEach(function() {
                         makeGrid();
                         old = [];
                         Ext.Array.forEach(grid.getColumnManager().getColumns(), function(col) {
-                            old.push(col.getEditor());    
+                            old.push(col.getEditor());
                         });
                         grid.reconfigure(null, [{
                             dataIndex: 'field1',
@@ -1360,15 +1397,15 @@ function() {
                     });
                 
                     it("should destroy old editors", function() {
-                        Ext.Array.forEach(old, function(item){
-                            expect(item.destroyed).toBe(true);    
+                        Ext.Array.forEach(old, function(item) {
+                            expect(item.destroyed).toBe(true);
                         });
                     });
                 
                     it("should update columns with no editors", function() {
                         triggerCellMouseEvent('dblclick', 0, 1);
                         expect(plugin.getEditor().items.getAt(1).getXType()).toBe('displayfield');
-                    });  
+                    });
                 
                     it("should use new editors", function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1409,7 +1446,7 @@ function() {
                             xtype: 'textfield',
                             name: 'field2'
                         }
-                    }]); 
+                    }]);
                     
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().getValue()).toBe('1.2');
@@ -1493,6 +1530,7 @@ function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         clearFormDelay();
                         var editor = plugin.getEditor();
+
                         editor.items.first().setValue('');
                         expect(editor.tooltip.isVisible()).toBe(true);
                     });
@@ -1502,6 +1540,7 @@ function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         clearFormDelay();
                         var editor = plugin.getEditor();
+
                         editor.items.first().setValue('Foo');
                         expect(editor.tooltip.isVisible()).toBe(false);
                     });
@@ -1613,9 +1652,11 @@ function() {
                             f1.getErrors = function() {
                                 return ['Foo'];
                             };
+
                             f2.getErrors = function() {
                                 return ['Bar'];
                             };
+
                             colRef[0].text = '';
                             triggerCellMouseEvent('dblclick', 0, 0);
                             clearFormDelay();
@@ -1639,7 +1680,7 @@ function() {
                     }]);
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().items.first().getValue()).toBe('1.1');
-                });  
+                });
             });
             
             describe("key events", function() {
@@ -1648,7 +1689,7 @@ function() {
                     triggerCellMouseEvent('dblclick', 0, 0);
                     triggerEditorKey(ESC);
                     expect(plugin.editing).toBe(false);
-                });   
+                });
                 
                 it("should complete on edit if the form is valid", function() {
                     makeGrid();
@@ -1683,11 +1724,11 @@ function() {
             describe("adding/removing/moving columns", function() {
                 function dragColumn(from, to, onRight) {
                     var fromBox = from.titleEl.getBox(),
-                        fromMx = fromBox.x + fromBox.width/2,
-                        fromMy = fromBox.y + fromBox.height/2,
+                        fromMx = fromBox.x + fromBox.width / 2,
+                        fromMy = fromBox.y + fromBox.height / 2,
                         toBox = to.titleEl.getBox(),
                         toMx = onRight ? toBox.right - 10 : toBox.left + 10,
-                        toMy = toBox.y + toBox.height/2,
+                        toMy = toBox.y + toBox.height / 2,
                         dragThresh = onRight ? Ext.dd.DragDropManager.clickPixelThresh + 1 : -Ext.dd.DragDropManager.clickPixelThresh - 1;
 
                     // Mousedown on the header to drag
@@ -1739,6 +1780,7 @@ function() {
                                             id: 'field6'
                                         }
                                     });
+
                                     if (beforeFirstShow) {
                                         startEdit();
                                     }
@@ -1747,7 +1789,7 @@ function() {
                                 runs(function() {
                                     expect(plugin.getEditor().getComponent('field6').getValue()).toBe('1.6');
                                 });
-                            });  
+                            });
                         
                             it("should remove an existing field & destroy it", function() {
                                 if (!beforeFirstShow) {
@@ -1756,6 +1798,7 @@ function() {
                                 
                                 runs(function() {
                                     grid.headerCt.remove(1);
+
                                     if (beforeFirstShow) {
                                         startEdit();
                                     }
@@ -1774,13 +1817,14 @@ function() {
                                 
                                 runs(function() {
                                     grid.headerCt.move(0, 5);
+
                                     if (beforeFirstShow) {
                                         startEdit();
                                     }
                                 });
                                 
                                 runs(function() {
-                                    expect(plugin.getEditor().items.last().getItemId()).toBe('field1');    
+                                    expect(plugin.getEditor().items.last().getItemId()).toBe('field1');
                                 });
                             });
                         
@@ -1791,6 +1835,7 @@ function() {
                                 
                                 runs(function() {
                                     grid.headerCt.removeAll();
+
                                     if (beforeFirstShow) {
                                         startEdit();
                                     }
@@ -1820,11 +1865,13 @@ function() {
                                         }
                                     });
                                 }
+
                                 return out;
                             }
 
                             it("should insert after the first hidden column", function() {
                                 makeGrid(makeColumns([true, false, false, false, false]));
+
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
@@ -1832,18 +1879,20 @@ function() {
                                 runs(function() {
                                     // insert before the first visible column
                                     grid.headerCt.move(4, 1);
+
                                     if (beforeFirstShow) {
                                        startEdit();
                                     }
                                 });
                                 
                                 runs(function() {
-                                    expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field5');  
+                                    expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field5');
                                 });
                             });
 
                             it("should insert before the last hidden column", function() {
                                 makeGrid(makeColumns([false, false, false, false, true]));
+
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
@@ -1851,6 +1900,7 @@ function() {
                                 runs(function() {
                                     // insert after the last visible column
                                     grid.headerCt.move(0, 3);
+
                                     if (beforeFirstShow) {
                                        startEdit();
                                     }
@@ -1863,6 +1913,7 @@ function() {
 
                             it("should position properly with hidden columns in the middle", function() {
                                 makeGrid(makeColumns([false, false, true, false, true, true, false]));
+
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
@@ -1870,14 +1921,15 @@ function() {
                                 runs(function() {
                                     grid.headerCt.move(0, 3);
                                     grid.headerCt.insert(1, colRef[6]);
+
                                     if (beforeFirstShow) {
                                        startEdit();
                                     }
                                 });
                                 
                                 runs(function() {
-                                    expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field7'); 
-                                    expect(plugin.getEditor().items.getAt(4).getItemId()).toBe('field1'); 
+                                    expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field7');
+                                    expect(plugin.getEditor().items.getAt(4).getItemId()).toBe('field1');
                                 });
                             });
                         });
@@ -1891,35 +1943,35 @@ function() {
                                 }, {
                                     columns: [{
                                         dataIndex: 'field1',
-                                        field: {id: 'field1'}
+                                        field: { id: 'field1' }
                                     }, {
                                         dataIndex: 'field2',
-                                        field: {id: 'field2'}
+                                        field: { id: 'field2' }
                                     }, {
                                         dataIndex: 'field3',
-                                        field: {id: 'field3'}
+                                        field: { id: 'field3' }
                                     }]
                                 }, {
                                     columns: [{
                                         dataIndex: 'field4',
-                                        field: {id: 'field4'}
+                                        field: { id: 'field4' }
                                     }, {
                                         dataIndex: 'field5',
-                                        field: {id: 'field5'}
+                                        field: { id: 'field5' }
                                     }, {
                                         dataIndex: 'field6',
-                                        field: {id: 'field6'}
+                                        field: { id: 'field6' }
                                     }]
                                 }, {
                                     columns: [{
                                         dataIndex: 'field7',
-                                        field: {id: 'field7'}
+                                        field: { id: 'field7' }
                                     }, {
                                         dataIndex: 'field8',
-                                        field: {id: 'field8'}
+                                        field: { id: 'field8' }
                                     }, {
                                         dataIndex: 'field9',
-                                        field: {id: 'field9'}
+                                        field: { id: 'field9' }
                                     }]
                                 }]);
                             });
@@ -1940,7 +1992,8 @@ function() {
                                     grid.normalGrid.headerCt.move(1, 0);
                                 }
 
-                                startEdit();                                
+                                startEdit();
+                                
                                 if (!beforeFirstShow) {
                                     runs(function() {
                                          grid.normalGrid.headerCt.move(1, 0);
@@ -1957,7 +2010,8 @@ function() {
                                     grid.normalGrid.headerCt.move(1, 2);
                                 }
 
-                                startEdit();                                
+                                startEdit();
+                                
                                 if (!beforeFirstShow) {
                                     runs(function() {
                                          grid.normalGrid.headerCt.move(1, 2);
@@ -1971,6 +2025,7 @@ function() {
                         });
                     });
                 }
+
                 createLockingSuite(true);
                 createLockingSuite(false);
             });
@@ -1979,7 +2034,7 @@ function() {
                 itNotIE8('should align to the bottom of the editor when at the end', function() {
                     store = Ext.create('Ext.data.Store', {
                         storeId: 'simpsonsStore',
-                        fields:[ 'name', 'email', 'phone'],
+                        fields: [ 'name', 'email', 'phone'],
                         data: [
                             { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
                             { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
@@ -2003,14 +2058,14 @@ function() {
                     });
                     
                     makeGrid([
-                            {header: 'Name', dataIndex: 'name', editor: 'textfield'},
-                            {header: 'Email', dataIndex: 'email', flex:1,
+                            { header: 'Name', dataIndex: 'name', editor: 'textfield' },
+                            { header: 'Email', dataIndex: 'email', flex: 1,
                              editor: {
                                  xtype: 'textarea',
                                  allowBlank: false
                              }
                             },
-                            {header: 'Phone', dataIndex: 'phone', width: 140}
+                            { header: 'Phone', dataIndex: 'phone', width: 140 }
                         ], { clicksToEdit: 1 }, false, {
                             xtype: 'grid',
                             title: 'Simpsons',
@@ -2115,7 +2170,9 @@ function() {
 
                 function triggerAction(type, row, colIdx) {
                     var cell = findCell(row || 0, colIdx || 0);
+
                     jasmine.fireMouseEvent(cell.querySelector('.' + Ext.grid.column.Action.prototype.actionIconCls), type || 'click');
+
                     return cell;
                 }
                 
@@ -2216,6 +2273,7 @@ function() {
             });
         });
     }
+
     createSuite(false);
     createSuite(true);
 });

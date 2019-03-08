@@ -3,3 +3,4 @@ Ext.define('Ext.theme.touchsizing.grid.selection.SpreadsheetModel', {
     
     checkboxHeaderWidth: 32
 });
+

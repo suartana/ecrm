@@ -1,4 +1,4 @@
-/* global Ext, spyOn, expect */
+/* global TestController */
 
 topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() {
     var panelEventFired = false,
@@ -11,25 +11,27 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             toBeFunction: function(expected) {
                 var actual = this.actual;
 
+                /* eslint-disable multiline-ternary */
                 return expected ? Ext.isFunction(actual) && actual === expected
                      :            Ext.isFunction(actual)
                      ;
+                /* eslint-enable multiline-ternary */
             }
         });
 
         Ext.define('TestController.view.FooPanel', {
             extend: 'Ext.panel.Panel',
-            xtype:  'foopanel'
+            xtype: 'foopanel'
         });
 
         Ext.define('TestController.view.BarPanel', {
             extend: 'Ext.panel.Panel',
-            xtype:  'barpanel'
+            xtype: 'barpanel'
         });
 
         Ext.define('TestController.view.BazPanel', {
             extend: 'Ext.panel.Panel',
-            xtype:  'bazpanel'
+            xtype: 'bazpanel'
         });
 
         Ext.define('TestController.model.Test', {
@@ -66,7 +68,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
         });
         
         fooPanel = new TestController.view.FooPanel({
-            id:   'fooPanel',
+            itemId: 'fooPanel',
             prop: 'foo',
             
             width: 100,
@@ -85,7 +87,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
         
         ctrl = null;
 
-        if (Ext.isIE) {
+        if (Ext.isIE8) {
             window.TestController = undefined;
             window.NonexistingNamespace = undefined;
             window.AnotherNonexistingNamespace = undefined;
@@ -118,7 +120,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             expect(names).toEqual({
                 absoluteName: 'Name.space.foo.Model',
-                shortName:    'Model'
+                shortName: 'Model'
             });
         });
 
@@ -127,7 +129,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             expect(names).toEqual({
                 absoluteName: 'Name.space.foo.Model',
-                shortName:    'foo.Model'
+                shortName: 'foo.Model'
             });
         });
 
@@ -139,7 +141,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
                 expect(names).toEqual({
                     absoluteName: 'TestController.DefinedModel',
-                    shortName:    'TestController.DefinedModel'
+                    shortName: 'TestController.DefinedModel'
                 });
             });
         });
@@ -149,7 +151,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             expect(names).toEqual({
                 absoluteName: 'TestController.store.StoreNotLoadedYet',
-                shortName:    'StoreNotLoadedYet'
+                shortName: 'StoreNotLoadedYet'
             });
         });
 
@@ -158,7 +160,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             expect(names).toEqual({
                 absoluteName: 'TestController.view.Dotted.Foo',
-                shortName:    'Dotted.Foo'
+                shortName: 'Dotted.Foo'
             });
         });
 
@@ -167,7 +169,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             expect(names).toEqual({
                 absoluteName: 'Some.bogus.Class',
-                shortName:    'Some.bogus.Class'
+                shortName: 'Some.bogus.Class'
             });
         });
 
@@ -178,9 +180,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 Class = Ext.define("TestController.controller.Single", {
                     extend: 'Ext.app.Controller',
 
-                    models:      'Foo',
-                    views:       'Foo',
-                    stores:      'Foo',
+                    models: 'Foo',
+                    views: 'Foo',
+                    stores: 'Foo',
                     controllers: 'Bar'
                 });
             });
@@ -189,6 +191,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             runs(function() {
                 var args = Ext.Loader.require.argsForCall[0][0];
+
                 expect(args).toEqual([
                     'TestController.model.Foo',
                     'TestController.view.Foo',
@@ -223,9 +226,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 Class = Ext.define("TestController.Nonconforming.Class", {
                     extend: 'Ext.app.Controller',
 
-                    models:      [ 'Bar' ],
-                    views:       [ 'Bar' ],
-                    stores:      [ 'Bar' ],
+                    models: [ 'Bar' ],
+                    views: [ 'Bar' ],
+                    stores: [ 'Bar' ],
                     controllers: [ 'Baz' ]
                 });
             });
@@ -271,9 +274,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 Class = Ext.define("TestController.AnotherNonconforming.Class", {
                     extend: 'Ext.app.Controller',
 
-                    models:      [ 'Baz' ],
-                    views:       [ 'Baz' ],
-                    stores:      [ 'Baz' ],
+                    models: [ 'Baz' ],
+                    views: [ 'Baz' ],
+                    stores: [ 'Baz' ],
                     controllers: [ 'Qux' ]
                 });
             });
@@ -318,9 +321,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
                     '$namespace': 'Foo',
 
-                    models:      [ 'Plugh' ],
-                    views:       [ 'Plugh' ],
-                    stores:      [ 'Plugh' ],
+                    models: [ 'Plugh' ],
+                    views: [ 'Plugh' ],
+                    stores: [ 'Plugh' ],
                     controllers: [ 'Xyzzy' ]
                 });
             });
@@ -362,9 +365,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 Class = Ext.define("AnotherNonexistingNamespace.Foobaroo", {
                     extend: 'Ext.app.Controller',
 
-                    models:      [ 'Splurge@TestController.model' ],
-                    views:       [ 'Splurge@TestController.view' ],
-                    stores:      [ 'Splurge@TestController.store' ],
+                    models: [ 'Splurge@TestController.model' ],
+                    views: [ 'Splurge@TestController.view' ],
+                    stores: [ 'Splurge@TestController.store' ],
                     controllers: [ 'Mymse@TestController.controller' ]
                 });
             });
@@ -406,9 +409,9 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 Class = Ext.define("YetAnotherNonexistingNamespace.Mymse", {
                     extend: 'Ext.app.Controller',
 
-                    models:      [ 'Fully.qualified.model.Flob' ],
-                    views:       [ 'Fully.qualified.view.Flob' ],
-                    stores:      [ 'Fully.qualified.store.Flob' ],
+                    models: [ 'Fully.qualified.model.Flob' ],
+                    views: [ 'Fully.qualified.view.Flob' ],
+                    stores: [ 'Fully.qualified.store.Flob' ],
                     controllers: [ 'Fully.qualified.controller.Flob' ]
                 });
             });
@@ -450,25 +453,25 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 extend: 'Ext.app.Controller',
 
                 refs: [{
-                    ref:         'fooPanel',
-                    selector:    'foopanel'
+                    ref: 'fooPanel',
+                    selector: 'foopanel'
                 }, {
-                    ref:         'barPanel',
-                    selector:    'barpanel',
-                    xtype:       'barpanel',
-                    autoCreate:  true
+                    ref: 'barPanel',
+                    selector: 'barpanel',
+                    xtype: 'barpanel',
+                    autoCreate: true
                 }, {
-                    ref:         'bazPanel',
-                    selector:    'bazpanel',
-                    xtype:       'bazpanel',
+                    ref: 'bazPanel',
+                    selector: 'bazpanel',
+                    xtype: 'bazpanel',
                     forceCreate: true
                 }, {
-                    ref:         'quxPanel',
-                    xtype:       'barpanel',
-                    autoCreate:  true
+                    ref: 'quxPanel',
+                    xtype: 'barpanel',
+                    autoCreate: true
                 }, {
-                    ref:         'fredComponent',
-                    autoCreate:  true
+                    ref: 'fredComponent',
+                    autoCreate: true
                 }, {
                     ref: 'destroyed',
                     xtype: 'component',
@@ -534,9 +537,11 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
         it("should be able to recreate an autoCreate after it is destroyed", function() {
             var o1 = ctrl.getDestroyed();
+
             expect(o1.isXType('component')).toBe(true);
             o1.destroy();
             var o2 = ctrl.getDestroyed();
+
             expect(o2.isXType('component')).toBe(true);
             expect(o2).not.toBe(o1);
         });
@@ -646,20 +651,20 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             expect(panelEventFired).toBeTruthy();
         });
 
-        describe("should ignore case", function () {
+        describe("should ignore case", function() {
             function ignoreCase(obj) {
-                it("should accept " + obj.specName, function () {
+                it("should accept " + obj.specName, function() {
                     fooPanel.fireEvent(obj.eventName, fooPanel);
                     expect(customEventFired).toBe(true);
                 });
             }
 
             Ext.Array.forEach([
-                {specName: 'lowercase', eventName: 'uppercustom'},
-                {specName: 'uppercase', eventName: 'UPPERCUSTOM'},
-                {specName: 'camelCase', eventName: 'upperCustom'},
-                {specName: 'mixed case', eventName: 'UpPErCustoM'}
-            ], function (obj) {
+                { specName: 'lowercase', eventName: 'uppercustom' },
+                { specName: 'uppercase', eventName: 'UPPERCUSTOM' },
+                { specName: 'camelCase', eventName: 'upperCustom' },
+                { specName: 'mixed case', eventName: 'UpPErCustoM' }
+            ], function(obj) {
                 ignoreCase(obj);
             });
         });

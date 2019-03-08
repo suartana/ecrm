@@ -36,7 +36,7 @@ topSuite("Ext.data.operation.Update", ['Ext.data.ArrayStore'], function() {
         };
     });
     
-    afterEach(function(){
+    afterEach(function() {
         op = clientAlien1 = serverAlien1 = clientAlien2 = serverAlien2 = null;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Alien');
@@ -45,7 +45,9 @@ topSuite("Ext.data.operation.Update", ['Ext.data.ArrayStore'], function() {
     describe("execute", function() {
         it("should call the proxy update method and pass itself", function() {
             var proxy = new Ext.data.proxy.Proxy();
+            
             spyOn(proxy, 'update').andReturn(new Ext.data.Request());
+            
             makeOperation({
                 proxy: proxy
             });

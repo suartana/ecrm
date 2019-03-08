@@ -50,7 +50,7 @@
  * For corresponding submit action, see {@link Ext.form.action.DirectSubmit}.
  */
 Ext.define('Ext.form.action.DirectLoad', {
-    extend:'Ext.form.action.Load',
+    extend: 'Ext.form.action.Load',
     alternateClassName: 'Ext.form.Action.DirectLoad',
     alias: 'formaction.directload',
     
@@ -96,7 +96,8 @@ Ext.define('Ext.form.action.DirectLoad', {
     onComplete: function(data) {
         if (data) {
             this.onSuccess(data);
-        } else {
+        }
+        else {
             this.onFailure(null);
         }
     }

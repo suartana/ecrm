@@ -53,12 +53,13 @@ Ext.define('Ext.util.Grouper', {
      * @param {Ext.data.Model} item The Model instance
      * @return {String}
      */
-    getGroupString: function (item) {
+    getGroupString: function(item) {
         var group = this._groupFn(item);
+
         return (group != null) ? String(group) : '';
     },
 
-    sortFn: function (item1, item2) {
+    sortFn: function(item1, item2) {
         var me = this,
             lhs = me._groupFn(item1),
             rhs = me._groupFn(item2),
@@ -95,16 +96,17 @@ Ext.define('Ext.util.Grouper', {
         return (lhs > rhs) ? 1 : (lhs < rhs ? -1 : 0);
     },
 
-    standardGroupFn: function (item) {
+    standardGroupFn: function(item) {
         var root = this._root;
+
         return (root ? item[root] : item)[this._property];
     },
 
-    updateSorterFn: function () {
+    updateSorterFn: function() {
         // don't callParent here - we don't want to smash sortFn w/sorterFn
     },
 
-    updateProperty: function () {
+    updateProperty: function() {
         // we don't callParent since that is related to sorterFn smashing sortFn
         if (!this.getGroupFn()) {
             this.setGroupFn(this.standardGroupFn);

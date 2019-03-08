@@ -1,16 +1,16 @@
-xtopSuite("Ext.layout.component.field.Trigger", function(){
+xtopSuite("Ext.layout.component.field.Trigger", function() {
     var text, trigger, width, height;
    
-    afterEach(function(){
+    afterEach(function() {
         Ext.destroy(text, trigger);
         text = trigger = width = null;
     });
     
-    describe("shrink wrap", function(){
+    describe("shrink wrap", function() {
        
         describe("without label", function() {
         
-            it("should have the same size as a text field with a single trigger", function(){
+            it("should have the same size as a text field with a single trigger", function() {
                 text = new Ext.form.field.Text({
                     renderTo: Ext.getBody(),
                     shrinkWrap: 3
@@ -25,7 +25,7 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
                 expect(trigger.inputEl.getWidth()).toBe(width - trigger.getTriggerWidth());
             });
        
-            it("should have the same size as a text field with a 3 triggers", function(){
+            it("should have the same size as a text field with a 3 triggers", function() {
                 text = new Ext.form.field.Text({
                     renderTo: Ext.getBody(),
                     shrinkWrap: 3
@@ -43,7 +43,7 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
                 expect(trigger.inputEl.getWidth()).toBe(width - trigger.getTriggerWidth());
             });
             
-            it("should respect an inputWidth", function(){
+            it("should respect an inputWidth", function() {
                 trigger = new Ext.form.field.Trigger({
                     renderTo: Ext.getBody(),
                     shrinkWrap: 3,
@@ -54,11 +54,11 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
             });
         });
         
-        describe("with label", function(){
+        describe("with label", function() {
             
             describe("labelAlign: 'left'", function() {
             
-                it("should take into account labelWidth", function(){
+                it("should take into account labelWidth", function() {
                     text = new Ext.form.field.Text({
                         renderTo: Ext.getBody(),
                         shrinkWrap: 3,
@@ -77,7 +77,7 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
                     expect(trigger.inputEl.getWidth()).toBe(width - trigger.getTriggerWidth() - trigger.labelWidth - trigger.labelPad);
                 });
             
-                it("should take into account labelPad", function(){
+                it("should take into account labelPad", function() {
                     text = new Ext.form.field.Text({
                         renderTo: Ext.getBody(),
                         shrinkWrap: 3,
@@ -97,8 +97,8 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
                 });
             });
             
-            describe("labelAlign: 'top'", function(){
-                it("should take ignore labelWidth", function(){
+            describe("labelAlign: 'top'", function() {
+                it("should take ignore labelWidth", function() {
                     text = new Ext.form.field.Text({
                         renderTo: Ext.getBody(),
                         shrinkWrap: 3,
@@ -119,7 +119,7 @@ xtopSuite("Ext.layout.component.field.Trigger", function(){
                     expect(trigger.inputEl.getWidth()).toBe(width - trigger.getTriggerWidth());
                 });
             
-                it("should take into account labelPad", function(){
+                it("should take into account labelPad", function() {
                     text = new Ext.form.field.Text({
                         renderTo: Ext.getBody(),
                         shrinkWrap: 3,

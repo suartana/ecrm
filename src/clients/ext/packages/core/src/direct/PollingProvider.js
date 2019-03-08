@@ -26,7 +26,7 @@
  */
 Ext.define('Ext.direct.PollingProvider', {
     extend: 'Ext.direct.JsonProvider',
-    alias:  'direct.pollingprovider',
+    alias: 'direct.pollingprovider',
     
     requires: [
         'Ext.Ajax',
@@ -117,7 +117,7 @@ Ext.define('Ext.direct.PollingProvider', {
         // when PollingProvider is constructed.
         if (pollFn && Ext.isString(pollFn)) {
             //<debug>
-            var fnName = pollFn;
+            var fnName = pollFn; // eslint-disable-line vars-on-top, one-var
             //</debug>
             
             me.pollFn = pollFn = Ext.direct.Manager.parseMethod(pollFn);
@@ -218,7 +218,7 @@ Ext.define('Ext.direct.PollingProvider', {
      * @private
      */
     onData: function(opt, success, response) {
-        var me = this, 
+        var me = this,
             i, len, events, event;
         
         if (success) {

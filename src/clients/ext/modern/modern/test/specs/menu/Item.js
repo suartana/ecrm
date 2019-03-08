@@ -1,3 +1,4 @@
+
 /* global Ext, jasmine, expect, xit */
 
 topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewController'], function() {
@@ -161,6 +162,20 @@ topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewCo
                     });
                     clickItem();
                     expect(spy).not.toHaveBeenCalled();
+                });
+
+                it("should add a click listener for touch devices", function() {
+                    makeMenu({
+                        text: 'Foo',
+                    });
+
+                    if (jasmine.supportsTouch) {
+                        expect(item.linkClickListener).not.toBe(null);
+                        expect(item.linkClickListener).not.toBe(item);
+                    }
+                    else {
+                        expect(item.linkClickListener).toBe(undefined);
+                    }
                 });
             });
 
@@ -428,6 +443,7 @@ topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewCo
 
     describe('when destroying', function () {
         var m;
+        var clickListener; 
 
         beforeEach(function () {
             makeMenu([{
@@ -438,6 +454,7 @@ topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewCo
                 }
             }]);
             m = menu.down('#office-submenu');
+            clickListener = item.linkClickListener;
             item.destroy();
         });
 
@@ -447,6 +464,17 @@ topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewCo
 
         it('should cleanup its menu reference', function () {
             expect(item.getMenu()).toBe(null);
+        });
+
+        it('should cleanup link click listener', function () {
+            expect(clickListener).not.toBe(item);
+            
+            if (jasmine.supportsTouch) {
+                expect(clickListener.observable.destroyed).toBe(true);
+            }
+
+            // After destroy linkClickListener should become null
+            expect(item.linkClickListener).toBe(null);          
         });
     });
 

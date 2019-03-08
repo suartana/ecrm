@@ -1,4 +1,4 @@
-describe('Ext.field.File', function () {
+topSuite('Ext.field.File', function () {
     var field, fileButton;
 
     function createField (cfg) {

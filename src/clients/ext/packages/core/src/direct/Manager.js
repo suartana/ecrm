@@ -140,7 +140,7 @@ Ext.define('Ext.direct.Manager', {
         me.mixins.observable.constructor.call(me);
 
         me.transactions = new Ext.util.MixedCollection();
-        me.providers    = new Ext.util.MixedCollection();
+        me.providers = new Ext.util.MixedCollection();
     },
 
     /**
@@ -157,7 +157,7 @@ Ext.define('Ext.direct.Manager', {
      *          id: 'remoting1',
      *          type: 'remoting',           // create a Ext.direct.RemotingProvider
      *          url:  'php/router.php',     // url to connect to the Ext Direct server-side router.
-     *          actions: {                  // each property within the actions object represents an Action
+     *          actions: {                  // each property in actions object represents an Action
      *              TestAction: [{          // array of Methods within each server side Action
      *                  name: 'doEcho',     // name of method
      *                  len:  1
@@ -253,7 +253,7 @@ Ext.define('Ext.direct.Manager', {
         // We may have been passed config object containing enough
         // information to create a Provider without further ado.
         type = config.type;
-        url  = config.url;
+        url = config.url;
         
         if (classes[type] && classes[type].checkConfig(config)) {
             provider = me.addProvider(config);
@@ -371,7 +371,8 @@ Ext.define('Ext.direct.Manager', {
     /**
      * Removes a transaction from the manager.
      *
-     * @param {String/Ext.direct.Transaction} transaction The transaction/id of transaction to remove
+     * @param {String/Ext.direct.Transaction} transaction The transaction/id of transaction
+     * to remove
      *
      * @return {Ext.direct.Transaction} transaction
      *
@@ -444,7 +445,7 @@ Ext.define('Ext.direct.Manager', {
             // from the window scope
             if (!resolved) {
                 parts = fn.split('.');
-                len   = parts.length;
+                len = parts.length;
 
                 while (current && i < len) {
                     current = current[parts[i]];

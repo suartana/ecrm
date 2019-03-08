@@ -231,6 +231,16 @@ topSuite("Ext.panel.Resizable", [
         expect(el.getHeight()).toBe(h);
     }
 
+    function getProxyBox(resizable) {
+        var proxy = resizable.getProxy();
+
+        if (!proxy) {
+            throw new Error('No proxy');
+        }
+
+        return proxy.getRegion();
+    }
+
     function runsExpectBoxOffset(offsets) {
         runs(function() {
             expectBoxOffset(offsets);
@@ -970,7 +980,7 @@ topSuite("Ext.panel.Resizable", [
                     function makeFloatPositionSuite(floated) {
                         describe(floated ? "as floated" : "as positioned", function() {
                             function expectProxyBox(newBox) {
-                                var box = resizable.getProxy().getRegion();
+                                var box = getProxyBox(resizable);
                                 compareBoxes(box, newBox);
                             }
 
@@ -1971,7 +1981,7 @@ topSuite("Ext.panel.Resizable", [
         describe("with split: true", function() {
             function makeDynamicSuite(dynamic) {
                 function expectProxyOffset(offset) {
-                    var box = resizable.getProxy().getRegion(),
+                    var box = getProxyBox(resizable),
                         key;
 
                     for (key in offset) {
@@ -2861,7 +2871,7 @@ topSuite("Ext.panel.Resizable", [
                                     startDrag(edge);
                                     moveBy(moveForEdge(edge, 50));
                                     runs(function() {
-                                        var proxyBox = resizable.getProxy().getRegion();
+                                        var proxyBox = getProxyBox(resizable);
                                         if (horz) {
                                             expect(proxyBox.top).toBe(startBox.top);
                                             expect(proxyBox.bottom).toBe(startBox.bottom);

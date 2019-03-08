@@ -3,6 +3,7 @@ topSuite("Ext.data.validator.Email", function() {
     
     function validate(value) {
         v = new Ext.data.validator.Email();
+        
         return v.validate(value);
     }
     
@@ -36,7 +37,7 @@ topSuite("Ext.data.validator.Email", function() {
         // these could be beefed up a bit, but don't really need to enumerate all kinds of emails
         // here unless we come across specific issues.
         it("should validate an email", function() {
-            expect(validate('support@sencha.com')).toBe(true);    
+            expect(validate('support@sencha.com')).toBe(true);
         });
     });
     

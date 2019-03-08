@@ -1,5 +1,4 @@
 topSuite("Ext.String", function() {
-    
     var S = Ext.String;
 
     describe("ellipsis", function() {
@@ -21,19 +20,19 @@ topSuite("Ext.String", function() {
                            
             it("should find a word break on ' '", function() {
                 expect(S.ellipsis(longString, 10, true)).toEqual("A...");
-            });      
+            });
             
             it("should be able to break on '.'", function() {
                 expect(S.ellipsis(longStringWithDot, 9, true)).toEqual("www...");
-            });  
+            });
             
             it("should be able to break on '!'", function() {
                 expect(S.ellipsis(longStringWithExclamationMark, 9, true)).toEqual("Yeah...");
-            }); 
+            });
             
             it("should be able to break on '?'", function() {
                 expect(S.ellipsis(longStringWithQuestionMark, 8, true)).toEqual("Who...");
-            });       
+            });
         });
     });
     
@@ -149,26 +148,26 @@ topSuite("Ext.String", function() {
             expect(S.htmlEncode(str)).toEqual("Fish &#39; Chips");
         });
 
-        describe("adding character entities", function(){
+        describe("adding character entities", function() {
 
             var src = "A string with entities: \u00e9\u00dc\u00e7\u00f1\u00b6",
                 encoded = "A string with entities: &egrave;&Uuml;&ccedil;&ntilde;&para;";
 
-            beforeEach(function(){
+            beforeEach(function() {
                 S.addCharacterEntities({
-                    "&Uuml;"  : "\u00dc",
+                    "&Uuml;": "\u00dc",
                     "&ccedil;": "\u00e7",
                     "&ntilde;": "\u00f1",
                     "&egrave;": "\u00e9",
-                    "&para;"  : "\u00b6"
+                    "&para;": "\u00b6"
                 });
             });
 
-            afterEach(function(){
+            afterEach(function() {
                 S.resetCharacterEntities();
             });
 
-            it("should allow extending the character entity set", function(){
+            it("should allow extending the character entity set", function() {
                 expect(S.htmlEncode(src)).toBe(encoded);
             });
         });
@@ -202,26 +201,26 @@ topSuite("Ext.String", function() {
             expect(S.htmlDecode(str)).toEqual("Fish ' Chips");
         });
 
-        describe("adding character entities", function(){
+        describe("adding character entities", function() {
 
             var src = "A string with entities: \u00e9\u00dc\u00e7\u00f1\u00b6",
                 encoded = "A string with entities: &egrave;&Uuml;&ccedil;&ntilde;&para;";
 
-            beforeEach(function(){
+            beforeEach(function() {
                 S.addCharacterEntities({
-                    "&Uuml;"  : "\u00dc",
+                    "&Uuml;": "\u00dc",
                     "&ccedil;": "\u00e7",
                     "&ntilde;": "\u00f1",
                     "&egrave;": "\u00e9",
-                    "&para;"  : "\u00b6"
+                    "&para;": "\u00b6"
                 });
             });
 
-            afterEach(function(){
+            afterEach(function() {
                 S.resetCharacterEntities();
             });
 
-            it("should allow extending the character entity set", function(){
+            it("should allow extending the character entity set", function() {
                 expect(S.htmlDecode(encoded)).toBe(src);
             });
         });
@@ -342,64 +341,64 @@ topSuite("Ext.String", function() {
         });
     });
     
-    describe("urlAppend", function(){
-        it("should leave the string untouched if the second argument is empty", function(){
-            expect(S.urlAppend('sencha.com')).toEqual('sencha.com');    
+    describe("urlAppend", function() {
+        it("should leave the string untouched if the second argument is empty", function() {
+            expect(S.urlAppend('sencha.com')).toEqual('sencha.com');
         });
         
-        it("should append a ? if one doesn't exist", function(){
+        it("should append a ? if one doesn't exist", function() {
             expect(S.urlAppend('sencha.com', 'foo=bar')).toEqual('sencha.com?foo=bar');
         });
         
-        it("should append any new values with & if a ? exists", function(){
+        it("should append any new values with & if a ? exists", function() {
             expect(S.urlAppend('sencha.com?x=y', 'foo=bar')).toEqual('sencha.com?x=y&foo=bar');
         });
     });
     
-    describe("capitalize", function(){
-        it("should handle an empty string", function(){
+    describe("capitalize", function() {
+        it("should handle an empty string", function() {
             expect(S.capitalize('')).toEqual('');
         });
         
-        it("should capitalize the first letter of the string", function(){
+        it("should capitalize the first letter of the string", function() {
             expect(S.capitalize('open')).toEqual('Open');
         });
         
-        it("should leave the first letter capitalized if it is already capitalized", function(){
+        it("should leave the first letter capitalized if it is already capitalized", function() {
             expect(S.capitalize('Closed')).toEqual('Closed');
         });
         
-        it("should capitalize a single letter", function(){
+        it("should capitalize a single letter", function() {
             expect(S.capitalize('a')).toEqual('A');
         });
         
-        it("should capitalize even when spaces are included", function(){
+        it("should capitalize even when spaces are included", function() {
             expect(S.capitalize('this is a sentence')).toEqual('This is a sentence');
         });
     });
 
-    describe("uncapitalize", function(){
-        it("should handle an empty string", function(){
+    describe("uncapitalize", function() {
+        it("should handle an empty string", function() {
             expect(S.uncapitalize('')).toEqual('');
         });
         
-        it("should uncapitalize the first letter of the string", function(){
+        it("should uncapitalize the first letter of the string", function() {
             expect(S.uncapitalize('Foo')).toEqual('foo');
         });
         
         it("should ignore case in the rest of the string", function() {
-            expect(S.uncapitalize('FooBar')).toEqual('fooBar'); 
+            expect(S.uncapitalize('FooBar')).toEqual('fooBar');
         });
         
-        it("should leave the first letter uncapitalized if it is already uncapitalized", function(){
+        it("should leave the first letter uncapitalized if it is already uncapitalized", function() {
             expect(S.uncapitalize('fooBar')).toEqual('fooBar');
         });
         
-        it("should uncapitalize a single letter", function(){
+        it("should uncapitalize a single letter", function() {
             expect(S.uncapitalize('F')).toEqual('f');
         });
 
-        it("should uncapitalize even when spaces are included", function(){
+        it("should uncapitalize even when spaces are included", function() {
             expect(S.uncapitalize('This is a sentence')).toEqual('this is a sentence');
         });
     });
@@ -409,8 +408,8 @@ topSuite("Ext.String", function() {
             expect(S.repeat('an ordinary string', 0)).toBe('');
         });
         
-        it("should return an empty string if the count is < 0", function(){
-            expect(S.repeat('an ordinary string', -1)).toBe('');    
+        it("should return an empty string if the count is < 0", function() {
+            expect(S.repeat('an ordinary string', -1)).toBe('');
         });
         it("should repeat the pattern as many times as required using the specified separator", function() {
             expect(S.repeat('an ordinary string', 1, '/')).toBe('an ordinary string');
@@ -423,263 +422,272 @@ topSuite("Ext.String", function() {
         });
     });
 
-    describe("splitWords", function () {
-        it("should handle no args", function () {
+    describe("splitWords", function() {
+        it("should handle no args", function() {
             var words = S.splitWords();
+
             expect(Ext.encode(words)).toEqual('[]');
         });
-        it("should handle null", function () {
+        it("should handle null", function() {
             var words = S.splitWords(null);
+
             expect(Ext.encode(words)).toEqual('[]');
         });
-        it("should handle an empty string", function () {
+        it("should handle an empty string", function() {
             var words = S.splitWords('');
+
             expect(Ext.encode(words)).toEqual('[]');
         });
-        it("should handle one trimmed word", function () {
+        it("should handle one trimmed word", function() {
             var words = S.splitWords('foo');
+
             expect(Ext.encode(words)).toEqual('["foo"]');
         });
-        it("should handle one word with spaces around it", function () {
+        it("should handle one word with spaces around it", function() {
             var words = S.splitWords(' foo ');
+
             expect(Ext.encode(words)).toEqual('["foo"]');
         });
-        it("should handle two trimmed words", function () {
+        it("should handle two trimmed words", function() {
             var words = S.splitWords('foo bar');
+
             expect(Ext.encode(words)).toEqual('["foo","bar"]');
         });
-        it("should handle two untrimmed words", function () {
+        it("should handle two untrimmed words", function() {
             var words = S.splitWords('  foo  bar  ');
+
             expect(Ext.encode(words)).toEqual('["foo","bar"]');
         });
-        it("should handle five trimmed words", function () {
+        it("should handle five trimmed words", function() {
             var words = S.splitWords('foo bar bif boo foobar');
+
             expect(Ext.encode(words)).toEqual('["foo","bar","bif","boo","foobar"]');
         });
-        it("should handle five untrimmed words", function () {
+        it("should handle five untrimmed words", function() {
             var words = S.splitWords(' foo   bar   bif   boo  foobar    \t');
+
             expect(Ext.encode(words)).toEqual('["foo","bar","bif","boo","foobar"]');
         });
     });
     
-    describe("insert", function(){
+    describe("insert", function() {
         describe("undefined/null/empty values", function() {
-            it("should handle an undefined original string", function(){
+            it("should handle an undefined original string", function() {
                 expect(S.insert(undefined, 'foo', 0)).toBe('foo');
             });
         
-            it("should handle a null original string", function(){
+            it("should handle a null original string", function() {
                 expect(S.insert(null, 'foo', 0)).toBe('foo');
             });
         
-            it("should handle an empty original string", function(){
+            it("should handle an empty original string", function() {
                 expect(S.insert('', 'foo', 0)).toBe('foo');
             });
         
-            it("should handle an undefined substring", function(){
+            it("should handle an undefined substring", function() {
                 expect(S.insert('foo', undefined)).toBe('foo');
             });
         
-            it("should handle a null substring", function(){
+            it("should handle a null substring", function() {
                 expect(S.insert('foo', null)).toBe('foo');
             });
         
-            it("should handle an empty substring", function(){
+            it("should handle an empty substring", function() {
                 expect(S.insert('foo', '')).toBe('foo');
             });
         });
         
-        describe("index", function(){
+        describe("index", function() {
             describe("invalid indexes", function() {
-                it("should default the index to the end of the string", function(){
+                it("should default the index to the end of the string", function() {
                     expect(S.insert('foo', 'bar')).toBe('foobar');
                 });
                 
-                it("should put any negative index greater than the length at the start", function(){
-                    expect(S.insert('foo', 'bar', -100)).toBe('barfoo');    
+                it("should put any negative index greater than the length at the start", function() {
+                    expect(S.insert('foo', 'bar', -100)).toBe('barfoo');
                 });
                 
-                it("should put any index greater than the string length at the end", function(){
-                    expect(S.insert('foo', 'bar', 100)).toBe('foobar');    
+                it("should put any index greater than the string length at the end", function() {
+                    expect(S.insert('foo', 'bar', 100)).toBe('foobar');
                 });
             });
             
-            describe("valid index", function(){
-                it("should insert at the start with 0 index", function(){
-                    expect(S.insert('foo', 'bar', 0)).toBe('barfoo');    
-                });  
-                
-                it("should insert at the end with index = len", function(){
-                    expect(S.insert('foo', 'bar', 3)).toBe('foobar');    
-                });  
-                
-                it("should insert at the start with index = -len", function(){
-                    expect(S.insert('foo', 'bar', -3)).toBe('barfoo');    
+            describe("valid index", function() {
+                it("should insert at the start with 0 index", function() {
+                    expect(S.insert('foo', 'bar', 0)).toBe('barfoo');
                 });
                 
-                it("should insert at the before the last character", function(){
-                    expect(S.insert('foo', 'bar', 2)).toBe('fobaro');  
+                it("should insert at the end with index = len", function() {
+                    expect(S.insert('foo', 'bar', 3)).toBe('foobar');
                 });
                 
-                it("should insert after the first character", function(){
-                    expect(S.insert('foo', 'bar', 1)).toBe('fbaroo');  
+                it("should insert at the start with index = -len", function() {
+                    expect(S.insert('foo', 'bar', -3)).toBe('barfoo');
                 });
                 
-                it("should insert before the last character (negative index)", function(){
+                it("should insert at the before the last character", function() {
+                    expect(S.insert('foo', 'bar', 2)).toBe('fobaro');
+                });
+                
+                it("should insert after the first character", function() {
+                    expect(S.insert('foo', 'bar', 1)).toBe('fbaroo');
+                });
+                
+                it("should insert before the last character (negative index)", function() {
                     expect(S.insert('foo', 'bar', -1)).toBe('fobaro');
                 });
                 
-                it("should insert after the first character (negative index)", function(){
-                    expect(S.insert('foo', 'bar', -2)).toBe('fbaroo');    
+                it("should insert after the first character (negative index)", function() {
+                    expect(S.insert('foo', 'bar', -2)).toBe('fbaroo');
                 });
             });
         });
     });
     
-    describe("startsWith", function(){
+    describe("startsWith", function() {
         
-        describe("invalid params", function(){
-            it("should return false when the original string is null", function(){
-                expect(S.startsWith(null, '')).toBe(false);    
-            });  
-            
-            it("should return false when the original string is undefined", function(){
-                expect(S.startsWith(undefined, '')).toBe(false);    
+        describe("invalid params", function() {
+            it("should return false when the original string is null", function() {
+                expect(S.startsWith(null, '')).toBe(false);
             });
             
-            it("should return false when the substring is null", function(){
-                expect(S.startsWith('', null)).toBe(false);    
-            });  
+            it("should return false when the original string is undefined", function() {
+                expect(S.startsWith(undefined, '')).toBe(false);
+            });
+            
+            it("should return false when the substring is null", function() {
+                expect(S.startsWith('', null)).toBe(false);
+            });
             
             
-            it("should return false when the substring is longer than the string", function(){
-                expect(S.startsWith('a', 'foo')).toBe(false);    
+            it("should return false when the substring is longer than the string", function() {
+                expect(S.startsWith('a', 'foo')).toBe(false);
             });
         });
         
-        describe("mixed strings", function(){
-            it("should return true when both strings are empty", function(){
-                expect(S.startsWith('', '')).toBe(true);    
+        describe("mixed strings", function() {
+            it("should return true when both strings are empty", function() {
+                expect(S.startsWith('', '')).toBe(true);
             });
             
-            it("should return true when the substring is empty", function(){
-                expect(S.endsWith('foo', '')).toBe(true);    
+            it("should return true when the substring is empty", function() {
+                expect(S.endsWith('foo', '')).toBe(true);
             });
             
-            it("should return true when both strings are the same", function(){
-                expect(S.startsWith('foo', 'foo')).toBe(true);    
+            it("should return true when both strings are the same", function() {
+                expect(S.startsWith('foo', 'foo')).toBe(true);
             });
             
-            it("should return true when the substring is at the start of the string", function(){
-                expect(S.startsWith('foobar', 'foo')).toBe(true);    
+            it("should return true when the substring is at the start of the string", function() {
+                expect(S.startsWith('foobar', 'foo')).toBe(true);
             });
             
-            it("should return true when the substring is at the start and in other places", function(){
-                expect(S.startsWith('foobarfoo', 'foo')).toBe(true);    
+            it("should return true when the substring is at the start and in other places", function() {
+                expect(S.startsWith('foobarfoo', 'foo')).toBe(true);
             });
             
-            it("should return false when the substring appears in the middle of the string", function(){
-                expect(S.startsWith('foobarbaz', 'bar')).toBe(false);    
+            it("should return false when the substring appears in the middle of the string", function() {
+                expect(S.startsWith('foobarbaz', 'bar')).toBe(false);
             });
             
-            it("should return false when the substring appears at the end of the string", function(){
-                expect(S.startsWith('foobarbaz', 'baz')).toBe(false);    
+            it("should return false when the substring appears at the end of the string", function() {
+                expect(S.startsWith('foobarbaz', 'baz')).toBe(false);
             });
         });
         
-        describe("ignoreCase", function(){
-            it("should match when both are lower case", function(){
-                expect(S.startsWith('foobarbaz', 'foo', true)).toBe(true);    
+        describe("ignoreCase", function() {
+            it("should match when both are lower case", function() {
+                expect(S.startsWith('foobarbaz', 'foo', true)).toBe(true);
             });
             
-            it("should match when both are upper case", function(){
-                expect(S.startsWith('FOOBARBAZ', 'FOO', true)).toBe(true);    
+            it("should match when both are upper case", function() {
+                expect(S.startsWith('FOOBARBAZ', 'FOO', true)).toBe(true);
             });
             
-            it("should match when the original is upper, substring is lower", function(){
-                expect(S.startsWith('FOOBARBAZ', 'foo', true)).toBe(true);    
+            it("should match when the original is upper, substring is lower", function() {
+                expect(S.startsWith('FOOBARBAZ', 'foo', true)).toBe(true);
             });
             
-            it("should match when the original is lower, substring is upper", function(){
-                expect(S.startsWith('foobarbaz', 'FOO', true)).toBe(true);    
+            it("should match when the original is lower, substring is upper", function() {
+                expect(S.startsWith('foobarbaz', 'FOO', true)).toBe(true);
             });
             
-            it("should match with mixed case", function(){
-                expect(S.startsWith('fOobarbaz', 'FoO', true)).toBe(true);    
+            it("should match with mixed case", function() {
+                expect(S.startsWith('fOobarbaz', 'FoO', true)).toBe(true);
             });
         });
             
     });
     
-    describe("endsWith", function(){
+    describe("endsWith", function() {
         
-        describe("invalid params", function(){
-            it("should return false when the original string is null", function(){
-                expect(S.endsWith(null, '')).toBe(false);    
-            });  
-            
-            it("should return false when the original string is undefined", function(){
-                expect(S.endsWith(undefined, '')).toBe(false);    
+        describe("invalid params", function() {
+            it("should return false when the original string is null", function() {
+                expect(S.endsWith(null, '')).toBe(false);
             });
             
-            it("should return false when the substring is null", function(){
-                expect(S.endsWith('', null)).toBe(false);    
-            });  
+            it("should return false when the original string is undefined", function() {
+                expect(S.endsWith(undefined, '')).toBe(false);
+            });
+            
+            it("should return false when the substring is null", function() {
+                expect(S.endsWith('', null)).toBe(false);
+            });
                         
-            it("should return false when the substring is longer than the string", function(){
-                expect(S.endsWith('a', 'foo')).toBe(false);    
+            it("should return false when the substring is longer than the string", function() {
+                expect(S.endsWith('a', 'foo')).toBe(false);
             });
         });
         
-        describe("mixed strings", function(){
-            it("should return true when both strings are empty", function(){
-                expect(S.endsWith('', '')).toBe(true);    
+        describe("mixed strings", function() {
+            it("should return true when both strings are empty", function() {
+                expect(S.endsWith('', '')).toBe(true);
             });
             
-            it("should return true when the substring is empty", function(){
-                expect(S.endsWith('foo', '')).toBe(true);    
+            it("should return true when the substring is empty", function() {
+                expect(S.endsWith('foo', '')).toBe(true);
             });
             
-            it("should return true when both strings are the same", function(){
-                expect(S.endsWith('foo', 'foo')).toBe(true);    
+            it("should return true when both strings are the same", function() {
+                expect(S.endsWith('foo', 'foo')).toBe(true);
             });
             
-            it("should return true when the substring is at the end of the string", function(){
-                expect(S.endsWith('foobar', 'bar')).toBe(true);    
+            it("should return true when the substring is at the end of the string", function() {
+                expect(S.endsWith('foobar', 'bar')).toBe(true);
             });
             
-            it("should return true when the substring is at the end and in other places", function(){
-                expect(S.endsWith('foobarfoo', 'foo')).toBe(true);    
+            it("should return true when the substring is at the end and in other places", function() {
+                expect(S.endsWith('foobarfoo', 'foo')).toBe(true);
             });
             
-            it("should return false when the substring appears in the middle of the string", function(){
-                expect(S.endsWith('foobarbaz', 'bar')).toBe(false);    
+            it("should return false when the substring appears in the middle of the string", function() {
+                expect(S.endsWith('foobarbaz', 'bar')).toBe(false);
             });
             
-            it("should return false when the substring appears at the start of the string", function(){
-                expect(S.endsWith('foobarbaz', 'foo')).toBe(false);    
+            it("should return false when the substring appears at the start of the string", function() {
+                expect(S.endsWith('foobarbaz', 'foo')).toBe(false);
             });
         });
         
-        describe("ignoreCase", function(){
-            it("should match when both are lower case", function(){
-                expect(S.endsWith('foobarbaz', 'baz', true)).toBe(true);    
+        describe("ignoreCase", function() {
+            it("should match when both are lower case", function() {
+                expect(S.endsWith('foobarbaz', 'baz', true)).toBe(true);
             });
             
-            it("should match when both are upper case", function(){
-                expect(S.endsWith('FOOBARBAZ', 'BAZ', true)).toBe(true);    
+            it("should match when both are upper case", function() {
+                expect(S.endsWith('FOOBARBAZ', 'BAZ', true)).toBe(true);
             });
             
-            it("should match when the original is upper, substring is lower", function(){
-                expect(S.endsWith('FOOBARBAZ', 'baz', true)).toBe(true);    
+            it("should match when the original is upper, substring is lower", function() {
+                expect(S.endsWith('FOOBARBAZ', 'baz', true)).toBe(true);
             });
             
-            it("should match when the original is lower, substring is upper", function(){
-                expect(S.endsWith('foobarbaz', 'BAZ', true)).toBe(true);    
+            it("should match when the original is lower, substring is upper", function() {
+                expect(S.endsWith('foobarbaz', 'BAZ', true)).toBe(true);
             });
             
-            it("should match with mixed case", function(){
-                expect(S.endsWith('foobarbAz', 'BaZ', true)).toBe(true);    
+            it("should match with mixed case", function() {
+                expect(S.endsWith('foobarbAz', 'BaZ', true)).toBe(true);
             });
         });
             

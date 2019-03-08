@@ -10,6 +10,7 @@ topSuite("Ext.grid.column.Number", ['Ext.grid.Panel'], function() {
     
     function getCellText(rowIdx, colIdx) {
         var cell = getCell(rowIdx, colIdx);
+
         return cell.querySelector(grid.getView().innerSelector).innerHTML;
     }
     
@@ -28,7 +29,7 @@ topSuite("Ext.grid.column.Number", ['Ext.grid.Panel'], function() {
                 format: '0,000',
                 text: 'Col',
                 dataIndex: 'field',
-                flex: 1    
+                flex: 1
             }],
             width: 400,
             height: 100,
@@ -59,9 +60,11 @@ topSuite("Ext.grid.column.Number", ['Ext.grid.Panel'], function() {
         it("should render render non-number values", function() {
             makeGrid(null);
             var text = getCellText(0, 0);
+
             if (text === '&nbsp;') {
                 text = '&#160;';
             }
+
             expect(text).toBe('&#160;');
         });
         

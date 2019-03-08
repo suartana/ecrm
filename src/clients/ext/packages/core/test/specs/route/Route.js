@@ -1,4 +1,4 @@
-topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
+topSuite("Ext.route.Route", ['Ext.app.Controller'], function() {
     var actionExecuted = false,
         beforeExecuted = false,
         numArgs = 0,
@@ -7,7 +7,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         controller,
         beforeSpy, beforeBlockSpy, actionSpy;
 
-    function promiseHasBeenResolved (promise) {
+    function promiseHasBeenResolved(promise) {
         var resolved = spyOn({
                 test: Ext.emptyFn
             }, 'test'),
@@ -19,13 +19,13 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
         waitsForSpy(resolved, 'Promise was never resolved');
 
-        runs(function () {
+        runs(function() {
             expect(resolved).toHaveBeenCalled();
             expect(rejected).not.toHaveBeenCalled();
         });
     }
 
-    function promiseHasBeenRejected (promise) {
+    function promiseHasBeenRejected(promise) {
         var resolved = spyOn({
                 test: Ext.emptyFn
             }, 'test'),
@@ -37,15 +37,15 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
         waitsForSpy(rejected, 'Promise was never rejected');
 
-        runs(function () {
+        runs(function() {
             expect(rejected).toHaveBeenCalled();
             expect(resolved).not.toHaveBeenCalled();
         });
     }
 
-    beforeEach(function () {
+    beforeEach(function() {
         controller = new Ext.app.Controller({
-            beforeHandleRoute: function () {
+            beforeHandleRoute: function() {
                 numBeforeArgs += arguments.length;
                 beforeExecuted = true;
 
@@ -54,16 +54,16 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 action.resume();
             },
 
-            beforeHandleRouteBlock: function () {
+            beforeHandleRouteBlock: function() {
                 numBeforeArgs += arguments.length;
                 beforeExecuted = true;
 
                 var action = arguments[arguments.length - 1];
 
-                action.stop(); //stop the current route
+                action.stop(); // stop the current route
             },
 
-            handleRoute: function () {
+            handleRoute: function() {
                 numArgs = arguments.length;
                 actionExecuted = true;
             }
@@ -74,7 +74,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         actionSpy = spyOn(controller, 'handleRoute').andCallThrough();
     });
 
-    afterEach(function () {
+    afterEach(function() {
         controller.destroy();
 
         controller = null;
@@ -84,51 +84,51 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         numBeforeArgs = 0;
     });
 
-    describe("should recognize tokens", function () {
-        it("recognize 'foo/bar'", function () {
+    describe("should recognize tokens", function() {
+        it("recognize 'foo/bar'", function() {
             var route = new Ext.route.Route({
-                controller : controller,
-                action     : 'handleRoute',
-                url        : token
+                controller: controller,
+                action: 'handleRoute',
+                url: token
             });
 
             expect(route.recognize(token)).toBeTruthy();
         });
 
-        describe("optional parameters", function () {
-            it("recognize 'foo/:id'", function () {
-                //:id is a param
+        describe("optional parameters", function() {
+            it("recognize 'foo/:id'", function() {
+                // :id is a param
                 var route = new Ext.route.Route({
-                    controller : controller,
-                    action     : 'handleRoute',
-                    url        : 'foo/:id'
+                    controller: controller,
+                    action: 'handleRoute',
+                    url: 'foo/:id'
                 });
 
                 expect(route.recognize('foo/123')).toBeTruthy();
             });
 
-            it("recognize 'foo/:id' using condition for :id", function () {
+            it("recognize 'foo/:id' using condition for :id", function() {
                 var route = new Ext.route.Route({
-                    controller : controller,
-                    action     : 'handleRoute',
-                    url        : 'foo:id',
-                    conditions : {
-                        //makes :id param optional
-                        ':id' : '(?:(?:/){1}([%a-zA-Z0-9\-\_\s,]+))?'
+                    controller: controller,
+                    action: 'handleRoute',
+                    url: 'foo:id',
+                    conditions: {
+                        // makes :id param optional
+                        ':id': '(?:(?:/){1}([%a-zA-Z0-9\-\_\s,]+))?'
                     }
                 });
 
                 expect(route.recognize('foo/123')).toBeTruthy();
             });
 
-            it("recognize 'foo/:id' using condition for :id but without colon", function () {
+            it("recognize 'foo/:id' using condition for :id but without colon", function() {
                 var route = new Ext.route.Route({
-                    controller : controller,
-                    action     : 'handleRoute',
-                    url        : 'foo:id',
-                    conditions : {
-                        //makes :id param optional
-                        'id' : '(?:(?:/){1}([%a-zA-Z0-9\-\_\s,]+))?'
+                    controller: controller,
+                    action: 'handleRoute',
+                    url: 'foo:id',
+                    conditions: {
+                        // makes :id param optional
+                        'id': '(?:(?:/){1}([%a-zA-Z0-9\-\_\s,]+))?'
                     }
                 });
 
@@ -137,8 +137,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         });
     });
 
-    describe("fire action", function () {
-        it("should fire action", function () {
+    describe("fire action", function() {
+        it("should fire action", function() {
             var route = new Ext.route.Route({
                     url: token,
                     handlers: [
@@ -153,12 +153,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionExecuted).toEqual(true);
             });
         });
 
-        it("should fire action using caseInsensitve", function () {
+        it("should fire action using caseInsensitve", function() {
             var route = new Ext.route.Route({
                     url: token,
                     caseInsensitive: true,
@@ -174,14 +174,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionExecuted).toEqual(true);
             });
         });
     });
 
-    describe("handle before action", function () {
-        it("should continue action execution", function () {
+    describe("handle before action", function() {
+        it("should continue action execution", function() {
             var route = new Ext.route.Route({
                     url: token,
                     handlers: [
@@ -197,12 +197,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(beforeExecuted && actionExecuted).toEqual(true);
             });
         });
 
-        it("should block action execution", function () {
+        it("should block action execution", function() {
             var route = new Ext.route.Route({
                     url: token,
                     handlers: [
@@ -218,14 +218,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenRejected(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(beforeExecuted && !actionExecuted).toEqual(true);
             });
         });
     });
 
-    describe("number of arguments", function () {
-        it("with a before action", function () {
+    describe("number of arguments", function() {
+        it("with a before action", function() {
             var route = new Ext.route.Route({
                     url: 'foo/:bar',
                     handlers: [
@@ -241,12 +241,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(numBeforeArgs + numArgs).toBe(3);
             });
         });
 
-        it("without a before action", function () {
+        it("without a before action", function() {
             var route = new Ext.route.Route({
                     url: 'foo/:bar',
                     handlers: [
@@ -261,14 +261,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(numBeforeArgs + numArgs).toBe(1);
             });
         });
     });
 
-    describe("controller activity", function () {
-        it("should not execute if the controller is inactive", function () {
+    describe("controller activity", function() {
+        it("should not execute if the controller is inactive", function() {
             var route = new Ext.route.Route({
                     url: token,
                     handlers: [
@@ -287,12 +287,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionExecuted).toBeFalsy();
             });
         });
 
-        it("should recognize if the controller is inactive & the allowInactive flag is set", function () {
+        it("should recognize if the controller is inactive & the allowInactive flag is set", function() {
             var route = new Ext.route.Route({
                     url: token,
                     allowInactive: true,
@@ -312,16 +312,16 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionExecuted).toBeTruthy();
             });
         });
     });
 
-    describe("onExit", function () {
+    describe("onExit", function() {
         var route;
 
-        beforeEach(function () {
+        beforeEach(function() {
             route = new Ext.route.Route({
                 url: token,
                 handlers: [
@@ -335,14 +335,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             route.lastToken = 'foo';
         });
 
-        it("should execute exit handler", function () {
+        it("should execute exit handler", function() {
             route.onExit();
 
             expect(actionExecuted).toBeTruthy();
             expect(actionSpy).toHaveBeenCalledWith('foo');
         });
 
-        it("should not execute if the controller is inactive", function () {
+        it("should not execute if the controller is inactive", function() {
             controller.deactivate();
 
             route.onExit();
@@ -351,7 +351,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             expect(actionSpy).not.toHaveBeenCalled();
         });
 
-        it("should recognize if the controller is inactive & the allowInactive flag is set", function () {
+        it("should recognize if the controller is inactive & the allowInactive flag is set", function() {
             route.setAllowInactive(true);
 
             route.onExit();
@@ -361,10 +361,10 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         });
     });
 
-    describe("beforeroute event", function () {
+    describe("beforeroute event", function() {
         var route;
 
-        beforeEach(function () {
+        beforeEach(function() {
             route = new Ext.route.Route({
                 url: token,
                 handlers: [
@@ -376,14 +376,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             if (route) {
                 route.destroy();
             }
         });
 
-        describe("using Ext.on", function () {
-            it("should fire event", function () {
+        describe("using Ext.on", function() {
+            it("should fire event", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -396,21 +396,21 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should execute before added in event listener", function () {
+            it("should execute before added in event listener", function() {
                 var fn = spyOn({
-                        test: function (action) {
+                        test: function(action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough(),
                     recognize = route.recognize(token),
                     promise;
 
-                Ext.on('beforeroute', function (action) {
+                Ext.on('beforeroute', function(action) {
                     action.before(fn);
                 }, null, { single: true });
 
@@ -418,19 +418,19 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should execute action added in event listener", function () {
+            it("should execute action added in event listener", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
                     recognize = route.recognize(token),
                     promise;
 
-                Ext.on('beforeroute', function (action) {
+                Ext.on('beforeroute', function(action) {
                     action.action(fn);
                 }, null, { single: true });
 
@@ -438,21 +438,21 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should not execute before if return false", function () {
+            it("should not execute before if return false", function() {
                 var fn = spyOn({
-                        test: function (action) {
+                        test: function(action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough(),
                     recognize = route.recognize(token),
                     promise;
 
-                Ext.on('beforeroute', function (action) {
+                Ext.on('beforeroute', function(action) {
                     action.before(fn);
 
                     return false;
@@ -462,19 +462,19 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenRejected(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).not.toHaveBeenCalled();
                 });
             });
 
-            it("should not execute action if return false", function () {
+            it("should not execute action if return false", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
                     recognize = route.recognize(token),
                     promise;
 
-                Ext.on('beforeroute', function (action) {
+                Ext.on('beforeroute', function(action) {
                     action.action(fn);
 
                     return false;
@@ -484,23 +484,23 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenRejected(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).not.toHaveBeenCalled();
                 });
             });
         });
 
-        describe("using event domain in controller", function () {
+        describe("using event domain in controller", function() {
             var controller;
 
-            afterEach(function () {
+            afterEach(function() {
                 if (controller) {
                     controller.destroy();
                     controller = null;
                 }
             });
 
-            it("should be listenable", function () {
+            it("should be listenable", function() {
                 var controller = new Ext.app.Controller({
                         listen: {
                             global: {
@@ -516,14 +516,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should execute before added in event listener", function () {
+            it("should execute before added in event listener", function() {
                 var fn = spyOn({
-                        test: function (action) {
+                        test: function(action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough(),
@@ -534,7 +534,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRoute: function (action) {
+                        onBeforeRoute: function(action) {
                             action.before(fn);
                         }
                     }),
@@ -543,12 +543,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should execute action added in event listener", function () {
+            it("should execute action added in event listener", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -559,7 +559,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRoute: function (action) {
+                        onBeforeRoute: function(action) {
                             action.action(fn);
                         }
                     }),
@@ -568,12 +568,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).toHaveBeenCalled();
                 });
             });
 
-            it("should not execute action when an added before stops the action", function () {
+            it("should not execute action when an added before stops the action", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -584,9 +584,9 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRoute: function (action) {
+                        onBeforeRoute: function(action) {
                             action
-                                .before(function (action) {
+                                .before(function(action) {
                                     action.stop();
                                 })
                                 .action(fn);
@@ -597,14 +597,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenRejected(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).not.toHaveBeenCalled();
                 });
             });
 
-            it("should not execute before if return false", function () {
+            it("should not execute before if return false", function() {
                 var fn = spyOn({
-                        test: function (action) {
+                        test: function(action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough(),
@@ -615,7 +615,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRoute: function (action) {
+                        onBeforeRoute: function(action) {
                             action.before(fn);
 
                             return false;
@@ -626,12 +626,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenRejected(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).not.toHaveBeenCalled();
                 });
             });
 
-            it("should not execute action if return false", function () {
+            it("should not execute action if return false", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -642,7 +642,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRoute: function (action) {
+                        onBeforeRoute: function(action) {
                             action.action(fn);
 
                             return false;
@@ -653,17 +653,17 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenRejected(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(fn).not.toHaveBeenCalled();
                 });
             });
         });
     });
 
-    describe("beforerouteexit event", function () {
+    describe("beforerouteexit event", function() {
         var route;
 
-        beforeEach(function () {
+        beforeEach(function() {
             route = new Ext.route.Route({
                 url: token,
                 handlers: [
@@ -677,14 +677,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             route.lastToken = 'foo';
         });
 
-        afterEach(function () {
+        afterEach(function() {
             if (route) {
                 route.destroy();
             }
         });
 
-        describe("using Ext.on", function () {
-            it("should fire event", function () {
+        describe("using Ext.on", function() {
+            it("should fire event", function() {
                 var fn = spyOn({
                     test: Ext.emptyFn
                 }, 'test');
@@ -696,16 +696,16 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should execute before added in event listener", function () {
+            it("should execute before added in event listener", function() {
                 var fn = spyOn({
-                    test: function (lastToken, action) {
+                    test: function(lastToken, action) {
                         expect(lastToken).toBe('foo');
 
                         action.resume();
                     }
                 }, 'test').andCallThrough();
 
-                Ext.on('beforerouteexit', function (action) {
+                Ext.on('beforerouteexit', function(action) {
                     action.before(fn);
                 }, null, { single: true });
 
@@ -714,12 +714,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should execute action added in event listener", function () {
+            it("should execute action added in event listener", function() {
                 var fn = spyOn({
                     test: Ext.emptyFn
                 }, 'test');
 
-                Ext.on('beforerouteexit', function (action) {
+                Ext.on('beforerouteexit', function(action) {
                     action.action(fn);
                 }, null, { single: true });
 
@@ -728,14 +728,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should not execute before if return false", function () {
+            it("should not execute before if return false", function() {
                 var fn = spyOn({
-                        test: function (lastToken, action) {
+                        test: function(lastToken, action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough();
 
-                Ext.on('beforerouteexit', function (action) {
+                Ext.on('beforerouteexit', function(action) {
                     action.before(fn);
 
                     return false;
@@ -746,12 +746,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).not.toHaveBeenCalled();
             });
 
-            it("should not execute action if return false", function () {
+            it("should not execute action if return false", function() {
                 var fn = spyOn({
                     test: Ext.emptyFn
                 }, 'test');
 
-                Ext.on('beforerouteexit', function (action) {
+                Ext.on('beforerouteexit', function(action) {
                     action.action(fn);
 
                     return false;
@@ -763,17 +763,17 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe("using event domain in controller", function () {
+        describe("using event domain in controller", function() {
             var controller;
 
-            afterEach(function () {
+            afterEach(function() {
                 if (controller) {
                     controller.destroy();
                     controller = null;
                 }
             });
 
-            it("should be listenable", function () {
+            it("should be listenable", function() {
                 var controller = new Ext.app.Controller({
                         listen: {
                             global: {
@@ -790,9 +790,9 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should execute before added in event listener", function () {
+            it("should execute before added in event listener", function() {
                 var fn = spyOn({
-                        test: function (lastToken, action) {
+                        test: function(lastToken, action) {
                             expect(lastToken).toBe('foo');
 
                             action.resume();
@@ -805,7 +805,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRouteExit: function (action) {
+                        onBeforeRouteExit: function(action) {
                             action.before(fn);
                         }
                     });
@@ -815,7 +815,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should execute action added in event listener", function () {
+            it("should execute action added in event listener", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -826,7 +826,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRouteExit: function (action) {
+                        onBeforeRouteExit: function(action) {
                             action.action(fn);
                         }
                     });
@@ -836,7 +836,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toHaveBeenCalled();
             });
 
-            it("should not execute action when an added before stops the action", function () {
+            it("should not execute action when an added before stops the action", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -847,9 +847,9 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRouteExit: function (action) {
+                        onBeforeRouteExit: function(action) {
                             action
-                                .before(function (lastToken, action) {
+                                .before(function(lastToken, action) {
                                     expect(lastToken).toBe('foo');
 
                                     action.stop();
@@ -863,9 +863,9 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).not.toHaveBeenCalled();
             });
 
-            it("should not execute before if return false", function () {
+            it("should not execute before if return false", function() {
                 var fn = spyOn({
-                        test: function (action) {
+                        test: function(action) {
                             action.resume();
                         }
                     }, 'test').andCallThrough(),
@@ -876,7 +876,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRouteExit: function (action) {
+                        onBeforeRouteExit: function(action) {
                             action.before(fn);
 
                             return false;
@@ -888,7 +888,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).not.toHaveBeenCalled();
             });
 
-            it("should not execute action if return false", function () {
+            it("should not execute action if return false", function() {
                 var fn = spyOn({
                         test: Ext.emptyFn
                     }, 'test'),
@@ -899,7 +899,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                             }
                         },
 
-                        onBeforeRouteExit: function (action) {
+                        onBeforeRouteExit: function(action) {
                             action.action(fn);
 
                             return false;
@@ -913,18 +913,18 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         });
     });
 
-    describe('types', function () {
+    describe('types', function() {
         var route;
 
-        afterEach(function () {
+        afterEach(function() {
             if (route) {
                 route.destroy();
             }
         });
 
-        describe('debug checks', function () {
-            it('should throw if multiple same named parameters', function () {
-                var fn = function () {
+        describe('debug checks', function() {
+            it('should throw if multiple same named parameters', function() {
+                var fn = function() {
                     new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{bar:alpha}',
                         handlers: [
@@ -939,8 +939,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toThrow('"bar" already defined in route "foo/:{bar:alpha}/:{bar:alpha}"');
             });
 
-            it('should throw if type is unknown', function () {
-                var fn = function () {
+            it('should throw if type is unknown', function() {
+                var fn = function() {
                     new Ext.route.Route({
                         url: 'foo/:{bar:foo}',
                         handlers: [
@@ -955,8 +955,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(fn).toThrow('Unknown parameter type "foo" in route "foo/:{bar:foo}"');
             });
 
-            it('should throw if parameter mismatch', function () {
-                var fn = function () {
+            it('should throw if parameter mismatch', function() {
+                var fn = function() {
                     new Ext.route.Route({
                         url: ':foo/:{bar:alpha}',
                         handlers: [
@@ -972,12 +972,12 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe('conditions', function () {
-            it('should still allow conditions in named mode', function () {
+        describe('conditions', function() {
+            it('should still allow conditions in named mode', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{baz}',
                         conditions: {
-                            baz : '([0-9a-zA-Z\.]+)'
+                            baz: '([0-9a-zA-Z\.]+)'
                         },
                         handlers: [
                             {
@@ -997,7 +997,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc',
                         baz: 'def'
@@ -1005,11 +1005,11 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should still not recognize if condition is not matched', function () {
+            it('should still not recognize if condition is not matched', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{baz}',
                         conditions: {
-                            baz : '([0-9]+)'
+                            baz: '([0-9]+)'
                         },
                         handlers: [
                             {
@@ -1024,13 +1024,13 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(recognized).toBe(false);
             });
 
-            it('should allow parse function in condition', function () {
+            it('should allow parse function in condition', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{baz}',
                         conditions: {
-                            baz : {
+                            baz: {
                                 re: '([0-9\.]+)',
-                                parse: function (value) {
+                                parse: function(value) {
                                     return parseFloat(value);
                                 }
                             }
@@ -1053,7 +1053,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc',
                         baz: 1.2
@@ -1061,14 +1061,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should allow split in condition', function () {
+            it('should allow split in condition', function() {
                 var route = new Ext.route.Route({
                         url: 'view/:{view}',
                         conditions: {
-                            view : {
+                            view: {
                                 re: '([a-z]+-[0-9]+)',
                                 split: '-',
-                                parse: function (values) {
+                                parse: function(values) {
                                     values[1] = parseFloat(values[1]);
 
                                     return values;
@@ -1092,7 +1092,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         view: ['ticket', 12345]
                     });
@@ -1100,8 +1100,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe('alpha', function () {
-            it('should recognize all formats', function () {
+        describe('alpha', function() {
+            it('should recognize all formats', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:alpha}',
                         handlers: [
@@ -1130,7 +1130,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should not recognize invalid characters', function () {
+            it('should not recognize invalid characters', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:alpha}',
                         handlers: [
@@ -1166,7 +1166,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should match a single parameter', function () {
+            it('should match a single parameter', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}',
                         handlers: [
@@ -1186,14 +1186,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc'
                     });
                 });
             });
 
-            it('should not match alpha', function () {
+            it('should not match alpha', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}',
                         handlers: [
@@ -1209,7 +1209,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 expect(recognized).toBe(false);
             });
 
-            it('should match multiple parameters', function () {
+            it('should match multiple parameters', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{baz:alpha}',
                         handlers: [
@@ -1230,7 +1230,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc',
                         baz: 'def'
@@ -1238,7 +1238,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should not match match if one parameter is invalid', function () {
+            it('should not match match if one parameter is invalid', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alpha}/:{baz:alpha}',
                         handlers: [
@@ -1255,10 +1255,10 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe('alphanum', function () {
+        describe('alphanum', function() {
             var numRe = /^[0-9.]+$/;
 
-            it('should recognize all formats', function () {
+            it('should recognize all formats', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:alphanum}',
                         handlers: [
@@ -1294,7 +1294,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should not recognize invalid characters', function () {
+            it('should not recognize invalid characters', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:alphanum}',
                         handlers: [
@@ -1327,7 +1327,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should match and execute with a single parameter', function () {
+            it('should match and execute with a single parameter', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alphanum}',
                         handlers: [
@@ -1347,14 +1347,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc'
                     });
                 });
             });
 
-            it('should match and execute with a single parameter as number', function () {
+            it('should match and execute with a single parameter as number', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alphanum}',
                         handlers: [
@@ -1374,14 +1374,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 10
                     });
                 });
             });
 
-            it('should match and execute with multiple parameters', function () {
+            it('should match and execute with multiple parameters', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alphanum}/:{baz:alphanum}',
                         handlers: [
@@ -1402,7 +1402,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 'abc',
                         baz: 123
@@ -1410,7 +1410,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should not match match if one parameter is invalid', function () {
+            it('should not match match if one parameter is invalid', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:alphanum}/:{baz:alphanum}',
                         handlers: [
@@ -1427,10 +1427,10 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe('num', function () {
+        describe('num', function() {
             var numRe = /^[0-9.]+$/;
 
-            it('should recognize all formats', function () {
+            it('should recognize all formats', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:num}',
                         handlers: [
@@ -1462,7 +1462,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should not recognize invalid characters', function () {
+            it('should not recognize invalid characters', function() {
                 var route = new Ext.route.Route({
                         url: ':{bar:num}',
                         handlers: [
@@ -1496,7 +1496,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 }
             });
 
-            it('should match and execute with a single parameter', function () {
+            it('should match and execute with a single parameter', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:num}',
                         handlers: [
@@ -1516,14 +1516,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 12
                     });
                 });
             });
 
-            it('should match and execute with a single parameter as number', function () {
+            it('should match and execute with a single parameter as number', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:num}',
                         handlers: [
@@ -1543,14 +1543,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 10
                     });
                 });
             });
 
-            it('should match and execute with multiple parameters', function () {
+            it('should match and execute with multiple parameters', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:num}/:{baz:num}',
                         handlers: [
@@ -1571,7 +1571,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: 123,
                         baz: 40.5
@@ -1579,7 +1579,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should not match match if one parameter is invalid', function () {
+            it('should not match match if one parameter is invalid', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{bar:num}/:{baz:num}',
                         handlers: [
@@ -1596,8 +1596,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        describe('...', function () {
-            it('should match single args value', function () {
+        describe('...', function() {
+            it('should match single args value', function() {
                 var route = new Ext.route.Route({
                         url: 'foo:{bar...}',
                         handlers: [
@@ -1617,14 +1617,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: ['baz']
                     });
                 });
             });
 
-            it('should not match args value (should be optional)', function () {
+            it('should not match args value (should be optional)', function() {
                 var route = new Ext.route.Route({
                         url: 'foo:{bar...}',
                         handlers: [
@@ -1644,14 +1644,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         bar: undefined
                     });
                 });
             });
 
-            it('should match single args value with another param', function () {
+            it('should match single args value with another param', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id}:{bar...}',
                         handlers: [
@@ -1672,7 +1672,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: '123',
                         bar: ['baz']
@@ -1680,7 +1680,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should match single args value with multiple other params', function () {
+            it('should match single args value with multiple other params', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id}/:{view}:{args...}',
                         handlers: [
@@ -1702,7 +1702,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: '123',
                         view: 'dashboard',
@@ -1711,7 +1711,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should match two args values', function () {
+            it('should match two args values', function() {
                 var route = new Ext.route.Route({
                         url: 'foo:{args...}',
                         handlers: [
@@ -1731,14 +1731,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         args: ['bar', 'baz']
                     });
                 });
             });
 
-            it('should match two args values with another param', function () {
+            it('should match two args values with another param', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id}:{args...}',
                         handlers: [
@@ -1759,7 +1759,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: '123',
                         args: ['bar', 'baz']
@@ -1767,7 +1767,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should match two args value with multiple other params', function () {
+            it('should match two args value with multiple other params', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id}/:{view}:{args...}',
                         handlers: [
@@ -1789,7 +1789,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: '123',
                         view: 'dashboard',
@@ -1798,7 +1798,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should match many args values', function () {
+            it('should match many args values', function() {
                 var route = new Ext.route.Route({
                         url: 'foo:{args...}',
                         handlers: [
@@ -1818,14 +1818,14 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         args: ['bar', 'baz', 'foobar', 'barbaz']
                     });
                 });
             });
 
-            it('should match many args values with another param', function () {
+            it('should match many args values with another param', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id}:{args...}',
                         handlers: [
@@ -1846,7 +1846,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: '123',
                         args: ['bar', 'baz', 456, 'barbaz']
@@ -1854,7 +1854,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                 });
             });
 
-            it('should match many args value with multiple other params', function () {
+            it('should match many args value with multiple other params', function() {
                 var route = new Ext.route.Route({
                         url: 'foo/:{id:num}/:{view}:{args...}',
                         handlers: [
@@ -1876,7 +1876,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
                 promiseHasBeenResolved(promise);
 
-                runs(function () {
+                runs(function() {
                     expect(actionSpy).toHaveBeenCalledWith({
                         id: 123,
                         view: 'dashboard',
@@ -1887,8 +1887,8 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         });
     });
 
-    describe('optional group', function () {
-        it('should match with value in optional group', function () {
+    describe('optional group', function() {
+        it('should match with value in optional group', function() {
             var route = new Ext.route.Route({
                     url: 'user/:{id:num}(/request/:{req:num})',
                     handlers: [
@@ -1909,7 +1909,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionSpy).toHaveBeenCalledWith({
                     id: 1234,
                     req: 9999
@@ -1917,7 +1917,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        it('should match with no value in optional group', function () {
+        it('should match with no value in optional group', function() {
             var route = new Ext.route.Route({
                     url: 'user/:{id:num}(/request/:{req:num})',
                     handlers: [
@@ -1938,7 +1938,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionSpy).toHaveBeenCalledWith({
                     id: 1234,
                     req: undefined
@@ -1946,7 +1946,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        it('should handle multiple optional groups and no values within either', function () {
+        it('should handle multiple optional groups and no values within either', function() {
             var route = new Ext.route.Route({
                     url: 'user(/:{id:num})/foo(/request/:{req:num})',
                     handlers: [
@@ -1967,7 +1967,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionSpy).toHaveBeenCalledWith({
                     id: undefined,
                     req: undefined
@@ -1975,7 +1975,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        it('should handle multiple optional groups with one value in a group', function () {
+        it('should handle multiple optional groups with one value in a group', function() {
             var route = new Ext.route.Route({
                     url: 'user(/:{id:num})/foo(/request/:{req:num})',
                     handlers: [
@@ -1996,7 +1996,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionSpy).toHaveBeenCalledWith({
                     id: undefined,
                     req: 8765
@@ -2004,7 +2004,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
             });
         });
 
-        it('should handle multiple optional groups with values in both groups', function () {
+        it('should handle multiple optional groups with values in both groups', function() {
             var route = new Ext.route.Route({
                     url: 'user(/:{id:num})/foo(/request/:{req:num})',
                     handlers: [
@@ -2025,7 +2025,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
 
             promiseHasBeenResolved(promise);
 
-            runs(function () {
+            runs(function() {
                 expect(actionSpy).toHaveBeenCalledWith({
                     id: 1234,
                     req: 8765
@@ -2034,10 +2034,10 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
         });
     });
 
-    describe('single', function () {
-        function buildSuite (single, rejectedAfter) {
-            describe(String(single), function () {
-                it('should remove handler from route', function () {
+    describe('single', function() {
+        function buildSuite(single, rejectedAfter) {
+            describe(String(single), function() {
+                it('should remove handler from route', function() {
                     var route = new Ext.route.Route({
                         url: 'foo',
                         handlers: [
@@ -2056,7 +2056,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                     expect(route.getHandlers().length).toBe(0);
                 });
 
-                it('should remove handler from route with resolved before', function () {
+                it('should remove handler from route with resolved before', function() {
                     var route = new Ext.route.Route({
                         url: 'foo',
                         handlers: [
@@ -2076,7 +2076,7 @@ topSuite("Ext.route.Route", ['Ext.app.Controller'], function () {
                     expect(route.getHandlers().length).toBe(0);
                 });
 
-                it('should not remove handler from route with rejected before', function () {
+                it('should not remove handler from route with rejected before', function() {
                     var route = new Ext.route.Route({
                         url: 'foo',
                         handlers: [

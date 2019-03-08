@@ -27,12 +27,12 @@ Ext.onReady(function() {
             "Tháng 12": 11
         };
         
-        Ext.Date.getShortMonthName = function(month){
+        Ext.Date.getShortMonthName = function(month) {
             return Ext.Date.monthNames[month];
         };
         
-        Ext.Date.getMonthNumber = function(name){
-            return Ext.Date.monthNumbers[name];    
+        Ext.Date.getMonthNumber = function(name) {
+            return Ext.Date.monthNumbers[name];
         };
         
         Ext.Date.getShortDayName = function(day) {
@@ -170,10 +170,10 @@ Ext.define("Ext.locale.vn.window.MessageBox", {
         cancel: "Hủy bỏ",
         yes: "Có",
         no: "Không"
-    }    
+    }
 });
 
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.vn.Component", {	
+Ext.define("Ext.locale.vn.Component", {
     override: "Ext.Component"
 });

@@ -85,21 +85,21 @@ topSuite("Ext.menu.DatePicker", function() {
         });
 
         describe("keyboard interaction", function() {
-            it("should focus the picker eventEl on open", function () {
+            it("should focus the picker eventEl on open", function() {
                 expectFocused(menu.picker.eventEl, false);
             });
 
-            it("should close the date menu on Esc key", function () {
+            it("should close the date menu on Esc key", function() {
                 pressKey(menu.picker.eventEl, 'esc');
 
                 waitForFocus(dateItem);
 
-                runs(function () {
+                runs(function() {
                     expect(menu.isVisible()).toBeFalsy();
                 });
             });
 
-            it("should focus the owner menu item on Esc key", function () {
+            it("should focus the owner menu item on Esc key", function() {
                 pressKey(menu.picker.eventEl, 'esc');
 
                 expectFocused(dateItem);
@@ -107,7 +107,7 @@ topSuite("Ext.menu.DatePicker", function() {
         });
 
         describe('clicking', function() {
-            it('should not hide on click of monthButton', function () {
+            it('should not hide on click of monthButton', function() {
                 Ext.testHelper.tap(menu.items.items[0].monthBtn.el);
                 expect(menu.isVisible()).toBe(true);
             });

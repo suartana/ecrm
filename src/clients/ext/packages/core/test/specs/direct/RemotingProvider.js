@@ -1,9 +1,10 @@
-/* global Ext, xdescribe, expect, spyOn, jasmine */
+/* global Direct */
 
-var deps = Ext.isModern ? ['Ext.direct.*', 'Ext.form.Panel']
-         : ['Ext.direct.*', 'Ext.form.Panel', 'Ext.layout.container.Form',
-            'Ext.form.field.Hidden', 'Ext.form.action.DirectSubmit',
-            'Ext.form.action.DirectLoad'];
+var deps = Ext.isModern
+        ? ['Ext.direct.*', 'Ext.form.Panel']
+        : ['Ext.direct.*', 'Ext.form.Panel', 'Ext.layout.container.Form',
+           'Ext.form.field.Hidden', 'Ext.form.action.DirectSubmit',
+           'Ext.form.action.DirectLoad'];
 
 topSuite("Ext.direct.RemotingProvider", deps, function() {
     var RP = Ext.direct.RemotingProvider,
@@ -13,10 +14,10 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
         api = {
             actions: {
                 "TestAction": [{
-                    len:  1,
+                    len: 1,
                     name: "echo"
                 }, {
-                    len:  1,
+                    len: 1,
                     name: "directFail"
                 }, {
                     name: 'directForm',
@@ -50,22 +51,22 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                 }],
                 
                 "TestAction.Foo": [{
-                    len:  0,
+                    len: 0,
                     name: "foo"
                 }],
                 
                 "TestAction.Foo.Bar": [{
-                    len:  0,
+                    len: 0,
                     name: "bar"
                 }],
                 
                 "TestAction.Foo.Bar.Baz": [{
-                    len:  0,
+                    len: 0,
                     name: "baz"
                 }],
                 
                 "TestAction.Foo.Qux": [{
-                    len:  0,
+                    len: 0,
                     name: "qux"
                 }]
             },
@@ -150,8 +151,7 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
             isUpload = options.isUpload,
             arg = {},
             success = true, // *Communication* success, i.e. connected to "server"
-            data, tid, action, method, arg, fn, success,
-            result, response, xhr, opt, metadata;
+            data, tid, action, method, fn, result, response, xhr, opt, metadata;
         
         if (isForm) {
             data     = options.params;
@@ -161,7 +161,7 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
             metadata = data.extMetadata;
             
             // Collect the input field values
-            Ext.fly(options.form).select('input').each(function(el, c, idx) { 
+            Ext.fly(options.form).select('input').each(function(el, c, idx) {
                 this[el.dom.name] = el.dom.value;
             }, arg);
             arg = [arg];
@@ -320,8 +320,8 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
         var ns;
         
         function checkFn(fn) {
-            expect( Ext.isFunction(fn) ).toBeTruthy();
-        };
+            expect(Ext.isFunction(fn)).toBeTruthy();
+        }
         
         beforeEach(function() {
             provider.connect();
@@ -460,21 +460,21 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                         ns.TestAction.echo('bar', Ext.emptyFn);
                     });
                 
-                    waitsFor(function() { return !!options; }, 'options never modified', Ext.isIE9m ? 100: 20);
+                    waitsFor(function() { return !!options; }, 'options never modified', Ext.isIE9m ? 100 : 20);
                 
                     runs(function() {
                         expect(options.jsonData).toEqual([{
                             action: 'TestAction',
                             method: 'echo',
-                            type:   'rpc',
-                            tid:    baseTid + 1,
-                            data:   ['foo']
+                            type: 'rpc',
+                            tid: baseTid + 1,
+                            data: ['foo']
                         }, {
                             action: 'TestAction',
                             method: 'echo',
-                            type:   'rpc',
-                            tid:    baseTid + 2,
-                            data:   ['bar']
+                            type: 'rpc',
+                            tid: baseTid + 2,
+                            data: ['bar']
                         }]);
                     });
                 });
@@ -503,9 +503,9 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                         expect(options[0].jsonData).toEqual({
                             action: 'TestAction',
                             method: 'echo',
-                            type:   'rpc',
-                            tid:    baseTid + 2,
-                            data:   ['qux']
+                            type: 'rpc',
+                            tid: baseTid + 2,
+                            data: ['qux']
                         });
                     });
                 });
@@ -536,9 +536,9 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                         expect(options[0].jsonData).toEqual({
                             action: 'TestAction',
                             method: 'echo',
-                            type:   'rpc',
-                            tid:    baseTid + 2,
-                            data:   ['qux']
+                            type: 'rpc',
+                            tid: baseTid + 2,
+                            data: ['qux']
                         });
                     });
                 });
@@ -598,21 +598,21 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                             expect(options[0].jsonData).toEqual([{
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 1,
-                                data:   ['fee']
+                                type: 'rpc',
+                                tid: baseTid + 1,
+                                data: ['fee']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 2,
-                                data:   ['fie']
+                                type: 'rpc',
+                                tid: baseTid + 2,
+                                data: ['fie']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 3,
-                                data:   ['foe']
+                                type: 'rpc',
+                                tid: baseTid + 3,
+                                data: ['foe']
                             }]);
                         });
                     });
@@ -637,41 +637,41 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                             expect(options[0].jsonData).toEqual([{
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 1,
-                                data:   ['frobbe']
+                                type: 'rpc',
+                                tid: baseTid + 1,
+                                data: ['frobbe']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 2,
-                                data:   ['throbbe']
+                                type: 'rpc',
+                                tid: baseTid + 2,
+                                data: ['throbbe']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 3,
-                                data:   ['gurgle']
+                                type: 'rpc',
+                                tid: baseTid + 3,
+                                data: ['gurgle']
                             }]);
                             
                             expect(options[1].jsonData).toEqual([{
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 4,
-                                data:   ['bonzo']
+                                type: 'rpc',
+                                tid: baseTid + 4,
+                                data: ['bonzo']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 5,
-                                data:   ['mymse']
+                                type: 'rpc',
+                                tid: baseTid + 5,
+                                data: ['mymse']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 6,
-                                data:   ['splurge']
+                                type: 'rpc',
+                                tid: baseTid + 6,
+                                data: ['splurge']
                             }]);
                         });
                     });
@@ -697,49 +697,49 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                             expect(options[0].jsonData).toEqual([{
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 1,
-                                data:   ['Grumpy']
+                                type: 'rpc',
+                                tid: baseTid + 1,
+                                data: ['Grumpy']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 2,
-                                data:   ['Sleepy']
+                                type: 'rpc',
+                                tid: baseTid + 2,
+                                data: ['Sleepy']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 3,
-                                data:   ['Dopey']
+                                type: 'rpc',
+                                tid: baseTid + 3,
+                                data: ['Dopey']
                             }]);
                             
                             expect(options[1].jsonData).toEqual([{
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 4,
-                                data:   ['Bashful']
+                                type: 'rpc',
+                                tid: baseTid + 4,
+                                data: ['Bashful']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 5,
-                                data:   ['Sneezy']
+                                type: 'rpc',
+                                tid: baseTid + 5,
+                                data: ['Sneezy']
                             }, {
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 6,
-                                data:   ['Happy']
+                                type: 'rpc',
+                                tid: baseTid + 6,
+                                data: ['Happy']
                             }]);
                             
                             expect(options[2].jsonData).toEqual({
                                 action: 'TestAction',
                                 method: 'echo',
-                                type:   'rpc',
-                                tid:    baseTid + 7,
-                                data:   ['Doc']
+                                type: 'rpc',
+                                tid: baseTid + 7,
+                                data: ['Doc']
                             });
                         });
                     });
@@ -967,6 +967,7 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                     
                     it("does NOT fire for unbound responses", function() {
                         var dataSpy = jasmine.createSpy('data event handler');
+
                         provider.on('data', dataSpy);
                         
                         runs(function() {
@@ -1000,6 +1001,7 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                 
                 it("does not fire 'beforecallback' event for unbound responses", function() {
                     var dataSpy = jasmine.createSpy('data event handler');
+
                     provider.on('data', dataSpy);
                     
                     runs(function() {
@@ -1095,6 +1097,7 @@ topSuite("Ext.direct.RemotingProvider", deps, function() {
                 
                 it("does not run for unbound responses", function() {
                     var dataSpy = jasmine.createSpy('data event handler');
+
                     provider.on('data', dataSpy);
                     
                     runs(function() {

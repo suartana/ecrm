@@ -34,131 +34,157 @@ Ext.define('Ext.dd.DDTarget', {
      * @method
      */
     getDragEl: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     isValidHandleChild: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     startDrag: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     endDrag: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onDrag: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onDragDrop: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onDragEnter: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onDragOut: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onDragOver: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onInvalidDrop: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onMouseDown: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     onMouseUp: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setXConstraint: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setYConstraint: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     resetConstraints: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     clearConstraints: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     clearTicks: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setInitPosition: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setDragElId: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setHandleElId: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     setOuterHandleElId: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     addInvalidHandleClass: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     addInvalidHandleId: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     addInvalidHandleType: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     removeInvalidHandleClass: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method
      */
     removeInvalidHandleId: Ext.emptyFn,
+    
     /**
      * Overridden and disabled. A DDTarget does not support being dragged.
      * @method

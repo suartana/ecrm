@@ -50,7 +50,7 @@ function() {
 
             runs(function() {
                 // Must focus the cell with first. Jasmine does this on mousedown.
-                // If a touch platform, we must programatically do this.
+                // If a touch platform, we must programmatically do this.
                 // TODO: Jasmine should focus the target on the tail end of all
                 // gestures which result in focus. Right now, it only does that
                 // if you explicitly request a mousedown.
@@ -330,7 +330,7 @@ function() {
                 editorParentNode = new Ext.grid.Location(grid, {
                     record: 0,
                     column: 0
-                }).getFocusEl(true);
+                }).getFocusEl('dom');
             });
 
             // https://sencha.jira.com/browse/EXTJS-18773
@@ -1676,7 +1676,8 @@ function() {
                 });
                 
                 waitsFor(function() {
-                    return plugin.location.column === colRef[0] &&
+                    return plugin.location &&
+                           plugin.location.column === colRef[0] &&
                            plugin.location.record === getRec(1);
                });
             });
@@ -2529,7 +2530,7 @@ function() {
                     });
 
                     runs(function () {
-                        expect(plugin.getActiveEditor().getField().expanded).toBe(true);
+                        expect(plugin.getActiveEditor().getField().expanded).toBeTruthy();
                     });
                 });
             });

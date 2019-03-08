@@ -39,6 +39,7 @@ Ext.define('Ext.form.field.FileButton', {
         unselectable: 'on'
     },
     
+    /* eslint-disable indent */
     /*
      * This <input type="file"/> element is placed above the button element to intercept
      * mouse clicks, as well as receive focus. This is the only way to make browser file input
@@ -53,6 +54,7 @@ Ext.define('Ext.form.field.FileButton', {
             '<tpl if="tabIndex != null">tabindex="{tabIndex}"</tpl>',
         '>'
     ],
+    /* eslint-enable indent */
     
     keyMap: null,
     ariaEl: 'fileInputEl',
@@ -203,11 +205,12 @@ Ext.define('Ext.form.field.FileButton', {
     handlePrompt: function(e) {
         var key;
 
-        if (e.type == 'keydown') {
+        if (e.type === 'keydown') {
             key = e.getKey();
             // We need this conditional here because IE doesn't open the prompt on ENTER
             this.promptCalled = ((!Ext.isIE && key === e.ENTER) || key === e.SPACE) ? true : false;
-        } else {
+        }
+        else {
             this.promptCalled = true;
         }
     },
@@ -232,6 +235,7 @@ Ext.define('Ext.form.field.FileButton', {
         if (this.promptCalled) {
             this.promptCalled = false;
             e.preventDefault();
+            
             return;
         }
 
@@ -267,7 +271,8 @@ Ext.define('Ext.form.field.FileButton', {
                     focusTo.resumeEvent('focus');
                 }, 1);
             }
-        } else if (key === e.ENTER || key === e.SPACE) {
+        }
+        else if (key === e.ENTER || key === e.SPACE) {
             this.handlePrompt(e);
         }
         

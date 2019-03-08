@@ -12,6 +12,7 @@ topSuite("Ext.picker.Slot", ['Ext.viewport.Default', 'Ext.picker.Picker'], funct
 
         viewport = Ext.Viewport = new Ext.viewport.Default();
         picker = Ext.create('Ext.picker.Picker', {
+            side: 'top',
             slots: [{
                 name: 'slot1',
                 data : (function() {
@@ -149,17 +150,11 @@ topSuite("Ext.picker.Slot", ['Ext.viewport.Default', 'Ext.picker.Picker'], funct
 
         it("should not make selection if value is not found in store", function () {
             makePicker({slot1: 255});
-            spyOn(slot, 'select');
 
             picker.show(false);
 
-            waitsFor(function () {
-                // since the default index will be 0, no scrolling will occur
-                // so we need to wait until view items are available and selectedIndex is set to 0
-                return slot.getViewItems().length && slot.selectedIndex === 0;
-            });
             runs(function () {
-                expect(slot.select).not.toHaveBeenCalled();
+                expect(slot.getSelection()).toBe(null);
             });
         });
 

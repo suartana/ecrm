@@ -6,15 +6,15 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
         el = Ext.getBody().createChild({
             id: 'ExtElementHelper',
             children: [
-                {id: 'child1'},
-                {id: 'child2'},
-                {id: 'child3'}
+                { id: 'child1' },
+                { id: 'child2' },
+                { id: 'child3' }
             ]
         });
         
         span = Ext.getBody().createChild({
-            id  : 'ExtElementSpanHelper',
-            tag : 'span'
+            id: 'ExtElementSpanHelper',
+            tag: 'span'
         });
         
         child1 = Ext.get('child1');
@@ -31,7 +31,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
         child1.destroy();
         child2.destroy();
         child3.destroy();
-    });    
+    });
     describe("appendChild", function() {
         it("should append the child", function() {
             expect(el.contains(span)).toBeFalsy();
@@ -88,6 +88,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
     describe("insertFirst", function() {
         it("should insert the el into the specified el", function() {
             var nodes = Ext.getDom(child2).childNodes;
+
             expect(nodes.length).toEqual(0);
             
             child2.insertFirst(child1);
@@ -105,6 +106,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             if (sibling1) {
                 sibling1.destroy();
             }
+
             if (sibling2) {
                 sibling2.destroy();
             }
@@ -113,11 +115,12 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("after", function() {
                 it("should create each of the elements and add them to the el parent", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling([
-                        {id: 'sibling1'},
-                        {id: 'sibling2'}
+                        { id: 'sibling1' },
+                        { id: 'sibling2' }
                     ], 'after');
 
                     nodes = Ext.getDom(el).childNodes;
@@ -128,11 +131,12 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("before", function() {
                 it("should create each of the elements and add them to the el parent", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling([
-                        {id: 'sibling1'},
-                        {id: 'sibling2'}
+                        { id: 'sibling1' },
+                        { id: 'sibling2' }
                     ], 'before');
 
                     nodes = Ext.getDom(el).childNodes;
@@ -145,6 +149,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("after", function() {
                 it("should move the element next to the el", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling(span, 'after');
@@ -157,6 +162,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("before", function() {
                 it("should move the element next to the el", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling(span, 'before');
@@ -171,6 +177,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("after", function() {
                 it("should move the element next to the el", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling({
@@ -185,6 +192,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             describe("before", function() {
                 it("should move the element next to the el", function() {
                     var nodes = Ext.getDom(el).childNodes;
+
                     expect(nodes.length).toEqual(3);
 
                     child1.insertSibling({
@@ -218,6 +226,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
     describe("replace", function() {
         it("should replace the passed element with this element", function() {
             var nodes = Ext.getDom(el).childNodes;
+
             expect(nodes.length).toEqual(3);
             
             child1.replace(child2);
@@ -230,9 +239,10 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
     describe("replaceWith", function() {
         it("should replace this element with the passed element config", function() {
             var nodes = Ext.getDom(el).childNodes;
+
             expect(nodes.length).toEqual(3);
             
-            child1.replaceWith({tag: "div", cls: "childtestdiv"});
+            child1.replaceWith({ tag: "div", cls: "childtestdiv" });
             
             expect(child1.hasCls("childtestdiv"));
             
@@ -282,9 +292,10 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
 
         it("should create a child", function() {
             var nodes = Ext.getDom(el).childNodes;
+
             expect(nodes.length).toEqual(3);
             
-            el.createChild({id: 'child4'});
+            el.createChild({ id: 'child4' });
             
             nodes = Ext.getDom(el).childNodes;
             expect(nodes.length).toEqual(4);
@@ -297,7 +308,7 @@ topSuite("Ext.dom.Element.insertion", [false, 'Ext.dom.Element'], function() {
             expect(nodes.length).toEqual(3);
             expect(Ext.Array.indexOf(array, Ext.getDom(child2))).toEqual(1);
             
-            el.createChild({id: 'child4'}, child2);
+            el.createChild({ id: 'child4' }, child2);
             
             nodes = Ext.getDom(el).childNodes;
             array = Ext.toArray(nodes);

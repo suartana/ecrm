@@ -3,11 +3,16 @@
  */
 Ext.define('Ext.grid.plugin.HeaderReorderer', {
     extend: 'Ext.plugin.Abstract',
-    requires: ['Ext.grid.header.DragZone', 'Ext.grid.header.DropZone'],
     alias: 'plugin.gridheaderreorderer',
+    
+    requires: [
+        'Ext.grid.header.DragZone',
+        'Ext.grid.header.DropZone'
+    ],
 
     init: function(headerCt) {
         this.headerCt = headerCt;
+        
         headerCt.on({
             boxready: this.onHeaderCtRender,
             single: true,
@@ -32,6 +37,7 @@ Ext.define('Ext.grid.plugin.HeaderReorderer', {
         
         me.dragZone = new Ext.grid.header.DragZone(me.headerCt);
         me.dropZone = new Ext.grid.header.DropZone(me.headerCt);
+
         if (me.disabled) {
             me.dragZone.disable();
         }
@@ -41,6 +47,7 @@ Ext.define('Ext.grid.plugin.HeaderReorderer', {
     
     enable: function() {
         this.disabled = false;
+
         if (this.dragZone) {
             this.dragZone.enable();
         }
@@ -48,6 +55,7 @@ Ext.define('Ext.grid.plugin.HeaderReorderer', {
     
     disable: function() {
         this.disabled = true;
+
         if (this.dragZone) {
             this.dragZone.disable();
         }

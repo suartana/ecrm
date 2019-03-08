@@ -13,6 +13,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
         spyOn(Ext.log, 'warn');
         
         group = new Ext.container.ButtonGroup(config || {});
+
         return group;
     }
     
@@ -23,6 +24,16 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
         
         return createButtonGroup(cfg);
     }
+
+    describe("alternate class name", function() {
+        it("should have Ext.ButtonGroup as the alternate class name", function() {
+            expect(Ext.container.ButtonGroup.prototype.alternateClassName).toEqual("Ext.ButtonGroup");
+        });
+
+        it("should allow the use of Ext.ButtonGroup", function() {
+            expect(Ext.ButtonGroup).toBeDefined();
+        });
+    });
 
     describe("Structure and creation", function() {
         it("should extend Ext.Panel", function() {
@@ -35,6 +46,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
                     xtype: 'buttongroup'
                 }]
             });
+
             expect(panel.items.getAt(0) instanceof Ext.container.ButtonGroup).toBeTruthy();
             
             panel.destroy();
@@ -50,7 +62,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
 
         it("should allow overriding the layout", function() {
             createButtonGroup({
-                layout: {type: 'hbox'}
+                layout: { type: 'hbox' }
             });
             expect(group.getLayout() instanceof Ext.layout.container.HBox).toBeTruthy();
         });
@@ -83,7 +95,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             createButtonGroup({
                 items: [
                     {},
-                    {xtype: 'splitbutton'}
+                    { xtype: 'splitbutton' }
                 ]
             });
 
@@ -145,7 +157,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             createButtonGroup({
                 baseCls: 'x-test',
                 // x-test doesn't support sass framing we must deactivate frame to do this test in IE
-                frame: false, 
+                frame: false,
                 renderTo: Ext.getBody()
             });
 
@@ -163,7 +175,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
 
             expect(group.frame).toBeTruthy();
             
-            expect(group.el).toHaveCls('x-btn-group-default-framed')
+            expect(group.el).toHaveCls('x-btn-group-default-framed');
         });
 
         it("should allow turning off the frame", function() {
@@ -173,7 +185,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             });
 
             expect(group.frame).toBeFalsy();
-            expect(group.el).not.toHaveCls('x-btn-group-default-framed')
+            expect(group.el).not.toHaveCls('x-btn-group-default-framed');
         });
     });
     

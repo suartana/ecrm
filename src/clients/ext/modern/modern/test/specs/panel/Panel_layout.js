@@ -1,4 +1,4 @@
-describe('Ext.panel.Panel_layout', function () {
+topSuite('Ext.panel.Panel_layout', [false, 'Ext.Panel'], function () {
     var shortText = 'MMMMMMMM',
         mediumText = 'MMMMMMMMMMMMMMMMMMMM',
         longText = 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',

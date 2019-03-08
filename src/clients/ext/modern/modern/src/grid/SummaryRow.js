@@ -23,6 +23,18 @@ Ext.define('Ext.grid.SummaryRow', {
     defaultCellUI: 'summary',
     
     classCls: Ext.baseCSSPrefix + 'summaryrow',
+    
+    element: {
+        reference: 'element',
+        children: [{
+            reference: 'cellsElement',
+            className: Ext.baseCSSPrefix + 'cells-el'
+        }, {
+            reference: 'rightSpacer',
+            className: Ext.baseCSSPrefix + 'cells-el-right-spacer'
+        }]
+    },
+
 
     updateGroup: function () {
         this.syncSummary();

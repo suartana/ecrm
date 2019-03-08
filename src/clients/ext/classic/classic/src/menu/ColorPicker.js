@@ -21,10 +21,10 @@
  *         items: [{
  *             text: 'Choose a color',
  *             menu: colorPicker
- *         },{
+ *         }, {
  *             iconCls: 'add16',
  *             text: 'Icon item'
- *         },{
+ *         }, {
  *             text: 'Regular item'
  *         }]
  *     }).showAt([5, 5]);
@@ -40,13 +40,13 @@ Ext.define('Ext.menu.ColorPicker', {
      * @cfg {Boolean} hideOnClick
      * False to continue showing the menu after a color is selected.
      */
-    hideOnClick : true,
+    hideOnClick: true,
 
     /**
      * @cfg {String} pickerId
      * An id to assign to the underlying color picker.
      */
-    pickerId : null,
+    pickerId: null,
 
     /**
      * @cfg {Number} maxHeight
@@ -63,7 +63,7 @@ Ext.define('Ext.menu.ColorPicker', {
      * @private
      */
 
-    initComponent : function(){
+    initComponent: function() {
         var me = this,
             cfg = Ext.apply({}, me.initialConfig),
             pickerConfig;

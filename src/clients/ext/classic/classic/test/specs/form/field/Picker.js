@@ -1,5 +1,3 @@
-/* global Ext, jasmine, expect, describe, spyOn, xdescribe */
-
 topSuite("Ext.form.field.Picker",
     ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.data.TreeStore',
      'Ext.tree.Panel', 'Ext.button.Button', 'Ext.window.Window'],
@@ -36,12 +34,14 @@ function() {
         if (component) {
             component.destroy();
         }
+
         component = makeComponent = null;
     });
 
     function clickTrigger(triggerName) {
         var trigger = component.getTrigger(triggerName || 'picker').el,
             xy = trigger.getXY();
+
         jasmine.fireMouseEvent(trigger.dom, 'click', xy[0], xy[1]);
     }
 
@@ -120,6 +120,7 @@ function() {
 
         it("should fire the 'expand' event", function() {
             var spy = jasmine.createSpy();
+
             component.on('expand', spy);
             component.expand();
             expect(spy).toHaveBeenCalledWith(component);
@@ -175,6 +176,7 @@ function() {
 
         it("should fire the 'collapse' event", function() {
             var spy = jasmine.createSpy();
+
             component.on('collapse', spy);
             component.collapse();
             expect(spy).toHaveBeenCalledWith(component);
@@ -614,8 +616,10 @@ function() {
                 row: rowIdx,
                 column: cellIdx
             }, true);
+
             jasmine.fireMouseEvent(target, type, x, y, button);
         }
+
         function triggerCellKeyEvent(view, type, rowIdx, cellIdx, key) {
             var target = view.getCellByPosition({
                 row: rowIdx,
@@ -635,22 +639,22 @@ function() {
             });
 
             MyField = Ext.define(null, {
-                extend : 'Ext.form.field.Picker',
+                extend: 'Ext.form.field.Picker',
 
-                createPicker : function () {
+                createPicker: function() {
                     var me = this;
 
                     pickerCellEditing = new Ext.grid.plugin.CellEditing();
                     pickerGrid = new Ext.grid.Panel({
-                        store    : new Ext.data.Store({
-                            fields : [{
+                        store: new Ext.data.Store({
+                            fields: [{
                                 type: 'int',
                                 name: 'a'
                             }, 'b'],
-                            data   : [
-                                { a : 123, b: '123 Text' },
-                                { a : 456, b: '456 Text' },
-                                { a : 789, b: '789 Text' }
+                            data: [
+                                { a: 123, b: '123 Text' },
+                                { a: 456, b: '456 Text' },
+                                { a: 789, b: '789 Text' }
                             ]
                         }),
                         floating: true,
@@ -697,6 +701,7 @@ function() {
                     if (r != null) {
                         picker.getSelectionModel().select(r, false, true);
                     }
+
                     this.callParent(arguments);
                 },
                 getValue: function() {
@@ -715,7 +720,7 @@ function() {
                 rowLines: true,
                 columnLines: true,
                 rootVisible: false,
-                plugins  : cellEditing,
+                plugins: cellEditing,
                 store: Ext.create('Ext.data.TreeStore', {
                     autoLoad: false,
                     model: TestModel,
@@ -725,47 +730,47 @@ function() {
                             id: 1,
                             text: 'Node 1',
                             value: 123,
-                            children: [{id: 11, text: 'Child Of Node 1', leaf: true, value: 456}]
+                            children: [{ id: 11, text: 'Child Of Node 1', leaf: true, value: 456 }]
                         }, {
                             id: 2,
                             text: 'Node 2',
                             value: 123,
-                            children: [{id: 22, text: 'Child Of Node 2', leaf: true, value: 456}]
+                            children: [{ id: 22, text: 'Child Of Node 2', leaf: true, value: 456 }]
                         }, {
                             id: 3,
                             text: 'Node 3',
                             value: 123,
-                            children: [{id: 33, text: 'Child Of Node 3', leaf: true, value: 456}]
+                            children: [{ id: 33, text: 'Child Of Node 3', leaf: true, value: 456 }]
                         }, {
                             id: 4,
                             text: 'Node 4',
                             value: 123,
-                            children: [{id: 44, text: 'Child Of Node 4', leaf: true, value: 456}]
+                            children: [{ id: 44, text: 'Child Of Node 4', leaf: true, value: 456 }]
                         }, {
                             id: 5,
                             text: 'Node 5',
                             value: 123,
-                            children: [{id: 55, text: 'Child Of Node 5', leaf: true, value: 456}]
+                            children: [{ id: 55, text: 'Child Of Node 5', leaf: true, value: 456 }]
                         }, {
                             id: 6,
                             text: 'Node 6',
                             value: 123,
-                            children: [{id: 66, text: 'Child Of Node 6', leaf: true, value: 456}]
+                            children: [{ id: 66, text: 'Child Of Node 6', leaf: true, value: 456 }]
                         }, {
                             id: 7,
                             text: 'Node 7',
                             value: 123,
-                            children: [{id: 77, text: 'Child Of Node 7', leaf: true, value: 456}]
+                            children: [{ id: 77, text: 'Child Of Node 7', leaf: true, value: 456 }]
                         }, {
                             id: 8,
                             text: 'Node 8',
                             value: 123,
-                            children: [{id: 88, text: 'Child Of Node 8', leaf: true, value: 456}]
+                            children: [{ id: 88, text: 'Child Of Node 8', leaf: true, value: 456 }]
                         }, {
                             id: 9,
                             text: 'Node 9',
                             value: 123,
-                            children: [{id: 99, text: 'Child Of Node 9', leaf: true, value: 456}]
+                            children: [{ id: 99, text: 'Child Of Node 9', leaf: true, value: 456 }]
                         }]
                     }
 
@@ -783,7 +788,7 @@ function() {
                     text: 'Value',
                     flex: 1,
                     dataIndex: 'value',
-                    editor : new MyField()
+                    editor: new MyField()
                 }, {
                     text: 'Any Column 2',
                     width: 150
@@ -807,7 +812,7 @@ function() {
 
             Ext.QuickTips.init();
             testWindow = Ext.create('Ext.window.Window', {
-                layout: 'fit',    
+                layout: 'fit',
                 autoShow: true,
                 x: 100,
                 y: 100,
@@ -826,7 +831,7 @@ function() {
 
             // The boxready listener focuses the first row
             waitsFor(function() {
-                return view && Ext.Element.getActiveElement() === view.getCellByPosition({row:0,column:0}, true);
+                return view && Ext.Element.getActiveElement() === view.getCellByPosition({ row: 0, column: 0 }, true);
             }, 'the cell to be focused');
 
             runs(function() {
@@ -844,7 +849,7 @@ function() {
 
                 // Focus on a cell elsewhere in the TreeGrid.
                 // Synthesized mousedowns do not move focus on some browsers.
-                view.getNavigationModel().setPosition(0,3);
+                view.getNavigationModel().setPosition(0, 3);
             });
 
             // Wait for the blur to result from the click to hide the editor
@@ -854,7 +859,7 @@ function() {
             
             runs(function() {
                 // The edit should have been canceled, and focus should move to the clicked cell
-                expect(Ext.Element.getActiveElement() === view.getCellByPosition({row:0,column:3}, true)).toBe(true);
+                expect(Ext.Element.getActiveElement() === view.getCellByPosition({ row: 0, column: 3 }, true)).toBe(true);
 
                 // Start editing row 0, column 2
                 triggerCellMouseEvent(view, 'dblclick', 0, 2);
@@ -965,7 +970,7 @@ function() {
 
             runs(function() {
                 // The edit should have been canceled, and focus should move to the clicked cell
-                expect(Ext.Element.getActiveElement() === view.getCellByPosition({row:0,column:3}, true)).toBe(true);
+                expect(Ext.Element.getActiveElement() === view.getCellByPosition({ row: 0, column: 3 }, true)).toBe(true);
             });
         });
     });

@@ -28,7 +28,7 @@ Ext.define('Ext.form.action.DirectAction', {
         fn = api[type];
         
         if (!fn) {
-            Ext.raise("Cannot resolve Ext Direct API method " + fnName + " for " + type + " action");
+            Ext.raise("Cannot resolve Ext Direct API method for " + type + " action");
         }
         
         return fn;

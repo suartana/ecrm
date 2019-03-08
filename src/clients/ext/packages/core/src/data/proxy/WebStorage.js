@@ -1,7 +1,8 @@
 /**
- * WebStorageProxy is simply a superclass for the {@link Ext.data.proxy.LocalStorage LocalStorage} and {@link
- * Ext.data.proxy.SessionStorage SessionStorage} proxies. It uses the new HTML5 key/value client-side storage objects to
- * save {@link Ext.data.Model model instances} for offline use.
+ * WebStorageProxy is simply a superclass for the {@link Ext.data.proxy.LocalStorage LocalStorage}
+ * and {@link Ext.data.proxy.SessionStorage SessionStorage} proxies. It uses the new HTML5
+ * key/value client-side storage objects to save {@link Ext.data.Model model instances} for
+ * offline use.
  * @private
  */
 Ext.define('Ext.data.proxy.WebStorage', {
@@ -41,19 +42,22 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         /**
          * @property {Object} cache
-         * Cached map of records already retrieved by this Proxy. Ensures that the same instance is always retrieved.
+         * Cached map of records already retrieved by this Proxy. Ensures that the same instance is
+         * always retrieved.
          */
         this.cache = {};
 
         //<debug>
         if (this.getStorageObject() === undefined) {
-            Ext.raise("Local Storage is not supported in this browser, please use another type of data proxy");
+            Ext.raise("Local Storage is not supported in this browser, please use another type " +
+                      "of data proxy");
         }
         //</debug>
 
         //<debug>
         if (this.getId() === undefined) {
-            Ext.raise("No unique id was provided to the local storage proxy. See Ext.data.proxy.LocalStorage documentation for details");
+            Ext.raise("No unique id was provided to the local storage proxy. " +
+                      "See Ext.data.proxy.LocalStorage documentation for details");
         }
         //</debug>
 
@@ -88,12 +92,15 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
             if (record.phantom) {
                 identifier = record.identifier;
+                
                 if (identifier && identifier.isUnique) {
                     id = record.getId();
-                } else {
+                }
+                else {
                     id = me.getNextId();
                 }
-            } else {
+            }
+            else {
                 id = record.getId();
             }
 
@@ -123,23 +130,28 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         if (me.isHierarchical) {
             records = me.getTreeData();
-        } else {
+        }
+        else {
             ids = me.getIds();
             length = ids.length;
             id = operation.getId();
-            //read a single record
+            
+            // read a single record
             if (id) {
                 data = me.getRecord(id);
+                
                 if (data !== null) {
                     record = recordCreator ? recordCreator(data, Model) : new Model(data);
                 }
 
                 if (record) {
                     records.push(record);
-                } else {
+                }
+                else {
                     success = false;
                 }
-            } else {
+            }
+            else {
                 sorters = operation.getSorters();
                 filters = operation.getFilters();
                 limit = operation.getLimit();
@@ -184,11 +196,13 @@ Ext.define('Ext.data.proxy.WebStorage', {
         if (success) {
             operation.setResultSet(new Ext.data.ResultSet({
                 records: records,
-                total  : records.length,
-                loaded : true
+                total: records.length,
+                loaded: true
             }));
+            
             operation.setSuccessful(true);
-        } else {
+        }
+        else {
             operation.setException('Unable to load records');
         }
     },
@@ -199,8 +213,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
      */
     update: function(operation) {
         var records = operation.getRecords(),
-            length  = records.length,
-            ids     = this.getIds(),
+            length = records.length,
+            ids = this.getIds(),
             record, id, i;
 
         for (i = 0; i < length; i++) {
@@ -261,7 +275,11 @@ Ext.define('Ext.data.proxy.WebStorage', {
     getRecord: function(id) {
         var me = this,
             cache = me.cache,
-            data = !cache[id] ? Ext.decode(me.getStorageObject().getItem(me.getRecordKey(id))) : cache[id];
+            data;
+        
+        data = !cache[id]
+            ? Ext.decode(me.getStorageObject().getItem(me.getRecordKey(id)))
+            : cache[id];
 
         if (!data) {
             return null;
@@ -271,44 +289,51 @@ Ext.define('Ext.data.proxy.WebStorage', {
         data[me.getModel().prototype.idProperty] = id;
 
         // In order to preserve the cache, we MUST copy it here because
-        // Models use the incoming raw data as their data object and convert/default values into that object
+        // Models use the incoming raw data as their data object and convert/default values
+        // into that object
         return Ext.merge({}, data);
     },
 
     /**
      * Saves the given record in the Proxy.
      * @param {Ext.data.Model} record The model instance
-     * @param {String} [id] The id to save the record under (defaults to the value of the record's getId() function)
+     * @param {String} [id] The id to save the record under (defaults to the value of the
+     * record's getId() function)
      */
     setRecord: function(record, id) {
         if (id) {
             record.set('id', id, {
                 commit: true
             });
-        } else {
+        }
+        else {
             id = record.getId();
         }
 
+        /* eslint-disable-next-line vars-on-top */
         var me = this,
             rawData = record.getData(),
-            data    = {},
-            model   = me.getModel(),
-            fields  = model.getFields(),
-            length  = fields.length,
+            data = {},
+            model = me.getModel(),
+            fields = model.getFields(),
+            length = fields.length,
             i = 0,
             field, name, obj, key, value;
 
         for (; i < length; i++) {
             field = fields[i];
-            name  = field.name;
+            name = field.name;
 
             if (field.persist) {
                 value = rawData[name];
+                
                 if (field.isDateField && field.dateFormat && Ext.isDate(value)) {
                     value = Ext.Date.format(value, field.dateFormat);
-                } else if (field.serialize) {
+                }
+                else if (field.serialize) {
                     value = field.serialize(value, record);
                 }
+                
                 data[name] = value;
             }
         }
@@ -316,7 +341,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
         // no need to store the id in the data, since it is already stored in the record key
         delete data[model.prototype.idProperty];
 
-        // if the record is a tree node and it's a direct child of the root node, do not store the parentId
+        // if the record is a tree node and it's a direct child of the root node, do not store
+        // the parentId
         if (record.isNode && record.get('depth') === 1) {
             delete data.parentId;
         }
@@ -324,19 +350,21 @@ Ext.define('Ext.data.proxy.WebStorage', {
         obj = me.getStorageObject();
         key = me.getRecordKey(id);
 
-        //keep the cache up to date
+        // keep the cache up to date
         me.cache[id] = data;
 
-        //iPad bug requires that we remove the item before setting it
+        // iPad bug requires that we remove the item before setting it
         obj.removeItem(key);
         obj.setItem(key, Ext.encode(data));
     },
 
     /**
      * @private
-     * Physically removes a given record from the local storage and recursively removes children if the record is a tree node. Used internally by {@link #destroy}.
+     * Physically removes a given record from the local storage and recursively removes children
+     * if the record is a tree node. Used internally by {@link #destroy}.
      * @param {Ext.data.Model} record The record to remove
-     * @return {Object} a hash with the ids of the records that were removed as keys and the records that were removed as values
+     * @return {Object} a hash with the ids of the records that were removed as keys and the
+     * records that were removed as values
      */
     removeRecord: function(record) {
         var me = this,
@@ -350,6 +378,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         if (record.childNodes) {
             childNodes = record.childNodes;
+            
             for (i = childNodes.length; i--;) {
                 Ext.apply(records, me.removeRecord(childNodes[i]));
             }
@@ -360,8 +389,9 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Given the id of a record, returns a unique string based on that id and the id of this proxy. This is used when
-     * storing data in the local storage object and should prevent naming collisions.
+     * Given the id of a record, returns a unique string based on that id and the id of this proxy.
+     * This is used when storing data in the local storage object and should prevent naming
+     * collisions.
      * @param {String/Number/Ext.data.Model} id The record id, or a Model instance
      * @return {String} The unique key for this record
      */
@@ -375,8 +405,9 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Returns the unique key used to store the current record counter for this proxy. This is used internally when
-     * realizing models (creating them when they used to be phantoms), in order to give each model instance a unique id.
+     * Returns the unique key used to store the current record counter for this proxy. This is used
+     * internally when realizing models (creating them when they used to be phantoms), in order to
+     * give each model instance a unique id.
      * @return {String} The counter key
      */
     getRecordCounterKey: function() {
@@ -385,7 +416,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Returns the unique key used to store the tree indicator. This is used internally to determine if the stored data is hierarchical
+     * Returns the unique key used to store the tree indicator. This is used internally to
+     * determine if the stored data is hierarchical
      * @return {String} The counter key
      */
     getTreeKey: function() {
@@ -406,7 +438,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         if (length === 1 && ids[0] === "") {
             ids = [];
-        } else {
+        }
+        else {
             for (i = 0; i < length; i++) {
                 ids[i] = isString ? ids[i] : +ids[i];
             }
@@ -438,8 +471,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Returns the next numerical ID that can be used when realizing a model instance (see getRecordCounterKey).
-     * Increments the counter.
+     * Returns the next numerical ID that can be used when realizing a model instance
+     * (see getRecordCounterKey). Increments the counter.
      * @return {Number} The id
      */
     getNextId: function() {
@@ -485,23 +518,29 @@ Ext.define('Ext.data.proxy.WebStorage', {
             records.push(record);
             // add the record to the record hash so it can be easily retrieved by id later
             recordHash[id] = record;
+            
             if (!record.parentId) {
-                // push records that are at the root level (those with no parent id) into the "root" array
+                // push records that are at the root level (those with no parent id) into the
+                // "root" array
                 root.push(record);
             }
         }
 
         rootLength = root.length;
 
-        // sort the records by parent id for greater efficiency, so that each parent record only has to be found once for all of its children
+        // sort the records by parent id for greater efficiency, so that each parent record only
+        // has to be found once for all of its children
         Ext.Array.sort(records, me.sortByParentId);
 
-        // append each record to its parent, starting after the root node(s), since root nodes do not need to be attached to a parent
+        // append each record to its parent, starting after the root node(s), since root nodes
+        // do not need to be attached to a parent
         for (i = rootLength; i < length; i++) {
             record = records[i];
             parentId = record.parentId;
+            
             if (!parent || parent[idProperty] !== parentId) {
-                // if this record has a different parent id from the previous record, we need to look up the parent by id.
+                // if this record has a different parent id from the previous record, we need to
+                // look up the parent by id.
                 parent = recordHash[parentId];
                 parent.children = children = [];
             }
@@ -512,8 +551,10 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         for (i = length; i--;) {
             record = records[i];
+            
             if (!record.children && !record.leaf) {
-                // set non-leaf nodes with no children to loaded so the proxy won't try to dynamically load their contents when they are expanded
+                // set non-leaf nodes with no children to loaded so the proxy won't try to
+                // dynamically load their contents when they are expanded
                 record.loaded = true;
             }
         }
@@ -540,8 +581,9 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Sets up the Proxy by claiming the key in the storage object that corresponds to the unique id of this Proxy. Called
-     * automatically by the constructor, this should not need to be called again unless {@link #clear} has been called.
+     * Sets up the Proxy by claiming the key in the storage object that corresponds to the unique
+     * id of this Proxy. Called automatically by the constructor, this should not need to be called
+     * again unless {@link #clear} has been called.
      */
     initialize: function() {
         var me = this,
@@ -550,6 +592,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             id = me.getId();
 
         storageObject.setItem(id, storageObject.getItem(id) || "");
+        
         if (storageObject.getItem(me.getTreeKey())) {
             me.isHierarchical = true;
         }
@@ -560,8 +603,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
     },
 
     /**
-     * Destroys all records stored in the proxy and removes all keys and values used to support the proxy from the
-     * storage object.
+     * Destroys all records stored in the proxy and removes all keys and values used to support
+     * the proxy from the storage object.
      */
     clear: function() {
         var me = this,
@@ -570,12 +613,12 @@ Ext.define('Ext.data.proxy.WebStorage', {
             len = ids.length,
             i;
 
-        //remove all the records
+        // remove all the records
         for (i = 0; i < len; i++) {
             obj.removeItem(me.getRecordKey(ids[i]));
         }
 
-        //remove the supporting objects
+        // remove the supporting objects
         obj.removeItem(me.getRecordCounterKey());
         obj.removeItem(me.getTreeKey());
         obj.removeItem(me.getId());
@@ -586,13 +629,14 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
     /**
      * @private
-     * Abstract function which should return the storage object that data will be saved to. This must be implemented
-     * in each subclass.
+     * Abstract function which should return the storage object that data will be saved to.
+     * This must be implemented in each subclass.
      * @return {Object} The storage object
      */
     getStorageObject: function() {
         //<debug>
-        Ext.raise("The getStorageObject function has not been defined in your Ext.data.proxy.WebStorage subclass");
+        Ext.raise("The getStorageObject function has not been defined in your " +
+                  "Ext.data.proxy.WebStorage subclass");
         //</debug>
     }
 });

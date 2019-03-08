@@ -1,13 +1,15 @@
 /**
- * A numeric text field that provides automatic keystroke filtering to disallow non-numeric characters,
- * and numeric validation to limit the value to a range of valid numbers. The range of acceptable number
- * values can be controlled by setting the {@link #minValue} and {@link #maxValue} configs, and fractional
- * decimals can be disallowed by setting {@link #allowDecimals} to `false`.
+ * A numeric text field that provides automatic keystroke filtering to disallow non-numeric
+ * characters, and numeric validation to limit the value to a range of valid numbers. The range
+ * of acceptable number values can be controlled by setting the {@link #minValue} and
+ * {@link #maxValue} configs, and fractional decimals can be disallowed by setting
+ * {@link #allowDecimals} to `false`.
  *
  * By default, the number field is also rendered with a set of up/down spinner buttons and has
- * up/down arrow key and mouse wheel event listeners attached for incrementing/decrementing the value by the
- * {@link #step} value. To hide the spinner buttons set `{@link #hideTrigger hideTrigger}:true`; to disable
- * the arrow key and mouse wheel handlers set `{@link #keyNavEnabled keyNavEnabled}:false` and
+ * up/down arrow key and mouse wheel event listeners attached for incrementing/decrementing
+ * the value by the {@link #step} value. To hide the spinner buttons set
+ * `{@link #hideTrigger hideTrigger}:true`; to disable the arrow key and mouse wheel handlers set
+ * `{@link #keyNavEnabled keyNavEnabled}:false` and
  * `{@link #mouseWheelEnabled mouseWheelEnabled}:false`. See the example below.
  *
  * # Example usage
@@ -86,7 +88,7 @@
  *     });
  */
 Ext.define('Ext.form.field.Number', {
-    extend:'Ext.form.field.Spinner',
+    extend: 'Ext.form.field.Spinner',
     alias: 'widget.numberfield',
     alternateClassName: ['Ext.form.NumberField', 'Ext.form.Number'],
 
@@ -109,14 +111,15 @@ Ext.define('Ext.form.field.Number', {
      * @cfg {Boolean} [allowDecimals=true]
      * False to disallow decimal values
      */
-    allowDecimals : true,
+    allowDecimals: true,
 
     /**
      * @cfg {String} decimalSeparator
-     * Character(s) to allow as the decimal separator. Defaults to {@link Ext.util.Format#decimalSeparator decimalSeparator}.
+     * Character(s) to allow as the decimal separator.
+     * Defaults to {@link Ext.util.Format#decimalSeparator decimalSeparator}.
      * @locale
      */
-    decimalSeparator : null,
+    decimalSeparator: null,
 
     /**
      * @cfg {Boolean} [submitLocaleSeparator=true]
@@ -132,12 +135,13 @@ Ext.define('Ext.form.field.Number', {
      * The maximum precision to display after the decimal separator
      * @locale
      */
-    decimalPrecision : 2,
+    decimalPrecision: 2,
 
     /**
      * @cfg {Number} minValue
      * The minimum allowed value. Will be used by the field's validation logic,
-     * and for {@link Ext.form.field.Spinner#setSpinUpEnabled enabling/disabling the down spinner button}.
+     * and for {@link Ext.form.field.Spinner#setSpinUpEnabled enabling/disabling
+     * the down spinner button}.
      *
      * Defaults to Number.NEGATIVE_INFINITY.
      */
@@ -154,8 +158,8 @@ Ext.define('Ext.form.field.Number', {
 
     /**
      * @cfg {Number} step
-     * Specifies a numeric interval by which the field's value will be incremented or decremented when the user invokes
-     * the spinner.
+     * Specifies a numeric interval by which the field's value will be incremented or decremented
+     * when the user invokes the spinner.
      */
     step: 1,
 
@@ -164,36 +168,36 @@ Ext.define('Ext.form.field.Number', {
      * Error text to display if the minimum value validation fails.
      * @locale
      */
-    minText : 'The minimum value for this field is {0}',
+    minText: 'The minimum value for this field is {0}',
 
     /**
      * @cfg {String} maxText
      * Error text to display if the maximum value validation fails.
      * @locale
      */
-    maxText : 'The maximum value for this field is {0}',
+    maxText: 'The maximum value for this field is {0}',
 
     /**
      * @cfg {String} nanText
-     * Error text to display if the value is not a valid number. For example, this can happen if a valid character like
-     * '.' or '-' is left in the field with no number.
+     * Error text to display if the value is not a valid number. For example, this can happen
+     * if a valid character like '.' or '-' is left in the field with no number.
      * @locale
      */
-    nanText : '{0} is not a valid number',
+    nanText: '{0} is not a valid number',
 
     /**
      * @cfg {String} negativeText
-     * Error text to display if the value is negative and {@link #minValue} is set to 0. This is used instead of the
-     * {@link #minText} in that circumstance only.
+     * Error text to display if the value is negative and {@link #minValue} is set to 0.
+     * This is used instead of the {@link #minText} in that circumstance only.
      * @locale
      */
-    negativeText : 'The value cannot be negative',
+    negativeText: 'The value cannot be negative',
 
     /**
      * @cfg {String} baseChars
      * The base set of characters to evaluate as valid numbers.
      */
-    baseChars : '0123456789',
+    baseChars: '0123456789',
 
     /**
      * @cfg {Boolean} autoStripChars
@@ -203,9 +207,11 @@ Ext.define('Ext.form.field.Number', {
 
     initComponent: function() {
         var me = this;
+
         if (me.decimalSeparator === null) {
             me.decimalSeparator = Ext.util.Format.decimalSeparator;
         }
+
         me.callParent();
 
         me.setMinValue(me.minValue);
@@ -258,23 +264,27 @@ Ext.define('Ext.form.field.Number', {
         if (me.hasFocus) {
             bind = me.getBind();
             valueBind = bind && bind.value;
+
             if (valueBind && valueBind.syncing && value === me.value) {
                 return me;
             }
         }
+
         return me.callParent([value]);
     },
 
     /**
-     * Runs all of Number's validations and returns an array of any errors. Note that this first runs Text's
-     * validations, so the returned array is an amalgamation of all field errors. The additional validations run test
-     * that the value is a number, and that it is within the configured min and max values.
+     * Runs all of Number's validations and returns an array of any errors. Note that this first
+     * runs Text's validations, so the returned array is an amalgamation of all field errors.
+     * The additional validations run test that the value is a number, and that it is within
+     * the configured min and max values.
      * @param {Object} [value] The value to get errors for (defaults to the current field value)
      * @return {String[]} All validation errors for this field
      */
     getErrors: function(value) {
         value = arguments.length > 0 ? value : this.processRawValue(this.getRawValue());
 
+        // eslint-disable-next-line vars-on-top
         var me = this,
             errors = me.callParent([value]),
             format = Ext.String.format,
@@ -286,7 +296,7 @@ Ext.define('Ext.form.field.Number', {
 
         value = String(value).replace(me.decimalSeparator, '.');
 
-        if(isNaN(value)){
+        if (isNaN(value)) {
             errors.push(format(me.nanText, value));
         }
 
@@ -309,19 +319,24 @@ Ext.define('Ext.form.field.Number', {
 
     rawToValue: function(rawValue) {
         var value = this.fixPrecision(this.parseValue(rawValue));
+
         if (value === null) {
             value = rawValue || null;
         }
-        return  value;
+
+        return value;
     },
 
     valueToRaw: function(value) {
         var me = this,
             decimalSeparator = me.decimalSeparator;
+
         value = me.parseValue(value);
         value = me.fixPrecision(value);
-        value = Ext.isNumber(value) ? value : parseFloat(String(value).replace(decimalSeparator, '.'));
+        value =
+            Ext.isNumber(value) ? value : parseFloat(String(value).replace(decimalSeparator, '.'));
         value = isNaN(value) ? '' : String(value).replace('.', decimalSeparator);
+
         return value;
     },
     
@@ -331,7 +346,8 @@ Ext.define('Ext.form.field.Number', {
             
         if (!me.submitLocaleSeparator) {
             value = value.replace(me.decimalSeparator, '.');
-        }  
+        }
+  
         return value;
     },
 
@@ -352,7 +368,7 @@ Ext.define('Ext.form.field.Number', {
         
     },
     
-    toggleSpinners: function(){
+    toggleSpinners: function() {
         var me = this,
             value = me.getValue(),
             valueIsNull = value === null,
@@ -405,6 +421,7 @@ Ext.define('Ext.form.field.Number', {
                 if (me.allowDecimals) {
                     allowed += me.decimalSeparator;
                 }
+
                 if (me.minValue < 0) {
                     allowed += '-';
                 }
@@ -412,6 +429,7 @@ Ext.define('Ext.form.field.Number', {
             
             allowed = Ext.String.escapeRegex(allowed);
             me.maskRe = new RegExp('[' + allowed + ']');
+
             if (me.autoStripChars) {
                 me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
             }
@@ -444,43 +462,48 @@ Ext.define('Ext.form.field.Number', {
     /**
      * @private
      */
-    parseValue : function(value) {
+    parseValue: function(value) {
         value = parseFloat(String(value).replace(this.decimalSeparator, '.'));
+
         return isNaN(value) ? null : value;
     },
 
     /**
      * @private
      */
-    fixPrecision : function(value) {
+    fixPrecision: function(value) {
         var me = this,
             nan = isNaN(value),
             precision = me.decimalPrecision;
 
         if (nan || !value) {
             return nan ? '' : value;
-        } else if (!me.allowDecimals || precision <= 0) {
+        }
+        else if (!me.allowDecimals || precision <= 0) {
             precision = 0;
         }
 
         return parseFloat(Ext.Number.toFixed(parseFloat(value), precision));
     },
 
-    onBlur : function(e) {
+    onBlur: function(e) {
         var me = this,
             v = me.rawToValue(me.getRawValue());
 
         if (!Ext.isEmpty(v)) {
             me.setValue(v);
         }
+
         me.callParent([e]);
     },
 
-    setSpinUpEnabled: function(enabled, internal){
+    setSpinUpEnabled: function(enabled, internal) {
         this.callParent(arguments);
+
         if (!internal) {
             delete this.spinUpDisabledByToggle;
-        } else {
+        }
+        else {
             this.spinUpDisabledByToggle = !enabled;
         }
     },
@@ -489,24 +512,30 @@ Ext.define('Ext.form.field.Number', {
         var me = this;
             
         if (!me.readOnly) {
-            me.setSpinValue(Ext.Number.constrain(me.getValue() + me.step, me.minValue, me.maxValue));
+            me.setSpinValue(
+                Ext.Number.constrain(me.getValue() + me.step, me.minValue, me.maxValue)
+            );
         }
     },
 
-    setSpinDownEnabled: function(enabled, internal){
+    setSpinDownEnabled: function(enabled, internal) {
         this.callParent(arguments);
+
         if (!internal) {
             delete this.spinDownDisabledByToggle;
-        } else {
+        }
+        else {
             this.spinDownDisabledByToggle = !enabled;
-        }   
+        }
     },
 
     onSpinDown: function() {
         var me = this;
         
         if (!me.readOnly) {
-            me.setSpinValue(Ext.Number.constrain(me.getValue() - me.step, me.minValue, me.maxValue));
+            me.setSpinValue(
+                Ext.Number.constrain(me.getValue() - me.step, me.minValue, me.maxValue)
+            );
         }
     },
     
@@ -520,6 +549,7 @@ Ext.define('Ext.form.field.Number', {
                 return;
             }
         }
+
         me.setValue(value);
     }
 });

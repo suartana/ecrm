@@ -14,6 +14,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                 animate: false
             }, config));
         };
+
         createThumb = function(config) {
             thumb = new Ext.slider.Thumb(config);
         };
@@ -23,11 +24,13 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
         if (slider) {
             slider.destroy();
         }
+
         slider = null;
         
         if (thumb) {
             thumb.destroy();
         }
+
         thumb = null;
     });
     
@@ -71,13 +74,14 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                             beforeEach(function() {
                                 setupSlider();
                                 var xy = thumb0.el.getXY();
+
                                 jasmine.fireMouseEvent(thumb0.el, 'mousedown', xy[0], xy[1]);
                                 jasmine.fireMouseEvent(thumb0.el, 'mouseup', xy[0], xy[1]);
                             });
 
                             it("should not change the thumb value", function() {
                                 expect(thumb0.value).toEqual(0);
-                            });   
+                            });
                         });
 
                         var dragConfig = {};
@@ -122,8 +126,8 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                                     
                                     it("should remove z-index of non-dragged thumb", function() {
                                         // z-indices will work down from the top one which is at 10000
-                                        expect(thumb60.el.dom.style.zIndex == 9000).toBe(true);
-                                        expect(thumb90.el.dom.style.zIndex == 8000).toBe(true);                                            
+                                        expect(+thumb60.el.dom.style.zIndex).toBe(9000);
+                                        expect(+thumb90.el.dom.style.zIndex).toBe(8000);
                                     });
                                 });
                             });
@@ -138,6 +142,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                         describe("if slider enabled", function() {
                             beforeEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'click', xy[0] + 100, xy[1] + 10);
                             });
                             
@@ -150,19 +155,21 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                             beforeEach(function() {
                                 slider.disable();
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0] + 10, xy[1] + 10);
                             });
                             
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mouseup', xy[0] + 10, xy[1] + 10);
                             });
 
                             it("should not change the thumb value", function() {
                                 expect(thumb0.value).toEqual(0);
-                            });                        
+                            });
                         });
-                    });                    
+                    });
                 });
             });
         });
@@ -228,8 +235,8 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                                     
                                     it("should remove z-index of non-dragged thumb", function() {
                                         // z-indices will work down from the top one which is at 10000
-                                        expect(thumb60.el.dom.style.zIndex == 9000).toBe(true);
-                                        expect(thumb90.el.dom.style.zIndex == 8000).toBe(true);                                            
+                                        expect(+thumb60.el.dom.style.zIndex).toBe(9000);
+                                        expect(+thumb90.el.dom.style.zIndex).toBe(8000);
                                     });
                                 });
                             });
@@ -258,17 +265,19 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                             beforeEach(function() {
                                 slider.disable();
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0] + 10, xy[1] - 10);
                             });
                             
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mouseup', xy[0] + 10, xy[1] - 10);
                             });
 
                             it("should not change the thumb value", function() {
                                 expect(thumb0.value).toEqual(0);
-                            });                        
+                            });
                         });
                     });
                 });

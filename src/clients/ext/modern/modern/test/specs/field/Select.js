@@ -1,4 +1,10 @@
-topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ext.app.ViewModel'], function() {
+topSuite("Ext.field.Select", [
+    'Ext.data.ArrayStore',
+    'Ext.viewport.Default',
+    'Ext.app.ViewModel',
+    'Ext.mixin.Watchable'
+],
+function() {
     var field, 
         viewport,
         store,
@@ -1245,8 +1251,7 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
         });
     });
 
-    // TODO: multiselect
-    xdescribe('multiSelect: true', function() {
+    describe('multiSelect: true', function() {
         var createMultiSelectField = function(config) {
             config = Ext.apply({
                 renderTo: document.body,
@@ -1274,16 +1279,13 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
         };
 
         describe('General tests', function() {
-            // TODO: Update this when https://sencha.jira.com/browse/EXT-486 is fixed
-            // and we have a Chip dataview
             it('should update the value and the selected item UI upon record mutation', function() {
                 createMultiSelectField();
                 field.setValue('ExtJS');
 
                 expect(field.getValue()).toEqual(['ExtJS']);
 
-                // This wull not be right when https://sencha.jira.com/browse/EXT-486 is fixed
-                expect(field.getInputValue()).toEqual('ExtJS');
+                expect(field.chipView.bodyElement.dom.innerText.trim()).toEqual('ExtJS');
 
                 store.getAt(0).set({
                     value: 'Sencha',
@@ -1292,8 +1294,7 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
 
                 expect(field.getValue()).toEqual(['Sencha']);
 
-                // This wull not be right when https://sencha.jira.com/browse/EXT-486 is fixed
-                expect(field.getInputValue()).toEqual('Our Framework');
+                expect(field.chipView.bodyElement.dom.innerText.trim()).toEqual('Our Framework');
             });
         });
 
@@ -1310,44 +1311,8 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
                 expect(field.getValue()).toEqual([store.getAt(0).get(field.getValueField())]);
                 expect(field.getSelection()).toEqual([store.getAt(0)]);
 
-                // Tap the second item
-                Ext.testHelper.tap(picker.itemFromRecord(1).el);
-
-                // Now field has two values in the array
-                expect(field.getValue()).toEqual([
-                    store.getAt(0).get(field.getValueField()),
-                    store.getAt(1).get(field.getValueField())
-                ]);
-                expect(field.getSelection()).toEqual([
-                    store.getAt(0),
-                    store.getAt(1)
-                ]);
-
-                // Should deselect item 0
-                Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
-
-                expect(field.getValue()).toEqual([store.getAt(1).get(field.getValueField())]);
-                expect(field.getSelection()).toEqual([store.getAt(1)]);
-            });
-        });
-
-        describe('Adding to the valueCollection on BoundList ENTER key', function() {
-            it('should set the value to an array', function() {
-                createMultiSelectField();
-                focusAndWait(field);
-
-                runs(function() {
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.DOWN);
-
-                    // Select item 0
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
-
-                    expect(field.getValue()).toEqual([store.getAt(0).get(field.getValueField())]);
-                    expect(field.getSelection()).toEqual([store.getAt(0)]);
-
-                    // Select the second item
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.DOWN);
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
+                    // Tap the second item
+                    Ext.testHelper.tap(picker.itemFromRecord(1).el);
 
                     // Now field has two values in the array
                     expect(field.getValue()).toEqual([
@@ -1360,8 +1325,79 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
                     ]);
 
                     // Should deselect item 0
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.UP);
-                    jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
+                    Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
+
+                    expect(field.getValue()).toEqual([store.getAt(1).get(field.getValueField())]);
+                    expect(field.getSelection()).toEqual([store.getAt(1)]);
+
+                });
+
+                it('should single select when switched from multiselect', function() {
+                    createMultiSelectField();
+                    field.expand();
+                    // Tapping on the tool should select.
+                    // The default List behaviour of ignoring tool taps
+                    // should be defeated by passive: true Tools
+                    Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
+                    Ext.testHelper.tap(picker.itemFromRecord(1).el);
+
+                    // Now field has two values in the array
+                    expect(field.getValue()).toEqual([
+                        store.getAt(0).get(field.getValueField()),
+                        store.getAt(1).get(field.getValueField())
+                    ]);
+                    expect(field.getSelection()).toEqual([
+                        store.getAt(0),
+                        store.getAt(1)
+                    ]);
+
+                    // Now converting it into single select
+                    field.setMultiSelect(false);
+
+                    Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
+                    Ext.testHelper.tap(picker.itemFromRecord(1).el);
+
+                    // Now field has single selected value of latest selection
+                    expect(field.getValue()).toEqual(
+                        store.getAt(1).get(field.getValueField())
+                    );
+                    expect(field.getSelection()).toEqual(
+                        store.getAt(1)
+                    );
+                });
+            });
+
+            describe('Adding to the valueCollection on BoundList ENTER key', function() {
+                it('should set the value to an array', function() {
+                    createMultiSelectField();
+                    focusAndWait(field);
+
+                    runs(function() {
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.DOWN);
+
+                        // Select item 0
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
+
+                        expect(field.getValue()).toEqual([store.getAt(0).get(field.getValueField())]);
+                        expect(field.getSelection()).toEqual([store.getAt(0)]);
+
+                        // Select the second item
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.DOWN);
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
+
+                        // Now field has two values in the array
+                        expect(field.getValue()).toEqual([
+                            store.getAt(0).get(field.getValueField()),
+                            store.getAt(1).get(field.getValueField())
+                        ]);
+                        expect(field.getSelection()).toEqual([
+                            store.getAt(0),
+                            store.getAt(1)
+                        ]);
+
+                        // Should deselect item 0
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.UP);
+                        jasmine.fireKeyEvent(field.inputElement, 'keydown', Ext.event.Event.ENTER);
 
                     expect(field.getValue()).toEqual([store.getAt(1).get(field.getValueField())]);
                     expect(field.getSelection()).toEqual([store.getAt(1)]);
@@ -1765,13 +1801,17 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
                             var args = selectionSpy.mostRecentCall.args;
 
                             // Selection should now be the real, matching record
-                            expect(args[0]).toEqual([getByVal('ExtJS')]);
+                            // expect(args[0]).toEqual([getByVal('ExtJS')]);
+                            var storeRec = getByVal('ExtJS');
+                            var selectRec = args[0][0];
+
+                            expect(selectRec.id).toBe(storeRec.id);
+                            expect(selectRec.data).toEqual(storeRec.data);
                             expect(args[1]).toBeUndefined();
 
                             args = valueSpy.mostRecentCall.args;
 
                             expect(args[0]).toEqual(['ExtJS']);
-                            expect(args[1]).toBeUndefined();
                         });
                     });
 
@@ -1908,13 +1948,77 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
         });
     });
 
-    describe('chained select fields', function() {
-        var CountriesStore,
-            StatesStore,
-            panel,
-            vm,
-            countries,
-            states;
+        describe('multiSelect: false', function() {
+            var createSingleSelectField = function(config) {
+                config = Ext.apply({
+                    renderTo: document.body,
+                    multiSelect: false,
+                    autoSelect: false,
+                    options: [
+                        'ExtJS',
+                        'Javascript',
+                        'CSS',
+                        'Git',
+                        'Java',
+                        'PHP',
+                        'COBOL',
+                        'Node.js',
+                        'JSON',
+                        'HTML5',
+                        'RIA',
+                        'OOP',
+                        'Scrum',
+                        'REST',
+                        'MVC'
+                    ]
+                }, config);
+                createField(config);
+
+                it('should multiselect when switched from single select', function() {
+                    createSingleSelectField();
+                    field.expand();
+
+                    // Tapping on the tool should select
+                    Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
+                    Ext.testHelper.tap(picker.itemFromRecord(1).el);
+
+                    // Now field has single selected value of latest selection
+                    expect(field.getValue()).toEqual(
+                        store.getAt(1).get(field.getValueField())
+                    );
+                    expect(field.getSelection()).toEqual(
+                        [store.getAt(1)]
+                    );
+
+                    // Now converting it into multi select
+                    field.setMultiSelect(true);
+
+                    // Tapping on the tool should select.
+                    // The default List behaviour of ignoring tool taps
+                    // should be defeated by passive: true Tools
+                    Ext.testHelper.tap(picker.itemFromRecord(0).getTools()[0].el);
+                    Ext.testHelper.tap(picker.itemFromRecord(1).el);
+
+                    // Now field has two values in the array
+                    expect(field.getValue()).toEqual([
+                        store.getAt(0).get(field.getValueField()),
+                        store.getAt(1).get(field.getValueField())
+                    ]);
+                    expect(field.getSelection()).toEqual([
+                        store.getAt(0),
+                        store.getAt(1)
+                    ]);
+                });
+            };
+        });
+        describe('chained select fields', function() {
+            var CountriesStore,
+                StatesStore,
+                panel,
+                vm,
+                countries,
+                states,
+                viewport;
 
         beforeEach(function() {
             CountriesStore = Ext.define('Ext.test.ChainedSelectTestCountries', {
@@ -2056,7 +2160,8 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
 
         });
         afterEach(function() {
-            Ext.destroy(panel);
+            Ext.destroy(viewport, panel);
+            Ext.Viewport = null;
             Ext.undefine('Ext.test.ChainedSelectTestCountries');
             Ext.undefine('Ext.test.ChainedSelectTestStates');
         });
@@ -2077,6 +2182,31 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
             waitsFor(function() {
                 return states.getValue() == null;
             });
+        });
+
+        // Note that this expectation will only work when the dependent combobox
+        // has had its value picked from the open picker.
+        it('should clear the dependent field when its selected record is filtered out and edge pickers are being used', function() {
+            Ext.Viewport = viewport = new Ext.viewport.Default();
+            viewport.add(panel);
+
+            countries.setPicker('edge');
+            states.setPicker('edge');
+
+            // Select Colorado
+            states.expand();
+            states.getPicker().innerItems[0].getSelectable().select(5);
+            states.getPicker().onDoneButtonTap();
+            expect(states.getValue()).toBe('CO');
+
+            // This will refresh the picker's selmodel and evict the state.
+            countries.setValue('Canada');
+
+            // When binding ticks, the states should be cleared because its
+            // selected record is no longer in its store.
+            waitsFor(function() {
+                return states.getValue() == null;
+            }, 1000, 'State field to be cleared');
         });
     });
 });

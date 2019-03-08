@@ -1,12 +1,12 @@
 /**
- * Single checkbox field. Can be used as a direct replacement for traditional checkbox fields. Also serves as a
- * parent class for {@link Ext.form.field.Radio radio buttons}.
+ * Single checkbox field. Can be used as a direct replacement for traditional checkbox fields.
+ * Also serves as a parent class for {@link Ext.form.field.Radio radio buttons}.
  *
  * ## Labeling
  *
  * In addition to the {@link Ext.form.Labelable standard field labeling options}, checkboxes
- * may be given an optional {@link #boxLabel} which will be displayed immediately after checkbox. Also see
- * {@link Ext.form.CheckboxGroup} for a convenient method of grouping related checkboxes.
+ * may be given an optional {@link #boxLabel} which will be displayed immediately after checkbox.
+ * Also see {@link Ext.form.CheckboxGroup} for a convenient method of grouping related checkboxes.
  *
  * # Values
  *
@@ -20,10 +20,10 @@
  *
  * Any other value will un-check the checkbox.
  *
- * In addition to the main boolean value, you may also specify a separate {@link #inputValue}. This will be
- * sent as the parameter value when the form is {@link Ext.form.Basic#submit submitted}. You will want to set
- * this value if you have multiple checkboxes with the same {@link #name}. If not specified, the value `on`
- * will be used.
+ * In addition to the main boolean value, you may also specify a separate {@link #inputValue}.
+ * This will be sent as the parameter value when the form is
+ * {@link Ext.form.Basic#submit submitted}. You will want to set this value if you have multiple
+ * checkboxes with the same {@link #name}. If not specified, the value `on` will be used.
  *
  * ## Example usage
  *
@@ -113,8 +113,8 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * @property {Ext.dom.Element} boxLabelEl
-     * A reference to the label element created for the {@link #boxLabel}. Only present if the component has been
-     * rendered and has a boxLabel configured.
+     * A reference to the label element created for the {@link #boxLabel}. Only present
+     * if the component has been rendered and has a boxLabel configured.
      */
 
     /**
@@ -127,6 +127,7 @@ Ext.define('Ext.form.field.Checkbox', {
         'displayEl'
     ],
 
+    /* eslint-disable indent, max-len */
     // note: {id} here is really {inputId}, but {cmpId} is available
     /**
      * @cfg fieldSubTpl
@@ -173,6 +174,7 @@ Ext.define('Ext.form.field.Checkbox', {
             compiled: true
         }
     ],
+    /* eslint-enable indent, max-len */
 
     /**
      * @cfg publishes
@@ -264,8 +266,8 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * @cfg {String} boxLabel
-     * An optional text label that will appear next to the checkbox. Whether it appears before or after the checkbox is
-     * determined by the {@link #boxLabelAlign} config.
+     * An optional text label that will appear next to the checkbox. Whether it appears before
+     * or after the checkbox is determined by the {@link #boxLabelAlign} config.
      */
 
     /**
@@ -276,8 +278,8 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * @cfg {String} boxLabelAlign
-     * The position relative to the checkbox where the {@link #boxLabel} should appear. Recognized values are 'before'
-     * and 'after'.
+     * The position relative to the checkbox where the {@link #boxLabel} should appear.
+     * Recognized values are 'before' and 'after'.
      */
     boxLabelAlign: 'after',
 
@@ -304,8 +306,8 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * @cfg {Function/String} [handler=undefined]
-     * A function called when the {@link #checked} value changes (can be used instead of handling the {@link #change
-     * change event}).
+     * A function called when the {@link #checked} value changes (can be used instead of handling
+     * the {@link #change change event}).
      * @cfg {Ext.form.field.Checkbox} handler.checkbox The Checkbox being toggled.
      * @cfg {Boolean} handler.checked The new checked state of the checkbox.
      * @controllable
@@ -376,8 +378,9 @@ Ext.define('Ext.form.field.Checkbox', {
 
         /**
          * @property {Object} originalValue
-         * The original value of the field as configured in the {@link #checked} configuration, or as loaded by the last
-         * form load operation if the form's {@link Ext.form.Basic#trackResetOnLoad trackResetOnLoad} setting is `true`.
+         * The original value of the field as configured in the {@link #checked} configuration,
+         * or as loaded by the last form load operation if the form's
+         * {@link Ext.form.Basic#trackResetOnLoad trackResetOnLoad} setting is `true`.
          */
         me.originalValue = me.initialValue = me.lastValue = checked;
 
@@ -407,6 +410,7 @@ Ext.define('Ext.form.field.Checkbox', {
         if (o) {
             o[me.getName()] = me.checked ? me.modelValue : me.modelValueUnchecked;
         }
+
         return o;
     },
 
@@ -485,6 +489,7 @@ Ext.define('Ext.form.field.Checkbox', {
         var me = this;
         
         me.boxLabel = boxLabel;
+
         if (me.rendered) {
             me.boxLabelEl.setHtml(boxLabel);
             me.boxLabelEl[boxLabel ? 'removeCls' : 'addCls'](me.noBoxLabelCls);
@@ -567,8 +572,8 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * Returns the submit value for the checkbox which can be used when submitting forms.
-     * @return {String} If checked the {@link #inputValue} is returned; otherwise the {@link #uncheckedValue}
-     * (or null if the latter is not configured).
+     * @return {String} If checked the {@link #inputValue} is returned; otherwise the
+     * {@link #uncheckedValue} (or null if the latter is not configured).
      */
     getSubmitValue: function() {
         var unchecked = this.uncheckedValue,
@@ -582,13 +587,17 @@ Ext.define('Ext.form.field.Checkbox', {
 
         if (rawValue === true || rawValue === 'true') {
             ret = true;
-        } else {
-            if (inputValue !== 'on' && (inputValue || inputValue === 0) && (Ext.isString(rawValue) || Ext.isNumber(rawValue))) {
-                ret = rawValue == inputValue;
-            } else {
+        }
+        else {
+            if (inputValue !== 'on' && (inputValue || inputValue === 0) &&
+                (Ext.isString(rawValue) || Ext.isNumber(rawValue))) {
+                ret = rawValue == inputValue; // eslint-disable-line eqeqeq
+            }
+            else {
                 ret = rawValue === '1' || rawValue === 1 || this.onRe.test(rawValue);
             }
         }
+
         return ret;
     },
 
@@ -627,21 +636,21 @@ Ext.define('Ext.form.field.Checkbox', {
 
     /**
      * Sets the checked state of the checkbox, and invokes change detection.
-     * @param {Array/Boolean/String} checked The following values will check the checkbox: `true, 'true', '1', or 'on'`, as
-     * well as a String that matches the {@link #inputValue}. Any other value will 
-     * un-check the checkbox.
+     * @param {Array/Boolean/String} checked The following values will check the checkbox:
+     * `true, 'true', '1', or 'on'`, as well as a String that matches the {@link #inputValue}.
+     * Any other value will  un-check the checkbox.
      *
-     * You may also pass an array of string values. If an array of strings is passed, all checkboxes in the group
-     * with a matched name will be checked.  The checkbox will be unchecked if a corresponding value
-     * is not found in the array.
+     * You may also pass an array of string values. If an array of strings is passed, all checkboxes
+     * in the group with a matched name will be checked.  The checkbox will be unchecked
+     * if a corresponding value is not found in the array.
      * @return {Ext.form.field.Checkbox} this
      */
     setValue: function(checked) {
         var me = this,
             boxes, i, len, box;
 
-        // If an array of strings is passed, find all checkboxes in the group with the same name as this
-        // one and check all those whose inputValue is in the array, un-checking all the 
+        // If an array of strings is passed, find all checkboxes in the group with the same name
+        // as this one and check all those whose inputValue is in the array, un-checking all the 
         // others. This is to facilitate setting values from Ext.form.Basic#setValues, 
         // but is not publicly documented as we don't want users depending on this 
         // behavior.
@@ -653,7 +662,8 @@ Ext.define('Ext.form.field.Checkbox', {
                 box = boxes[i];
                 box.setValue(Ext.Array.contains(checked, box.inputValue));
             }
-        } else {
+        }
+        else {
             // The callParent() call ends up trigger setRawValue, we only want to modify
             // the lastValue when setRawValue being called independently.
             me.duringSetValue = true;
@@ -697,23 +707,22 @@ Ext.define('Ext.form.field.Checkbox', {
      */
     resetOriginalValue: function(fromBoxInGroup) {
         var me = this,
-            boxes,
-            box,
-            len,
-            i;
+            boxes, box, len, i;
             
         // If we're resetting the value of a field in a group, also reset the others.
         if (!fromBoxInGroup) {
             boxes = me.getManager().getByName(me.name, me.getFormId()).items;
-            len  = boxes.length;
+            len = boxes.length;
             
             for (i = 0; i < len; ++i) {
                 box = boxes[i];
+
                 if (box !== me) {
                     boxes[i].resetOriginalValue(true);
                 }
             }
         }
+
         me.callParent();
     },
 
@@ -757,10 +766,12 @@ Ext.define('Ext.form.field.Checkbox', {
 
         if (!me.formId) {
             form = me.up('form');
+
             if (form) {
                 me.formId = form.id;
             }
         }
+
         return me.formId;
     },
 

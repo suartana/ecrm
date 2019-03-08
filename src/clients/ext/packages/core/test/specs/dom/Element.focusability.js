@@ -42,7 +42,9 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
         try {
             want.focus();
         }
-        catch (e) {}
+        catch (e) {
+            // ignore
+        }
         
         // There is a strange inconsistent bug in IE where trying to focus a freshly added node
         // might fail if it's a textbox, textarea, or an iframe. Trying to focus it the second time
@@ -53,7 +55,9 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
             try {
                 want.focus();
             }
-            catch (e) {};
+            catch (e) {
+                // ignore
+            }
         }
         
         // NOT document.activeElement here! See comment in getActiveElement!
@@ -118,19 +122,19 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
                 function createStandardSuite(wantFocusable) {
                     createFocusableSpecs(
                         "with tabIndex < 0",
-                        function() { dom.setAttribute('tabIndex', -1) },
+                        function() { dom.setAttribute('tabIndex', -1); },
                         wantFocusable
                     );
                     
                     createFocusableSpecs(
                         "with tabIndex = 0",
-                        function() { dom.setAttribute('tabIndex', 0) },
+                        function() { dom.setAttribute('tabIndex', 0); },
                         wantFocusable
                     );
                     
                     createFocusableSpecs(
                         "with tabIndex > 0",
-                        function() { dom.setAttribute('tabIndex', 1) },
+                        function() { dom.setAttribute('tabIndex', 1); },
                         wantFocusable
                     );
                 }
@@ -217,7 +221,7 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
                                     createVisibilitySuites(true);
                                 });
                                 
-                                if ( disableableTags[ (elConfig.tag || 'div').toUpperCase() ] ) {
+                                if (disableableTags[(elConfig.tag || 'div').toUpperCase()]) {
                                     describe("disabled=true " + name, function() {
                                         beforeEach(function() {
                                             dom.setAttribute('disabled', true);
@@ -414,7 +418,7 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
                         createSuite('span', { tag: 'span' });
                         createSuite('p', { tag: 'p' });
                         createSuite('ul li', { tag: 'ul', cn: [{ tag: 'li' }] }, 'li');
-                        createSuite('ol li', { tag: 'ol', cn: [{ tag: 'li' }] }, 'li' );
+                        createSuite('ol li', { tag: 'ol', cn: [{ tag: 'li' }] }, 'li');
                         createSuite('img', { tag: 'img' });
                         createSuite('td', {
                             tag: 'table',
@@ -549,7 +553,7 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
                                     createVisibilitySuites(true);
                                 });
                             
-                                if ( disableableTags[ (elConfig.tag || 'div').toUpperCase() ] ) {
+                                if (disableableTags[(elConfig.tag || 'div').toUpperCase()]) {
                                     describe("disabled=true " + name, function() {
                                         beforeEach(function() {
                                             dom.setAttribute('disabled', true);
@@ -706,7 +710,7 @@ topSuite("Ext.dom.Element.focusability", [false, 'Ext.dom.Element'], function() 
                         createSuite('span', { tag: 'span' });
                         createSuite('p', { tag: 'p' });
                         createSuite('ul li', { tag: 'ul', cn: [{ tag: 'li' }] }, 'li');
-                        createSuite('ol li', { tag: 'ol', cn: [{ tag: 'li' }] }, 'li' );
+                        createSuite('ol li', { tag: 'ol', cn: [{ tag: 'li' }] }, 'li');
                         createSuite('img', { tag: 'img' });
                         createSuite('td', {
                             tag: 'table',

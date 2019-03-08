@@ -1,6 +1,11 @@
 /* global Ext, spyOn, jasmine, expect */
 
-topSuite("Ext.Widget.floated", [false, 'Ext.Panel'], function() {
+topSuite('Ext.Widget.floated', [
+    false,
+    'Ext.Dialog',
+    'Ext.form.*',
+    'Ext.field.*'
+], function() {
     var w;
 
     function makeWidget(cfg) {
@@ -548,14 +553,14 @@ topSuite("Ext.Widget.floated", [false, 'Ext.Panel'], function() {
 
     // Phones do not use floated pickers
     if (!Ext.platformTags.phone) {
-        describe('non-parent hierarchy', function () {
+        describe('non-parent hierarchy', function() {
             var dialog, dateField, picker;
 
-            afterEach(function () {
+            afterEach(function() {
                 Ext.destroy(dialog);
             });
 
-            it('should render the float roots of non-child descendant floateds into the closest ancestor floatWrap', function () {
+            it('should render the float roots of non-child descendant floateds into the closest ancestor floatWrap', function() {
                 dialog = new Ext.Dialog({
                     modal: false,
                     title: 'Floated Panel',

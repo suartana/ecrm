@@ -300,6 +300,7 @@ Ext.define('Ext.theme.Material', {
     },
 
     hasFashion: function() {
+        // eslint-disable-next-line no-undef
         return !!window.Fashion && !!Fashion.css && Fashion.css.setVariables;
     },
 
@@ -311,18 +312,22 @@ Ext.define('Ext.theme.Material', {
         return this._autoUpdateMeta;
     },
 
-    getDefaultWeight: function () {
+    getDefaultWeight: function() {
         return this._defaultWeight;
     },
 
-    setDarkMode: function (value) {
+    setDarkMode: function(value) {
         if (!this.hasFashion()) {
             //<debug>
-            Ext.Logger.warn('Fashion was not found and is required to set CSS Variables for Material Theme');
+            Ext.Logger.warn(
+                'Fashion was not found and is required to set CSS Variables for Material Theme');
             //</debug>
+
             return;
         }
-        Fashion.css.setVariables({'dark-mode': value ? 'true' : 'false'});
+
+        // eslint-disable-next-line no-undef
+        Fashion.css.setVariables({ 'dark-mode': value ? 'true' : 'false' });
     },
 
     /**
@@ -331,55 +336,76 @@ Ext.define('Ext.theme.Material', {
      * @param {String} colorsConfig.base Name of the base color (red, green, blue, etc)
      * @param {String} colorsConfig.baseWeight Weight for the base color ('500', '400', '300', etc)
      * @param {String} colorsConfig.accent Name of the accent color (red, green, blue, etc)
-     * @param {String} colorsConfig.accentWeight Weight for the accent color ('500', '400', '300', etc)
+     * @param {String} colorsConfig.accentWeight Weight for the accent color
+     * ('500', '400', '300', etc)
      * @param {Boolean} colorsConfig.darkMode Determines if the theme is in Light or Dark Mode
      */
-    setColors: function (colorsConfig) {
+    setColors: function(colorsConfig) {
+        var obj = {},
+            baseColor, accentColor;
+
         if (!this.hasFashion()) {
             //<debug>
-            Ext.Logger.warn('Fashion was not found and is required to set CSS Variables for Material Theme');
+            Ext.Logger.warn(
+                'Fashion was not found and is required to set CSS Variables for Material Theme');
             //</debug>
+
             return;
         }
 
-        colorsConfig = Ext.merge( { baseWeight: this.getDefaultWeight(), accentWeight: this.getDefaultWeight()}, colorsConfig);
+        colorsConfig = Ext.merge(
+            { baseWeight: this.getDefaultWeight(), accentWeight: this.getDefaultWeight() },
+            colorsConfig);
 
-        var baseColor = this._colors[colorsConfig.base],
-            accentColor = this._colors[colorsConfig.accent], obj = {};
+        baseColor = this._colors[colorsConfig.base];
+        accentColor = this._colors[colorsConfig.accent];
 
         if (baseColor) {
             if (baseColor[colorsConfig.baseWeight]) {
                 obj['base-color-name'] = colorsConfig.base;
+
                 if (this.getAutoUpdateMeta()) {
                     this.updateMetaThemeColor(colorsConfig.base, colorsConfig.baseWeight);
                 }
-            } else {
-                Ext.Logger.warn("Base color weight: " + colorsConfig.baseWeight + " is not a valid weight", this);
             }
-        } else if (colorsConfig.base) {
-            Ext.Logger.warn("Base color: " + colorsConfig.base + " is not a valid material color", this);
+            else {
+                Ext.Logger.warn(
+                    "Base color weight: " + colorsConfig.baseWeight + " is not a valid weight",
+                    this);
+            }
+        }
+        else if (colorsConfig.base) {
+            Ext.Logger.warn(
+                "Base color: " + colorsConfig.base + " is not a valid material color", this);
         }
 
         if (accentColor) {
             if (accentColor[colorsConfig.accentWeight]) {
                 obj['accent-color-name'] = colorsConfig.accent;
-            } else {
-                Ext.Logger.warn("Accent color weight: " + colorsConfig.accentWeight + " is not a valid weight", this);
             }
-        }  else if (colorsConfig.accent) {
-            Ext.Logger.warn("Accent color: " + colorsConfig.accent + " is not a valid material color", this);
+            else {
+                Ext.Logger.warn(
+                    "Accent color weight: " + colorsConfig.accentWeight + " is not a valid weight",
+                    this);
+            }
+        }
+        else if (colorsConfig.accent) {
+            Ext.Logger.warn(
+                "Accent color: " + colorsConfig.accent + " is not a valid material color", this);
         }
 
         if (colorsConfig.darkMode !== null) {
             obj['dark-mode'] = colorsConfig.darkMode ? 'true' : 'false';
         }
 
+        // eslint-disable-next-line no-undef
         Fashion.css.setVariables(obj);
     },
 
-    updateMetaThemeColor: function (colorName, weight) {
+    updateMetaThemeColor: function(colorName, weight) {
         var color = this._colors[colorName],
-            toolbarIsDynamic = Ext.manifest.material.toolbar.dynamic, meta;
+            toolbarIsDynamic = Ext.manifest.material.toolbar.dynamic,
+            meta;
 
         if (!weight) {
             weight = this.getDefaultWeight();
@@ -388,13 +414,14 @@ Ext.define('Ext.theme.Material', {
         if (Ext.platformTags.android && Ext.platformTags.chrome && toolbarIsDynamic && color) {
             color = color[weight];
             meta = Ext.query('meta[name="theme-color"]')[0];
+
             if (meta) {
                 meta.setAttribute('content', color);
             }
         }
     },
 
-    getColors: function () {
+    getColors: function() {
         return this._colors;
     }
 });

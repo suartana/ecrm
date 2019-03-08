@@ -23,7 +23,7 @@ topSuite("Ext.app.domain.Global", function() {
     });
 
     it("should pass the event data & default the scope to the controller", function() {
-        var data = [{ foo: 1, bar: 2}, { foo: 3, bar: 4}];
+        var data = [{ foo: 1, bar: 2 }, { foo: 3, bar: 4 }];
         
         ctrl.listen({
             global: {
@@ -39,6 +39,7 @@ topSuite("Ext.app.domain.Global", function() {
 
     it("should be able to listen over multiple listen calls", function() {
         var other = jasmine.createSpy();
+
         ctrl.listen({
             global: {
                 foo: spy

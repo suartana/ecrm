@@ -1,6 +1,5 @@
 /**
  * A class which encapsulates a range of rows defining a selection in a grid.
- *
  */
 Ext.define('Ext.dataview.selection.Rows', {
     extend: 'Ext.dataview.selection.Selection',
@@ -42,7 +41,7 @@ Ext.define('Ext.dataview.selection.Rows', {
     add: function(range, keepExisting, suppressEvent) {
         var me = this,
             view = me.view,
-            rowIdx;
+            rowIdx, tmp;
 
         // Single element array - extract it.
         // We cannot accept an array of records in this Selection class
@@ -50,31 +49,35 @@ Ext.define('Ext.dataview.selection.Rows', {
         if (range.length === 1) {
             range = range[0];
         }
+
         // Adding a record selects that index
         if (range.isEntity) {
             range = view.mapToRecordIndex(range);
         }
+
         // Adding a single index - create an *EXCLUSIVE* range
         if (typeof range === 'number') {
             range = [range, range + 1];
         }
 
         //<debug>
-        if (range.length !== 2 || (typeof range[0] !== 'number') || (typeof range[1] !== 'number')) {
+        if (range.length !== 2 || typeof range[0] !== 'number' || typeof range[1] !== 'number') {
             Ext.raise('add must be called with a [start, end] row index *EXCLUSIVE* range');
         }
         //</debug>
 
         if (range[0] > range[1]) {
-            var tmp = range[1];
+            tmp = range[1];
             range[1] = range[0];
             range[0] = tmp;
         }
 
         me.lastSelected = range[1];
+
         if (!keepExisting) {
             me.clear();
         }
+
         me.getSelected().add(range);
 
         for (rowIdx = range[0]; rowIdx < range[1]; rowIdx++) {
@@ -97,27 +100,31 @@ Ext.define('Ext.dataview.selection.Rows', {
         if (!selModel.getDeselectable() && me.getCount() === 1) {
             return;
         }
+
         // Single element array - extract it.
         // We cannot accept an array of records in this Selection class
         // because we deal in row ranges.
         if (range.length === 1) {
             range = range[0];
         }
+
         // Removing a record selects that index
         if (range.isEntity) {
             range = view.mapToRecordIndex(range);
         }
+
         // Removing a single index - create an *EXCLUSIVE* range
         if (typeof range === 'number') {
             range = [range, range + 1];
         }
 
         //<debug>
-        if (!range.length === 2 && (typeof range[0] === 'number') && (typeof range[1] === 'number')) {
+        if (!range.length === 2 && typeof range[0] === 'number' && typeof range[1] === 'number') {
             Ext.raise('remove must be called with a [start, end] record *EXCLUSIVE* range');
         }
+
         if (range[0] > range[1]) {
-            Ext.raise('A range MUST have the start index first, and the exclusive end index second');
+            Ext.raise('Range must be [startIndex, endIndex] (exclusive end)');
         }
         //</debug>
 
@@ -137,15 +144,17 @@ Ext.define('Ext.dataview.selection.Rows', {
      * @param {Ext.data.Model} record The record to test.
      * @return {Boolean} `true` if the passed {@link Ext.data.Model record} is selected.
      */
-    isSelected: function (record) {
+    isSelected: function(record) {
         var me = this,
             ranges = me.getSelected().spans,
             len = ranges.length,
             recIndex, range, i;
 
         recIndex = record.isEntity ? me.view.getStore().indexOf(record) : record;
+
         for (i = 0; i < len; i++) {
             range = ranges[i];
+
             if (recIndex >= range[0] && recIndex < range[1]) {
                 return true;
             }
@@ -208,6 +217,7 @@ Ext.define('Ext.dataview.selection.Rows', {
 
         for (i = 0; i < len; i++) {
             range = ranges[i];
+
             for (j = range[0]; result !== false && j < range[1]; j++) {
                 result = fn.call(this || scope, j);
             }
@@ -246,14 +256,19 @@ Ext.define('Ext.dataview.selection.Rows', {
             colCount = columns.length;
             location = new Ext.grid.Location(view);
 
-            // Use Collection#each instead of copying the entire dataset into an array and iterating that.
+            // Use Collection#each instead of copying the entire dataset into an array and
+            // iterating that.
             if (selection) {
                 me.eachRow(function(recordIndex) {
                     location.setItem(recordIndex);
+
                     for (i = 0; i < colCount; i++) {
                         location.setColumn(columns[i]);
-                        if (fn.call(scope || me, location, location.columnIndex, location.recordIndex) === false) {
+
+                        if (fn.call(scope || me, location, location.columnIndex,
+                                    location.recordIndex) === false) {
                             abort = true;
+
                             return false;
                         }
                     }
@@ -266,11 +281,15 @@ Ext.define('Ext.dataview.selection.Rows', {
                     forRender: false,
                     callback: function(records) {
                         recCount = records.length;
+
                         for (i = 0; !abort && i < recCount; i++) {
                             location.setItem(records[i]);
+
                             for (j = 0; !abort && j < colCount; j++) {
                                 location.setColumn(columns[j]);
-                                if (fn.call(scope || me, location, location.columnIndex, location.recordIndex) === false) {
+
+                                if (fn.call(scope || me, location, location.columnIndex,
+                                            location.recordIndex) === false) {
                                     abort = true;
                                 }
                             }
@@ -288,6 +307,7 @@ Ext.define('Ext.dataview.selection.Rows', {
             if (!spans.isSpans) {
                 spans = new Ext.util.Spans();
             }
+
             return spans;
         },
 
@@ -312,9 +332,11 @@ Ext.define('Ext.dataview.selection.Rows', {
             for (i = 0; i < len; i++) {
                 view.onItemDeselect(i);
             }
+
             me.getSelected().clear();
 
-            // Enforce our selection model's deselectable: false by re-adding the last selected index.
+            // Enforce our selection model's deselectable: false by re-adding the last
+            // selected index.
             // Suppress event because we might be firing it.
             if (!selModel.getDeselectable() && me.lastSelected) {
                 me.add(me.lastSelected, true, true);
@@ -338,7 +360,9 @@ Ext.define('Ext.dataview.selection.Rows', {
          * @private
          */
         isAllSelected: function() {
-            return this.getCount() === (this.view.getStore().getTotalCount() || this.view.store.getCount());
+            var store = this.view.store;
+
+            return this.getCount() === (store.getTotalCount() || store.getCount());
         },
 
         /**
@@ -349,11 +373,13 @@ Ext.define('Ext.dataview.selection.Rows', {
         setRangeStart: function(start) {
             if (start == null) {
                 this.dragRange = null;
-            } else {
+            }
+            else {
                 this.dragRange = [start, start];
 
-                // This is just theoretical for now - we are simply defining a range, not adding to the collection.
-                // So we have to programatically sync the view state.
+                // This is just theoretical for now - we are simply defining a range, not
+                // adding to the collection.
+                // So we have to programmatically sync the view state.
                 this.view.onItemSelect(start, true);
             }
         },
@@ -382,8 +408,11 @@ Ext.define('Ext.dataview.selection.Rows', {
                 start = tmp;
             }
 
-            rowIdx = Math.max(Math.min(dragRange[0], start, oldEnd, end), renderInfo.indexTop);
-            limit = Math.min(Math.max(dragRange[1], start, oldEnd, end), renderInfo.indexBottom - 1);
+            rowIdx = Math.max(Math.min(dragRange[0], start, oldEnd, end),
+                              renderInfo.indexTop);
+
+            limit = Math.min(Math.max(dragRange[1], start, oldEnd, end),
+                             renderInfo.indexBottom - 1);
 
             // Loop through the union of previous range and newly set range
             for (; rowIdx <= limit; rowIdx++) {
@@ -391,7 +420,8 @@ Ext.define('Ext.dataview.selection.Rows', {
                 if (rowIdx < start || rowIdx > end) {
                     view.onItemDeselect(rowIdx);
                     removeRange[removeRange.length ? 1 : 0] = rowIdx;
-                } else {
+                }
+                else {
                     view.onItemSelect(rowIdx, true);
                     addRange = true;
                 }
@@ -409,8 +439,9 @@ Ext.define('Ext.dataview.selection.Rows', {
         },
 
         /**
-         * Called at the end of a drag, or shift+downarrow row range select.
-         * The record range delineated by the start and end row indices is added to the selected Collection.
+         * Called at the end of a drag, or shift+downArrow row range select.
+         * The record range delineated by the start and end row indices is added to the
+         * selected Collection.
          * @private
          */
         addRange: function(keep) {
@@ -456,6 +487,7 @@ Ext.define('Ext.dataview.selection.Rows', {
             if (range[0] <= range[1]) {
                 return range;
             }
+
             return [range[1], range[0]];
         },
 
@@ -466,6 +498,7 @@ Ext.define('Ext.dataview.selection.Rows', {
          */
         getRangeSize: function() {
             var range = this.getRange();
+
             return range[1] - range[0] + 1;
         },
 
@@ -474,10 +507,15 @@ Ext.define('Ext.dataview.selection.Rows', {
                 range = me.getContiguousSelection();
 
             if (range) {
-                me.getSelectionModel().onSelectionFinish(me,
-                    new Ext.grid.Location(me.view, {record: range[0], column: 0}),
-                    new Ext.grid.Location(me.view, {record: range[1], column: me.view.getHeaderContainer().getVisibleColumns().length - 1}));
-            } else {
+                me.getSelectionModel().onSelectionFinish(
+                    me,
+                    new Ext.grid.Location(me.view, { record: range[0], column: 0 }),
+                    new Ext.grid.Location(me.view, {
+                        record: range[1],
+                        column: me.view.getHeaderContainer().getVisibleColumns().length - 1
+                    }));
+            }
+            else {
                 me.getSelectionModel().onSelectionFinish(me);
             }
         },

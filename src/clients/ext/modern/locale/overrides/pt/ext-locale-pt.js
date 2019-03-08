@@ -1,12 +1,17 @@
 /**
- * Portuguese/Brazil Translation 
+ * Portuguese/Brazil Translation
  */
 Ext.onReady(function() {
 
     if (Ext.Date) {
-        Ext.Date.monthNames = ["Janeiro", "Fevereiro", "Mar&ccedil;o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        Ext.Date.monthNames = [
+            "Janeiro", "Fevereiro", "Mar&ccedil;o", "Abril", "Maio", "Junho", "Julho", "Agosto",
+            "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
 
-        Ext.Date.dayNames = ["Domingo", "Segunda", "Ter&ccedil;a", "Quarta", "Quinta", "Sexta", "S&aacute;bado"];
+        Ext.Date.dayNames = [
+            "Domingo", "Segunda", "Ter&ccedil;a", "Quarta", "Quinta", "Sexta", "S&aacute;bado"
+        ];
     }
 
     if (Ext.util && Ext.util.Format) {
@@ -103,7 +108,7 @@ Ext.define('Ext.locale.pt.panel.Date', {
 Ext.define('Ext.locale.pt.panel.Collapser', {
     override: 'Ext.panel.Collapser',
 
-    config:{
+    config: {
         collapseToolText: "Recolher painel",
         expandToolText: "Expandir painel"
     }
@@ -150,10 +155,10 @@ Ext.define('Ext.locale.pt.Dialog', {
     }
 });
 
-Ext.define("Ext.locale.pt.field.FileButton", { 
-    override: "Ext.field.FileButton", 
+Ext.define("Ext.locale.pt.field.FileButton", {
+    override: "Ext.field.FileButton",
 
-    config:{
+    config: {
         text: 'Squeaky toy...'
     }
 });
@@ -161,7 +166,7 @@ Ext.define("Ext.locale.pt.field.FileButton", {
 Ext.define('Ext.locale.pt.dataview.List', {
     override: 'Ext.dataview.List',
 
-    config:{
+    config: {
         loadingText: 'Carregando...'
     }
 });
@@ -177,7 +182,7 @@ Ext.define('Ext.locale.pt.dataview.EmptyText', {
 Ext.define('Ext.locale.pt.dataview.Abstract', {
     override: 'Ext.dataview.Abstract',
 
-    config:{
+    config: {
         loadingText: 'Carregando...'
     }
 });
@@ -185,9 +190,9 @@ Ext.define('Ext.locale.pt.dataview.Abstract', {
 Ext.define("Ext.locale.pt.LoadMask", {
     override: "Ext.LoadMask",
 
-    config:{
+    config: {
         message: 'Carregando...'
-    } 
+    }
 });
 
 Ext.define('Ext.locale.pt.dataview.plugin.ListPaging', {
@@ -202,7 +207,7 @@ Ext.define('Ext.locale.pt.dataview.plugin.ListPaging', {
 Ext.define("Ext.locale.pt.dataview.DataView", {
     override: "Ext.dataview.DataView",
 
-    config:{
+    config: {
         emptyText: ""
     }
 });
@@ -217,7 +222,7 @@ Ext.define('Ext.locale.pt.field.Date', {
 Ext.define("Ext.locale.pt.grid.menu.SortAsc", {
     override: "Ext.grid.menu.SortAsc",
 
-    config:{
+    config: {
         text: "Ordenar crescente"
     }
 });
@@ -225,7 +230,7 @@ Ext.define("Ext.locale.pt.grid.menu.SortAsc", {
 Ext.define("Ext.locale.pt.grid.menu.SortDesc", {
     override: "Ext.grid.menu.SortDesc",
 
-    config:{
+    config: {
         text: "Ordenar decrescente"
     }
 });
@@ -233,7 +238,7 @@ Ext.define("Ext.locale.pt.grid.menu.SortDesc", {
 Ext.define("Ext.locale.pt.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
-    config:{
+    config: {
         text: "Agrupar por este campo"
     }
 });
@@ -241,7 +246,7 @@ Ext.define("Ext.locale.pt.grid.menu.GroupByThis", {
 Ext.define("Ext.locale.pt.grid.menu.ShowInGroups", {
     override: "Ext.grid.menu.ShowInGroups",
 
-    config:{
+    config: {
         text: "Mostrar em grupos"
     }
 });
@@ -249,15 +254,15 @@ Ext.define("Ext.locale.pt.grid.menu.ShowInGroups", {
 Ext.define("Ext.locale.pt.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
-    config:{
+    config: {
         text: "Colunas"
     }
 });
 
-Ext.define('Ext.locale.pt.data.validator.Presence',{
+Ext.define('Ext.locale.pt.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
-    config:{
+    config: {
         message: 'Deve estar presente'
     }
 });
@@ -265,7 +270,7 @@ Ext.define('Ext.locale.pt.data.validator.Presence',{
 Ext.define('Ext.locale.pt.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
-    config:{
+    config: {
         message: 'Está com formato errado'
     }
 });
@@ -273,7 +278,7 @@ Ext.define('Ext.locale.pt.data.validator.Format', {
 Ext.define('Ext.locale.pt.data.validator.Email', {
     override: 'Ext.data.validator.Email',
 
-    config:{
+    config: {
         message: 'Não é um e-mail válido'
     }
 });
@@ -281,7 +286,7 @@ Ext.define('Ext.locale.pt.data.validator.Email', {
 Ext.define('Ext.locale.pt.data.validator.Phone', {
     override: 'Ext.data.validator.Phone',
 
-    config:{
+    config: {
         message: 'Não é um telefone válido'
     }
 });
@@ -289,7 +294,7 @@ Ext.define('Ext.locale.pt.data.validator.Phone', {
 Ext.define('Ext.locale.pt.data.validator.Number', {
     override: 'Ext.data.validator.Number',
 
-    config:{
+    config: {
         message: 'Não é um número válido'
     }
 });
@@ -297,14 +302,14 @@ Ext.define('Ext.locale.pt.data.validator.Number', {
 Ext.define('Ext.locale.pt.data.validator.Url', {
     override: 'Ext.data.validator.Url',
 
-    config:{
+    config: {
         message: 'Não é uma URL válida'
     }
 });
 
 Ext.define('Ext.locale.pt.data.validator.Range', {
     override: 'Ext.data.validator.Range',
- 
+
     config: {
         nanMessage: 'Deve ser numérico',
         minOnlyMessage: 'Deve ser pelo menos {0}',
@@ -326,7 +331,7 @@ Ext.define('Ext.locale.pt.data.validator.Bound', {
 
 Ext.define('Ext.locale.pt.data.validator.CIDRv4', {
     override: 'Ext.data.validator.CIDRv4',
- 
+
     config: {
         message: 'Não é um bloco CIDR válido'
     }
@@ -334,7 +339,7 @@ Ext.define('Ext.locale.pt.data.validator.CIDRv4', {
 
 Ext.define('Ext.locale.pt.data.validator.CIDRv6', {
     override: 'Ext.data.validator.CIDRv6',
- 
+
     config: {
         message: 'Não é um bloco CIDR válido'
     }
@@ -342,7 +347,7 @@ Ext.define('Ext.locale.pt.data.validator.CIDRv6', {
 
 Ext.define('Ext.locale.pt.data.validator.Currency', {
     override: 'Ext.data.validator.Currency',
- 
+
     config: {
         message: 'Não é um valor monetário válido'
     }
@@ -351,7 +356,7 @@ Ext.define('Ext.locale.pt.data.validator.Currency', {
 
 Ext.define('Ext.locale.pt.data.validator.DateTime', {
     override: 'Ext.data.validator.DateTime',
- 
+
     config: {
         message: 'Não é uma data e hora válida'
     }
@@ -359,7 +364,7 @@ Ext.define('Ext.locale.pt.data.validator.DateTime', {
 
 Ext.define('Ext.locale.pt.data.validator.Exclusion', {
     override: 'Ext.data.validator.Exclusion',
- 
+
     config: {
         message: 'É um valor que foi excluído'
     }
@@ -367,7 +372,7 @@ Ext.define('Ext.locale.pt.data.validator.Exclusion', {
 
 Ext.define('Ext.locale.pt.data.validator.IPAddress', {
     override: 'Ext.data.validator.IPAddress',
- 
+
     config: {
         message: 'Não é um endereço IP válido'
     }
@@ -375,7 +380,7 @@ Ext.define('Ext.locale.pt.data.validator.IPAddress', {
 
 Ext.define('Ext.locale.pt.data.validator.Inclusion', {
     override: 'Ext.data.validator.Inclusion',
- 
+
     config: {
         message: 'Não está na lista de valores válidos'
     }
@@ -383,7 +388,7 @@ Ext.define('Ext.locale.pt.data.validator.Inclusion', {
 
 Ext.define('Ext.locale.pt.data.validator.Time', {
     override: 'Ext.data.validator.Time',
- 
+
     config: {
         message: 'Não é um momento válido'
     }
@@ -391,7 +396,7 @@ Ext.define('Ext.locale.pt.data.validator.Time', {
 
 Ext.define('Ext.locale.pt.data.validator.Date', {
     override: 'Ext.data.validator.Date',
- 
+
     config: {
         message: "Não é uma data válida"
     }
@@ -400,14 +405,54 @@ Ext.define('Ext.locale.pt.data.validator.Date', {
 Ext.define('Ext.locale.pt.data.validator.Length', {
     override: 'Ext.data.validator.Length',
 
-    config:{
+    config: {
         minOnlyMessage: 'Tamanho deve ser pelo menos {0}',
         maxOnlyMessage: 'Tamanho deve ser menor que {0}',
         bothMessage: 'Tamanho deve estar entre {0} e {1}'
     }
 });
 
+Ext.define('Ext.locale.pt.ux.colorpick.Selector', {
+    override: 'Ext.ux.colorpick.Selector',
+
+    okButtonText: 'OK',
+    cancelButtonText: 'Cancelar'
+});
+
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.pt.Component", {	
+Ext.define("Ext.locale.pt.Component", {
     override: "Ext.Component"
+});
+
+Ext.define("Ext.locale.pt.grid.filters.menu.Base", {
+    override: "Ext.grid.filters.menu.Base",
+
+    config: {
+        text: "Filtro"
+    }
+});
+
+Ext.define("Ext.locale.pt.grid.LockedGrid", {
+    override: "Ext.grid.LockedGrid",
+
+    config: {
+        columnMenu: {
+            items: {
+                region: {
+                    text: 'Região'
+                }
+            }
+        },
+        regions: {
+            left: {
+                menuLabel: 'Bloqueado (Esquerda)'
+            },
+            center: {
+                menuLabel: 'Desbloqueado'
+            },
+            right: {
+                menuLabel: 'Bloqueado (Direita)'
+            }
+        }
+    }
 });

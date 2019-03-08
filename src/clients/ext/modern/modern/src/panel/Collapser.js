@@ -590,7 +590,10 @@ Ext.define('Ext.panel.Collapser', {
             }
 
             me.preventUpdate = true;
-            me.setCollapsed(collapsed);
+            // Ensure the panel's collapsed config is maintained (so it can be stateful but
+            // also just to be correct if user calls getCollapsed):
+            target._collapsed = !collapsed;
+            target.setCollapsed(collapsed);
             me.preventUpdate = false;
 
             me.ensureCollapseTool();

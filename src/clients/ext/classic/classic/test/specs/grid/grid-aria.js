@@ -31,9 +31,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+            
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+            
             return this;
         };
     

@@ -1,7 +1,8 @@
 /**
  * A simple class used to mask any {@link Ext.Container}.
  *
- * This should rarely be used directly, instead look at the {@link Ext.Container#masked} configuration.
+ * This should rarely be used directly, instead look at the {@link Ext.Container#masked}
+ * configuration.
  *
  * ## Example
  *
@@ -69,12 +70,15 @@ Ext.define('Ext.Mask', {
         me.on('hide', 'onHide', me);
     },
 
-    onHide: function(){
+    onHide: function() {
+        var firstChild;
+
         Ext.util.InputBlocker.unblockInputs();
 
         // Oh how I loves the Android
         if (Ext.browser.is.AndroidStock4 && Ext.os.version.getMinor() === 0) {
-            var firstChild = this.element.getFirstChild();
+            firstChild = this.element.getFirstChild();
+
             if (firstChild) {
                 firstChild.redraw();
             }

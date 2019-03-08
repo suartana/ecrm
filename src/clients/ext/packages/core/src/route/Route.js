@@ -307,6 +307,7 @@ Ext.define('Ext.route.Route', {
          */
         handlers: [],
 
+        /* eslint-disable max-len */
         /**
          * @since 6.6.0
          * @property {Object} types
@@ -434,6 +435,7 @@ Ext.define('Ext.route.Route', {
          *         user: 'C56A4180-65AA-42EC-A945-5FD21DEC0538'
          *     }
          */
+        /* eslint-enable max-len */
         types: {
             cached: true,
             $value: {
@@ -442,7 +444,7 @@ Ext.define('Ext.route.Route', {
                 },
                 alphanum: {
                     re: '([a-zA-Z0-9]+|[0-9]+(?:\\.[0-9]+)?|[0-9]*(?:\\.[0-9]+){1})',
-                    parse: function (value) {
+                    parse: function(value) {
                         var test;
 
                         if (value && this.numRe.test(value)) {
@@ -459,7 +461,7 @@ Ext.define('Ext.route.Route', {
                 num: {
                     // allow `1`, `10`, 10.1`, `.1`
                     re: '([0-9]+(?:\\.[0-9]+)?|[0-9]*(?:\\.[0-9]+){1})',
-                    parse: function (value) {
+                    parse: function(value) {
                         if (value) {
                             value = parseFloat(value);
                         }
@@ -470,7 +472,7 @@ Ext.define('Ext.route.Route', {
                 '...': {
                     re: '(.+)?',
                     split: '/',
-                    parse: function (values) {
+                    parse: function(values) {
                         var length, i, value;
 
                         if (values) {
@@ -500,7 +502,8 @@ Ext.define('Ext.route.Route', {
 
     /**
      * @private
-     * @property {RegExp} matcherRegex A regular expression to match the token to the configured {@link #url}.
+     * @property {RegExp} matcherRegex A regular expression to match the token to the
+     * configured {@link #url}.
      */
 
     /**
@@ -519,7 +522,7 @@ Ext.define('Ext.route.Route', {
      * {@link Ext.route.Handler#before} and {@link Ext.route.Handler#after} will
      * be in an object instead of separate arguments.
      */
-    typeParamRegex: /:{([0-9A-Za-z\_]+)(?::?([0-9A-Za-z\_]+|.{3})?)}/g,
+    typeParamRegex: /:{([0-9A-Za-z_]+)(?::?([0-9A-Za-z_]+|.{3})?)}/g,
 
     /**
      * @private
@@ -550,7 +553,7 @@ Ext.define('Ext.route.Route', {
      * A regular expression to check if there are parameters in the configured
      * {@link #url}.
      */
-    paramMatchingRegex: /:([0-9A-Za-z\_]+)/g,
+    paramMatchingRegex: /:([0-9A-Za-z_]+)/g,
 
     /**
      * @private
@@ -635,19 +638,20 @@ Ext.define('Ext.route.Route', {
      */
     isRoute: true,
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this,
             url;
 
         this.initConfig(config);
 
-        url = me.getUrl().replace(me.optionalGroupRegex, function (match, middle) {
+        url = me.getUrl().replace(me.optionalGroupRegex, function(match, middle) {
             return '(?:' + middle + ')?';
         });
 
         if (url.match(me.typeParamRegex)) {
             me.handleNamedPattern(url);
-        } else {
+        }
+        else {
             me.handlePositionalPattern(url);
         }
     },
@@ -659,7 +663,7 @@ Ext.define('Ext.route.Route', {
      *
      * @param {String} url The url pattern.
      */
-    handlePositionalPattern: function (url) {
+    handlePositionalPattern: function(url) {
         var me = this;
 
         me.paramsInMatchString = url.match(me.paramMatchingRegex) || [];
@@ -674,14 +678,14 @@ Ext.define('Ext.route.Route', {
      *
      * @param {String} url The url pattern.
      */
-    handleNamedPattern: function (url) {
+    handleNamedPattern: function(url) {
         var me = this,
             typeParamRegex = me.typeParamRegex,
             conditions = me.getConditions(),
             types = me.getTypes(),
             defaultMatcher = me.defaultMatcher,
             params = {},
-            re = url.replace(typeParamRegex, function (match, param, typeMatch) {
+            re = url.replace(typeParamRegex, function(match, param, typeMatch) {
                 var type = typeMatch && types[typeMatch],
                     matcher = conditions[param] || type || defaultMatcher;
 
@@ -709,7 +713,8 @@ Ext.define('Ext.route.Route', {
 
         // <debug>
         if (re.search(me.paramMatchingRegex) !== -1) {
-            Ext.raise('URL parameter mismatch. Positional url parameter found while in named mode.');
+            Ext.raise('URL parameter mismatch. Positional url parameter found ' +
+                      'while in named mode.');
         }
         // </debug>
 
@@ -725,12 +730,10 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url to recognize.
      * @return {Object/Boolean} The matched data, or `false` if no match.
      */
-    recognize: function (url) {
+    recognize: function(url) {
         var me = this,
             recognized = me.recognizes(url),
-            handlers, length, hasHandler,
-            i, handler, matches, urlParams,
-            arg, params;
+            handlers, length, hasHandler, handler, matches, urlParams, i;
 
         if (recognized) {
             handlers = me.getHandlers();
@@ -740,14 +743,14 @@ Ext.define('Ext.route.Route', {
                 handler = handlers[i];
 
                 if (handler.lastToken !== url) {
-                    //there is a handler that can execute
+                    // there is a handler that can execute
                     hasHandler = true;
                     break;
                 }
             }
 
             if (!hasHandler && url === me.lastToken) {
-                //url matched the lastToken
+                // url matched the lastToken
                 return true;
             }
 
@@ -775,10 +778,11 @@ Ext.define('Ext.route.Route', {
      * If is `positional`, an array from {@link #method!getPositionalUrlParams}
      * will be returned.
      */
-    getUrlParams: function (url) {
+    getUrlParams: function(url) {
         if (this.mode === 'named') {
             return this.getNamedUrlParams(url);
-        } else {
+        }
+        else {
             return this.getPositionalUrlParams(url);
         }
     },
@@ -791,7 +795,7 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url the route is executing on.
      * @return {Array}
      */
-    getPositionalUrlParams: function (url) {
+    getPositionalUrlParams: function(url) {
         var params = [],
             conditions = this.getConditions(),
             keys = this.paramsInMatchString,
@@ -808,7 +812,8 @@ Ext.define('Ext.route.Route', {
 
             if (conditions[key]) {
                 type = conditions[key];
-            } else if (key[0] === ':') {
+            }
+            else if (key[0] === ':') {
                 key = key.substr(1);
 
                 if (conditions[key]) {
@@ -821,7 +826,8 @@ Ext.define('Ext.route.Route', {
             if (Ext.isDefined(value) && value !== '') {
                 if (Ext.isArray(value)) {
                     params.push.apply(params, value);
-                } else {
+                }
+                else {
                     params.push(value);
                 }
             }
@@ -839,7 +845,7 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url the route is executing on.
      * @return {Array}
      */
-    getNamedUrlParams: function (url) {
+    getNamedUrlParams: function(url) {
         var conditions = this.getConditions(),
             types = this.getTypes(),
             params = {},
@@ -876,7 +882,7 @@ Ext.define('Ext.route.Route', {
      * @param {Object} [type] The type object that will be used to parse the value.
      * @return {String/Number/Array}
      */
-    parseValue: function (value, type) {
+    parseValue: function(value, type) {
         if (type) {
             if (value && type.split) {
                 value = value.split(type.split);
@@ -918,7 +924,7 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url to test.
      * @return {Boolean} `true` if this {@link Ext.route.Route} recognizes the url.
      */
-    recognizes: function (url) {
+    recognizes: function(url) {
         return this.matcherRegex.test(url);
     },
 
@@ -931,14 +937,12 @@ Ext.define('Ext.route.Route', {
      * recognize method call.
      * @return {Ext.promise.Promise}
      */
-    execute: function (token, argConfig) {
+    execute: function(token, argConfig) {
         var me = this,
             allowInactive = me.getAllowInactive(),
             handlers = me.getHandlers(),
             queue = Ext.route.Router.getQueueRoutes(),
             length = handlers.length,
-            befores = [],
-            actions = [],
             urlParams = (argConfig && argConfig.urlParams) || [],
             i, handler, scope, action, promises, single, remover;
 
@@ -948,10 +952,11 @@ Ext.define('Ext.route.Route', {
             promises = [];
         }
 
-        return new Ext.Promise(function (resolve, reject) {
+        return new Ext.Promise(function(resolve, reject) {
             if (argConfig === false) {
                 reject();
-            } else {
+            }
+            else {
                 if (queue) {
                     action = new Ext.route.Action({
                         urlParams: urlParams
@@ -962,7 +967,7 @@ Ext.define('Ext.route.Route', {
                     handler = handlers[i];
 
                     if (token != null && handler.lastToken === token) {
-                        //no change on this handler
+                        // no change on this handler
                         continue;
                     }
 
@@ -996,18 +1001,20 @@ Ext.define('Ext.route.Route', {
                         if (single === true) {
                             if (handler.action) {
                                 action.action(remover, me);
-                            } else {
-                                action.before(function () {
+                            }
+                            else {
+                                action.before(function() {
                                     remover();
 
                                     return Ext.Promise.resolve();
                                 }, me);
                             }
-                        } else {
+                        }
+                        else {
                             // all before actions have to resolve,
                             // resolve a promise to allow the action
                             // chain to continue
-                            action.before(single === 'before', function () {
+                            action.before(single === 'before', function() {
                                 remover();
 
                                 return Ext.Promise.resolve();
@@ -1018,7 +1025,8 @@ Ext.define('Ext.route.Route', {
                     if (!queue) {
                         if (Ext.fireEvent('beforeroute', action, me) === false) {
                             action.destroy();
-                        } else {
+                        }
+                        else {
                             promises.push(action.run());
                         }
                     }
@@ -1029,10 +1037,12 @@ Ext.define('Ext.route.Route', {
                         action.destroy();
 
                         reject();
-                    } else {
+                    }
+                    else {
                         action.run().then(resolve, reject);
                     }
-                } else {
+                }
+                else {
                     Ext.Promise.all(promises).then(resolve, reject);
                 }
             }
@@ -1045,14 +1055,16 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url to extract matches for
      * @return {Object} matching url segments
      */
-    matchesFor: function (url) {
+    matchesFor: function(url) {
         var params = {},
-            keys = this.mode === 'named' ? Ext.Object.getKeys(this.paramsInMatchString) : this.paramsInMatchString,
+            keys = this.mode === 'named'
+                ? Ext.Object.getKeys(this.paramsInMatchString)
+                : this.paramsInMatchString,
             values = url.match(this.matcherRegex),
             length = keys.length,
             i;
 
-        //first value is the entire match so reject
+        // first value is the entire match so reject
         values.shift();
 
         for (i = 0; i < length; i++) {
@@ -1071,7 +1083,7 @@ Ext.define('Ext.route.Route', {
      * @param {String} url The url string.
      * @return {RegExp} The matcher regex.
      */
-    createMatcherRegex: function (url) {
+    createMatcherRegex: function(url) {
         // Converts a route string into an array of symbols starting with a colon. e.g.
         // ":controller/:action/:id" => [':controller', ':action', ':id']
         var me = this,
@@ -1085,7 +1097,8 @@ Ext.define('Ext.route.Route', {
         if (url === '*') {
             // handle wildcard routes, won't have conditions
             url = url.replace('*', '\\*');
-        } else {
+        }
+        else {
             for (i = 0; i < length; i++) {
                 param = paramsInMatchString[i];
 
@@ -1094,9 +1107,11 @@ Ext.define('Ext.route.Route', {
                 if (conditions[param]) {
                     matcher = conditions[param];
                 // without colon
-                } else if (param[0] === ':' && conditions[param.substr(1)]) {
+                }
+                else if (param[0] === ':' && conditions[param.substr(1)]) {
                     matcher = conditions[param.substr(1)];
-                } else {
+                }
+                else {
                     matcher = defaultMatcher;
                 }
 
@@ -1108,7 +1123,7 @@ Ext.define('Ext.route.Route', {
             }
         }
 
-        //we want to match the whole string, so include the anchors
+        // we want to match the whole string, so include the anchors
         return new RegExp('^' + url + '$', modifiers);
     },
 
@@ -1120,7 +1135,7 @@ Ext.define('Ext.route.Route', {
      * If the `fn` is a String, the function will be resolved from the `scope`.
      * @return {Ext.route.Route} this
      */
-    addHandler: function (handler) {
+    addHandler: function(handler) {
         var handlers = this.getHandlers();
 
         if (!handler.isInstance) {
@@ -1142,7 +1157,7 @@ Ext.define('Ext.route.Route', {
      * will be removed.
      * @return {Ext.route.Route} this
      */
-    removeHandler: function (scope, handler) {
+    removeHandler: function(scope, handler) {
         var handlers = this.getHandlers(),
             length = handlers.length,
             newHandlers = [],
@@ -1155,7 +1170,8 @@ Ext.define('Ext.route.Route', {
                 if (item !== handler) {
                     newHandlers.push(item);
                 }
-            } else if (item.scope !== scope) {
+            }
+            else if (item.scope !== scope) {
                 newHandlers.push(item);
             }
         }
@@ -1168,7 +1184,7 @@ Ext.define('Ext.route.Route', {
     /**
      * Clears the last token properties of this route and all handlers.
      */
-    clearLastTokens: function () {
+    clearLastTokens: function() {
         var handlers = this.getHandlers(),
             length = handlers.length,
             i;
@@ -1187,7 +1203,7 @@ Ext.define('Ext.route.Route', {
      * When a route is exited (no longer recognizes a token in the current hash)
      * we need to clear all last tokens and execute any exit handlers.
      */
-    onExit: function () {
+    onExit: function() {
         var me = this,
             handlers = me.getHandlers(),
             allowInactive = me.getAllowInactive(),
@@ -1218,7 +1234,8 @@ Ext.define('Ext.route.Route', {
 
         if (Ext.fireEvent('beforerouteexit', action, me) === false) {
             action.destroy();
-        } else {
+        }
+        else {
             action.run();
         }
     }

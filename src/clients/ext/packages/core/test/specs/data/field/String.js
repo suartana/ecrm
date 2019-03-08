@@ -18,7 +18,7 @@ topSuite("Ext.data.field.String", function() {
         it("should configure the type", function() {
             make();
             expect(field.getType()).toBe('string');
-        });    
+        });
     });
     
     describe("convert", function() {
@@ -27,14 +27,14 @@ topSuite("Ext.data.field.String", function() {
                make({
                    allowNull: true
                });
-            });    
+            });
             
             it("should return null with undefined", function() {
-                expect(c(undefined)).toBeNull();    
+                expect(c(undefined)).toBeNull();
             });
             
             it("should return null with null", function() {
-                expect(c(null)).toBeNull();    
+                expect(c(null)).toBeNull();
             });
         });
         
@@ -46,12 +46,12 @@ topSuite("Ext.data.field.String", function() {
             });
             
             it("should return '' with undefined", function() {
-                expect(c(undefined)).toBe('');    
+                expect(c(undefined)).toBe('');
             });
             
             it("should return null with null", function() {
-                expect(c(null)).toBe('');    
-            });    
+                expect(c(null)).toBe('');
+            });
         });
         
         it("should return a stringified bool", function() {
@@ -61,12 +61,12 @@ topSuite("Ext.data.field.String", function() {
         
         it("should return a stringified number", function() {
             make();
-            expect(c(2)).toBe('2');    
+            expect(c(2)).toBe('2');
         });
         
         it("should return a string", function() {
             make();
-            expect(c('foo')).toBe('foo');    
+            expect(c('foo')).toBe('foo');
         });
     });
 });

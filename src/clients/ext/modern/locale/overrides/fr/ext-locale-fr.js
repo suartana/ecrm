@@ -4,8 +4,11 @@
 Ext.onReady(function() {
 
     if (Ext.Date) {
-        Ext.Date.shortMonthNames = ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"];
-        
+        Ext.Date.shortMonthNames = [
+            "Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov",
+            "Déc"
+        ];
+
         Ext.Date.defaultFormat = 'd/m/Y';
         Ext.Date.defaultTimeFormat = 'H:i';
 
@@ -13,7 +16,10 @@ Ext.onReady(function() {
             return Ext.Date.shortMonthNames[month];
         };
 
-        Ext.Date.monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+        Ext.Date.monthNames = [
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre",
+            "Octobre", "Novembre", "Décembre"
+        ];
 
         Ext.Date.monthNumbers = {
             "Janvier": 0,
@@ -26,7 +32,7 @@ Ext.onReady(function() {
             "Mai": 4,
             "Juin": 5,
             "Juillet": 6,
-            "Juil": 6, 
+            "Juil": 6,
             "Août": 7,
             "Septembre": 8,
             "Sept": 8,
@@ -42,7 +48,9 @@ Ext.onReady(function() {
             return Ext.Date.monthNumbers[Ext.util.Format.capitalize(name)];
         };
 
-        Ext.Date.dayNames = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        Ext.Date.dayNames = [
+            "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+        ];
 
         Ext.Date.getShortDayName = function(day) {
             return Ext.Date.dayNames[day].substring(0, 3);
@@ -51,7 +59,7 @@ Ext.onReady(function() {
         Ext.Date.parseCodes.S.s = "(?:er)";
 
         Ext.Date.getSuffix = function() {
-            return (this.getDate() == 1) ? "er" : "";
+            return (this.getDate() === 1) ? "er" : "";
         };
     }
 
@@ -149,7 +157,7 @@ Ext.define('Ext.locale.fr.panel.Date', {
 Ext.define('Ext.locale.fr.panel.Collapser', {
     override: 'Ext.panel.Collapser',
 
-    config:{
+    config: {
         collapseToolText: "Réduire la fenêtre",
         expandToolText: "Elargir la fenêtre"
     }
@@ -196,10 +204,10 @@ Ext.define('Ext.locale.fr.Dialog', {
     }
 });
 
-Ext.define("Ext.locale.fr.field.FileButton", { 
-    override: "Ext.field.FileButton", 
+Ext.define("Ext.locale.fr.field.FileButton", {
+    override: "Ext.field.FileButton",
 
-    config:{
+    config: {
         text: 'Feuilleter...'
     }
 });
@@ -207,7 +215,7 @@ Ext.define("Ext.locale.fr.field.FileButton", {
 Ext.define('Ext.locale.fr.dataview.List', {
     override: 'Ext.dataview.List',
 
-    config:{
+    config: {
         loadingText: 'Chargement...'
     }
 });
@@ -223,7 +231,7 @@ Ext.define('Ext.locale.fr.dataview.EmptyText', {
 Ext.define('Ext.locale.fr.dataview.Abstract', {
     override: 'Ext.dataview.Abstract',
 
-    config:{
+    config: {
         loadingText: 'Chargement...'
     }
 });
@@ -231,9 +239,9 @@ Ext.define('Ext.locale.fr.dataview.Abstract', {
 Ext.define("Ext.locale.fr.LoadMask", {
     override: "Ext.LoadMask",
 
-    config:{
+    config: {
         message: 'Chargement...'
-    } 
+    }
 });
 
 Ext.define('Ext.locale.fr.dataview.plugin.ListPaging', {
@@ -248,7 +256,7 @@ Ext.define('Ext.locale.fr.dataview.plugin.ListPaging', {
 Ext.define("Ext.locale.fr.dataview.DataView", {
     override: "Ext.dataview.DataView",
 
-    config:{
+    config: {
         emptyText: ""
     }
 });
@@ -263,7 +271,7 @@ Ext.define('Ext.locale.fr.field.Date', {
 Ext.define("Ext.locale.fr.grid.menu.SortAsc", {
     override: "Ext.grid.menu.SortAsc",
 
-    config:{
+    config: {
         text: "Trier en ordre croissant"
     }
 });
@@ -271,7 +279,7 @@ Ext.define("Ext.locale.fr.grid.menu.SortAsc", {
 Ext.define("Ext.locale.fr.grid.menu.SortDesc", {
     override: "Ext.grid.menu.SortDesc",
 
-    config:{
+    config: {
         text: "Trier en ordre décroissant"
     }
 });
@@ -279,7 +287,7 @@ Ext.define("Ext.locale.fr.grid.menu.SortDesc", {
 Ext.define("Ext.locale.fr.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
-    config:{
+    config: {
         text: "Grouper selon ce champ"
     }
 });
@@ -287,7 +295,7 @@ Ext.define("Ext.locale.fr.grid.menu.GroupByThis", {
 Ext.define("Ext.locale.fr.grid.menu.ShowInGroups", {
     override: "Ext.grid.menu.ShowInGroups",
 
-    config:{
+    config: {
         text: "Montrer en groupe"
     }
 });
@@ -295,15 +303,15 @@ Ext.define("Ext.locale.fr.grid.menu.ShowInGroups", {
 Ext.define("Ext.locale.fr.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
-    config:{
+    config: {
         text: "Colonnes"
     }
 });
 
-Ext.define('Ext.locale.fr.data.validator.Presence',{
+Ext.define('Ext.locale.fr.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
-    config:{
+    config: {
         message: 'Presence obligatoire'
     }
 });
@@ -311,7 +319,7 @@ Ext.define('Ext.locale.fr.data.validator.Presence',{
 Ext.define('Ext.locale.fr.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
-    config:{
+    config: {
         message: "Ce format n'est pas le bon"
     }
 });
@@ -319,7 +327,7 @@ Ext.define('Ext.locale.fr.data.validator.Format', {
 Ext.define('Ext.locale.fr.data.validator.Email', {
     override: 'Ext.data.validator.Email',
 
-    config:{
+    config: {
         message: "N'est pas une adresse email valide"
     }
 });
@@ -327,7 +335,7 @@ Ext.define('Ext.locale.fr.data.validator.Email', {
 Ext.define('Ext.locale.fr.data.validator.Phone', {
     override: 'Ext.data.validator.Phone',
 
-    config:{
+    config: {
         message: "N'est pas un numéro de téléphone valide"
     }
 });
@@ -335,7 +343,7 @@ Ext.define('Ext.locale.fr.data.validator.Phone', {
 Ext.define('Ext.locale.fr.data.validator.Number', {
     override: 'Ext.data.validator.Number',
 
-    config:{
+    config: {
         message: "N'est pas un nombre valide"
     }
 });
@@ -343,14 +351,14 @@ Ext.define('Ext.locale.fr.data.validator.Number', {
 Ext.define('Ext.locale.fr.data.validator.Url', {
     override: 'Ext.data.validator.Url',
 
-    config:{
+    config: {
         message: "N'est pas un URL valide"
     }
 });
 
 Ext.define('Ext.locale.fr.data.validator.Range', {
     override: 'Ext.data.validator.Range',
- 
+
     config: {
         nanMessage: 'Doit être un chiffre',
         minOnlyMessage: 'Doit être au moins {0}',
@@ -372,7 +380,7 @@ Ext.define('Ext.locale.fr.data.validator.Bound', {
 
 Ext.define('Ext.locale.fr.data.validator.CIDRv4', {
     override: 'Ext.data.validator.CIDRv4',
- 
+
     config: {
         message: "N'est pas un bloc CIDR valide"
     }
@@ -380,7 +388,7 @@ Ext.define('Ext.locale.fr.data.validator.CIDRv4', {
 
 Ext.define('Ext.locale.fr.data.validator.CIDRv6', {
     override: 'Ext.data.validator.CIDRv6',
- 
+
     config: {
         message: "N'est pas un bloc CIDR valide"
     }
@@ -388,7 +396,7 @@ Ext.define('Ext.locale.fr.data.validator.CIDRv6', {
 
 Ext.define('Ext.locale.fr.data.validator.Currency', {
     override: 'Ext.data.validator.Currency',
- 
+
     config: {
         message: "N'est pas un montant devises valide"
     }
@@ -397,7 +405,7 @@ Ext.define('Ext.locale.fr.data.validator.Currency', {
 
 Ext.define('Ext.locale.fr.data.validator.DateTime', {
     override: 'Ext.data.validator.DateTime',
- 
+
     config: {
         message: "N'est pas une heure et date valide"
     }
@@ -405,7 +413,7 @@ Ext.define('Ext.locale.fr.data.validator.DateTime', {
 
 Ext.define('Ext.locale.fr.data.validator.Exclusion', {
     override: 'Ext.data.validator.Exclusion',
- 
+
     config: {
         message: 'Est une valeur qui a été exclue'
     }
@@ -413,7 +421,7 @@ Ext.define('Ext.locale.fr.data.validator.Exclusion', {
 
 Ext.define('Ext.locale.fr.data.validator.IPAddress', {
     override: 'Ext.data.validator.IPAddress',
- 
+
     config: {
         message: "N'est pas une adresse IP valide"
     }
@@ -421,7 +429,7 @@ Ext.define('Ext.locale.fr.data.validator.IPAddress', {
 
 Ext.define('Ext.locale.fr.data.validator.Inclusion', {
     override: 'Ext.data.validator.Inclusion',
- 
+
     config: {
         message: "N'est pas dans la liste de valeurs acceptables"
     }
@@ -429,7 +437,7 @@ Ext.define('Ext.locale.fr.data.validator.Inclusion', {
 
 Ext.define('Ext.locale.fr.data.validator.Time', {
     override: 'Ext.data.validator.Time',
- 
+
     config: {
         message: "N'est pas un moment valide"
     }
@@ -437,7 +445,7 @@ Ext.define('Ext.locale.fr.data.validator.Time', {
 
 Ext.define('Ext.locale.fr.data.validator.Date', {
     override: 'Ext.data.validator.Date',
- 
+
     config: {
         message: "N'est pas une date valide"
     }
@@ -446,14 +454,54 @@ Ext.define('Ext.locale.fr.data.validator.Date', {
 Ext.define('Ext.locale.fr.data.validator.Length', {
     override: 'Ext.data.validator.Length',
 
-    config:{
+    config: {
         minOnlyMessage: 'La longueur doit être au moins {0}',
         maxOnlyMessage: 'La longueur ne doit pas être plus que {0}',
         bothMessage: 'La longueur doit être entre {0} Et {1}'
     }
 });
 
+Ext.define('Ext.locale.fr.ux.colorpick.Selector', {
+    override: 'Ext.ux.colorpick.Selector',
+
+    okButtonText: 'OK',
+    cancelButtonText: 'Annuler'
+});
+
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.fr.Component", {	
+Ext.define("Ext.locale.fr.Component", {
     override: "Ext.Component"
+});
+
+Ext.define("Ext.locale.fr.grid.filters.menu.Base", {
+    override: "Ext.grid.filters.menu.Base",
+
+    config: {
+        text: "filtre"
+    }
+});
+
+Ext.define("Ext.locale.fr.grid.LockedGrid", {
+    override: "Ext.grid.LockedGrid",
+
+    config: {
+        columnMenu: {
+            items: {
+                region: {
+                    text: 'Région'
+                }
+            }
+        },
+        regions: {
+            left: {
+                menuLabel: 'Fermé à clef (Gauche)'
+            },
+            center: {
+                menuLabel: 'Débloqué'
+            },
+            right: {
+                menuLabel: 'Fermé à clef (Droite)'
+            }
+        }
+    }
 });

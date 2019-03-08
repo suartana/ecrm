@@ -1,5 +1,3 @@
-/* global Ext, expect, jasmine, xit, spyOn */
-
 topSuite("Ext.selection.CheckboxModel",
     ['Ext.grid.Panel', 'Ext.grid.column.Widget', 'Ext.Button'],
 function() {
@@ -9,9 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+            
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+            
             return this;
         };
 
@@ -21,7 +21,7 @@ function() {
         grid = new Ext.grid.Panel(Ext.apply({
             store: store,
             columns: [
-                {text: "name", flex: 1, sortable: true, dataIndex: 'name'}
+                { text: "name", flex: 1, sortable: true, dataIndex: 'name' }
             ],
             columnLines: true,
             selModel: checkboxModel,
@@ -138,9 +138,10 @@ function() {
                     foo: 'bar'
                 }]
             });
+
             makeGrid();
 
-            grid.reconfigure(store2, [{dataIndex: 'foo'}]);
+            grid.reconfigure(store2, [{ dataIndex: 'foo' }]);
 
             expect(grid.view.body.el.dom.querySelector('.x-grid-checkcolumn')).not.toBeNull();
         });
@@ -168,6 +169,7 @@ function() {
                 }
             });
             var allCols = grid.getColumnManager().getColumns();
+
             expect(allCols[0].$className).toBe('Ext.grid.column.Check');
         });
 
@@ -257,9 +259,10 @@ function() {
 
             it('should be able to be locked without any other locked columns', function() {
                 var checkColumn;
+
                 makeGrid({
                     locked: true
-                },{
+                }, {
                     enableLocking: true,
                     column: cols
                 });
@@ -458,7 +461,7 @@ function() {
             expectHeaderChecked(false);
         });
         
-        it("should be unchecked if there are no records", function(){
+        it("should be unchecked if there are no records", function() {
             store.removeAll();
             expectHeaderChecked(false);
         });
@@ -523,14 +526,14 @@ function() {
                 }]);
                 store.load();
                 expectHeaderChecked(false);
-            });            
+            });
         });
 
         it("should uncheck header when an unchecked record is added", function() {
             checkboxModel.selectAll();
             expectHeaderChecked(true);
 
-            store.add({name: 'Marcelo'});
+            store.add({ name: 'Marcelo' });
             expectHeaderChecked(false);
         });
 
@@ -644,8 +647,8 @@ function() {
     });
 
     describe("check all", function() {
-        describe('mode="SINGLE"', function () {
-            it('should not render the header checkbox by default', function () {
+        describe('mode="SINGLE"', function() {
+            it('should not render the header checkbox by default', function() {
                 makeGrid({
                     mode: 'SINGLE'
                 });
@@ -653,8 +656,8 @@ function() {
                 expect(checkboxModel.column.el.dom.querySelector(checkboxModel.checkSelector)).toBe(null);
             });
 
-            it('should not render the header checkbox by config', function () {
-                expect(function () {
+            it('should not render the header checkbox by config', function() {
+                expect(function() {
                     makeGrid({
                         mode: 'SINGLE',
                         showHeaderCheckbox: true
@@ -663,7 +666,7 @@ function() {
             });
         });
 
-        describe('mode="MULTI"', function () {
+        describe('mode="MULTI"', function() {
             it("should check all when no record is checked", function() {
                 makeGrid();
                 expectHeaderChecked(false);
@@ -803,6 +806,7 @@ function() {
 
                 it("should select when clicking on the checkbox", function() {
                     var checker = byPos(0, 0).querySelector(checkboxModel.checkSelector);
+
                     jasmine.fireMouseEvent(checker, 'click');
                     expect(checkboxModel.isSelected(donRec)).toBe(true);
                 });
@@ -842,6 +846,7 @@ function() {
 
                 it("should select when clicking on the checkbox", function() {
                     var checker = byPos(0, 0).querySelector(checkboxModel.checkSelector);
+
                     jasmine.fireMouseEvent(checker, 'click');
                     expect(checkboxModel.isSelected(donRec)).toBe(true);
                 });
@@ -869,6 +874,7 @@ function() {
 
                 it("should select when clicking on the checkbox", function() {
                     var checker = byPos(0, 0).querySelector(checkboxModel.checkSelector);
+
                     jasmine.fireMouseEvent(checker, 'click');
                     expect(checkboxModel.isSelected(donRec)).toBe(true);
                 });
@@ -900,6 +906,7 @@ function() {
 
                 it("should select when clicking on the checkbox", function() {
                     var checker = byPos(0, 0).querySelector(checkboxModel.checkSelector);
+
                     jasmine.fireMouseEvent(checker, 'click');
                     expect(checkboxModel.isSelected(donRec)).toBe(true);
                 });
@@ -922,6 +929,7 @@ function() {
 
         function expectChangeSpy(records) {
             var args = changeSpy.mostRecentCall.args;
+
             expect(changeSpy.callCount).toBe(1);
             expect(args[0]).toBe(checkboxModel);
             expect(args[1]).toEqual(records);
@@ -929,6 +937,7 @@ function() {
 
         function expectSelectSpy(record) {
             var args = selectSpy.mostRecentCall.args;
+
             expect(selectSpy.callCount).toBe(1);
             expect(args[0]).toBe(checkboxModel);
             expect(args[1]).toBe(record);
@@ -936,6 +945,7 @@ function() {
 
         function expectDeselectSpy(record) {
             var args = deselectSpy.mostRecentCall.args;
+
             expect(deselectSpy.callCount).toBe(1);
             expect(args[0]).toBe(checkboxModel);
             expect(args[1]).toBe(record);
@@ -1018,6 +1028,7 @@ function() {
                             if (e.type === 'click') {
                                 e.shiftKey = true;
                             }
+
                             Ext.grid.View.prototype.processUIEvent.apply(view, arguments);
                         });
     
@@ -1102,6 +1113,7 @@ function() {
                             if (e.type === 'click') {
                                 e.shiftKey = true;
                             }
+
                             Ext.grid.View.prototype.processUIEvent.apply(view, arguments);
                         });
     
@@ -1122,6 +1134,7 @@ function() {
                             if (e.type === 'click') {
                                 e.shiftKey = true;
                             }
+
                             Ext.grid.View.prototype.processUIEvent.apply(view, arguments);
                         });
     
@@ -1249,8 +1262,9 @@ function() {
                 });
                 
                 describe("header", function() {
-                    it("should not have tabIndex", function() {
-                        expect(column).not.toHaveAttr('tabIndex');
+                    it("should have tabIndex set to -1", function() {
+                        expect(column).toHaveAttr('tabIndex');
+                        expect(column.tabIndex).toBe(-1);
                     });
                     
                     it("should have presentation role", function() {
@@ -1315,8 +1329,9 @@ function() {
                 });
                 
                 describe("header", function() {
-                    it("should not have tabIndex", function() {
-                        expect(column).not.toHaveAttr('tabIndex');
+                    it("should have tabIndex set to -1", function() {
+                        expect(column).toHaveAttr('tabIndex');
+                        expect(column.tabIndex).toBe(-1);
                     });
                     
                     it("should have presentation role", function() {
@@ -1524,7 +1539,35 @@ function() {
                         expect(cell).toHaveAttr('aria-describedby', column.id + '-cell-description-selected');
                     });
                 });
+
+                
             });
+        });
+    });
+    describe("checkbox model", function() {
+        it("should support renderer", function() {
+            makeGrid(
+                {
+                    type: 'checkboxmodel',
+                    renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
+                        var result = this.defaultRenderer(value);
+
+                        if (record) {
+                            return (record.get('id') === 1 || record.get('id') === 2) ? result : '';
+                        }
+                    },
+                    showHeaderCheckbox: false
+                }, {
+                    allowDeselect: true,
+                    scrollable: true
+                }
+            );
+
+            var allCols = grid.getColumnManager().getColumns(),
+            col = allCols[0];
+
+            expect(col.isCheckColumn).toBe(true);
+            expect(grid.el.select('.x-grid-checkcolumn').elements.length).toBe(2);
         });
     });
 });

@@ -1,4 +1,4 @@
-describe('Ext.layout.Form', function() {
+topSuite('Ext.layout.Form', ['Ext.form.Panel', 'Ext.field.*'], function() {
     var container;
 
     afterEach(function() {

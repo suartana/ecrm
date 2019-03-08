@@ -110,7 +110,11 @@ Ext.define('Ext.dataview.listswiper.Accordion', {
     destroy: function () {
         var me = this,
             target = me.getTranslationTarget();
-
+        
+        if (me.$undoTimer) {
+            Ext.unraf(me.$undoTimer);
+        }
+        
         //<debug>
         if (me.thresholdEl) {
             me.thresholdEl.destroy();
@@ -337,7 +341,12 @@ Ext.define('Ext.dataview.listswiper.Accordion', {
                         tap: 'onDismissTap'
                     });
 
-                    Ext.raf(function () {
+                    if (me.$undoTimer) {
+                        Ext.unraf(me.$undoTimer);
+                    }
+
+                    me.$undoTimer = Ext.raf(function () {
+                        me.$undoTimer = null;
                         me.setState('undo');
                         backgroundColor = me.getButtonBackgroundColor(button);
                         if (backgroundColor) {

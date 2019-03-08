@@ -1,5 +1,4 @@
 topSuite("Ext.data.operation.Destroy", ['Ext.data.ArrayStore'], function() {
-    
     var op;
     
     function makeOperation(cfg) {
@@ -15,6 +14,7 @@ topSuite("Ext.data.operation.Destroy", ['Ext.data.ArrayStore'], function() {
     describe("execute", function() {
         it("should call the proxy erase method and pass itself", function() {
             var proxy = new Ext.data.proxy.Proxy();
+
             spyOn(proxy, 'erase').andReturn(new Ext.data.Request());
             makeOperation({
                 proxy: proxy
@@ -22,7 +22,7 @@ topSuite("Ext.data.operation.Destroy", ['Ext.data.ArrayStore'], function() {
             op.execute();
             expect(proxy.erase).toHaveBeenCalledWith(op);
         });
-    });   
+    });
     
     describe("process", function() {
         
@@ -50,14 +50,14 @@ topSuite("Ext.data.operation.Destroy", ['Ext.data.ArrayStore'], function() {
             User = rec1 = rec2 = null;
         });
         
-        it("should erase all records if successful", function() {            
+        it("should erase all records if successful", function() {
             op.process(new Ext.data.ResultSet({
                 success: true
             }), new Ext.data.Request(), {});
             
             expect(rec1.setErased).toHaveBeenCalled();
             expect(rec2.setErased).toHaveBeenCalled();
-        }); 
+        });
         
         it("should not erase records if not successful", function() {
             op.process(new Ext.data.ResultSet({

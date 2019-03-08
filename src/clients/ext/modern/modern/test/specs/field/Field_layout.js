@@ -1,4 +1,4 @@
-describe('Ext.field.Field_layout', function() {
+topSuite('Ext.field.Field_layout', [false, 'Ext.field.Field'], function() {
     var Field = Ext.define(null, {
             extend: Ext.field.Field,
             getBodyTemplate: function () {

@@ -6,8 +6,9 @@ Ext.define('Ext.rtl.grid.plugin.BufferedRenderer', {
 
         if (this.isRTL && Ext.supports.xOriginBug && scroller && scroller.getY()) {
             body.translate(Ext.getScrollbarSize().width, this.bodyTop = bodyTop);
-        } else {
+        }
+        else {
             this.callParent([body, bodyTop]);
         }
     }
-})
+});

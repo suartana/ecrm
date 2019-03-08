@@ -11,11 +11,11 @@ topSuite("Ext.Base", function() {
             delete Ext.compatVersions.foo;
         });
 
-        function declareClass (compatVersion) {
+        function declareClass(compatVersion) {
             Ext.setCompatVersion('foo', compatVersion);
 
             cls = Ext.define(null, {
-                foo: function () {
+                foo: function() {
                     return 'a';
                 },
 
@@ -24,7 +24,7 @@ topSuite("Ext.Base", function() {
                     5: {
                         methods: {
                             bar: 'foo',
-                            foo: function () {
+                            foo: function() {
                                 return this.callParent() + 'd';
                             }
                         }
@@ -33,7 +33,7 @@ topSuite("Ext.Base", function() {
                     5.1: {
                         methods: {
                             foo: {
-                                fn: function () {
+                                fn: function() {
                                     return this.callParent() + 'c';
                                 }
                             }
@@ -44,7 +44,7 @@ topSuite("Ext.Base", function() {
                         methods: {
                             foo: {
                                 message: 'Foo is bad',
-                                fn: function () {
+                                fn: function() {
                                     return this.callParent() + 'b';
                                 }
                             }
@@ -54,19 +54,22 @@ topSuite("Ext.Base", function() {
             });
         }
 
-        describe('no backward compatibility', function () {
-            beforeEach(function () {
+        describe('no backward compatibility', function() {
+            beforeEach(function() {
                 declareClass('5.2');
             });
 
             it("should not activate methods when compatVersion equals curVersion", function() {
                 var obj = new cls();
+
                 var s = obj.foo();
+
                 expect(s).toBe('a');
             });
 
             it("should install error shim from old block", function() {
                 var obj = new cls();
+
                 var s = 'No exception';
 
                 // Silence console error
@@ -74,26 +77,31 @@ topSuite("Ext.Base", function() {
 
                 try {
                     obj.bar();
-                } catch (e) {
+                }
+                catch (e) {
                     s = e.message;
                 }
+
                 expect(s).toBe('"#bar" is deprecated. Please use "foo" instead.');
             });
         });
 
-        describe('one increment of backward compatibility', function () {
-            beforeEach(function () {
+        describe('one increment of backward compatibility', function() {
+            beforeEach(function() {
                 declareClass('5.1');
             });
 
             it("should activate just one block", function() {
                 var obj = new cls();
+
                 var s = obj.foo();
+
                 expect(s).toBe('ab');
             });
 
             it("should install error shim from old block", function() {
                 var obj = new cls();
+
                 var s = 'No exception';
 
                 // Silence console error
@@ -101,26 +109,31 @@ topSuite("Ext.Base", function() {
 
                 try {
                     obj.bar();
-                } catch (e) {
+                }
+                catch (e) {
                     s = e.message;
                 }
+
                 expect(s).toBe('"#bar" is deprecated. Please use "foo" instead.');
             });
         });
 
-        describe('two increments of backward compatibility', function () {
-            beforeEach(function () {
+        describe('two increments of backward compatibility', function() {
+            beforeEach(function() {
                 declareClass('5');
             });
 
             it("should activate just two blocks", function() {
                 var obj = new cls();
+
                 var s = obj.foo();
+
                 expect(s).toBe('abc');
             });
 
             it("should install error shim from old block", function() {
                 var obj = new cls();
+
                 var s = 'No exception';
                 
                 // Silence console error
@@ -128,27 +141,33 @@ topSuite("Ext.Base", function() {
 
                 try {
                     obj.bar();
-                } catch (e) {
+                }
+                catch (e) {
                     s = e.message;
                 }
+
                 expect(s).toBe('"#bar" is deprecated. Please use "foo" instead.');
             });
         });
 
-        describe('full backward compatibility', function () {
-            beforeEach(function () {
+        describe('full backward compatibility', function() {
+            beforeEach(function() {
                 declareClass('4.2');
             });
 
             it("should activate all three blocks", function() {
                 var obj = new cls();
+
                 var s = obj.foo();
+
                 expect(s).toBe('abcd');
             });
 
             it("should install alias", function() {
                 var obj = new cls();
+
                 var s = obj.bar();
+
                 expect(s).toBe('abcd');
             });
         });
@@ -159,6 +178,7 @@ topSuite("Ext.Base", function() {
 
         beforeEach(function() {
             fn = function() {};
+
             overrideFn = function() {};
 
             Cls = Ext.define(null, {
@@ -236,14 +256,14 @@ topSuite("Ext.Base", function() {
         describe("other values", function() {
             var oldVersions;
 
-            beforeEach(function () {
+            beforeEach(function() {
                 oldVersions = Ext.versions;
                 Ext.versions = {
                     ext: new Ext.Version('4.2.2.900')
                 };
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 Ext.versions = oldVersions;
                 oldVersions = null;
             });
@@ -319,6 +339,7 @@ topSuite("Ext.Base", function() {
             spec.Bar.borrow(spec.Foo, ['b', 'c']);
             
             var bar = new spec.Bar();
+
             expect(bar.a()).toEqual('bar a');
             expect(bar.b()).toEqual('foo b');
             expect(bar.c()).toEqual('foo c');
@@ -330,6 +351,7 @@ topSuite("Ext.Base", function() {
         
         function makeCls(fn, name) {
             var o = {};
+
             o[name || 'oldFn'] = fn;
             cls = Ext.define(null, o);
         }
@@ -339,29 +361,31 @@ topSuite("Ext.Base", function() {
         });
         
         it("should create a method on the prototype", function() {
-            makeCls(function(){});
+            makeCls(function() {});
             cls.createAlias('newFn', 'oldFn');
             expect(Ext.isFunction(cls.prototype.newFn)).toBe(true);
         });
         
         it("should call through to the old method with the passed arguments", function() {
             var a, b;
+
             makeCls(function(arg1, arg2) {
                 a = arg1;
                 b = arg2;
-            });   
+            });
             cls.createAlias('newFn', 'oldFn');
             o = new cls();
             o.newFn('Val', 17);
             expect(a).toBe('Val');
-            expect(b).toBe(17);             
+            expect(b).toBe(17);
         });
         
         it("should dynamically resolve the old method at runtime", function() {
             var values = [];
+
             makeCls(function() {
                 values.push(1);
-            });   
+            });
             cls.createAlias('newFn', 'oldFn');
             o = new cls();
             o.newFn();
@@ -374,8 +398,9 @@ topSuite("Ext.Base", function() {
             o.newFn();
             
             o.oldFn = function() {
-                values.push(3);    
+                values.push(3);
             };
+
             o.newFn();
             expect(values).toEqual([1, 2, 3]);
         });
@@ -384,8 +409,10 @@ topSuite("Ext.Base", function() {
     describe("override", function() {
         describe("mixins", function() {
             var aFn, bFn;
+
             beforeEach(function() {
                 aFn = function() {};
+
                 bFn = function() {};
                 
                 Ext.define('spec.Mix1', {
@@ -420,7 +447,7 @@ topSuite("Ext.Base", function() {
                 
                 Ext.define(null, {
                     override: 'spec.MyBase',
-                    mixins : ['spec.Mix1']
+                    mixins: ['spec.Mix1']
                 });
                 
                 expect(cls.prototype.a).toBe(aFn);
@@ -434,7 +461,7 @@ topSuite("Ext.Base", function() {
                 
                 Ext.define(null, {
                     override: 'spec.MyBase',
-                    mixins : ['spec.Mix2']
+                    mixins: ['spec.Mix2']
                 });
                 
                 expect(cls.prototype.a).toBe(aFn);
@@ -453,7 +480,7 @@ topSuite("Ext.Base", function() {
                 
                 Ext.define(null, {
                     override: 'spec.MyBase',
-                    mixins : ['spec.Mix2']
+                    mixins: ['spec.Mix2']
                 });
                 
                 expect(cls.prototype.a).toBe(aFn);
@@ -565,6 +592,7 @@ topSuite("Ext.Base", function() {
                 };
                 
                 Class.prototype.qux = {};
+
                 Class.prototype.mymse = function() {};
             });
             

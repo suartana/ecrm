@@ -107,41 +107,43 @@ Ext.define('Ext.ux.gauge.needle.Abstract', {
         gauge: null
     },
 
-    constructor: function (config) {
+    constructor: function(config) {
         this.initConfig(config);
     },
 
-    applyInnerRadius: function (innerRadius) {
+    applyInnerRadius: function(innerRadius) {
         return this.getGauge().getRadiusFn(innerRadius);
     },
 
-    applyOuterRadius: function (outerRadius) {
+    applyOuterRadius: function(outerRadius) {
         return this.getGauge().getRadiusFn(outerRadius);
     },
 
-    updateRadius: function () {
+    updateRadius: function() {
         this.regeneratePath();
     },
 
-    setTransform: function (centerX, centerY, rotation) {
+    setTransform: function(centerX, centerY, rotation) {
         var needleGroup = this.getNeedleGroup();
 
-        needleGroup.setStyle('transform',
-            'translate(' + centerX + 'px,' + centerY + 'px) ' +
-            'rotate(' + rotation + 'deg)');
+        needleGroup.setStyle(
+            'transform',
+            'translate(' + centerX + 'px,' + centerY + 'px) ' + 'rotate(' + rotation + 'deg)'
+        );
     },
 
-    applyPath: function (path) {
+    applyPath: function(path) {
         return Ext.isFunction(path) ? path : null;
     },
 
-    updatePath: function (path) {
+    updatePath: function(path) {
         this.regeneratePath(path);
     },
 
-    regeneratePath: function (path) {
+    regeneratePath: function(path) {
         path = path || this.getPath();
 
+        // eslint-disable-next-line vars-on-top
         var me = this,
             radius = me.getRadius(),
             inner = me.getInnerRadius()(radius),
@@ -151,7 +153,7 @@ Ext.define('Ext.ux.gauge.needle.Abstract', {
         me.getNeedlePath().dom.setAttribute('d', d);
     },
 
-    getNeedleGroup: function () {
+    getNeedleGroup: function() {
         var gauge = this.getGauge(),
             group = this.needleGroup;
 
@@ -170,12 +172,13 @@ Ext.define('Ext.ux.gauge.needle.Abstract', {
         return group;
     },
 
-    getNeedlePath: function () {
+    getNeedlePath: function() {
         var me = this,
             pathElement = me.pathElement;
 
         if (!pathElement) {
-            pathElement = me.pathElement = Ext.get(document.createElementNS(me.getGauge().svgNS, 'path'));
+            pathElement = me.pathElement =
+                Ext.get(document.createElementNS(me.getGauge().svgNS, 'path'));
             pathElement.dom.setAttribute('class', Ext.baseCSSPrefix + 'gauge-needle');
             me.getNeedleGroup().appendChild(pathElement);
         }
@@ -183,7 +186,7 @@ Ext.define('Ext.ux.gauge.needle.Abstract', {
         return pathElement;
     },
 
-    updateStyle: function (style) {
+    updateStyle: function(style) {
         var pathElement = this.getNeedlePath();
 
         // Note that we are setting the `style` attribute, e.g `style="fill: red"`,
@@ -192,17 +195,17 @@ Ext.define('Ext.ux.gauge.needle.Abstract', {
         // of attributes set on the elements individually.
         if (Ext.isObject(style)) {
             pathElement.setStyle(style);
-        } else {
+        }
+        else {
             pathElement.dom.removeAttribute('style');
         }
     },
 
-    destroy: function () {
+    destroy: function() {
         var me = this;
 
         me.pathElement = Ext.destroy(me.pathElement);
         me.needleGroup = Ext.destroy(me.needleGroup);
         me.setGauge(null);
     }
-
 });

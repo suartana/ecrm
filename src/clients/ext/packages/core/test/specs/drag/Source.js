@@ -1,4 +1,4 @@
-topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
+(Ext.isAndroid || Ext.isiOS ? xtopSuite : topSuite)("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     var helper = Ext.testHelper,
         touchId = 0,
         cursorTrack, source, target,
@@ -52,12 +52,15 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
 
     function makeSource(cfg, Type) {
         cfg = cfg || {};
+
         if (!cfg.element) {
             if (!dragEl) {
                 makeDragEl();
             }
+
             cfg.element = dragEl;
         }
+
         Type = Type || Ext.drag.Source;
         source = new Type(cfg);
         source.on('dragmove', dragSpy.andCallFake(function(source, info) {
@@ -67,12 +70,15 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
 
     function makeTarget(cfg) {
         cfg = cfg || {};
+
         if (!cfg.element) {
             if (!dropEl) {
                 makeDropEl();
             }
+
             cfg.element = dropEl;
         }
+
         target = new Ext.drag.Target(cfg);
     }
 
@@ -99,6 +105,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     function startDrag(x, y, target) {
         runs(function() {
             var xy = source.getElement().getXY();
+
             x = x || xy[0];
             y = y || xy[1];
 
@@ -114,6 +121,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
      function startOffsetDrag(offsetX, offsetY, target) {
         runs(function() {
             var xy = source.getElement().getXY();
+
             start({
                 id: touchId,
                 x: xy[0] + (offsetX || 0),
@@ -166,7 +174,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         waitsForAnimation();
         runs(function() {
             ++touchId;
-        }); 
+        });
     }
 
     function dragBy(x, y, target) {
@@ -177,6 +185,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
 
     function getCenter(el) {
         var xy = el.getXY();
+
         return [xy[0] + (el.getWidth() / 2), xy[1] + (el.getHeight() / 2)];
     }
 
@@ -185,6 +194,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
             if (!Ext.isArray(spies)) {
                 spies = [spies];
             }
+
             Ext.Array.forEach(spies, function(spy) {
                 expect(spy.callCount).toBe(n);
             });
@@ -214,6 +224,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     function expectXY(x, y) {
         var info = dragSpy.mostRecentCall.dragInfo,
             el = (info && info.proxy.element) || source.getElement();
+
         expect(el.getXY()).toEqual([x, y]);
     }
 
@@ -223,6 +234,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
 
     function expectProxyXY(x, y) {
         var info = dragSpy.mostRecentCall.dragSpy;
+
         expect(info.proxy.element.getXY()).toEqual([x, y]);
     }
 
@@ -333,7 +345,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         it("should be false if dragging is vetoed", function() {
             source.on('beforedragstart', function() {
                 return false;
-            }); 
+            });
             startDrag();
             runs(function() {
                 expect(source.isDragging()).toBe(false);
@@ -370,6 +382,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     endDrag();
                     runs(function() {
                         var info = dragSpy.mostRecentCall.args[1];
+
                         info.getData('foo').then(promiseSpy);
                         expect(spy.callCount).toBe(1);
                     });
@@ -379,7 +392,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     runs(function() {
                         expect(promiseSpy.mostRecentCall.args[0]).toBe(100);
                     });
-                }); 
+                });
 
                 it("should pass the info object", function() {
                     var spy = jasmine.createSpy();
@@ -419,6 +432,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     endDrag();
                     runs(function() {
                         var info = dragSpy.mostRecentCall.args[1];
+
                         info.getData('foo').then(promiseSpy);
                         expect(spy.callCount).toBe(1);
                     });
@@ -428,7 +442,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     runs(function() {
                         expect(promiseSpy.mostRecentCall.args[0]).toBe(101);
                     });
-                }); 
+                });
 
                 it("should pass the info object", function() {
                     var spy = jasmine.createSpy();
@@ -485,6 +499,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0] instanceof Ext.drag.Info).toBe(true);
                 });
                 endDrag();
@@ -495,6 +510,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     return false;
                 };
                 var spy = jasmine.createSpy();
+
                 source.on('dragstart', spy);
                 source.on('dragmove', spy);
                 source.on('dragend', spy);
@@ -532,6 +548,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0] instanceof Ext.drag.Info).toBe(true);
                 });
                 endDrag();
@@ -561,6 +578,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0] instanceof Ext.drag.Info).toBe(true);
                 });
                 endDrag();
@@ -592,12 +610,14 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0] instanceof Ext.drag.Info).toBe(true);
                 });
             });
 
             it("should not call onDragCancel", function() {
                 var otherSpy = spyOn(source, 'onDragCancel');
+
                 startDrag();
                 moveBy(10, 0);
                 endDrag();
@@ -631,12 +651,14 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     doCancel(0, 0);
                     runs(function() {
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0] instanceof Ext.drag.Info).toBe(true);
                     });
                 });
 
                 it("should not call onDragEnd", function() {
                     var otherSpy = spyOn(source, 'onDragEnd');
+
                     startDrag();
                     moveBy(10, 0);
                     doCancel(0, 0);
@@ -681,6 +703,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(source);
                     expect(args[1] instanceof Ext.drag.Info).toBe(true);
                     expect(args[2] instanceof Ext.event.Event).toBe(true);
@@ -691,7 +714,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
             it("should not drag if the handler returns false", function() {
                 source.on('beforedragstart', function() {
                     return false;
-                }); 
+                });
                 source.on('dragstart', spy);
                 source.on('dragmove', spy);
                 source.on('dragend', spy);
@@ -727,6 +750,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(source);
                     expect(args[1] instanceof Ext.drag.Info).toBe(true);
                     expect(args[2] instanceof Ext.event.Event).toBe(true);
@@ -756,6 +780,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 0);
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(source);
                     expect(args[1] instanceof Ext.drag.Info).toBe(true);
                     expect(args[2] instanceof Ext.event.Event).toBe(true);
@@ -787,6 +812,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
                 runs(function() {
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(source);
                     expect(args[1] instanceof Ext.drag.Info).toBe(true);
                     expect(args[2] instanceof Ext.event.Event).toBe(true);
@@ -833,6 +859,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     doCancel(0, 0);
                     runs(function() {
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(source);
                         expect(args[1] instanceof Ext.drag.Info).toBe(true);
                         expect(args[2] instanceof Ext.event.Event).toBe(true);
@@ -853,6 +880,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     describe("proxy", function() {
         it("should default to using proxy.Original", function() {
             var spy = jasmine.createSpy();
+
             makeSource();
             source.on('dragmove', spy.andCallFake(function(source, info) {
                 spy.mostRecentCall.dragInfo = info.clone();
@@ -869,6 +897,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         it("should call getElement once at the start of the drag", function() {
             makeSource();
             var spy = spyOn(source.getProxy(), 'getElement').andCallThrough();
+
             startDrag();
             // Need to move over threshhold to start the drag
             moveBy(10, 10);
@@ -893,6 +922,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         it("should call cleanup when the drag completes", function() {
             makeSource();
             var spy = spyOn(source.getProxy(), 'cleanup').andCallThrough();
+
             startDrag();
             // Need to move over threshhold to start the drag
             moveBy(10, 10);
@@ -994,6 +1024,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 moveBy(10, 10);
                 runs(function() {
                     var el = spy.mostRecentCall.dragInfo.proxy.element;
+
                     expect(el).toHaveCls('foo');
                     expect(el.dom).hasHTML('TheText');
                 });
@@ -1013,6 +1044,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
                 runs(function() {
                     var el = spy.mostRecentCall.dragInfo.proxy.element;
+
                     expect(el.destroyed).toBe(true);
                 });
             });
@@ -1030,6 +1062,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
                 runs(function() {
                     var id = spy.mostRecentCall.dragInfo.proxy.element.id;
+
                     source.destroy();
                     expect(Ext.get(id)).toBeNull();
                 });
@@ -1048,7 +1081,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
             runs(function() {
                 expect(dragEl).not.toHaveCls(cls);
             });
-        }                
+        }
 
         it("should add the cls when dragging starts and remove when it ends", function() {
             makeSource({
@@ -1337,11 +1370,13 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         left: '50px',
                         top: '50px'
                     },
-                    children: preventChildren ? [] : [
-                        getChild('foo', 10, 10),
-                        getChild('bar', 100, 100),
-                        getChild('foo', 150, 150)
-                    ]
+                    children: preventChildren
+                        ? []
+                        : [
+                            getChild('foo', 10, 10),
+                            getChild('bar', 100, 100),
+                            getChild('foo', 150, 150)
+                        ]
                 });
             }
 
@@ -1368,6 +1403,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 makeDragElWithHandles();
                 makeSource();
                 var handle = Ext.fly(dragEl.child('.foo', true));
+
                 startHandleDrag(handle);
                 moveBy(100, 100, handle);
                 runsExpectXY(150, 150);
@@ -1389,6 +1425,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     handle: '.foo'
                 });
                 var handle = Ext.fly(dragEl.child('.bar', true));
+
                 startHandleDrag(handle);
                 moveBy(200, 200, handle);
                 runsExpectXY(50, 50);
@@ -1401,6 +1438,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     handle: '.foo'
                 });
                 var handle = Ext.fly(dragEl.child('.foo', true));
+
                 startHandleDrag(handle);
                 moveBy(100, 100, handle);
                 runsExpectXY(150, 150);
@@ -1413,6 +1451,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     handle: '.foo'
                 });
                 var handle = Ext.fly(dragEl.child('.foo', true));
+
                 startHandleDrag(handle);
                 moveBy(100, 100, handle);
                 runsExpectXY(150, 150);
@@ -1444,6 +1483,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                     handle: '.foo'
                 });
                 var handle = Ext.fly(dragEl.down('.foo', true));
+
                 startHandleDrag(handle);
                 moveBy(100, 100, handle);
                 runsExpectXY(150, 150);
@@ -1463,6 +1503,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         // Shouldn't move
                         runsExpectXY(50, 50);
                         var handle = Ext.fly(dragEl.child('.foo', true));
+
                         startHandleDrag(handle);
                         moveBy(100, 100, handle);
                         runsExpectXY(150, 150);
@@ -1484,12 +1525,14 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         });
                         source.setHandle('.bar');
                         var handle = dragEl.child('.foo');
+
                         startHandleDrag(handle);
                         moveBy(100, 100, handle);
                         endHandleDrag(handle);
                         // Shouldn't move
                         runsExpectXY(50, 50);
                         var handle2 = dragEl.child('.bar');
+
                         startHandleDrag(handle2);
                         moveBy(100, 100, handle2);
                         endHandleDrag(handle2);
@@ -1514,6 +1557,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         // Shouldn't move
                         runsExpectXY(150, 150);
                         var handle = Ext.fly(dragEl.child('.foo', true));
+
                         startHandleDrag(handle);
                         moveBy(100, 100, handle);
                         runsExpectXY(250, 250);
@@ -1525,6 +1569,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                             handle: '.foo'
                         });
                         var handle = Ext.fly(dragEl.child('.foo', true));
+
                         startHandleDrag(handle);
                         moveBy(100, 100, handle);
                         runsExpectXY(150, 150);
@@ -1541,6 +1586,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                             handle: '.foo'
                         });
                         var handle = dragEl.child('.foo');
+
                         startHandleDrag(handle);
                         moveBy(100, 100, handle);
                         endHandleDrag(handle);
@@ -1554,6 +1600,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         runsExpectXY(150, 150);
                         endHandleDrag(handle);
                         var handle2 = dragEl.child('.bar');
+
                         startHandleDrag(handle2);
                         moveBy(100, 100, handle2);
                         endHandleDrag(handle2);
@@ -1878,7 +1925,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         runsExpectXY(20, 100);
                         endDrag();
                     });
-                }); 
+                });
             });
 
             describe("y", function() {
@@ -2034,7 +2081,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         runsExpectXY(100, 20);
                         endDrag();
                     });
-                }); 
+                });
             });
 
             describe("element", function() {
@@ -2500,7 +2547,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should snap to the nearest value", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {x: 30}
+                                    snap: { x: 30 }
                                 }
                             });
                             startDrag();
@@ -2530,7 +2577,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should respect constraints", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {x: 10},
+                                    snap: { x: 10 },
                                     x: [10, 160]
                                 }
                             });
@@ -2555,7 +2602,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                             runsExpectXY(60, 50);
                             runs(function() {
                                 source.setConstrain({
-                                    snap: {x: 50}
+                                    snap: { x: 50 }
                                 });
                             });
                             startDrag();
@@ -2569,7 +2616,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should be able to clear snap after an initial drag", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {x: 50}
+                                    snap: { x: 50 }
                                 }
                             });
                             dragBy(30, 0);
@@ -2588,7 +2635,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should not affect the y value", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {x: 40}
+                                    snap: { x: 40 }
                                 }
                             });
 
@@ -2647,9 +2694,11 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                                         x: function(info, x) {
                                             if (x < 100) {
                                                 return 10;
-                                            } else if (x < 200) {
+                                            }
+                                            else if (x < 200) {
                                                 return 150;
-                                            } else {
+                                            }
+                                            else {
                                                 return 400;
                                             }
                                         }
@@ -2678,7 +2727,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should snap to the nearest value", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {y: 30}
+                                    snap: { y: 30 }
                                 }
                             });
                             startDrag();
@@ -2708,7 +2757,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should respect constraints", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {y: 10},
+                                    snap: { y: 10 },
                                     y: [10, 160]
                                 }
                             });
@@ -2733,7 +2782,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                             runsExpectXY(50, 60);
                             runs(function() {
                                 source.setConstrain({
-                                    snap: {y: 50}
+                                    snap: { y: 50 }
                                 });
                             });
                             startDrag();
@@ -2747,7 +2796,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should be able to clear snap after an initial drag", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {y: 50}
+                                    snap: { y: 50 }
                                 }
                             });
                             dragBy(0, 30);
@@ -2766,7 +2815,7 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                         it("should not affect the x value", function() {
                             makeSource({
                                 constrain: {
-                                    snap: {y: 40}
+                                    snap: { y: 40 }
                                 }
                             });
 
@@ -2825,9 +2874,11 @@ topSuite("Ext.drag.Source", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                                         y: function(info, y) {
                                             if (y < 100) {
                                                 return 10;
-                                            } else if (y < 200) {
+                                            }
+                                            else if (y < 200) {
                                                 return 150;
-                                            } else {
+                                            }
+                                            else {
                                                 return 400;
                                             }
                                         }

@@ -1,5 +1,4 @@
 topSuite("Ext.data.identifier.Generator", ['Ext.data.identifier.*'], function() {
-    
     var Generator = Ext.data.identifier.Generator,
         idgen;
     
@@ -14,6 +13,7 @@ topSuite("Ext.data.identifier.Generator", ['Ext.data.identifier.*'], function() 
         describe("creating", function() {
             describe("sequential", function() {
                 var Sequential = Ext.data.identifier.Sequential;
+
                 it("should create a with a string", function() {
                     idgen = Ext.Factory.dataIdentifier('sequential');
                     expect(idgen instanceof Sequential);
@@ -32,8 +32,8 @@ topSuite("Ext.data.identifier.Generator", ['Ext.data.identifier.*'], function() 
                 });
                 
                 it("should return an existing id", function() {
-                    idgen = new Sequential({id: 'foo'});
-                    expect(Ext.Factory.dataIdentifier('foo')).toBe(idgen);    
+                    idgen = new Sequential({ id: 'foo' });
+                    expect(Ext.Factory.dataIdentifier('foo')).toBe(idgen);
                 });
             });
             
@@ -58,8 +58,8 @@ topSuite("Ext.data.identifier.Generator", ['Ext.data.identifier.*'], function() 
                 });
                 
                 it("should return an existing id", function() {
-                    idgen = new Uuid({id: 'foo'});
-                    expect(Ext.Factory.dataIdentifier('foo')).toBe(idgen);    
+                    idgen = new Uuid({ id: 'foo' });
+                    expect(Ext.Factory.dataIdentifier('foo')).toBe(idgen);
                 });
             });
         });

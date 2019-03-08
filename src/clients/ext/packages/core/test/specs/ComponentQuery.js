@@ -2,6 +2,8 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     var cq,
         cm,
         realComponentMgrAll,
+        realComponentMgrByInstanceId,
+        realComponentMgrCount,
         EA,
         result,
         root,
@@ -23,6 +25,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     setup(o.items[i], o);
                 }
             }
+            
             Ext.apply(o, {
                 $iid: ++Ext.$nextIid,
                 getItemId: function() {
@@ -42,6 +45,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     if (deep) {
                         for (; i < len; i++) {
                             item = items[i];
+                            
                             if (item.getRefItems) {
                                 items = items.concat(item.getRefItems(true));
                             }
@@ -60,7 +64,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                 },
                 
                 hasCls: function(cls) {
-                    return this.cls == cls;
+                    return this.cls == cls; // eslint-disable-line eqeqeq
                 },
                 
                 isHidden: function() {
@@ -103,10 +107,15 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         cq = Ext.ComponentQuery;
         cm = Ext.ComponentManager;
         EA = Ext.Array;
+        
         realComponentMgrAll = cm.all;
+        realComponentMgrByInstanceId = cm.byInstanceId;
+        realComponentMgrCount = cm.count;
 
         // The test uses a fake ComponentManager cache
         cm.all = {};
+        cm.byInstanceId = {};
+        cm.count = 0;
 
         root = {
             id: 'root',
@@ -162,13 +171,13 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                         type: 'B/G/Z',
                         hidden: true
                     }, child10 = {
-                        id   : 'child10',
-                        cls  : 'child10-cls my-foo-cls',
-                        type : 'B'
+                        id: 'child10',
+                        cls: 'child10-cls my-foo-cls',
+                        type: 'B'
                     }, child11 = {
-                        id   : 'child.11',
-                        cls  : 'child11-cls my-foo-cls-test',
-                        type : 'B',
+                        id: 'child.11',
+                        cls: 'child11-cls my-foo-cls-test',
+                        type: 'B',
                         scrollable: 'y'
                     }, child12 = {
                         id: 'child.12',
@@ -186,6 +195,8 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
 
     afterEach(function() {
         cm.all = realComponentMgrAll;
+        cm.byInstanceId = realComponentMgrByInstanceId;
+        cm.count = realComponentMgrCount;
     });
     
     describe("parser", function() {
@@ -250,29 +261,30 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
     
-    describe("is", function(){
+    describe("is", function() {
         var item;
+        
         beforeEach(function() {
            item = Ext.getCmp('root');
         });
         
-        afterEach(function(){
+        afterEach(function() {
             item = null;
         });
         
-        it("should return true if there is no selector", function(){
+        it("should return true if there is no selector", function() {
             expect(cq.is(root)).toBe(true);
         });
         
-        it("should return true if component matches the selector", function(){
+        it("should return true if component matches the selector", function() {
             expect(cq.is(root, '[type=A]')).toBe(true);
-        });  
+        });
         
-        it("should return true if component matches any selector", function(){
+        it("should return true if component matches any selector", function() {
             expect(cq.is(root, 'button, #foo, #root, [type=A]')).toBe(true);
-        });  
+        });
         
-        it("should return false if the component doesn't match the selector", function(){
+        it("should return false if the component doesn't match the selector", function() {
             expect(cq.is(root, '#foo')).toBe(false);
         });
         
@@ -285,20 +297,20 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
         
         describe("hierarchy selectors", function() {
-            it("should match a direct child", function(){
-                expect(cq.is(child6, '#child4 > #child6')).toBe(true);    
-            });  
+            it("should match a direct child", function() {
+                expect(cq.is(child6, '#child4 > #child6')).toBe(true);
+            });
             
             it("should return false if it's not a direct child", function() {
-                expect(cq.is(child6, '#child3 > #child6')).toBe(false);    
+                expect(cq.is(child6, '#child3 > #child6')).toBe(false);
             });
             
             it("should match deep children", function() {
-                expect(cq.is(child6, '#child3 #child6')).toBe(true);    
+                expect(cq.is(child6, '#child3 #child6')).toBe(true);
             });
             
             it("should match an upward selector", function() {
-                expect(cq.is(child3, '#child6 ^ #child3')).toBe(true);  
+                expect(cq.is(child3, '#child6 ^ #child3')).toBe(true);
             });
         });
 
@@ -340,6 +352,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     describe("query with no selector", function() {
         it("should return all components", function() {
             var result = cq.query();
+            
             expect(result.length).toBe(13);
         });
     });
@@ -377,13 +390,13 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
     
-    describe("attributes starting with $", function(){
-        it("should match $className variable", function(){
-            result = cq.query('[$className=Foo]');    
+    describe("attributes starting with $", function() {
+        it("should match $className variable", function() {
+            result = cq.query('[$className=Foo]');
             expect(result.length).toBe(2);
             expect(result[0].id).toBe('child1');
             expect(result[1].id).toBe('child3');
-        });  
+        });
 
         it("should allow dots in attribute values", function() {
             result = cq.query('[$className=Bar.Baz.Qux]', root);
@@ -422,7 +435,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[0].id).toEqual(child2.id);
         });
 
-        it("should select the sixth child", function () {
+        it("should select the sixth child", function() {
             result = cq.query('[hidden]', root);
             expect(result.length).toEqual(1);
             expect(result[0].id).toEqual(child6.id);
@@ -450,22 +463,22 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
         });
         
-        describe("matchers", function(){
-            it("should select the tenth child", function () {
+        describe("matchers", function() {
+            it("should select the tenth child", function() {
                 result = cq.query('[cls~=my-foo-cls]', root);
                 expect(result.length).toEqual(1);
                 expect(result[0].id).toEqual(child10.id);
-            }); 
+            });
             
-            it("should select items where id starts with child1", function(){
+            it("should select items where id starts with child1", function() {
                 result = cq.query('[id^=child1]', root);
                 expectChildren(result, child1, child10);
             });
             
-            it("should select items where cls ends with 9-cls", function(){
+            it("should select items where cls ends with 9-cls", function() {
                 result = cq.query('[cls$=9-cls]', root);
                 expect(result.length).toBe(1);
-                expect(result[0].cls).toBe('child9-cls');                
+                expect(result[0].cls).toBe('child9-cls');
             });
 
             it("should select items with commas in properties", function() {
@@ -558,12 +571,17 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     describe("query using pseudo-class", function() {
         beforeEach(function() {
             cq.pseudos.cardLayout = function(items) {
-                var result = [], c, i = 0, l = items.length;
+                var result = [],
+                    c,
+                    i = 0,
+                    l = items.length;
+                
                 for (; i < l; i++) {
                     if ((c = items[i]).layout === 'card') {
                         result.push(c);
                     }
                 }
+                
                 return result;
             };
         });
@@ -575,19 +593,21 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[0].id).toEqual(child3.id);
         });
         
-        it("should not select the sixth child which is filtered by :not()", function(){
+        it("should not select the sixth child which is filtered by :not()", function() {
             result = cq.query(':not([hidden])', root);
+            
             var all = root.getRefItems(true),
-                getId = function(o){ return o.id; },
+                getId = function(o) { return o.id; },
                 allIds = EA.map(all, getId),
                 resultIds = EA.map(result, getId),
                 diffIds = EA.difference(allIds, resultIds);
+            
             expect(result.length).toEqual(all.length - 1);
             expect(diffIds.length).toEqual(1);
             expect(diffIds[0]).toEqual(child6.id);
         });
         
-        it("should accept back-to-back pseudo-class selectors with cumulative results", function(){
+        it("should accept back-to-back pseudo-class selectors with cumulative results", function() {
             result = cq.query(':not(G):not(F)', root);
             expect(result.length).toEqual(5);
             expect(result[0].id).toEqual(child3.id);
@@ -599,11 +619,13 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         
         it("should accept member expression selectors", function() {
             result = cq.query(':not({isHidden()})', root);
+            
             var all = root.getRefItems(true),
-                getId = function(o){ return o.id; },
+                getId = function(o) { return o.id; },
                 allIds = EA.map(all, getId),
                 resultIds = EA.map(result, getId),
                 diffIds = EA.difference(allIds, resultIds);
+            
             expect(result.length).toEqual(all.length - 1);
             expect(diffIds.length).toEqual(1);
             expect(diffIds[0]).toEqual(child6.id);
@@ -627,7 +649,8 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         
         describe("first/last", function() {
             var items;
-            beforeEach(function(){
+            
+            beforeEach(function() {
                 items = [
                     new Ext.Component({
                         action: 'type1',
@@ -652,111 +675,124 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                 ];
             });
             
-            afterEach(function(){
-                Ext.Array.forEach(items, function(item){
+            afterEach(function() {
+                Ext.Array.forEach(items, function(item) {
                     item.destroy();
                 });
+                
                 items = null;
             });
             
-            describe("first", function(){
-                it("should return an empty array if no items match", function(){
+            describe("first", function() {
+                it("should return an empty array if no items match", function() {
                     var result = cq.query('button:first', items);
-                    expect(result).toEqual([]);  
+                    
+                    expect(result).toEqual([]);
                 });
                 
-                it("should return the first matching component by type", function(){
+                it("should return the first matching component by type", function() {
                     var result = cq.query('container:first', items);
-                    expect(result).toEqual([items[1]]);  
+                    
+                    expect(result).toEqual([items[1]]);
                 });
                 
-                it("should return the last matching component by attribute", function(){
+                it("should return the last matching component by attribute", function() {
                     var result = cq.query('[action=type2]:first', items);
-                    expect(result).toEqual([items[2]]);  
+                    
+                    expect(result).toEqual([items[2]]);
                 });
                 
-                it("should return the first component", function(){
+                it("should return the first component", function() {
                     var result = cq.query('*:first', items);
-                    expect(result).toEqual([items[0]]);  
+                    
+                    expect(result).toEqual([items[0]]);
                 });
                 
-                describe("no items/single item", function(){
-                    it("should return an empty array if there are no items", function(){
+                describe("no items/single item", function() {
+                    it("should return an empty array if there are no items", function() {
                         var result = cq.query('*:first', []);
-                        expect(result).toEqual([]);    
+                        
+                        expect(result).toEqual([]);
                     });
                     
-                    it("should return an a single item if it matches", function(){
-                        var c = new Ext.Component();
-                        var result = cq.query('component:first', [c]);
-                        expect(result).toEqual([c]); 
-                        c.destroy();   
-                    });    
+                    it("should return an a single item if it matches", function() {
+                        var c = new Ext.Component(),
+                            result = cq.query('component:first', [c]);
+                        
+                        expect(result).toEqual([c]);
+                        c.destroy();
+                    });
                 });
             });
         
-            describe("last", function(){
-                it("should return an empty array if no items match", function(){
+            describe("last", function() {
+                it("should return an empty array if no items match", function() {
                     var result = cq.query('button:last', items);
-                    expect(result).toEqual([]);  
+                    
+                    expect(result).toEqual([]);
                 });
                 
-                it("should return the last matching component by type", function(){
+                it("should return the last matching component by type", function() {
                     var result = cq.query('component:last', items);
-                    expect(result).toEqual([items[4]]);  
+                    
+                    expect(result).toEqual([items[4]]);
                 });
                 
-                it("should return the first matching component by attribute", function(){
+                it("should return the first matching component by attribute", function() {
                     var result = cq.query('[action=type1]:last', items);
-                    expect(result).toEqual([items[1]]);  
+                    
+                    expect(result).toEqual([items[1]]);
                 });
                 
-                it("should return the first component", function(){
+                it("should return the first component", function() {
                     var result = cq.query('*:last', items);
-                    expect(result).toEqual([items[4]]);  
+                    
+                    expect(result).toEqual([items[4]]);
                 });
                 
-                describe("no items/single item", function(){
-                    it("should return an empty array if there are no items", function(){
+                describe("no items/single item", function() {
+                    it("should return an empty array if there are no items", function() {
                         var result = cq.query('*:last', []);
-                        expect(result).toEqual([]);    
+                        
+                        expect(result).toEqual([]);
                     });
                     
-                    it("should return an a single item if it matches", function(){
-                        var c = new Ext.Component();
-                        var result = cq.query('component:last', [c]);
-                        expect(result).toEqual([c]); 
-                        c.destroy();   
-                    });    
+                    it("should return an a single item if it matches", function() {
+                        var c = new Ext.Component(),
+                            result = cq.query('component:last', [c]);
+                        
+                        expect(result).toEqual([c]);
+                        c.destroy();
+                    });
                 });
             });
         });
 
-        describe(':scrollable', function () {
-            it('should find all valid scrollable items no matter how deeply nested', function () {
+        describe(':scrollable', function() {
+            it('should find all valid scrollable items no matter how deeply nested', function() {
                 expect(cq.query(':scrollable', root).length).toBe(3);
             });
 
-            it('should only find non-valid scrollable items (with a null or false value) if explicitly specified', function () {
+            it('should only find non-valid scrollable items (with a null or false value) if explicitly specified', function() {
                 expect(cq.query('[scrollable=null]', root).length).toBe(1);
                 expect(cq.query('[scrollable=false]', root).length).toBe(1);
             });
 
-            it('should return an empty array if no items match', function () {
+            it('should return an empty array if no items match', function() {
                 expect(cq.query(':scrollable[type=B/C/D]', root)).toEqual([]);
             });
 
-            it('should return an a single item if it matches', function () {
+            it('should return an a single item if it matches', function() {
                 expect(cq.query(':scrollable:first', root)[0]).toEqual(Ext.getCmp('child2'));
             });
 
-            it('should not blow up when card item is not a component', function () {
+            it('should not blow up when card item is not a component', function() {
                 var container = new Ext.container.Container({
                     renderTo: Ext.getBody(),
                     items: [new Ext.Widget()]
                 });
 
-                expect(function () {
+                expect(function() {
                     container.query(':scrollable');
                 }).not.toThrow();
 
@@ -765,7 +801,8 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
 
-    describe('attribute value coercion', function() {
+    // TODO These tests were broken all along?
+    xdescribe('attribute value coercion', function() {
         var candidates = [{
             att1: 0,
             att2: 0,
@@ -783,19 +820,19 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             att4: 0
         }];
 
-        if('should coerce "null" to match a null property value', function() {
+        it('should coerce "null" to match a null property value', function() {
             expect(cq.query('[att1=null]', candidates)).toBe(candidates[1]);
         });
 
-        if('should coerce "false" to match a Boolean property value', function() {
+        it('should coerce "false" to match a Boolean property value', function() {
             expect(cq.query('[att2=false]', candidates)).toBe(candidates[1]);
         });
 
-        if('should coerce "true" to match a Boolean property value', function() {
+        it('should coerce "true" to match a Boolean property value', function() {
             expect(cq.query('[att3=true]', candidates)).toBe(candidates[1]);
         });
 
-        if('should coerce "undefined" to match an undefined property value', function() {
+        it('should coerce "undefined" to match an undefined property value', function() {
             expect(cq.query('[att4=undefined]', candidates)).toBe(candidates[1]);
         });
     });
@@ -872,6 +909,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
 
         it('should find all descendants', function() {
             var d = c.query();
+
             expect(d.length).toEqual(3);
             expect(d[0]).toBe(Ext.getCmp('floating-cq-child'));
             expect(d[1]).toBe(Ext.getCmp('floating-cq-grandchild'));
@@ -879,6 +917,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
         it('should find individual descendants', function() {
             var d = c.query('>*');
+
             expect(d.length).toEqual(1);
             expect(d[0]).toBe(Ext.getCmp('floating-cq-child'));
 
@@ -892,10 +931,10 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
 
-    describe('trimming spaces', function () {
+    describe('trimming spaces', function() {
         var c;
 
-        beforeEach(function () {
+        beforeEach(function() {
             c = new Ext.container.Container({
                 items: {
                     xtype: 'component',
@@ -906,14 +945,14 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             c.destroy();
             c = null;
         });
 
-        describe('single space', function () {
+        describe('single space', function() {
             describe("attribute matching expressions", function() {
-                it('should trim leading space', function () {
+                it('should trim leading space', function() {
                     result = cq.query('[action =selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -927,7 +966,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     expect(result[0].action).toBe('selectVendors');
                 });
 
-                it('should trim trailing space', function () {
+                it('should trim trailing space', function() {
                     result = cq.query('[action= selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -941,7 +980,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     expect(result[0].action).toBe('selectVendors');
                 });
 
-                it('should trim both spaces', function () {
+                it('should trim both spaces', function() {
                     result = cq.query('[action = selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -957,9 +996,9 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
         });
 
-        describe('multiple spaces', function () {
+        describe('multiple spaces', function() {
             describe("attribute matching expressions", function() {
-                it('should trim multiple leading spaces', function () {
+                it('should trim multiple leading spaces', function() {
                     result = cq.query('[action     =selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -973,7 +1012,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     expect(result[0].action).toBe('selectVendors');
                 });
 
-                it('should trim multiple trailing spaces', function () {
+                it('should trim multiple trailing spaces', function() {
                     result = cq.query('[action=      selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -987,7 +1026,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     expect(result[0].action).toBe('selectVendors');
                 });
 
-                it('should trim multiple spaces on both sides', function () {
+                it('should trim multiple spaces on both sides', function() {
                     result = cq.query('[action      =      selectVendors]', c);
                     expect(result.length).toBe(1);
                     expect(result[0].action).toBe('selectVendors');
@@ -1050,19 +1089,19 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
 
-    describe('pre- and postOrder', function () {
+    describe('pre- and postOrder', function() {
         var foo = false;
 
-        afterEach(function () {
+        afterEach(function() {
             foo = false;
             cq.cache.clear();
         });
 
-        describe('preOrder', function () {
-            it('should call the fn regardless of whether the selector has been cached', function () {
+        describe('preOrder', function() {
+            it('should call the fn regardless of whether the selector has been cached', function() {
                 expect(cq.cache.get('')).toBeUndefined();
 
-                cq.visitPreOrder('', this, function () {
+                cq.visitPreOrder('', this, function() {
                     foo = true;
                 });
 
@@ -1070,11 +1109,11 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
         });
 
-        describe('postOrder', function () {
-            it('should call the fn regardless of whether the selector has been cached', function () {
+        describe('postOrder', function() {
+            it('should call the fn regardless of whether the selector has been cached', function() {
                 expect(cq.cache.get('')).toBeUndefined();
 
-                cq.visitPostOrder('', this, function () {
+                cq.visitPostOrder('', this, function() {
                     foo = true;
                 });
 
@@ -1083,10 +1122,11 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         });
     });
 
-    describe("selecting by attribute", function(){
+    describe("selecting by attribute", function() {
 
         var foo, bar, bletch;
-        beforeEach(function(){
+
+        beforeEach(function() {
             Ext.define('spec.Foo', {
                 extend: 'Ext.Component',
                 config: {
@@ -1097,7 +1137,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
 
             foo = new spec.Foo({
-                jaz:3
+                jaz: 3
             });
 
             Ext.define('spec.Bar', {
@@ -1132,12 +1172,12 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             Ext.undefine('spec.Bar');
             Ext.undefine('spec.Bletch');
         });
-        it("should match instance config", function(){
+        it("should match instance config", function() {
             result = cq.query('[bar=1]');
             expect(result.length).toBe(1);
             expect(result[0]).toBe(foo);
         });
-        it("should match instance config presence", function(){
+        it("should match instance config presence", function() {
             result = cq.query('[cqUnitTestConfigName]');
             expect(result.length).toBe(1);
             expect(result[0]).toBe(foo);
@@ -1155,7 +1195,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[0]).toBe(foo);
         });
 
-        it("should match instance config when there's a custom getter", function(){
+        it("should match instance config when there's a custom getter", function() {
             result = cq.query('[bar=customBarGetter]');
             expect(result.length).toBe(1);
             expect(result[0]).toBe(bletch);
@@ -1164,8 +1204,8 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     
     describe('querying non Ext classes', function() {
         it('should be able to query on raw objects', function() {
-            var target = {foo: 'bar'},
-                candidates = [{foo: 'ik'}, {foo: 'screeble'}, target, {foo: 'razz'}, {foo: 'poot'}];
+            var target = { foo: 'bar' },
+                candidates = [{ foo: 'ik' }, { foo: 'screeble' }, target, { foo: 'razz' }, { foo: 'poot' }];
 
             expect(Ext.ComponentQuery.query('[foo=bar]', candidates)[0]).toBe(target);
         });

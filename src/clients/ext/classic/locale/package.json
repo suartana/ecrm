@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-classic-locale",
     "SenchaExtName": "@sencha/ext-classic-locale",
     "SenchaExtReactName": "@sencha/ext-react-classic-locale",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "locale",
         "namespace": "Ext",
@@ -17,7 +17,7 @@
         "creator": "Sencha",
         "summary": "Classic toolkit locale",
         "detailedDescription": "Localization for Classic toolkit UI components",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

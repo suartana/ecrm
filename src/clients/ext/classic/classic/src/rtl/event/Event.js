@@ -7,11 +7,12 @@ Ext.define('Ext.rtl.event.Event', {
 
         if (!xy) {
             xy = me.callParent();
+            
             if (Ext.rootInheritedState.rtl) {
                 xy[0] = Ext.Element.getViewportWidth() - xy[0];
             }
         }
+        
         return xy;
     }
-
 });

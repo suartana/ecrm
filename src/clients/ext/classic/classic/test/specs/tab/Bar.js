@@ -1,5 +1,3 @@
-/* global expect, Ext, jasmine, spyOn */
-
 topSuite("Ext.tab.Bar",
     ['Ext.tab.Panel', 'Ext.layout.container.boxOverflow.Menu'],
 function() {
@@ -34,11 +32,13 @@ function() {
             i, o;
 
         prop = prop || 'text';
+
         for (i = 1; i <= n; ++i) {
             o = {};
             o[prop] = 'ItemText' + i;
             tabs.push(o);
         }
+
         return tabs;
     }
 
@@ -65,12 +65,14 @@ function() {
         it("should be hbox by default", function() {
             createTabBar();
             var layout = tabBar.getLayout();
+
             expect(layout.type).toBe('hbox');
         });
         
         it("should have pack start by default", function() {
             createTabBar();
             var layout = tabBar.getLayout();
+
             expect(layout.pack).toBe('start');
         });
 
@@ -81,6 +83,7 @@ function() {
                 }
             });
             var layout = tabBar.getLayout();
+
             expect(layout.pack).toBe('center');
         });
 
@@ -156,6 +159,7 @@ function() {
         it("should remove tab from tabBar", function() {
             // backup tab, since item will no longer have a tab after being removed
             var tab = item1.tab;
+
             jasmine.fireMouseEvent(item1CloseButton, 'click');
             expect(tabPanel.getTabBar().remove).toHaveBeenCalledWith(tab);
         });
@@ -268,7 +272,7 @@ function() {
                         some: 'card'
                     },
                     tabBar: tabBar
-                },{
+                }, {
                     xtype: 'tab',
                     id: 'tab2',
                     disabled: true,
@@ -286,7 +290,7 @@ function() {
                 tabBar.destroy();
             });
             
-            it("should set the tab instance to disabled", function(){
+            it("should set the tab instance to disabled", function() {
                 expect(tabBar.getComponent('tab2').disabled).toBe(true);
             });
             
@@ -317,6 +321,7 @@ function() {
             it("should default to the activeTab", function() {
                 makeScrollTabs();
                 var item = items.last();
+
                 tabBar.setActiveTab(item);
                 // Go to the front
                 tabBar.layout.overflowHandler.scrollBy(-1000, false);
@@ -328,6 +333,7 @@ function() {
             it("should accept a tab", function() {
                 makeScrollTabs();
                 var item = items.getAt(8);
+
                 expectNotVisible(item);
                 tabBar.ensureTabVisible(8);
                 expectVisible(item);
@@ -337,6 +343,7 @@ function() {
                 it("should accept 0", function() {
                     makeScrollTabs();
                     var item = items.first();
+
                     tabBar.layout.overflowHandler.scrollBy(5000, false);
                     expectNotVisible(item);
                     tabBar.ensureTabVisible(0);
@@ -346,6 +353,7 @@ function() {
                 it("should accept a non-zero index", function() {
                     makeScrollTabs();
                     var item = items.getAt(3);
+
                     tabBar.layout.overflowHandler.scrollBy(5000, false);
                     expectNotVisible(item);
                     tabBar.ensureTabVisible(3);
@@ -372,6 +380,7 @@ function() {
 
                 it("should accept a tabpanel item", function() {
                     var item = tabBar.items.last();
+
                     expectNotVisible(item);
                     tabBar.ensureTabVisible(tabPanel.items.last());
                     expectVisible(item);
@@ -379,7 +388,9 @@ function() {
 
                 it("should ignore components not in the tab panel", function() {
                     var c = new Ext.Component();
+
                     var item = tabBar.items.first();
+
                     expectVisible(item);
                     tabBar.ensureTabVisible(c);
                     expectVisible(item);
@@ -456,6 +467,7 @@ function() {
         it("should have the the active tab scrolled to", function() {
             makeScrollTabs();
             var item = items.last();
+
             tabBar.setActiveTab(item);
             expectVisible(item);
 

@@ -10,7 +10,7 @@ Ext.define('Docucrm.view.authentication.Login', {
         'Ext.button.Button'
     ],
 
-    title: '<h3>Docuportal CRM v.3.0</h3>',
+    title: '<h3>Docu CRM v.3.0</h3>',
     defaultFocus: 'authdialog', // Focus the Auth Form to force field focus as well
 
     items: [
@@ -37,6 +37,7 @@ Ext.define('Docucrm.view.authentication.Login', {
 					xtype:'container',
 					html:'<img src="resources/images/login_logo.png" width="225px">'
 				},
+
                 {
                     xtype: 'label',
                     text: 'Sign into your account'

@@ -176,6 +176,7 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
             isInverseY = surface.matrix.elements[3] < 0;
             surfaceXY = surface.element.getXY();
             itemBBox = Ext.clone(marker.getBBoxFor(item.index));
+
             if (isInverseY) {
                 // The item.category for bar series will be 'items'.
                 // The item.category for line series will be 'markers'.
@@ -186,17 +187,21 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                 // with the origin at the top-left of the surface, but for 'items'
                 // we need to do a conversion.
                 if (surface.getInherited().rtl) {
-                    matrix = surface.inverseMatrix.clone().flipX().translate(item.sprite.attr.innerWidth, 0, true);
-                } else {
+                    matrix = surface.inverseMatrix.clone().flipX()
+                                    .translate(item.sprite.attr.innerWidth, 0, true);
+                }
+                else {
                     matrix = surface.inverseMatrix;
                 }
+
                 itemBBox = matrix.transformBBox(itemBBox);
             }
+
             itemBBox.x += surfaceXY[0];
             itemBBox.y += surfaceXY[1];
             item.series.showTooltipAt(item,
-                itemBBox.x + itemBBox.width * .5,
-                itemBBox.y + itemBBox.height * .5
+                                      itemBBox.x + itemBBox.width * 0.5,
+                                      itemBBox.y + itemBBox.height * 0.5
             );
         }
     },
@@ -214,7 +219,8 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
     },
 
     onTapGesture: function(e) {
-        var me = this;
+        var me = this,
+            item;
 
         // A click/tap on an item makes its highlight sticky.
         // It requires another click/tap to unhighlight.
@@ -222,11 +228,12 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
             return;
         }
 
-        var item = me.getItemForEvent(e);
+        item = me.getItemForEvent(e);
 
         if (me.isSameItem(me.stickyHighlightItem, item)) {
             item = null; // toggle
         }
+
         me.stickyHighlightItem = item;
         me.highlight(item);
     },

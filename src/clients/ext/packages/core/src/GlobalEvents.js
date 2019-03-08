@@ -119,13 +119,12 @@ Ext.define('Ext.GlobalEvents', {
      * Fires when a Component is shown.
      * @param {Ext.Component} component
      */
-    
+
     /**
      * @event beforebindnotify
      * Fires before a scheduled set of bindings are fired. This allows interested parties
      * to react and do any required work.
-     * @param {Ext.util.Scheduler} scheduler The scheduler triggering the bindings.
-     * 
+     *
      * @private
      * @since 5.1.0
      */
@@ -197,7 +196,7 @@ Ext.define('Ext.GlobalEvents', {
 
         if (component) {
             me.pressedScrollStart = Ext.on({
-                scrollstart: function () {
+                scrollstart: function() {
                     me.setPressedComponent(null, e);
                 },
                 destroyable: true
@@ -291,6 +290,7 @@ Ext.define('Ext.GlobalEvents', {
 
     handleOnlineChange: function() {
         var online = Ext.isOnline();
+        
         if (online !== this.onlineState) {
             this.onlineState = online;
             this.fireEvent('onlinechange', online);
@@ -298,6 +298,8 @@ Ext.define('Ext.GlobalEvents', {
     }
 
 }, function(GlobalEvents) {
+    Ext.hasListeners = GlobalEvents.hasListeners;
+
     /**
      * @member Ext
      * @method on
@@ -338,7 +340,7 @@ Ext.define('Ext.GlobalEvents', {
      * @since 6.5.1
      * @private
      */
-    Ext.fireIdle = function () {
+    Ext.fireIdle = function() {
         if (GlobalEvents.hasListeners.idle && !Ext._suppressIdle) {
             GlobalEvents.fireEventArgs('idle');
         }

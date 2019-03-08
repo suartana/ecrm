@@ -1,6 +1,3 @@
-/* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager, it, topSuite */
-/* eslint indent: off */
-
 topSuite("grid-general-locking",
     [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.layout.container.Border',
      'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text'],
@@ -10,18 +7,22 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+            
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+            
             return this;
         };
 
     function spyOnEvent(object, eventName, fn) {
         var obj = {
-            fn: fn || Ext.emptyFn
-        },
-        spy = spyOn(obj, "fn");
+                fn: fn || Ext.emptyFn
+            },
+            spy = spyOn(obj, "fn");
+        
         object.addListener(eventName, obj.fn);
+        
         return spy;
     }
 
@@ -57,8 +58,8 @@ function() {
         navModel = grid.getNavigationModel();
     }
 
-    describe("Locking configuration", function () {
-        beforeEach(function () {
+    describe("Locking configuration", function() {
+        beforeEach(function() {
             store = new Ext.data.ArrayStore({
                 data: [
                     [ 1, 'Lorem'],
@@ -69,8 +70,8 @@ function() {
             });
         });
 
-        describe("on init", function () {
-            beforeEach(function () {
+        describe("on init", function() {
+            beforeEach(function() {
                 createGrid({
                     enableColumnHide: true,
                     rowLines: true,
@@ -84,22 +85,22 @@ function() {
                 });
             });
 
-            it("should pass down configs to normalGrid", function () {
+            it("should pass down configs to normalGrid", function() {
                 expect(grid.enableColumnMove).toBe(false);
                 expect(grid.normalGrid.enableColumnMove).toBe(false);
             });
 
-            it("should pass down configs to lockedGrid", function () {
+            it("should pass down configs to lockedGrid", function() {
                 expect(grid.enableColumnMove).toBe(false);
                 expect(grid.lockedGrid.enableColumnMove).toBe(false);
             });
 
-            it("should not pass down configs specified in normalGridConfig", function () {
+            it("should not pass down configs specified in normalGridConfig", function() {
                 expect(grid.enableColumnHide).toBe(true);
                 expect(grid.normalGrid.enableColumnHide).toBe(false);
             });
 
-            it("should not pass down configs specified in lockedGridConfig", function () {
+            it("should not pass down configs specified in lockedGridConfig", function() {
                 expect(grid.rowLines).toBe(true);
                 expect(grid.lockedGrid.rowLines).toBe(false);
             });
@@ -107,7 +108,7 @@ function() {
             it("should set both sides with xtype gridpanel when creating form extended classes", function() {
                 grid.destroy();
 
-                Ext.define('BaseGrid',{
+                Ext.define('BaseGrid', {
                     extend: 'Ext.grid.Panel',
                     xtype: 'base-grid',
                     title: 'foo'
@@ -119,12 +120,12 @@ function() {
                     columns: [{
                         dataIndex: 'foo',
                         locked: true
-                    },{
-                        dataIndex:'bar'
+                    }, {
+                        dataIndex: 'bar'
                     }]
                 });
 
-                grid = Ext.create('MyGrid',{
+                grid = Ext.create('MyGrid', {
                     renderTo: document.body,
                     store: {
                         data: {
@@ -142,12 +143,12 @@ function() {
             });
         });
 
-        describe("when stateful", function () {
-            afterEach(function () {
+        describe("when stateful", function() {
+            afterEach(function() {
                 Ext.state.Manager.set(grid.getStateId(), null);
             });
 
-            describe("retaining state across page loads", function () {
+            describe("retaining state across page loads", function() {
                 function makeGrid(stateId) {
                     createGrid({
                         columns: [{
@@ -179,18 +180,19 @@ function() {
                 function testStateId(stateId) {
                     var maybe = !!stateId ? '' : 'not';
 
-                    describe("when columns are " + maybe + ' configured with a stateId', function () {
+                    describe("when columns are " + maybe + ' configured with a stateId', function() {
                         function testLockingPartner(which) {
-                            describe(which + ' locking partner', function () {
+                            describe(which + ' locking partner', function() {
                                 var partner = which + 'Grid';
 
-                                beforeEach(function () {
+                                beforeEach(function() {
                                     makeGrid(stateId);
                                 });
 
-                                it("should retain column width", function () {
+                                it("should retain column width", function() {
                                     var columnManager = grid[partner].columnManager;
-                                    waitsFor(function(){
+
+                                    waitsFor(function() {
                                         return columnManager.getColumns()[0];
                                     });
                                     runs(function() {
@@ -209,10 +211,10 @@ function() {
                                     
                                 });
 
-                                it("should retain column visibility", function () {
+                                it("should retain column visibility", function() {
                                     var columnManager = grid[partner].columnManager;
 
-                                    waitsFor(function(){
+                                    waitsFor(function() {
                                         return columnManager.getColumns()[0];
                                     });
 
@@ -231,11 +233,11 @@ function() {
                                     });
                                 });
 
-                                it("should retain the column sort", function () {
+                                it("should retain the column sort", function() {
                                     var columnManager = grid[partner].columnManager,
                                         column;
 
-                                    waitsFor(function(){
+                                    waitsFor(function() {
                                         return columnManager.getColumns()[0];
                                     });
 
@@ -244,7 +246,7 @@ function() {
                                         column.sort();
                                     });
 
-                                    waitsFor(function(){
+                                    waitsFor(function() {
                                         return column.sortState;
                                     });
 
@@ -256,7 +258,7 @@ function() {
                                         columnManager = grid[partner].columnManager;
                                     });
 
-                                    waitsFor(function(){
+                                    waitsFor(function() {
                                         return columnManager.getColumns()[0] && columnManager.getColumns()[0].sortState;
                                     });
 
@@ -311,7 +313,7 @@ function() {
             lockedGrid, lockedView,
             normalGrid, normalView;
 
-            function makeGrid(lockedColumnCount, cfg, lockedGridConfig, normalGridConfig) {               
+            function makeGrid(lockedColumnCount, cfg, lockedGridConfig, normalGridConfig) {
                 var data = [],
                     defaultCols = [],
                     i;
@@ -529,7 +531,7 @@ function() {
     });
 
     describe('Focusing the view el, not a cell', function() {
-        Ext.isIE8 ? xit: it('should move to the same row on the other side', function() {
+        (Ext.isIE8 ? xit : it)('should move to the same row on the other side', function() {
             var errorSpy = jasmine.createSpy('error handler'),
                 old = window.onError;
 
@@ -593,26 +595,38 @@ function() {
         });
     });
 
+    describe("enable/disable", function() {
+        it("should be able to enable a grid that was initially disabled", function() {
+            createGrid({
+                disabled: true
+            });
+
+            grid.enable();
+            
+            expect(grid.el.down('.x-mask').isVisible(true)).toBeFalsy();
+        });
+    });
+
     describe("scrolling", function() {
         beforeEach(function() {
             store = new Ext.data.Store({
                 fields: ['name', 'email', 'phone'],
                 data: [
-                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
-                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
-                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' },
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
                 { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
-                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
-                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
-                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' },
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
                 { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
-                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
-                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
-                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' },
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
                 { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
-                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
-                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
-                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' },
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
                 { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
                 ]
             });
@@ -650,7 +664,7 @@ function() {
                 return scroller.position.y === scroller.position.x && scroller.position.y === 100;
             });
 
-            runs(function(){ 
+            runs(function() {
                 cell = grid.normalGrid.view.getCell(7, 0);
                 jasmine.fireMouseEvent(cell, 'mousedown');
             });
@@ -661,13 +675,13 @@ function() {
             runs(function() {
                 expect(scroller.getPosition().y).toBe(100);
                 // finish the click to avoid even publisher leaks
-                jasmine.fireMouseEvent(cell, 'mouseup'); 
+                jasmine.fireMouseEvent(cell, 'mouseup');
             });
         });
     });
     
-    describe('View focus from cell editor', function () {
-        it('should set position to the closest cell', function () {
+    describe('View focus from cell editor', function() {
+        it('should set position to the closest cell', function() {
             var rowIdx = 0,
                 colIdx = 2,
                 editor, editorActive, position,
@@ -687,7 +701,7 @@ function() {
                 plugins: [{
                     ptype: 'cellediting',
                     listeners: {
-                        beforeedit: function () {
+                        beforeedit: function() {
                             editorActive = true;
                         }
                     }
@@ -712,14 +726,14 @@ function() {
             navModel = grid.normalGrid.getNavigationModel();
             record = store.getAt(0);
             
-            editor.startEditByPosition({row: rowIdx, column: colIdx});
+            editor.startEditByPosition({ row: rowIdx, column: colIdx });
     
-            waitFor(function () {
+            waitFor(function() {
                 return editorActive;
             });
     
-            run(function () {
-                cellEl = view.getCell(record, colIdx-1, true);
+            runs(function() {
+                cellEl = view.getCell(record, colIdx - 1, true);
                 cellRegion = cellEl.getRegion();
                 viewRegion = view.getRegion();
                 
@@ -736,8 +750,8 @@ function() {
                 // position should remain on the same cell
                 expect({
                     rowIdx: position.rowIdx,
-                    colIdx: position.colIdx}).
-                toEqual({
+                    colIdx: position.colIdx })
+                .toEqual({
                     rowIdx: rowIdx,
                     colIdx: --colIdx
                 });
@@ -750,8 +764,8 @@ function() {
                 // position should be moved to the cell to the left
                 expect({
                     rowIdx: position.rowIdx,
-                    colIdx: position.colIdx}).
-                toEqual({
+                    colIdx: position.colIdx })
+                .toEqual({
                     rowIdx: rowIdx,
                     colIdx: --colIdx
                 });

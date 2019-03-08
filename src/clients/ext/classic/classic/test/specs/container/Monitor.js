@@ -6,10 +6,13 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
         c1 = new Ext.Component({
             foo: true
         });
+        
         c2 = new Ext.Component();
+        
         c3 = new Ext.Component({
             foo: true
         });
+        
         ct = new Ext.container.Container({
             defaultType: 'container'
         });
@@ -21,15 +24,18 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                 removeHandler: removeSpy,
                 invalidateHandler: invalidateSpy
             });
+            
             mon.bind(ct);
+            
             // Trigger the cache
             mon.getItems();
         };
         
         deepCt = function(depth, c) {
             var root = {
-                xtype: 'container'
-            }, out = root;
+                    xtype: 'container'
+                },
+                out = root;
             
             while (depth > 1) {
                 out.items = {
@@ -38,9 +44,11 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                 out = out.items;
                 --depth;
             }
+            
             if (c) {
                 out.items = c;
             }
+            
             return root;
         };
         
@@ -55,7 +63,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
     });
     
     describe("initialization", function() {
-        it("should match direct children of the target", function() {            
+        it("should match direct children of the target", function() {
             ct.add(c1, c2, c3);
             
             makeMon();
@@ -63,7 +71,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             expect(addSpy.calls.length).toBe(2);
             expect(addSpy.calls[0].args[0]).toBe(c1);
             expect(addSpy.calls[1].args[0]).toBe(c3);
-        });  
+        });
         
         it("should match docked items", function() {
             ct.destroy();
@@ -72,12 +80,12 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                     xtype: 'toolbar',
                     items: c1
                 }]
-            });  
+            });
             
             makeMon();
             
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
         });
         
         it("should match Queryable items that aren't containers", function() {
@@ -86,12 +94,12 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                     items: c1
                 }
             }));
-            makeMon();   
+            makeMon();
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1); 
+            expect(addSpy.calls[0].args[0]).toBe(c1);
         });
         
-        it("should match items inside direct containers of the target", function() {            
+        it("should match items inside direct containers of the target", function() {
             ct.add(
                 deepCt(1, c1),
                 deepCt(1, c2),
@@ -105,7 +113,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             expect(addSpy.calls[1].args[0]).toBe(c3);
         });
         
-        it("should match items inside deep containers of the target", function() {            
+        it("should match items inside deep containers of the target", function() {
             ct.add(
                 deepCt(4, c1),
                 deepCt(5, c2),
@@ -122,7 +130,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
     
     describe("dynamic adding", function() {
         var expectContains = function(o) {
-            expect(mon.getItems().contains(o)).toBe(true);    
+            expect(mon.getItems().contains(o)).toBe(true);
         };
         
         it("should match a direct item of the target", function() {
@@ -132,7 +140,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             expect(addSpy.calls.length).toBe(1);
             expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
-        });  
+        });
         
         it("should match docked items", function() {
             ct.destroy();
@@ -155,7 +163,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             
             inner.add(c1);
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);    
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
         });
         
@@ -168,7 +176,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             }));
             
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
         });
         
@@ -176,11 +184,12 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             makeMon();
             
             var inner = new Ext.container.Container();
+
             ct.add(deepCt(10, inner));
             
             inner.add(c1);
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
         });
         
@@ -189,7 +198,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             
             ct.add(deepCt(1, c1));
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
         });
         
@@ -198,26 +207,27 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             
             ct.add(deepCt(5, c1));
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1); 
-            expectContains(c1); 
+            expect(addSpy.calls[0].args[0]).toBe(c1);
+            expectContains(c1);
         });
         
         it("should match items inside dynamic containers", function() {
             makeMon();
             
             var child1 = new Ext.container.Container();
+
             ct.add(deepCt(2, child1));
             
             child1.add(deepCt(3, c1));
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectContains(c1);
         });
     });
     
     describe("removing", function() {
         var expectNotContains = function(o) {
-            expect(mon.getItems().contains(o)).toBe(false);    
+            expect(mon.getItems().contains(o)).toBe(false);
         };
         
         it("should handle removal of direct children of the target", function() {
@@ -226,7 +236,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             
             ct.remove(c1);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1); 
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
         });
         
@@ -242,7 +252,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             makeMon();
             ct.getDockedItems()[0].remove(c1);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1); 
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
         });
         
@@ -257,7 +267,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             ct.remove(0);
             
             expect(addSpy.calls.length).toBe(1);
-            expect(addSpy.calls[0].args[0]).toBe(c1);  
+            expect(addSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
         });
         
@@ -270,7 +280,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             
             ct.items.first().remove(c1);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1); 
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
         });
         
@@ -278,12 +288,13 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             var inner = new Ext.container.Container({
                 items: c1
             });
+
             ct.add(deepCt(10, inner));
             makeMon();
             
-            inner.remove(c1); 
+            inner.remove(c1);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1);  
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
         });
         
@@ -296,7 +307,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             makeMon();
             ct.remove(inner, false);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1);  
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
             
             inner.destroy();
@@ -311,7 +322,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             makeMon();
             inner.ownerCt.remove(inner, false);
             expect(removeSpy.calls.length).toBe(1);
-            expect(removeSpy.calls[0].args[0]).toBe(c1);  
+            expect(removeSpy.calls[0].args[0]).toBe(c1);
             expectNotContains(c1);
             
             inner.destroy();
@@ -324,7 +335,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             });
             makeMon();
             
-            ct.remove(0); 
+            ct.remove(0);
             expectNotContains(c1);
         });
         
@@ -343,6 +354,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                 var inner = new Ext.container.Container({
                     items: c1
                 });
+
                 ct.add(inner);
                 makeMon();
                 ct.remove(inner, false);
@@ -372,7 +384,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
                 expect(inner4.hasListener('add')).toBe(false);
                 expect(inner4.hasListener('remove')).toBe(false);
                 expect(inner5.hasListener('add')).toBe(false);
-                expect(inner5.hasListener('remove')).toBe(false);            
+                expect(inner5.hasListener('remove')).toBe(false);
                 
                 Ext.destroy(inner1, inner2, inner3, inner4, inner5);
             });
@@ -382,6 +394,7 @@ topSuite("Ext.container.Monitor", ['Ext.Container', 'Ext.Button'], function() {
             var myCt = new Ext.container.Container({
                 items: c1
             });
+
             ct.add(myCt);
             
             makeMon();

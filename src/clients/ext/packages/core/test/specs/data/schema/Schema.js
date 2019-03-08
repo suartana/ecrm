@@ -9,7 +9,7 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
     afterEach(function() {
         schema = Ext.data.Model.schema;
         schema.clear(true);
-        schema = null;   
+        schema = null;
     });
     
     describe("entity names", function() {
@@ -21,7 +21,7 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
         
         describe("without namespace", function() {
             it("should return null if there is no className", function() {
-                expect(schema.getEntityName(makeCls())).toBeNull(); 
+                expect(schema.getEntityName(makeCls())).toBeNull();
             });
             
             it("should return a simple name", function() {
@@ -33,25 +33,25 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
             });
         });
         
-        describe("with namespace", function() {            
+        describe("with namespace", function() {
             it("should return null if there is no className", function() {
                 schema.setNamespace('spec.model');
-                expect(schema.getEntityName(makeCls())).toBeNull(); 
+                expect(schema.getEntityName(makeCls())).toBeNull();
             });
             
             it("should return the model name sans the namespace", function() {
                 schema.setNamespace('spec.model');
-                expect(schema.getEntityName(makeCls('spec.model.User'))).toBe('User'); 
+                expect(schema.getEntityName(makeCls('spec.model.User'))).toBe('User');
             });
             
             it("should return the other parts of model name sans the namespace", function() {
                 schema.setNamespace('spec.model');
-                expect(schema.getEntityName(makeCls('spec.model.trading.Bid'))).toBe('trading.Bid'); 
+                expect(schema.getEntityName(makeCls('spec.model.trading.Bid'))).toBe('trading.Bid');
             });
             
             it("should support putting the . at the end of the namespace", function() {
                 schema.setNamespace('spec.model.');
-                expect(schema.getEntityName(makeCls('spec.model.User'))).toBe('User'); 
+                expect(schema.getEntityName(makeCls('spec.model.User'))).toBe('User');
             });
             
             it("should not remove an unrelated namespace", function() {
@@ -211,8 +211,8 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
     });
     
     describe("legacy associations", function() {
-        describe('inherited associations', function () {
-            beforeEach(function () {
+        describe('inherited associations', function() {
+            beforeEach(function() {
                 schema.setNamespace('spec');
                 Ext.define('spec.AssociatedModel', {
                     extend: 'Ext.data.Model'
@@ -236,13 +236,13 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
                 });
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 Ext.undefine('spec.AssociatedModel');
                 Ext.undefine('spec.ParentModel');
                 Ext.undefine('spec.ChildModel');
             });
 
-            it('should convert the association', function () {
+            it('should convert the association', function() {
                 var associatedModel = spec.ParentModel.associations.associatedModel;
 
                 expect(!associatedModel).toBe(false);
@@ -256,7 +256,7 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
                 expect(associatedModel.inverse.cls.$className).toBe('spec.ParentModel');
             });
 
-            it('should decorate AssociatedModel with ParentModel association', function () {
+            it('should decorate AssociatedModel with ParentModel association', function() {
                 var association = spec.AssociatedModel.associations.parentModel;
 
                 expect(!association).toBe(false);
@@ -266,7 +266,7 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
                 expect(association.inverse.cls.$className).toBe('spec.AssociatedModel');
             });
 
-            xit('should inherit the association', function () {
+            xit('should inherit the association', function() {
                 // See https://sencha.jira.com/browse/EXTJSIV-12979
                 var associatedModel = spec.ChildModel.associations.associatedModel;
 
@@ -277,7 +277,7 @@ topSuite("Ext.data.schema.Schema", ['Ext.data.Model'], function() {
                 expect(associatedModel.inverse.cls.$className).toBe('spec.ChildModel');
             });
 
-            xit('should decorate AssociatedModel with ChildModel association', function () {
+            xit('should decorate AssociatedModel with ChildModel association', function() {
                 // See https://sencha.jira.com/browse/EXTJSIV-12979
                 var association = spec.AssociatedModel.associations.childModel;
 

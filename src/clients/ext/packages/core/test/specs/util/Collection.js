@@ -1,35 +1,34 @@
-/* global expect, Ext, jasmine */
+topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
+    var collection,
+        fakeScope = {};
 
-topSuite("Ext.util.Collection", [
-    'Ext.JSON'
-], function() {
-    var collection, fakeScope = {};
-
-    function logEvents (col, log, property) {
+    function logEvents(col, log, property) {
         property = property || 'id';
 
         col.on({
-            beginupdate: function (sender) {
+            beginupdate: function(sender) {
                 expect(sender === col).toBe(true);
                 log.push('beginupdate');
             },
-            add: function (sender, details) {
+            add: function(sender, details) {
                 expect(sender === col).toBe(true);
                 log.push('add ' + Ext.encode(Ext.Array.pluck(details.items, property)) +
                         ' at ' + details.at);
+
                 if (details.keys) {
                     log[log.length - 1] += ' w/keys ' + Ext.encode(details.keys);
                 }
             },
-            remove: function (sender, details) {
+            remove: function(sender, details) {
                 expect(sender === col).toBe(true);
                 log.push('remove ' + Ext.encode(Ext.Array.pluck(details.items, property)) +
                          ' at ' + details.at);
+
                 if (details.keys) {
                     log[log.length - 1] += ' w/keys ' + Ext.encode(details.keys);
                 }
             },
-            endupdate: function (sender) {
+            endupdate: function(sender) {
                 expect(sender === col).toBe(true);
                 log.push('endupdate');
             }
@@ -41,11 +40,11 @@ topSuite("Ext.util.Collection", [
 
         beforeEach(function() {
             collection = new Ext.util.Collection();
-            item1 = {id: 1};
-            item2 = {id: 2};
-            item3 = {id: 3};
-            item4 = {id: 4};
-            item5 = {id: 5};
+            item1 = { id: 1 };
+            item2 = { id: 2 };
+            item3 = { id: 3 };
+            item4 = { id: 4 };
+            item5 = { id: 5 };
 
             collection.add([item4, item3, item2, item1]);
         });
@@ -54,7 +53,7 @@ topSuite("Ext.util.Collection", [
         });
 
         it('should honour the new insertion point', function() {
-            collection.sort({property: 'id'});
+            collection.sort({ property: 'id' });
 
             expect(collection.getAt(0)).toBe(item1);
             expect(collection.getAt(1)).toBe(item2);
@@ -91,7 +90,8 @@ topSuite("Ext.util.Collection", [
             var downstreamCollection = new Ext.util.Collection({
                 source: collection
             });
-            downstreamCollection.sort({property: 'id'});
+
+            downstreamCollection.sort({ property: 'id' });
 
             expect(downstreamCollection.getAt(0)).toBe(item1);
             expect(downstreamCollection.getAt(1)).toBe(item2);
@@ -149,8 +149,8 @@ topSuite("Ext.util.Collection", [
         it("should provide a default getKey implementation", function() {
             collection = new Ext.util.Collection();
 
-            var item1 = {id: 1, data: 'first item'},
-                item2 = {id: 2, data: 'second item'};
+            var item1 = { id: 1, data: 'first item' },
+                item2 = { id: 2, data: 'second item' };
 
             collection.add(item1);
             collection.add(item2);
@@ -166,8 +166,8 @@ topSuite("Ext.util.Collection", [
                 }
             });
 
-            var item1 = {myKey: 'a', data: 'first item'},
-                item2 = {myKey: 'b', data: 'second item'};
+            var item1 = { myKey: 'a', data: 'first item' },
+                item2 = { myKey: 'b', data: 'second item' };
 
             collection.add(item1, item2);
 
@@ -177,7 +177,8 @@ topSuite("Ext.util.Collection", [
         
         it("should contain the source items when configured with a source", function() {
             var source = new Ext.util.Collection();
-            source.add({id: 1}, {id: 2}, {id: 3});
+
+            source.add({ id: 1 }, { id: 2 }, { id: 3 });
             
             collection = new Ext.util.Collection({
                 source: source
@@ -194,9 +195,9 @@ topSuite("Ext.util.Collection", [
 
             fn = jasmine.createSpy('fn');
 
-            item1 = {id: 1, name: 'first'};
-            item2 = {id: 2, name: 'second'};
-            item3 = {id: 3, name: 'third'};
+            item1 = { id: 1, name: 'first' };
+            item2 = { id: 2, name: 'second' };
+            item3 = { id: 3, name: 'third' };
 
             collection.add([item1, item2, item3]);
         });
@@ -252,12 +253,13 @@ topSuite("Ext.util.Collection", [
 
     describe("adding items", function() {
         var item1, item2, item3, item4;
+
         beforeEach(function() {
             collection = new Ext.util.Collection();
-            item1 = {id: 1};
-            item2 = {id: 2};
-            item3 = {id: 3};
-            item4 = {id: 4};
+            item1 = { id: 1 };
+            item2 = { id: 2 };
+            item3 = { id: 3 };
+            item4 = { id: 4 };
         });
 
         afterEach(function() {
@@ -361,6 +363,7 @@ topSuite("Ext.util.Collection", [
                             expect(collection.getAt(0)).toBe(item1);
                             expect(collection.indexOfKey(1)).toBe(0);
                         };
+
                         collection.on('add', expectPos);
                         collection.add(item1);
                         expectPos();
@@ -380,7 +383,8 @@ topSuite("Ext.util.Collection", [
 
                 describe("with items", function() {
                     var items = (function() {
-                            var records = [];
+                        var records = [];
+                        
                         for (var i = 0; i < 30; i++) {
                             records.push({
                                 id: i,
@@ -390,7 +394,10 @@ topSuite("Ext.util.Collection", [
 
                         return records;
 
-                    })(), item1 = {id: 30, order: 'mac'}, item2 = {id: 31, order: 'and'}, item3 = {id: 32, order: 'cheese'};
+                    })(),
+                    item1 = { id: 30, order: 'mac' },
+                    item2 = { id: 31, order: 'and' },
+                    item3 = { id: 32, order: 'cheese' };
                     
                     beforeEach(function() {
                         collection.getSorters().add('order');
@@ -400,6 +407,7 @@ topSuite("Ext.util.Collection", [
 
                     it("should put the item in the correct position", function() {
                         collection.add(item1, item2);
+
                         expectPos = function() {
                             expect(collection.length).toBe(33);
                             expect(collection.getAt(32)).toBe(item1);
@@ -408,6 +416,7 @@ topSuite("Ext.util.Collection", [
                             expect(collection.indexOfKey(31)).toBe(10);
                             expect(collection.indexOfKey(32)).toBe(21);
                         };
+
                         collection.on('add', expectPos);
                         collection.add(item3);
                         expectPos();
@@ -468,6 +477,7 @@ topSuite("Ext.util.Collection", [
                             expect(collection.indexOfKey(2)).toBe(1);
                             expect(collection.indexOfKey(3)).toBe(2);
                         };
+
                         collection.on('add', expectPos);
                         collection.add([item1, item2, item3]);
                         expectPos();
@@ -480,6 +490,7 @@ topSuite("Ext.util.Collection", [
                             expect(collection.getAt(1)).toBe(item2);
                             expect(collection.getAt(2)).toBe(item3);
                         };
+
                         collection.on('add', expectPos);
                         collection.add([item3, item1, item2]);
                         expectPos();
@@ -489,22 +500,7 @@ topSuite("Ext.util.Collection", [
                 describe("with items", function() {
                     it("should insert the items into the correct position", function() {
                         collection.add(item3);
-                        expectPos = function() {
-                            expect(collection.length).toBe(3);
-                            expect(collection.getAt(0)).toBe(item1);
-                            expect(collection.getAt(1)).toBe(item2);    
-                            expect(collection.getAt(2)).toBe(item3);
-                            expect(collection.indexOfKey(1)).toBe(0);
-                            expect(collection.indexOfKey(2)).toBe(1);
-                            expect(collection.indexOfKey(3)).toBe(2);
-                        };
-                        collection.on('add', expectPos);
-                        collection.add(item1, item2);
-                        expectPos();
-                    });
 
-                    it("should sort the added items", function() {
-                        collection.add(item3);
                         expectPos = function() {
                             expect(collection.length).toBe(3);
                             expect(collection.getAt(0)).toBe(item1);
@@ -514,6 +510,25 @@ topSuite("Ext.util.Collection", [
                             expect(collection.indexOfKey(2)).toBe(1);
                             expect(collection.indexOfKey(3)).toBe(2);
                         };
+
+                        collection.on('add', expectPos);
+                        collection.add(item1, item2);
+                        expectPos();
+                    });
+
+                    it("should sort the added items", function() {
+                        collection.add(item3);
+
+                        expectPos = function() {
+                            expect(collection.length).toBe(3);
+                            expect(collection.getAt(0)).toBe(item1);
+                            expect(collection.getAt(1)).toBe(item2);
+                            expect(collection.getAt(2)).toBe(item3);
+                            expect(collection.indexOfKey(1)).toBe(0);
+                            expect(collection.indexOfKey(2)).toBe(1);
+                            expect(collection.indexOfKey(3)).toBe(2);
+                        };
+
                         collection.on('add', expectPos);
                         collection.add(item2, item1);
                         expectPos();
@@ -522,6 +537,7 @@ topSuite("Ext.util.Collection", [
                     it("should insert items in a discontiguous range", function() {
                         collection.add(item1, item3);
                         var count = 0;
+
                         expectPos = function() {
                             expect(collection.length).toBe(4);
                             expect(collection.getAt(0)).toBe(item1);
@@ -533,6 +549,7 @@ topSuite("Ext.util.Collection", [
                             expect(collection.indexOfKey(3)).toBe(2);
                             expect(collection.indexOfKey(4)).toBe(3);
                         };
+
                         collection.on('add', function() {
                             if (count === 0) {
                                 expect(collection.length).toBe(4);
@@ -542,9 +559,11 @@ topSuite("Ext.util.Collection", [
                                 expect(collection.indexOfKey(1)).toBe(0);
                                 expect(collection.indexOfKey(2)).toBe(1);
                                 expect(collection.indexOfKey(3)).toBe(2);
-                            } else {
+                            }
+                            else {
                                 expectPos();
                             }
+                            
                             ++count;
                         });
                         collection.add(item4, item2);
@@ -556,28 +575,28 @@ topSuite("Ext.util.Collection", [
     });
 
     describe("removing items", function() {
-        var item1 = {id: 1, name: 'one'},
-            item2 = {id: 2, name: 'two'},
-            item3 = {id: 3, name: 'three'},
-            item4 = {id: 4, name: 'four'},
-            item5 = {id: 5, name: 'five'},
-            item6 = {id: 6, name: 'six'},
-            item7 = {id: 7, name: 'seven'},
-            item8 = {id: 8, name: 'eight'},
-            item9 = {id: 9, name: 'nine'};
+        var item1 = { id: 1, name: 'one' },
+            item2 = { id: 2, name: 'two' },
+            item3 = { id: 3, name: 'three' },
+            item4 = { id: 4, name: 'four' },
+            item5 = { id: 5, name: 'five' },
+            item6 = { id: 6, name: 'six' },
+            item7 = { id: 7, name: 'seven' },
+            item8 = { id: 8, name: 'eight' },
+            item9 = { id: 9, name: 'nine' };
 
         beforeEach(function() {
             collection = new Ext.util.Collection();
 
             collection.add([
-                item1, 
-                item2, 
-                item3, 
-                item4, 
-                item5, 
-                item6, 
-                item7, 
-                item8, 
+                item1,
+                item2,
+                item3,
+                item4,
+                item5,
+                item6,
+                item7,
+                item8,
                 item9
             ]);
         });
@@ -589,20 +608,20 @@ topSuite("Ext.util.Collection", [
                 expect(collection.getCount()).toBe(8);
             });
             
-            it("should return the removed item count", function(){
+            it("should return the removed item count", function() {
                 expect(collection.remove(item1)).toBe(1);
             });
 
-            it("should the passed items array", function(){
+            it("should the passed items array", function() {
                 collection.remove([item2, item3]);
                 expect(collection.getCount()).toBe(7);
             });
 
-            it("should fire the remove event when passing items array", function () {
+            it("should fire the remove event when passing items array", function() {
                 var source = [],
                     details = [];
 
-                collection.on('remove', function (sender, remove) {
+                collection.on('remove', function(sender, remove) {
                     source.push(sender);
                     details.push(remove);
                 });
@@ -628,14 +647,14 @@ topSuite("Ext.util.Collection", [
                 expect(details[1].keys[1]).toBe(3);
             });
 
-            it("should return 0 if no item was found", function(){
+            it("should return 0 if no item was found", function() {
                 expect(collection.remove({ id: 0 })).toBe(0);
             });
 
             it("should fire the remove event", function() {
                 var source, details;
 
-                collection.on('remove', function (sender, remove) {
+                collection.on('remove', function(sender, remove) {
                     source = sender;
                     details = remove;
                 });
@@ -658,6 +677,7 @@ topSuite("Ext.util.Collection", [
                         id: i + 1
                     });
                 }
+
                 collection.add(items);
                 collection.on('remove', spy);
                 collection.remove(collection.getRange());
@@ -672,11 +692,11 @@ topSuite("Ext.util.Collection", [
                 expect(collection.getCount()).toBe(8);
             });
             
-            it("should return the removed item", function(){
+            it("should return the removed item", function() {
                 expect(collection.removeAt(1)).toBe(item2);
             });
             
-            it("should return false if no item was found", function(){
+            it("should return false if no item was found", function() {
                 expect(collection.removeAt(9)).toBeFalsy();
             });
 
@@ -684,7 +704,7 @@ topSuite("Ext.util.Collection", [
                 it("should fire the remove event", function() {
                     var source, details;
 
-                    collection.on('remove', function (sender, remove) {
+                    collection.on('remove', function(sender, remove) {
                         source = sender;
                         details = remove;
                     });
@@ -699,9 +719,10 @@ topSuite("Ext.util.Collection", [
                     expect(details.keys[0]).toBe(2);
                 });
                 
-                it("should update the collection during a remove", function(){
+                it("should update the collection during a remove", function() {
                     var count, item;
-                    collection.on('remove', function(){
+
+                    collection.on('remove', function() {
                         count = collection.getCount();
                         item = collection.getByKey(1);
                     });
@@ -724,18 +745,18 @@ topSuite("Ext.util.Collection", [
             });
         });
         
-        describe("bulkRemove", function(){
-            it("should limit the length to that of the collection", function () {
+        describe("bulkRemove", function() {
+            it("should limit the length to that of the collection", function() {
                 collection.removeAt(4, 100);
                 expect(collection.getCount()).toBe(4);
             });
                 
-            it("should remove the correct items", function(){
+            it("should remove the correct items", function() {
                 collection.removeAt(3, 2);
                 expect(collection.getCount()).toBe(7);
                 expect(collection.getAt(2)).toBe(item3);
                 expect(collection.getAt(3)).toBe(item6);
-            });    
+            });
         });
         
         describe("removeByKey", function() {
@@ -745,18 +766,18 @@ topSuite("Ext.util.Collection", [
                 expect(collection.getCount()).toBe(8);
             });
             
-            it("should return the removed item", function(){
+            it("should return the removed item", function() {
                 expect(collection.removeByKey(1)).toBe(item1);
             });
             
-            it("should return false if no item was found", function(){
+            it("should return false if no item was found", function() {
                 expect(collection.removeByKey(10)).toBeFalsy();
             });
 
             it("should fire the remove event", function() {
                 var source, details;
 
-                collection.on('remove', function (sender, remove) {
+                collection.on('remove', function(sender, remove) {
                     source = sender;
                     details = remove;
                 });
@@ -772,17 +793,17 @@ topSuite("Ext.util.Collection", [
             });
         });
         
-        describe("removeAll", function(){
-            it("should remove all items", function(){
-                collection.removeAll();  
-                expect(collection.getCount()).toBe(0);  
+        describe("removeAll", function() {
+            it("should remove all items", function() {
+                collection.removeAll();
+                expect(collection.getCount()).toBe(0);
             });
             
-            it("should fire the remove event with no passed items", function(){
+            it("should fire the remove event with no passed items", function() {
                 var called = 0,
                     source, details;
 
-                collection.on('remove', function (sender, remove) {
+                collection.on('remove', function(sender, remove) {
                     source = sender;
                     details = remove;
                     ++called;
@@ -797,7 +818,7 @@ topSuite("Ext.util.Collection", [
                 expect(details.items).toEqual([item1, item2, item3, item4, item5, item6,
                     item7, item8, item9]);
                 expect(details.keys.length).toBe(9);
-                expect(details.keys).toEqual([1,2,3,4,5,6,7,8,9]);
+                expect(details.keys).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
             });
         });
     });
@@ -806,7 +827,7 @@ topSuite("Ext.util.Collection", [
         beforeEach(function() {
             collection = new Ext.util.Collection();
 
-            collection.add([{id: 1}, {id: 2}]);
+            collection.add([{ id: 1 }, { id: 2 }]);
         });
 
         it("should remove all items", function() {
@@ -833,25 +854,27 @@ topSuite("Ext.util.Collection", [
     describe("determining insertion index in a sorted Collection", function() {
 
         // Items to sort into name order
-        var item1 = {id: 2, name: 'Michael'},
-            item2 = {id: 3, name: 'Yanto'},
-            item3 = {id: 1, name: 'Bill'},
+        var item1 = { id: 2, name: 'Michael' },
+            item2 = { id: 3, name: 'Yanto' },
+            item3 = { id: 1, name: 'Bill' },
 
             // Items to find insertion indices for
-            item4 = {id: 4, name: 'Albert'}, // Insert index 0 when ASC, 3 when DESC
-            item5 = {id: 5, name: 'Fred'},   // Insert index 1 when ASC, 2 when DESC
-            item6 = {id: 6, name: 'Robert'}, // Insert index 2 when ASC, 1 when DESC
-            item7 = {id: 7, name: 'Zebedee'};// Insert index 3 when ASC, 0 when DESC
+            item4 = { id: 4, name: 'Albert' }, // Insert index 0 when ASC, 3 when DESC
+            item5 = { id: 5, name: 'Fred' },   // Insert index 1 when ASC, 2 when DESC
+            item6 = { id: 6, name: 'Robert' }, // Insert index 2 when ASC, 1 when DESC
+            item7 = { id: 7, name: 'Zebedee' };// Insert index 3 when ASC, 0 when DESC
 
         beforeEach(function() {
             collection = new Ext.util.Collection();
             collection.add([item1, item2, item3]);
         });
 
-        function getInsertIndex (item) {
+        function getInsertIndex(item) {
             collection.add(item);
             var ret = collection.indexOf(item);
+
             collection.remove(item);
+
             return ret;
         }
 
@@ -879,17 +902,17 @@ topSuite("Ext.util.Collection", [
     });
 
     describe("an existing Collection", function() {
-        var item1 = {id: 1, name: 'first'},
-            item2 = {id: 2, name: 'second'},
-            item3 = {id: 3, name: 'third'},
-            item4 = {id: 4, name: 'fourth'},
-            item5 = {id: 5, name: 'fifth'},
-            item6 = {id: 6, name: 'sixth'},
-            item7 = {id: 7, name: 'seventh'},
-            item8 = {id: 8, name: 'eighth'},
-            item9 = {id: 9, name: 'ninth'};
+        var item1 = { id: 1, name: 'first' },
+            item2 = { id: 2, name: 'second' },
+            item3 = { id: 3, name: 'third' },
+            item4 = { id: 4, name: 'fourth' },
+            item5 = { id: 5, name: 'fifth' },
+            item6 = { id: 6, name: 'sixth' },
+            item7 = { id: 7, name: 'seventh' },
+            item8 = { id: 8, name: 'eighth' },
+            item9 = { id: 9, name: 'ninth' };
             
-        function fill () {
+        function fill() {
             collection.clear();
             collection.add([
                 item1,  // 0    -9
@@ -913,7 +936,7 @@ topSuite("Ext.util.Collection", [
             generation = collection.generation;
         });
         
-        describe("updateKey", function(){
+        describe("updateKey", function() {
             it("should do nothing if the old key doesn't exist for member item", function() {
                 collection.updateKey(item1, 'bar');
                 expect(collection.getByKey('bar')).toBeUndefined();
@@ -931,7 +954,7 @@ topSuite("Ext.util.Collection", [
             });
 
             it("should throw if old key is a different item", function() {
-                expect(function () {
+                expect(function() {
                     collection.updateKey(item4, item1.id);
                 }).toThrow();
 
@@ -945,13 +968,14 @@ topSuite("Ext.util.Collection", [
                 // an error for claiming newItem1 was the item by id=1. We just want to
                 // check for the collision on the new id.
                 var newItem1 = Ext.apply({}, item1);
+
                 collection.add(newItem1);
 
                 generation = collection.generation;
 
                 newItem1.id = item3.id;
 
-                expect(function () {
+                expect(function() {
                     collection.updateKey(newItem1, item1.id);
                 }).toThrow();
 
@@ -960,7 +984,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.generation).toBe(generation); // no changes made
             });
 
-            it("should update the key for the item", function () {
+            it("should update the key for the item", function() {
                 var newItem1 = Ext.apply({}, item1);
 
                 collection.clear();
@@ -992,7 +1016,7 @@ topSuite("Ext.util.Collection", [
                 var called = 0,
                     source, details;
 
-                collection.on('add', function (sender, add) {
+                collection.on('add', function(sender, add) {
                     ++called;
                     source = sender;
                     details = add;
@@ -1061,6 +1085,7 @@ topSuite("Ext.util.Collection", [
                                 if (n1 === n2) {
                                     return 0;
                                 }
+
                                 return n1 < n2 ? -1 : 1;
                             });
                             newItem.name = 'a';
@@ -1131,7 +1156,8 @@ topSuite("Ext.util.Collection", [
                     describe("with the source sorted", function() {
                         it("should use the specified position", function() {
                             collection.sort('name');
-                            var item = {id: 100, name: 'zzzz'};
+                            var item = { id: 100, name: 'zzzz' };
+
                             child.insert(0, item);
                             expect(child.getAt(0)).toBe(item);
                             expect(collection.getAt(9)).toBe(item);
@@ -1154,6 +1180,7 @@ topSuite("Ext.util.Collection", [
                         observerPriority: -1000,
                         onCollectionAdd: function(source, details) {
                             var item = details.items[0];
+
                             item.name = 'asdf';
                             expect(function() {
                                 collection.itemChanged(item, ['name']);
@@ -1214,14 +1241,14 @@ topSuite("Ext.util.Collection", [
                 expect(mc2.items[2]).toBe(item3);
             });
             
-            it("should keep the getKey fn", function(){
-                var fn = function(o){
-                    return o.id;    
-                }, mc1 = new Ext.util.Collection({
-                    keyFn: fn
-                });
+            it("should keep the getKey fn", function() {
+                var fn = function(o) { return o.id; },
+                    mc1 = new Ext.util.Collection({
+                        keyFn: fn
+                    });
                 
                 var mc2 = mc1.clone();
+                
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
@@ -1265,7 +1292,8 @@ topSuite("Ext.util.Collection", [
                 });
                 
                 it("should get an newly added item", function() {
-                    var item5 = {id: 'a', name: 'fifth item'};
+                    var item5 = { id: 'a', name: 'fifth item' };
+
                     collection.add(item5);
                     expect(collection.get('a')).toBe(item5);
                 });
@@ -1277,7 +1305,7 @@ topSuite("Ext.util.Collection", [
                 });
                 
                 it("should return -1 if the item does not exist in the collection", function() {
-                    expect(collection.indexOf({id: 73})).toBe(-1);
+                    expect(collection.indexOf({ id: 73 })).toBe(-1);
                 });
                 
                 it("should handle null", function() {
@@ -1346,25 +1374,28 @@ topSuite("Ext.util.Collection", [
                     expect(items[7]).toBe(item9);
                 });
                 
-                it("should wrap the start value if negative", function(){
+                it("should wrap the start value if negative", function() {
                     fill();
                     var items = collection.getRange(-6, 6);
+
                     expect(items.length).toBe(3);
                     expect(items[0]).toBe(item4);
                     expect(items[1]).toBe(item5);
                     expect(items[2]).toBe(item6);
                 });
                 
-                it("should normalize the end value the collection max", function(){
+                it("should normalize the end value the collection max", function() {
                     fill();
                     var items = collection.getRange(6, 200);
+
                     expect(items.length).toBe(3);
                     expect(items[0]).toBe(item7);
                 });
                 
-                it("should return empty if start > length", function(){
+                it("should return empty if start > length", function() {
                     fill();
                     var items = collection.getRange(10, 15);
+
                     expect(items.length).toBe(0);
                 });
             });
@@ -1386,8 +1417,10 @@ topSuite("Ext.util.Collection", [
                 
                 it("should stop iterating once a match is found", function() {
                     var count = 0;
+
                     collection.findBy(function(item) {
                         ++count;
+
                         return item.name === 'third';
                     });
 
@@ -1398,11 +1431,13 @@ topSuite("Ext.util.Collection", [
                     var matched = collection.findBy(function(item) {
                         return false;
                     });
+
                     expect(matched).toBeNull();
                 });
                 
                 it("should pass the item and the key", function() {
                     var spy = jasmine.createSpy().andReturn(true);
+
                     collection.findBy(spy);
                     expect(spy).toHaveBeenCalledWith(item1, 1);
                 });
@@ -1410,8 +1445,10 @@ topSuite("Ext.util.Collection", [
                 describe("scope", function() {
                     it("should default the scope to the collection", function() {
                         var scope;
+
                         collection.findBy(function() {
                             scope = this;
+
                             return true;
                         });
                         expect(scope).toBe(collection);
@@ -1419,8 +1456,10 @@ topSuite("Ext.util.Collection", [
                     
                     it("should use the passed scope", function() {
                         var scope;
+
                         collection.findBy(function() {
                             scope = this;
+
                             return true;
                         }, fakeScope);
                         expect(scope).toBe(fakeScope);
@@ -1430,6 +1469,7 @@ topSuite("Ext.util.Collection", [
                 describe("start", function() {
                     it("should not iterate at all if start > length", function() {
                         var count = 0;
+
                         collection.findBy(function() {
                             ++count;
                         }, null, 1000);
@@ -1438,6 +1478,7 @@ topSuite("Ext.util.Collection", [
                     
                     it("should start from the passed index", function() {
                         var keys = [];
+
                         collection.findBy(function(item, key) {
                             keys.push(key);
                         }, null, 4);
@@ -1448,6 +1489,7 @@ topSuite("Ext.util.Collection", [
                         var matched = collection.findBy(function(item) {
                             return item.name === 'second';
                         }, null, 6);
+
                         expect(matched).toBeNull();
                     });
                     
@@ -1455,6 +1497,7 @@ topSuite("Ext.util.Collection", [
                         var matched = collection.findBy(function(item) {
                             return item.name === 'third' || item.name === 'ninth';
                         }, null, 5);
+
                         expect(matched).toBe(item9);
                     });
                 });
@@ -1475,8 +1518,10 @@ topSuite("Ext.util.Collection", [
                 
                 it("should stop iterating once a match is found", function() {
                     var count = 0;
+
                     collection.findIndexBy(function(item) {
                         ++count;
+
                         return item.name === 'third';
                     });
 
@@ -1487,11 +1532,13 @@ topSuite("Ext.util.Collection", [
                     var index = collection.findIndexBy(function(item) {
                         return false;
                     });
+
                     expect(index).toBe(-1);
                 });
                 
                 it("should pass the item and the key", function() {
                     var spy = jasmine.createSpy().andReturn(true);
+
                     collection.findIndexBy(spy);
                     expect(spy).toHaveBeenCalledWith(item1, 1);
                 });
@@ -1499,8 +1546,10 @@ topSuite("Ext.util.Collection", [
                 describe("scope", function() {
                     it("should default the scope to the collection", function() {
                         var scope;
+
                         collection.findIndexBy(function() {
                             scope = this;
+
                             return true;
                         });
                         expect(scope).toBe(collection);
@@ -1508,8 +1557,10 @@ topSuite("Ext.util.Collection", [
                     
                     it("should use the passed scope", function() {
                         var scope;
+
                         collection.findIndexBy(function() {
                             scope = this;
+
                             return true;
                         }, fakeScope);
                         expect(scope).toBe(fakeScope);
@@ -1519,6 +1570,7 @@ topSuite("Ext.util.Collection", [
                 describe("start", function() {
                     it("should not iterate at all if start > length", function() {
                         var count = 0;
+
                         collection.findIndexBy(function() {
                             ++count;
                         }, null, 1000);
@@ -1527,6 +1579,7 @@ topSuite("Ext.util.Collection", [
                     
                     it("should start from the passed index", function() {
                         var keys = [];
+
                         collection.findIndexBy(function(item, key) {
                             keys.push(key);
                         }, null, 4);
@@ -1537,6 +1590,7 @@ topSuite("Ext.util.Collection", [
                         var index = collection.findIndexBy(function(item) {
                             return item.name === 'second';
                         }, null, 6);
+
                         expect(index).toBe(-1);
                     });
                     
@@ -1544,6 +1598,7 @@ topSuite("Ext.util.Collection", [
                         var index = collection.findIndexBy(function(item) {
                             return item.name === 'third' || item.name === 'ninth';
                         }, null, 5);
+
                         expect(index).toBe(8);
                     });
                 });
@@ -1556,11 +1611,13 @@ topSuite("Ext.util.Collection", [
                 
                 it("should find an item's index", function() {
                     var index = collection.findIndex('name', 'third');
+
                     expect(index).toBe(2);
                 });
                 
                 it("should return -1 if there is no match", function() {
                     var index = collection.findIndex('name', 'foo');
+
                     expect(index).toBe(-1);
                 });
                 
@@ -1585,6 +1642,7 @@ topSuite("Ext.util.Collection", [
                         }
                     });
                     var index = collection.findIndex('name', 'B');
+
                     expect(index).toBe(1);
                 });
                 
@@ -1592,21 +1650,25 @@ topSuite("Ext.util.Collection", [
                     describe("startIndex", function() {
                         it("should match from the startIndex, including the start", function() {
                             var index = collection.findIndex('name', 's', 6, null, false);
+
                             expect(index).toBe(6);
                         });
                     
                         it("should find items after the startIndex", function() {
                             var index = collection.findIndex('name', 's', 4, null, false);
+
                             expect(index).toBe(5);
                         });
                     
                         it("should return -1 if the startIndex is larger than the length", function() {
                             var index = collection.findIndex('name', 's', 100);
+
                             expect(index).toBe(-1);
                         });
                     
                         it("should not 'wrap' over the collection", function() {
                             var index = collection.findIndex('name', 'one', 2);
+
                             expect(index).toBe(-1);
                         });
                     });
@@ -1615,6 +1677,7 @@ topSuite("Ext.util.Collection", [
                         describe("startsWith/endsWith", function() {
                             it("should default startsWith & endsWith to true", function() {
                                 var index = collection.findIndex('name', 'second');
+
                                 expect(index).toBe(1);
                                 index = collection.findIndex('name', 'secon');
                                 expect(index).toBe(-1);
@@ -1624,6 +1687,7 @@ topSuite("Ext.util.Collection", [
                             
                             it("should match the start of the string when passing endsWith: false", function() {
                                 var index = collection.findIndex('name', 'second', null, null, false);
+
                                 expect(index).toBe(1);
                                 index = collection.findIndex('name', 'secon', null, null, false);
                                 expect(index).toBe(1);
@@ -1633,6 +1697,7 @@ topSuite("Ext.util.Collection", [
                         
                             it("should match the end of the string when passing startsWith: false", function() {
                                 var index = collection.findIndex('name', 'second', null, false);
+
                                 expect(index).toBe(1);
                                 index = collection.findIndex('name', 'econd', null, false);
                                 expect(index).toBe(1);
@@ -1642,6 +1707,7 @@ topSuite("Ext.util.Collection", [
                             
                             it("should match anywhere in the string when using startsWith/endsWith false", function() {
                                 var index = collection.findIndex('name', 'con', null, false, false);
+
                                 expect(index).toBe(1);
                             });
                         });
@@ -1649,11 +1715,13 @@ topSuite("Ext.util.Collection", [
                         describe("case", function() {
                             it("should be case insensitive by default", function() {
                                 var index = collection.findIndex('name', 'SEVENTH');
+
                                 expect(index).toBe(6);
                             });
                             
                             it("should respect case when passing the ignoreCase flag", function() {
                                 var index = collection.findIndex('name', 'SEVENTH', null, null, null, false);
+
                                 expect(index).toBe(-1);
                             });
                         });
@@ -1692,9 +1760,9 @@ topSuite("Ext.util.Collection", [
             });
 
             collection.add([
-                {id: 1, name: 'Ed',     code: 'C', modifier: 10},
-                {id: 2, name: 'Abe',    code: 'A', modifier: 100},
-                {id: 3, name: 'Edward', code: 'B', modifier: 5}
+                { id: 1, name: 'Ed',     code: 'C', modifier: 10 },
+                { id: 2, name: 'Abe',    code: 'A', modifier: 100 },
+                { id: 3, name: 'Edward', code: 'B', modifier: 5 }
             ]);
 
             filter = new Ext.util.Filter({
@@ -1712,28 +1780,26 @@ topSuite("Ext.util.Collection", [
                 expect(filtered).not.toBe(collection);
             });
             
-            it("should keep the getKey function when using filter", function(){
-                var fn = function(o){
-                    return o.id;    
-                }, mc1 = new Ext.util.Collection({
-                    keyFn: fn
-                });
-
-                var mc2 = mc1.createFiltered('name', 'Ed');
+            it("should keep the getKey function when using filter", function() {
+                var fn = function(o) { return o.id; },
+                    mc1 = new Ext.util.Collection({
+                        keyFn: fn
+                    }),
+                    mc2 = mc1.createFiltered('name', 'Ed');
+                
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
             
-            it("should keep the getKey function when using filterBy", function(){
-                var fn = function(o){
-                    return o.id;    
-                }, mc1 = new Ext.util.Collection({
-                    keyFn: fn
-                });
-
-                var mc2 = mc1.createFiltered(function(){
-                    return true;
-                });
+            it("should keep the getKey function when using filterBy", function() {
+                var fn = function(o) { return o.id; },
+                    mc1 = new Ext.util.Collection({
+                        keyFn: fn
+                    }),
+                    mc2 = mc1.createFiltered(function() {
+                        return true;
+                    });
+                
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
@@ -1744,10 +1810,10 @@ topSuite("Ext.util.Collection", [
                 filtered = collection.createFiltered('name', 'Edward');
 
                 expect(filtered.items[0].name).toBe('Edward');
-                expect(filtered.length).toBe(1);                
+                expect(filtered.length).toBe(1);
             });
 
-            it("should use anyMatch by default", function () {
+            it("should use anyMatch by default", function() {
                 filtered = collection.createFiltered('name', 'Ed');
 
                 expect(filtered.length).toBe(2);
@@ -1844,19 +1910,19 @@ topSuite("Ext.util.Collection", [
             item7  = { id: 7,  name: 'xyz' },
             item8  = { id: 8,  name: 'ddd' },
             item9  = { id: 9,  name: 'dad' },
-            item10 = { id: 10, name: 'dood'};
+            item10 = { id: 10, name: 'dood' };
 
         beforeEach(function() {
             collection = new Ext.util.Collection();
             collection.add(item1, item2, item3, item4, item5, item6, item7, item8, item9);
         });
 
-        describe('single filter', function () {
-            it('should save original items on filter and restore on clear', function () {
+        describe('single filter', function() {
+            it('should save original items on filter and restore on clear', function() {
                 var refreshes = 0,
                     filters = collection.getFilters();
 
-                collection.on('refresh', function () {
+                collection.on('refresh', function() {
                     ++refreshes;
                 });
 
@@ -1890,11 +1956,11 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[8]).toBe(item9);
             });
 
-            it('should add items even when filtered', function () {
+            it('should add items even when filtered', function() {
                 var refreshes = 0,
                     filters = collection.getFilters();
 
-                collection.on('refresh', function () {
+                collection.on('refresh', function() {
                     ++refreshes;
                 });
 
@@ -1940,11 +2006,11 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[10]).toBe(item10);
             });
 
-            it('should sort the filtered items', function () {
+            it('should sort the filtered items', function() {
                 var refreshes = 0,
                     filters = collection.getFilters();
 
-                collection.on('refresh', function () {
+                collection.on('refresh', function() {
                     ++refreshes;
                 });
 
@@ -1998,14 +2064,14 @@ topSuite("Ext.util.Collection", [
             });
         }); // single filter
 
-        describe('configurable and detachable', function () {
-            it('should allow filters to be configured', function () {
+        describe('configurable and detachable', function() {
+            it('should allow filters to be configured', function() {
                 var refreshes = 0;
 
                 collection = new Ext.util.Collection({
                     filters: { property: 'name', value: 'a' },
                     listeners: {
-                        refresh: function () {
+                        refresh: function() {
                             ++refreshes;
                         }
                     }
@@ -2015,6 +2081,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.length).toBe(0);
 
                 var filters = collection.getFilters();
+
                 expect(filters.length).toBe(1);
 
                 collection.add(item1, item2, item3, item4, item5, item6, item7, item8, item9);
@@ -2037,13 +2104,13 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[2]).toBe(item0);
             });
 
-            it('should allow filters to be detached', function () {
+            it('should allow filters to be detached', function() {
                 var refreshes = 0;
 
                 collection = new Ext.util.Collection({
                     filters: { property: 'name', value: 'a' },
                     listeners: {
-                        refresh: function () {
+                        refresh: function() {
                             ++refreshes;
                         }
                     }
@@ -2053,12 +2120,13 @@ topSuite("Ext.util.Collection", [
                 expect(collection.length).toBe(0);
 
                 var filters = collection.getFilters();
+
                 expect(filters.length).toBe(1);
 
                 collection.add(item1, item2, item3, item4, item5, item6, item7, item8, item9);
                 collection.add(item0, item10);
 
-                //filters.removeAll();
+                // filters.removeAll();
                 collection.setFilters(null);
 
                 expect(refreshes).toBe(1);
@@ -2089,13 +2157,13 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[2]).toBe(item0);
             });
 
-            it('should allow detached filters to be manipulated', function () {
+            it('should allow detached filters to be manipulated', function() {
                 var refreshes = 0;
 
                 collection = new Ext.util.Collection({
                     filters: { property: 'name', value: 'a' },
                     listeners: {
-                        refresh: function () {
+                        refresh: function() {
                             ++refreshes;
                         }
                     }
@@ -2105,12 +2173,13 @@ topSuite("Ext.util.Collection", [
                 expect(collection.length).toBe(0);
 
                 var filters = collection.getFilters();
+
                 expect(filters.length).toBe(1);
 
                 collection.add(item1, item2, item3, item4, item5, item6, item7, item8, item9);
                 collection.add(item0, item10);
 
-                //filters.removeAll();
+                // filters.removeAll();
                 collection.setFilters(null);
 
                 expect(refreshes).toBe(1);
@@ -2157,6 +2226,7 @@ topSuite("Ext.util.Collection", [
         describe("events", function() {
             it("should fire the filter event after filtering has taken place", function() {
                 var count;
+
                 collection.on('filter', function() {
                     count = collection.getCount();
                 });
@@ -2202,16 +2272,16 @@ topSuite("Ext.util.Collection", [
         beforeEach(function() {
             collection = new Ext.util.Collection();
             collection.add(
-                (item0 = {id: 0, name: 'Item0', group: 'A', sortKey: 3, groupOrder: 3, isFilter: false, age: 10}),
-                (item1 = {id: 1, name: 'Item1', group: 'A', sortKey: 1, groupOrder: 3, isFilter: true,  age: 30}),
-                (item2 = {id: 2, name: 'Item2', group: 'A', sortKey: 2, groupOrder: 3, isFilter: false, age: 20}),
-                (item3 = {id: 3, name: 'Item3', group: 'B', sortKey: 2, groupOrder: 1, isFilter: true,  age: 60}),
-                (item4 = {id: 4, name: 'Item4', group: 'B', sortKey: 3, groupOrder: 1, isFilter: false, age: 50}),
-                (item5 = {id: 5, name: 'Item5', group: 'B', sortKey: 1, groupOrder: 1, isFilter: true,  age: 40}),
-                (item6 = {id: 6, name: 'Item6', group: 'C', sortKey: 1, groupOrder: 4, isFilter: false, age: 80}),
-                (item7 = {id: 7, name: 'Item7', group: 'C', sortKey: 2, groupOrder: 4, isFilter: true,  age: 70}),
-                (item8 = {id: 8, name: 'Item8', group: 'C', sortKey: 3, groupOrder: 4, isFilter: false, age: 90}),
-                (item9 = {id: 9, name: 'Item9', group: 'D', sortKey: 1, groupOrder: 2, isFilter: true,  age: 100})
+                (item0 = { id: 0, name: 'Item0', group: 'A', sortKey: 3, groupOrder: 3, isFilter: false, age: 10 }),
+                (item1 = { id: 1, name: 'Item1', group: 'A', sortKey: 1, groupOrder: 3, isFilter: true,  age: 30 }),
+                (item2 = { id: 2, name: 'Item2', group: 'A', sortKey: 2, groupOrder: 3, isFilter: false, age: 20 }),
+                (item3 = { id: 3, name: 'Item3', group: 'B', sortKey: 2, groupOrder: 1, isFilter: true,  age: 60 }),
+                (item4 = { id: 4, name: 'Item4', group: 'B', sortKey: 3, groupOrder: 1, isFilter: false, age: 50 }),
+                (item5 = { id: 5, name: 'Item5', group: 'B', sortKey: 1, groupOrder: 1, isFilter: true,  age: 40 }),
+                (item6 = { id: 6, name: 'Item6', group: 'C', sortKey: 1, groupOrder: 4, isFilter: false, age: 80 }),
+                (item7 = { id: 7, name: 'Item7', group: 'C', sortKey: 2, groupOrder: 4, isFilter: true,  age: 70 }),
+                (item8 = { id: 8, name: 'Item8', group: 'C', sortKey: 3, groupOrder: 4, isFilter: false, age: 90 }),
+                (item9 = { id: 9, name: 'Item9', group: 'D', sortKey: 1, groupOrder: 2, isFilter: true,  age: 100 })
             );
         });
         
@@ -2237,6 +2307,7 @@ topSuite("Ext.util.Collection", [
             groups = collection.getGroups();
             groups.each(function(group) {
                 var key = group.getGroupKey();
+
                 group.each(function(item) {
                     expect(item.group).toBe(key);
                 });
@@ -2247,7 +2318,7 @@ topSuite("Ext.util.Collection", [
             it("should return no groups by default", function() {
                 collection = new Ext.util.Collection();
                 expect(collection.getGroups()).toBeNull();
-            }); 
+            });
             
             it("should return no groups once the grouper has cleared", function() {
                 groupBy();
@@ -2261,10 +2332,12 @@ topSuite("Ext.util.Collection", [
             describe("adding", function() {
                 it("should add to an existing group", function() {
                     groupBy();
+                    
                     var o = {
-                        id: 'new',
-                        group: 'D'
-                    }, d;
+                            id: 'new',
+                            group: 'D'
+                        },
+                        d;
                     
                     collection.add(o);
                     d = collection.getGroups().get('D');
@@ -2275,10 +2348,12 @@ topSuite("Ext.util.Collection", [
                 it("should create a new group", function() {
                     groupBy();
                     expect(collection.getGroups().get('E')).toBeUndefined();
+                    
                     var o = {
-                        id: 'new',
-                        group: 'E'
-                    }, e;
+                            id: 'new',
+                            group: 'E'
+                        },
+                        e;
                     
                     collection.add(o);
                     e = collection.getGroups().get('E');
@@ -2288,13 +2363,15 @@ topSuite("Ext.util.Collection", [
 
                 it("should position correctly when adding multiple items", function() {
                     groupBy();
+                    
                     var new1 = {
-                        id: 'new1',
-                        group: 'D'
-                    }, new2 = {
-                        id: 'new2',
-                        group: 'C'
-                    };
+                            id: 'new1',
+                            group: 'D'
+                        },
+                        new2 = {
+                            id: 'new2',
+                            group: 'C'
+                        };
 
                     collection.add([new1, new2]);
                     expect(collection.indexOf(new1)).toBe(11);
@@ -2302,11 +2379,13 @@ topSuite("Ext.util.Collection", [
                 });
 
                 describe("inserting at index", function() {
-                    var new1, new2, new3, groupRef = function(name) {
-                        return collection.getGroups().getByKey(name);
-                    };
+                    var new1, new2, new3,
+                        groupRef = function(name) {
+                            return collection.getGroups().getByKey(name);
+                        };
+                    
                     beforeEach(function() {
-                        new1 = { id: 'new1', group: 'A' }; 
+                        new1 = { id: 'new1', group: 'A' };
                         new2 = { id: 'new2', group: 'B' };
                         new3 = { id: 'new3', group: 'D' };
                         groupBy();
@@ -2362,6 +2441,7 @@ topSuite("Ext.util.Collection", [
                     groupBy();
                     collection.remove(item0);
                     var a = collection.getGroups().get('A');
+
                     expect(a.length).toBe(2);
                     expect(a.contains(item0)).toBe(false);
                 });
@@ -2415,6 +2495,7 @@ topSuite("Ext.util.Collection", [
                 it("should not re-add the item to the group when the id changes", function() {
                     groupBy();
                     var group = collection.getGroups().get('A');
+
                     expect(group.getCount()).toBe(3);
                     expect(group.indexOf(item1)).toBe(1);
                     item1.id = 1000;
@@ -2455,6 +2536,7 @@ topSuite("Ext.util.Collection", [
                     collection.itemChanged(item0);
 
                     var groups = collection.getGroups();
+
                     expect(groups.get('A')).toBeUndefined();
                     expect(groups.get('B').getAt(0)).toBe(item0);
                 });
@@ -2467,6 +2549,7 @@ topSuite("Ext.util.Collection", [
                     i;
                 
                 c = c || collection;
+
                 for (i = 0; i < len; ++i) {
                     expect(c.getAt(i)).toBe(items[i]);
                 }
@@ -2532,9 +2615,11 @@ topSuite("Ext.util.Collection", [
                         sorterFn: function(a, b) {
                             a = a.groupOrder;
                             b = b.groupOrder;
+
                             if (a === b) {
                                 return 0;
                             }
+
                             // The order reversal is intentional here
                             return a < b ? 1 : -1;
                         }
@@ -2564,6 +2649,7 @@ topSuite("Ext.util.Collection", [
                     groupBy();
                     expectOrder([item2, item1, item0, item5, item4, item3]);
                     var groups = collection.getGroups();
+
                     expectOrder([item2, item1, item0], groups.get('A'));
                     expectOrder([item5, item4, item3], groups.get('B'));
                 });
@@ -2580,7 +2666,8 @@ topSuite("Ext.util.Collection", [
                     var nige = {
                         id: 3,
                         name: 'Nige'
-                    };  
+                    };
+  
                     groupBy('name');
                     collection.add(nige);
                     expect(collection.indexOf(nige)).toBe(1);
@@ -2598,6 +2685,7 @@ topSuite("Ext.util.Collection", [
                     sortBy();
                     groupBy();
                     var groups = collection.getGroups();
+
                     expectOrder([item1, item2, item0], groups.get('A'));
                     expectOrder([item5, item3, item4], groups.get('B'));
                     expectOrder([item6, item7, item8], groups.get('C'));
@@ -2608,6 +2696,7 @@ topSuite("Ext.util.Collection", [
                     groupBy();
                     sortBy();
                     var groups = collection.getGroups();
+
                     expectOrder([item1, item2, item0], groups.get('A'));
                     expectOrder([item5, item3, item4], groups.get('B'));
                     expectOrder([item6, item7, item8], groups.get('C'));
@@ -2705,6 +2794,7 @@ topSuite("Ext.util.Collection", [
             it("should add groups when required", function() {
                 groupBy();
                 var filters = collection.getFilters();
+
                 filters.add({
                     filterFn: function(o) {
                         return Ext.Array.indexOf(['Item0', 'Item9'], o.name) > -1;
@@ -2871,16 +2961,19 @@ topSuite("Ext.util.Collection", [
             
             describe("with a custom aggregator", function() {
                 var fn = function(records, items) {
-                    var total = 0,
-                        len = items.length,
-                        i;
-                    
-                    for (i = 0; i < len; ++i) {
-                        total += (items[i] * 2);
-                    }
-                    scope = this;
-                    return total;
-                }, scope;
+                        var total = 0,
+                            len = items.length,
+                            i;
+                        
+                        for (i = 0; i < len; ++i) {
+                            total += (items[i] * 2);
+                        }
+
+                        scope = this;
+
+                        return total;
+                    },
+                    scope;
                 
                 it("should call the custom aggregator", function() {
                     groupBy();
@@ -2903,6 +2996,7 @@ topSuite("Ext.util.Collection", [
         describe("cleanup", function() {
             it("should not destroy the sorters collection when removing a group", function() {
                 var sorters = collection.getSorters();
+
                 sorters.add({
                     property: 'sortKey'
                 });
@@ -2913,6 +3007,7 @@ topSuite("Ext.util.Collection", [
 
             it("should not destroy the sorters collection when clearing grouping", function() {
                 var sorters = collection.getSorters();
+
                 sorters.add({
                     property: 'sortKey'
                 });
@@ -2923,21 +3018,25 @@ topSuite("Ext.util.Collection", [
 
             it("should clear endupdate listeners on the sorters as groups are removed", function() {
                 var sorters = collection.getSorters();
+
                 sorters.add({
                     property: 'sortKey'
                 });
                 groupBy();
                 var count = sorters.events.endupdate.listeners.length;
+
                 collection.remove(item9);
                 expect(sorters.events.endupdate.listeners.length).toBe(count - 1);
             });
 
             it("should clear endupdate listeners on the sorters when groups are cleared", function() {
                 var sorters = collection.getSorters();
+
                 sorters.add({
                     property: 'sortKey'
                 });
                 var count = sorters.events.endupdate.listeners.length;
+
                 groupBy();
                 clearGroup();
                 expect(sorters.events.endupdate.listeners.length).toBe(count);
@@ -2960,6 +3059,7 @@ topSuite("Ext.util.Collection", [
                 collection.itemChanged(item2, ['group']);
 
                 var group = collection.getGroups().get('E');
+
                 expect(group.contains(item2));
 
                 group = child.getGroups().get('E');
@@ -2973,7 +3073,7 @@ topSuite("Ext.util.Collection", [
             Abe    = { id: 2, name: 'Abe',    code: 'A', modifier: 100, firstInitial: 'A' },
             Edward = { id: 3, name: 'Edward', code: 'B', modifier: 5, firstInitial: 'E' };
 
-        function addItems (c) {
+        function addItems(c) {
             c.add(Ed, Abe, Edward);
         }
 
@@ -2990,7 +3090,7 @@ topSuite("Ext.util.Collection", [
         it('should respect the sorters upon insertion at any index', function() {
             collection.sort('code');
             expect(collection.sorted).toBe(true);
-            collection.insert(0, {id: 4, name: 'Nige', code: 'D', modifier: 75, firstInitial: 'N'});
+            collection.insert(0, { id: 4, name: 'Nige', code: 'D', modifier: 75, firstInitial: 'N' });
             expect(collection.items[0].code).toBe('A');
             expect(collection.items[1].code).toBe('B');
             expect(collection.items[2].code).toBe('C');
@@ -3009,7 +3109,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.sorted).toBe(false);
 
             // Insertion at position zero should be respected now that there are no sorters
-            collection.insert(0, {id: 4, name: 'Nige', code: 'D', modifier: 75, firstInitial: 'N'});
+            collection.insert(0, { id: 4, name: 'Nige', code: 'D', modifier: 75, firstInitial: 'N' });
             expect(collection.items[0].code).toBe('D');
             expect(collection.items[1].code).toBe('A');
             expect(collection.items[2].code).toBe('B');
@@ -3057,7 +3157,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.items[0].code).toBe('A');
         });
 
-        it('should respect configured sorters', function () {
+        it('should respect configured sorters', function() {
             var calls = 0;
 
             collection = new Ext.util.Collection({
@@ -3087,7 +3187,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.getByKey(Edward.id)).toBe(Edward);
         });
 
-        it('should merge new items not resort', function () {
+        it('should merge new items not resort', function() {
             var adds = [],
                 sorts = 0;
 
@@ -3098,10 +3198,10 @@ topSuite("Ext.util.Collection", [
             expect(collection.sorted).toBe(true);
 
             collection.on({
-                add: function (sender, details) {
+                add: function(sender, details) {
                     adds.push(details.items.length + ' at ' + details.at);
                 },
-                sort: function () {
+                sort: function() {
                     ++sorts;
                 }
             });
@@ -3321,7 +3421,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.items[2].name).toBe('Ed');
         }); // multiSortLimit
 
-        it('should allow sorter collection removal', function () {
+        it('should allow sorter collection removal', function() {
             var spy = jasmine.createSpy(),
                 sorters = collection.getSorters();
 
@@ -3392,10 +3492,10 @@ topSuite("Ext.util.Collection", [
 
         it("should be able to get items by key after inserting multiple items into a sorted collection", function() {
             collection.getSorters().add('name');
-            var Brian = {id: 4, name: 'Brian'},
-                Aaron = {id: 5, name: 'Aaron'},
-                Fred = {id: 6, name: 'Fred'},
-                Fredward = {id: 7, name: 'Fredward'};
+            var Brian = { id: 4, name: 'Brian' },
+                Aaron = { id: 5, name: 'Aaron' },
+                Fred = { id: 6, name: 'Fred' },
+                Fredward = { id: 7, name: 'Fredward' };
 
             collection.add(Fredward, Brian, Aaron, Fred);
             expect(collection.getByKey('Aaron')).toBe(Aaron);
@@ -3416,24 +3516,26 @@ topSuite("Ext.util.Collection", [
             var sorter = new Ext.util.Sorter({
                 property: 'name'
             });
+
             var sorters = collection.getSorters();
+
             sorters.add(sorter);
             sorters.remove(sorter);
             expect(sorters.getCount()).toBe(0);
         });
     });
 
-    describe('rootProperty', function () {
+    describe('rootProperty', function() {
         var Ed     = { id: 1, data: { name: 'Ed',     code: 'C', modifier: 10, firstInitial: 'E' } },
             Abe    = { id: 2, data: { name: 'Abe',    code: 'A', modifier: 100, firstInitial: 'A' } },
             Edward = { id: 3, data: { name: 'Edward', code: 'B', modifier: 5, firstInitial: 'E' } };
 
-        function addItems (c) {
+        function addItems(c) {
             c.add(Edward, Abe, Ed);
         }
 
-        describe('with extraKeys', function () {
-            it('should properly extract keys', function () {
+        describe('with extraKeys', function() {
+            it('should properly extract keys', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data',
                     extraKeys: {
@@ -3457,8 +3559,8 @@ topSuite("Ext.util.Collection", [
             });
         });
 
-        describe('with configured sorters', function () {
-            it('should use the rootProperty', function () {
+        describe('with configured sorters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data',
                     sorters: 'name'
@@ -3473,8 +3575,8 @@ topSuite("Ext.util.Collection", [
             });
         });
 
-        describe('with dynamic sorters', function () {
-            it('should use the rootProperty', function () {
+        describe('with dynamic sorters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data'
                 });
@@ -3490,8 +3592,8 @@ topSuite("Ext.util.Collection", [
             });
         });
 
-        describe('with configured filters', function () {
-            it('should use the rootProperty', function () {
+        describe('with configured filters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data',
                     filters: { property: 'name', value: 'E' }
@@ -3500,14 +3602,14 @@ topSuite("Ext.util.Collection", [
                 addItems(collection);
 
                 expect(collection.length).toBe(2);
-                //expect(collection.items[0]).toBe(Abe);
+                // expect(collection.items[0]).toBe(Abe);
                 expect(collection.items[0]).toBe(Edward);
                 expect(collection.items[1]).toBe(Ed);
             });
         });
 
-        describe('with dynamic filters', function () {
-            it('should use the rootProperty', function () {
+        describe('with dynamic filters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data'
                 });
@@ -3517,14 +3619,14 @@ topSuite("Ext.util.Collection", [
                 collection.setFilters({ property: 'name', value: 'E' });
 
                 expect(collection.length).toBe(2);
-                //expect(collection.items[0]).toBe(Abe);
+                // expect(collection.items[0]).toBe(Abe);
                 expect(collection.items[0]).toBe(Edward);
                 expect(collection.items[1]).toBe(Ed);
             });
         });
 
-        describe('with configured filters and sorters', function () {
-            it('should use the rootProperty', function () {
+        describe('with configured filters and sorters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data',
                     filters: { property: 'name', value: 'E' },
@@ -3534,14 +3636,14 @@ topSuite("Ext.util.Collection", [
                 addItems(collection);
 
                 expect(collection.length).toBe(2);
-                //expect(collection.items[0]).toBe(Abe);
+                // expect(collection.items[0]).toBe(Abe);
                 expect(collection.items[0]).toBe(Ed);
                 expect(collection.items[1]).toBe(Edward);
             });
         });
 
-        describe('with dynamic filters and sorters', function () {
-            it('should use the rootProperty', function () {
+        describe('with dynamic filters and sorters', function() {
+            it('should use the rootProperty', function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'data'
                 });
@@ -3552,7 +3654,7 @@ topSuite("Ext.util.Collection", [
                 collection.sort('name');
 
                 expect(collection.length).toBe(2);
-                //expect(collection.items[0]).toBe(Abe);
+                // expect(collection.items[0]).toBe(Abe);
                 expect(collection.items[0]).toBe(Ed);
                 expect(collection.items[1]).toBe(Edward);
             });
@@ -3589,7 +3691,7 @@ topSuite("Ext.util.Collection", [
                            item9, item10);
         });
 
-        it('should add items and track unique extraKeys', function () {
+        it('should add items and track unique extraKeys', function() {
             expect(collection.length).toBe(11);
 
             expect(collection.byUid.get(item0.uid)).toBe(item0);
@@ -3605,7 +3707,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byUid.get(item10.uid)).toBe(item10);
         });
 
-        it('should update items on itemChanged', function () {
+        it('should update items on itemChanged', function() {
             expect(collection.length).toBe(11);
 
             expect(collection.byUid.get(item0.uid)).toBe(item0);
@@ -3626,7 +3728,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byUid.get(item0.uid)).toBe(item0);
         });
 
-        it('should add items and track non-unique extraKeys', function () {
+        it('should add items and track non-unique extraKeys', function() {
             var array12 = collection.byFoo.get(12),
                 array24 = collection.byFoo.get(24),
                 array34 = collection.byFoo.get(34);
@@ -3650,7 +3752,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byFoo.get(item6.foo)).toBe(item6);
         });
 
-        it('should iterate all indices of non-unique extraKeys', function () {
+        it('should iterate all indices of non-unique extraKeys', function() {
             var index;
 
             index = collection.byFoo.indexOf(34);
@@ -3669,7 +3771,7 @@ topSuite("Ext.util.Collection", [
             expect(index).toBe(-1);
         });
 
-        it('should iterate one index of unique extraKeys', function () {
+        it('should iterate one index of unique extraKeys', function() {
             var index;
 
             index = collection.byFoo.indexOf(item5.foo);
@@ -3679,14 +3781,14 @@ topSuite("Ext.util.Collection", [
             expect(index).toBe(-1);
         });
 
-        it('should return -1 from indexOf if not found', function () {
+        it('should return -1 from indexOf if not found', function() {
             var index;
 
             index = collection.byFoo.indexOf(1234);
             expect(index).toBe(-1);
         });
 
-        it('should reflect filter state in unique extraKeys', function () {
+        it('should reflect filter state in unique extraKeys', function() {
             var filters = collection.getFilters();
 
             expect(collection.length).toBe(11);
@@ -3707,7 +3809,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byUid.get(item9.uid)).toBe(item9);
             expect(collection.byUid.get(item10.uid)).toBe(item10);
 
-            function evens (item) {
+            function evens(item) {
                 return item.id % 2 === 0;
             }
 
@@ -3756,7 +3858,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byUid.get(item10.uid)).toBe(item10);
         });
 
-        it('should reflect filter state in non-unique extraKeys', function () {
+        it('should reflect filter state in non-unique extraKeys', function() {
             var filters = collection.getFilters();
 
             expect(collection.length).toBe(11);
@@ -3787,7 +3889,7 @@ topSuite("Ext.util.Collection", [
             expect(collection.byFoo.get(item5.foo)).toBe(item5);
             expect(collection.byFoo.get(item6.foo)).toBe(item6);
 
-            function evens (item) {
+            function evens(item) {
                 return item.id % 2 === 0;
             }
 
@@ -3812,13 +3914,13 @@ topSuite("Ext.util.Collection", [
 
             expect(array24.length).toBe(2);
             expect(array24[0]).toBe(item4);
-            //expect(array24[1]).toBe(item9);
+            // expect(array24[1]).toBe(item9);
             expect(array24[1]).toBe(item10);
 
             expect(array34.length).toBe(2);
             expect(array34[0]).toBe(item2);
-            //expect(array34[1]).toBe(item3);
-            //expect(array34[2]).toBe(item7);
+            // expect(array34[1]).toBe(item3);
+            // expect(array34[2]).toBe(item7);
             expect(array34[1]).toBe(item8);
 
             expect(collection.byFoo.get(item5.foo)).toBe(null);
@@ -3869,15 +3971,15 @@ topSuite("Ext.util.Collection", [
 
             describe("bounds", function() {
                 it("should operate on all items", function() {
-                    expect(collection.bounds('amount')).toEqual([10,40]);
+                    expect(collection.bounds('amount')).toEqual([10, 40]);
                 });
 
                 it("should support a start index", function() {
-                    expect(collection.bounds('amount', 2)).toEqual([10,30]);
+                    expect(collection.bounds('amount', 2)).toEqual([10, 30]);
                 });
 
                 it("should support a range", function() {
-                    expect(collection.bounds('amount', 0, 2)).toEqual([20,40]);
+                    expect(collection.bounds('amount', 0, 2)).toEqual([20, 40]);
                 });
             });
             
@@ -3890,18 +3992,21 @@ topSuite("Ext.util.Collection", [
             describe("extremes", function() {
                 it("should operate on all items", function() {
                     var extremes = collection.extremes('amount');
+
                     expect(extremes[0]).toBe(item2);
                     expect(extremes[1]).toBe(item0);
                 });
 
                 it("should support a start index", function() {
                     var extremes = collection.extremes('amount', 2);
+
                     expect(extremes[0]).toBe(item2);
                     expect(extremes[1]).toBe(item3);
                 });
 
                 it("should support a range", function() {
                     var extremes = collection.extremes('amount', 0, 2);
+
                     expect(extremes[0]).toBe(item1);
                     expect(extremes[1]).toBe(item0);
                 });
@@ -3993,33 +4098,36 @@ topSuite("Ext.util.Collection", [
 
             describe("bounds", function() {
                 it("should operate on all items", function() {
-                    expect(collection.bounds('amount')).toEqual([10,40]);
+                    expect(collection.bounds('amount')).toEqual([10, 40]);
                 });
 
                 it("should support a start index", function() {
-                    expect(collection.bounds('amount', 2)).toEqual([10,30]);
+                    expect(collection.bounds('amount', 2)).toEqual([10, 30]);
                 });
 
                 it("should support a range", function() {
-                    expect(collection.bounds('amount', 0, 2)).toEqual([20,40]);
+                    expect(collection.bounds('amount', 0, 2)).toEqual([20, 40]);
                 });
             });
 
             describe("extremes", function() {
                 it("should operate on all items", function() {
                     var extremes = collection.extremes('amount');
+
                     expect(extremes[0]).toBe(item2);
                     expect(extremes[1]).toBe(item0);
                 });
 
                 it("should support a start index", function() {
                     var extremes = collection.extremes('amount', 2);
+
                     expect(extremes[0]).toBe(item2);
                     expect(extremes[1]).toBe(item3);
                 });
 
                 it("should support a range", function() {
                     var extremes = collection.extremes('amount', 0, 2);
+
                     expect(extremes[0]).toBe(item1);
                     expect(extremes[1]).toBe(item0);
                 });
@@ -4097,7 +4205,7 @@ topSuite("Ext.util.Collection", [
         });
     }); // aggregation
 
-    describe('itemChanged', function () {
+    describe('itemChanged', function() {
         var events = {
                 add: 0,
                 beforeitemchange: 0,
@@ -4110,18 +4218,21 @@ topSuite("Ext.util.Collection", [
                 sort: 0,
                 updatekey: 0
             };
+
         var eventArgs, eventNames, argList;
+
         var Don, Evan, Nige, Phil, Kevin;
 
-        function resetEvents () {
+        function resetEvents() {
             var listeners = {};
 
             eventArgs = [];
             eventNames = [];
 
-            Ext.Object.each(events, function (name) {
+            Ext.Object.each(events, function(name) {
                 events[name] = 0;
-                listeners[name] = function () {
+
+                listeners[name] = function() {
                     ++events[name];
                     
                     argList = Ext.Array.slice(arguments, 0);
@@ -4140,7 +4251,7 @@ topSuite("Ext.util.Collection", [
             return listeners;
         }
 
-        beforeEach(function () {
+        beforeEach(function() {
             // Reset these before each test
             Don = { id: 1, name: 'Don', foo: 10 };
             Evan = { id: 2, name: 'Evan', foo: 100 };
@@ -4149,8 +4260,8 @@ topSuite("Ext.util.Collection", [
             Kevin = { id: 5, name: 'Kevin', foo: 30 };
         });
 
-        describe('unsorted and unfiltered', function () {
-            beforeEach(function () {
+        describe('unsorted and unfiltered', function() {
+            beforeEach(function() {
                 collection = new Ext.util.Collection({
                     listeners: resetEvents()
                 });
@@ -4159,13 +4270,13 @@ topSuite("Ext.util.Collection", [
                 resetEvents();
             });
 
-            it('should not fire add, remove or updatekey when not changed', function () {
+            it('should not fire add, remove or updatekey when not changed', function() {
                 Don.name = 'Donald';
 
                 collection.itemChanged(Don);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[2][1];
@@ -4185,7 +4296,7 @@ topSuite("Ext.util.Collection", [
                 expect(beforeitemchange.wasFiltered).toBe(false);
             });
 
-            it('should fire updatekey and not fire add or remove', function () {
+            it('should fire updatekey and not fire add or remove', function() {
                 var oldKey = Don.id;
 
                 Don.name = 'Donald';
@@ -4193,8 +4304,8 @@ topSuite("Ext.util.Collection", [
 
                 collection.itemChanged(Don, null, oldKey);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,updatekey,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,updatekey,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4215,8 +4326,8 @@ topSuite("Ext.util.Collection", [
             });
         }); // unsorted / unfiltered
 
-        describe('sorted and unfiltered', function () {
-            beforeEach(function () {
+        describe('sorted and unfiltered', function() {
+            beforeEach(function() {
                 collection = new Ext.util.Collection({
                     listeners: resetEvents(),
                     sorters: 'name'
@@ -4228,13 +4339,13 @@ topSuite("Ext.util.Collection", [
                 resetEvents();
             });
 
-            it('should fire add and remove not updatekey', function () {
+            it('should fire add and remove not updatekey', function() {
                 Don.name = 'Wayne';
 
                 collection.itemChanged(Don);
 
-                expect(eventNames.join(',')).
-                        toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                        .toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1];
 
@@ -4253,7 +4364,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items).toEqual([Evan, Kevin, Nige, Phil, Don]);
             });
 
-            it('should fire updatekey and not fire add or remove', function () {
+            it('should fire updatekey and not fire add or remove', function() {
                 var oldKey = Don.id;
 
                 Don.name = 'Donald';
@@ -4261,8 +4372,8 @@ topSuite("Ext.util.Collection", [
 
                 collection.itemChanged(Don, null, oldKey);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,updatekey,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,updatekey,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4281,7 +4392,7 @@ topSuite("Ext.util.Collection", [
                 expect(beforeitemchange.wasFiltered).toBe(false);
             });
 
-            it('should order correctly after a sort field change moving to last position', function () {
+            it('should order correctly after a sort field change moving to last position', function() {
                 var insertionPoint;
 
                 // Don should move to end
@@ -4295,8 +4406,8 @@ topSuite("Ext.util.Collection", [
                 });
                 collection.itemChanged(Don);
 
-                expect(eventNames.join(',')).
-                        toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                        .toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[4][1];
@@ -4319,7 +4430,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items).toEqual([Evan, Kevin, Nige, Phil, Don]);
             });
 
-            it('should order correctly after a sort field change moving to penultimate position', function () {
+            it('should order correctly after a sort field change moving to penultimate position', function() {
                 var insertionPoint;
 
                 // Don should move to second from end, before Phil
@@ -4333,8 +4444,8 @@ topSuite("Ext.util.Collection", [
                 });
                 collection.itemChanged(Don);
 
-                expect(eventNames.join(',')).
-                        toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                        .toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[4][1];
@@ -4357,7 +4468,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items).toEqual([Evan, Kevin, Nige, Don, Phil]);
             });
 
-            it('should order correctly after a sort field change moving to first position', function () {
+            it('should order correctly after a sort field change moving to first position', function() {
                 var insertionPoint;
 
                 // Evan should move from second to first, before Don
@@ -4371,8 +4482,8 @@ topSuite("Ext.util.Collection", [
                 });
                 collection.itemChanged(Evan);
 
-                expect(eventNames.join(',')).
-                        toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                        .toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[4][1];
@@ -4395,7 +4506,7 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items).toEqual([Evan, Don, Kevin, Nige, Phil]);
             });
 
-            it('should order correctly after a sort field change moving to second position', function () {
+            it('should order correctly after a sort field change moving to second position', function() {
                 var insertionPoint;
 
                 // Phil should move to 2nd before Evan
@@ -4409,8 +4520,8 @@ topSuite("Ext.util.Collection", [
                 });
                 collection.itemChanged(Phil);
 
-                expect(eventNames.join(',')).
-                        toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                        .toBe('beginupdate,beforeitemchange,remove,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[4][1];
@@ -4445,8 +4556,8 @@ topSuite("Ext.util.Collection", [
 
         }); // sorted / unfiltered
 
-        describe('unsorted and filtered', function () {
-            beforeEach(function () {
+        describe('unsorted and filtered', function() {
+            beforeEach(function() {
                 collection = new Ext.util.Collection({
                     listeners: resetEvents(),
                     filters: { property: 'foo', value: 50, operator: '<=' }
@@ -4456,7 +4567,7 @@ topSuite("Ext.util.Collection", [
                 resetEvents();
             });
 
-            it('should remove item once filter applies', function () {
+            it('should remove item once filter applies', function() {
                 expect(collection.length).toBe(2);
                 expect(collection.items[0]).toBe(Don);
                 expect(collection.items[1]).toBe(Nige);
@@ -4466,11 +4577,11 @@ topSuite("Ext.util.Collection", [
                 collection.itemChanged(Don);
 
                 expect(collection.length).toBe(1);
-                //expect(collection.items[0]).toBe(Don);
+                // expect(collection.items[0]).toBe(Don);
                 expect(collection.items[0]).toBe(Nige);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,remove,filtereditemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,remove,filtereditemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4489,7 +4600,7 @@ topSuite("Ext.util.Collection", [
                 expect(beforeitemchange.wasFiltered).toBe(false);
             });
 
-            it('should restore item once filter no longer applies', function () {
+            it('should restore item once filter no longer applies', function() {
                 Evan.foo = 5;
 
                 collection.itemChanged(Evan);
@@ -4499,8 +4610,8 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[1]).toBe(Nige);
                 expect(collection.items[2]).toBe(Evan);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4521,14 +4632,15 @@ topSuite("Ext.util.Collection", [
 
             it("should pass along the modified fields", function() {
                 var spy = jasmine.createSpy();
+
                 collection.on('beforeitemchange', spy);
                 collection.itemChanged(Evan, ['foo', 'bar']);
                 expect(spy.mostRecentCall.args[1].modified).toEqual(['foo', 'bar']);
             });
         }); // unsorted / filtered
 
-        describe('sorted and filtered', function () {
-            beforeEach(function () {
+        describe('sorted and filtered', function() {
+            beforeEach(function() {
                 collection = new Ext.util.Collection({
                     listeners: resetEvents(),
                     filters: { property: 'foo', value: 50, operator: '<=' },
@@ -4539,7 +4651,7 @@ topSuite("Ext.util.Collection", [
                 resetEvents();
             });
 
-            it('should remove item once filter applies', function () {
+            it('should remove item once filter applies', function() {
                 expect(collection.length).toBe(2);
                 expect(collection.items[0]).toBe(Nige);
                 expect(collection.items[1]).toBe(Don);
@@ -4550,10 +4662,10 @@ topSuite("Ext.util.Collection", [
 
                 expect(collection.length).toBe(1);
                 expect(collection.items[0]).toBe(Nige);
-                //expect(collection.items[1]).toBe(Don);
+                // expect(collection.items[1]).toBe(Don);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,remove,filtereditemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,remove,filtereditemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4572,7 +4684,7 @@ topSuite("Ext.util.Collection", [
                 expect(beforeitemchange.wasFiltered).toBe(false);
             });
 
-            it('should restore item once filter no longer applies', function () {
+            it('should restore item once filter no longer applies', function() {
                 Evan.foo = 5;
 
                 collection.itemChanged(Evan);
@@ -4582,8 +4694,8 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[1]).toBe(Evan);
                 expect(collection.items[2]).toBe(Don);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4602,7 +4714,7 @@ topSuite("Ext.util.Collection", [
                 expect(beforeitemchange.wasFiltered).toBe(true);
             });
 
-            it('should restore item and position once filter no longer applies', function () {
+            it('should restore item and position once filter no longer applies', function() {
                 Evan.foo = 5;
                 Evan.name = 'ZEvan';
 
@@ -4613,8 +4725,8 @@ topSuite("Ext.util.Collection", [
                 expect(collection.items[1]).toBe(Nige);
                 expect(collection.items[2]).toBe(Don);
 
-                expect(eventNames.join(',')).
-                    toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
+                expect(eventNames.join(','))
+                    .toBe('beginupdate,beforeitemchange,add,itemchange,endupdate');
 
                 var beforeitemchange = eventArgs[1][1],
                     itemchange = eventArgs[3][1];
@@ -4727,6 +4839,7 @@ topSuite("Ext.util.Collection", [
     describe('adding duplicate items', function() {
         it('should overwrite duplicates', function() {
             var mc1 = new Ext.util.Collection();
+
             var log = [];
 
             logEvents(mc1, log, 'text');
@@ -4756,20 +4869,24 @@ topSuite("Ext.util.Collection", [
                     id: null
                 },
 
-                constructor: function (config) {
+                constructor: function(config) {
                     this.initConfig(config);
                 }
             });
+
             var calls = 0;
+
             var decoded = 0;
 
             var mc = new Ext.util.Collection({
-                    decoder: function (item) {
+                    decoder: function(item) {
                         ++calls;
+
                         if (!item.isItem) {
                             ++decoded;
                             item = new Item(item);
                         }
+
                         return item;
                     }
                 });
@@ -4787,8 +4904,8 @@ topSuite("Ext.util.Collection", [
 
     describe("misc", function() {
         it("should have an updated key in a child collectionafter changing a filtered out item", function() {
-            var item1 = {id: 1},
-                item2 = {id: 2};
+            var item1 = { id: 1 },
+                item2 = { id: 2 };
 
             collection = new Ext.util.Collection({
                 filters: [{

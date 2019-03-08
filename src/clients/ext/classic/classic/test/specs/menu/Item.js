@@ -1,5 +1,3 @@
-/* global Ext, jasmine, expect, xit */
-
 topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         menu, item;
@@ -29,7 +27,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
         }
     }
 
-    describe('on click', function () {
+    describe('on click', function() {
         describe("click event/handler", function() {
             var spy;
 
@@ -69,6 +67,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     clickItem();
 
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(item);
                     expect(args[1] instanceof Ext.event.Event).toBe(true);
                 });
@@ -84,6 +83,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
                 it("should used the passed scope", function() {
                     var o = {};
+
                     makeMenu({
                         text: 'Foo',
                         scope: o,
@@ -95,6 +95,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
                 it("should be able to route the handler to a view controller", function() {
                     var ctrl = new Ext.app.ViewController();
+
                     ctrl.onFoo = spy;
                     makeMenu({
                         text: 'Foo',
@@ -108,6 +109,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
                 it("should have the menu hidden when the handler fires with hideOnClick: true", function() {
                     var visible;
+
                     makeMenu({
                         text: 'Foo',
                         handler: spy.andCallFake(function() {
@@ -120,6 +122,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
                 it("should fire the handler after the click event", function() {
                     var order = [];
+
                     makeMenu({
                         text: 'Foo',
                         listeners: {
@@ -159,7 +162,12 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                         },
                         handler: spy
                     });
+                    
+                    // Error messages are expected
+                    spyOn(Ext, 'log');
+                    spyOn(Ext.Error, 'raise');
                     clickItem();
+                    
                     expect(spy).not.toHaveBeenCalled();
                 });
             });
@@ -198,12 +206,14 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     clickItem();
 
                     var args = spy.mostRecentCall.args;
+
                     expect(args[0]).toBe(item);
                     expect(args[1] instanceof Ext.event.Event).toBe(true);
                 });
 
                 it("should have the menu hidden when the handler fires with hideOnClick: true", function() {
                     var visible;
+
                     makeMenu({
                         text: 'Foo',
                         listeners: {
@@ -244,6 +254,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
                     return item.menu;
                 }
+
                 it("should hide a parent menu", function() {
                     makeMenu({
                         text: 'Foo',
@@ -297,17 +308,17 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
             });
         });
 
-        describe('href property', function () {
+        describe('href property', function() {
             // Note that the specs were failing in FF 24 without the waitsFor().
             // Note that it's necessary to set the activeItem and focusedItem to test the API!
             var menuItem;
 
-            afterEach(function () {
+            afterEach(function() {
                 menuItem = null;
                 location.hash = '';
             });
 
-            it('should follow the target', function () {
+            xit('should follow the target', function() {
                 makeMenu([{
                     text: 'menu item one',
                     href: '#ledzep'
@@ -322,11 +333,11 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     clickItem(item, true);
                 });
 
-                waitsFor(function () {
+                waitsFor(function() {
                     return location.hash === '#ledzep';
                 }, 'timed out waiting for hash to change', 1000);
 
-                runs(function () {
+                runs(function() {
                     expect(location.hash).toBe('#ledzep');
                 });
             });
@@ -334,14 +345,14 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
             // TODO This test does not work properly due to events being translated
             // TODO: Reinstate this for touch platforms when https://sencha.jira.com/browse/EXT-4 is fixed.
             // We cannot now preventDefault on native click events on touch because of click event synthesis.
-            xit('should not follow the target link if the click listener stops the event', function () {
+            xit('should not follow the target link if the click listener stops the event', function() {
                 var hashValue = Ext.isIE ? '#' : '';
 
                 makeMenu([{
                     text: 'menu item one',
                     href: '#motley',
                     listeners: {
-                        click: function (cmp, e) {
+                        click: function(cmp, e) {
                             e.preventDefault();
                         }
                     }
@@ -352,20 +363,20 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                 menu.activeItem = menu.focusedItem = item;
                 clickItem(item, Ext.isIE9m);
 
-                waitsFor(function () {
+                waitsFor(function() {
                     return location.hash === hashValue;
                 }, 'timed out waiting for hash to change', 1000);
 
-                runs(function () {
+                runs(function() {
                     expect(location.hash).toBe(hashValue);
                 });
             });
         });
     });
 
-    describe('disabled', function () {
-        describe('when item has an href config', function () {
-            it('should stop the event', function () {
+    describe('disabled', function() {
+        describe('when item has an href config', function() {
+            it('should stop the event', function() {
                 makeMenu({
                     disabled: true,
                     href: '#menu'
@@ -381,6 +392,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                 disabled: true
             }]);
             var item = menu.items.getAt(0);
+
             jasmine.fireMouseEvent(item.getEl(), 'mouseover');
             waitsFor(function() {
                 return item.containsFocus === true;
@@ -417,10 +429,10 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
         });
     });
 
-    describe('when destroying', function () {
+    describe('when destroying', function() {
         var m;
 
-        beforeEach(function () {
+        beforeEach(function() {
             m = new Ext.menu.Menu();
 
             makeMenu([{
@@ -432,15 +444,15 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
         });
 
-        afterEach(function () {
+        afterEach(function() {
             m = null;
         });
 
-        it('should destroy its menu', function () {
+        it('should destroy its menu', function() {
             expect(m.destroyed).toBe(true);
         });
 
-        it('should cleanup its menu reference', function () {
+        it('should cleanup its menu reference', function() {
             expect(item.menu).toBe(null);
         });
     });
@@ -452,6 +464,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     title: 'someTitle'
                 }
             });
+
             makeMenu({
                 text: 'Foo',
                 menu: {
@@ -463,6 +476,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                 viewModel: vm
             });
             var subMenu = item.menu;
+
             // Render to force the VM to fire
             subMenu.show();
             vm.notify();

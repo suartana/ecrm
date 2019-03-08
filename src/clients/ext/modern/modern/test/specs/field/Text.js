@@ -1767,7 +1767,7 @@ function () {
 
             expect(function() {
                 field.addTrigger('foo');
-            }).toThrow('Cannot add trigger "foo". A trigger config or instance is required.');
+            }).toThrow('Cannot add trigger "foo".');
         });
 
         it("should remove a trigger by key", function() {

@@ -1,4 +1,4 @@
-// describe("Ext.event.gesture.DoubleTap", function () {});
+// describe("Ext.event.gesture.DoubleTap", function() {});
 // The above appeases Cmd's parser to associate spec run results with files.
 
 (Ext.isIE10m ? xtopSuite : topSuite)("Ext.event.gesture.Swipe", function() {

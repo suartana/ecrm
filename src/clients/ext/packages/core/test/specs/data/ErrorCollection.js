@@ -28,4 +28,4 @@ topSuite("Ext.data.ErrorCollection", function() {
             expect(getByField[0].field).toEqual('name');
         });
     });
-});    
+});

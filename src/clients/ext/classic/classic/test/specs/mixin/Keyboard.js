@@ -1,5 +1,3 @@
-/* global Ext, jasmine, expect */
-
 topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
     // more specs in Ext.Widget
     var Event = Ext.event.Event,
@@ -68,7 +66,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(c.hasOwnProperty('keyMap')).toBe(false);
                 expect(ChildClass.prototype.hasOwnProperty('keyMap')).toBe(true);
 
-                expect(Ext.Array.sort(Ext.Object.getKeys(km))).toEqual(['ENTER','ESC']);
+                expect(Ext.Array.sort(Ext.Object.getKeys(km))).toEqual(['ENTER', 'ESC']);
                 expect(km.ENTER[0].handler).toBe('onKeyEnter');
                 expect(km.ESC[0].handler).toBe('onEsc');
 
@@ -96,19 +94,22 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 });
 
                 var km3 = c.getKeyMap();
+
                 expect(c.hasOwnProperty('keyMap')).toBe(true); // has its own now
                 expect(km !== km3).toBe(true);
 
                 var km3keys = Ext.Object.getKeys(km3);
+
                 Ext.Array.remove(km3keys, '$owner');
                 Ext.Array.sort(km3keys);
-                expect(km3keys).toEqual(['ENTER','ESC']);
+                expect(km3keys).toEqual(['ENTER', 'ESC']);
 
                 c.destroy();
 
                 c = new ChildClass2();
                 var km4 = c.getKeyMap();
-                expect(Ext.Array.sort(Ext.Object.getKeys(km4))).toEqual(['ENTER','HOME']);
+
+                expect(Ext.Array.sort(Ext.Object.getKeys(km4))).toEqual(['ENTER', 'HOME']);
                 expect(c.hasOwnProperty('keyMap')).toBe(false); // on prototype
                 expect(ChildClass2.prototype.hasOwnProperty('keyMap')).toBe(true);
 
@@ -140,6 +141,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
 
                 c = new ParentClass();
                 var km = c.getKeyMap();
+
                 expect(km.ENTER[0].handler).toBe('onKeyEnter');
                 expect(Ext.Object.getKeys(km)).toEqual(['ENTER']);
                 expect(c.hasOwnProperty('keyMap')).toBe(false);
@@ -176,6 +178,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
 
                 c = new ParentClass();
                 var km = c.getKeyMap();
+
                 expect(km).toBe(null);
                 expect(c.hasOwnProperty('keyMap')).toBe(false);
                 expect(ParentClass.prototype.hasOwnProperty('keyMap')).toBe(true);
@@ -216,7 +219,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(handlers.PAGE_UP[0].handler).toBe('onKeyPageUp');
             });
 
-            it('should accept single characters for keys', function () {
+            it('should accept single characters for keys', function() {
                 c.setKeyMap({
                     '+': 'onPlus'
                 });
@@ -231,7 +234,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(entry.handler).toBe('onPlus');
             });
 
-            it('should accept modifier and single characters', function () {
+            it('should accept modifier and single characters', function() {
                 c.setKeyMap({
                     'Ctrl-+': 'onCtrlPlus'
                 });
@@ -247,7 +250,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(entry.handler).toBe('onCtrlPlus');
             });
 
-            it('should accept #num for charCode', function () {
+            it('should accept #num for charCode', function() {
                 c.setKeyMap({
                     '#65': 'onKey65'
                 });
@@ -262,7 +265,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(entry.handler).toBe('onKey65');
             });
 
-            it('should accept number as key for keyCode', function () {
+            it('should accept number as key for keyCode', function() {
                 c.setKeyMap({
                     65: 'onKey65'
                 });
@@ -277,7 +280,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(entry.handler).toBe('onKey65');
             });
 
-            it('should accept modifier and charCode', function () {
+            it('should accept modifier and charCode', function() {
                 c.setKeyMap({
                     'Ctrl+#65': 'onCtrlKey65'
                 });
@@ -294,7 +297,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
                 expect(entry.ctrlKey).toBe(true);
             });
 
-            it('should accept modifier and keyCode', function () {
+            it('should accept modifier and keyCode', function() {
                 c.setKeyMap({
                     'Alt+Meta+65': 'onAltMetaKey65'
                 });
@@ -324,7 +327,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
             it("should throw an error on undefined binding", function() {
                 expect(function() {
                     c.setKeyMap({ UP: undefined });
-                }).toThrow();            
+                }).toThrow();
             });
         });
     });
@@ -441,7 +444,7 @@ topSuite("Ext.mixin.Keyboard", 'Ext.Component', function() {
             
             xdescribe("enabled keyMap", function() {
                 beforeEach(function() {
-                    //c.getKeyMap().disabled = true;
+                    // c.getKeyMap().disabled = true;
                 });
                 
                 it("should not invoke the handler", function() {

@@ -25,24 +25,25 @@
  *
  * ## Data
  *
- * Data representing the underlying drag is driven by the {@link #method!describe} method. This method
- * is called once at the beginning of the drag. It should populate the info object with data using
- * the {@link Ext.drag.Info#setData setData} method. It accepts 2 arguments. 
+ * Data representing the underlying drag is driven by the {@link #method!describe} method. This
+ * method is called once at the beginning of the drag. It should populate the info object with data
+ * using the {@link Ext.drag.Info#setData setData} method. It accepts 2 arguments. 
  * 
- * - The `type` is used to indicate to {@link Ext.drag.Target targets} the type(s) of data being provided. 
- * This allows the {@link Ext.drag.Target target} to decide whether it is able to interact with the source. 
- * All types added are available in {@link Ext.drag.Info#types types}.
- * - The value can be a static value, or a function reference. In the latter case, the function is evaluated
- * when the data is requested.
+ * - The `type` is used to indicate to {@link Ext.drag.Target targets} the type(s) of data being
+ * provided.  This allows the {@link Ext.drag.Target target} to decide whether it is able to
+ * interact with the source.  All types added are available in {@link Ext.drag.Info#types types}.
+ * - The value can be a static value, or a function reference. In the latter case, the function
+ * is evaluated when the data is requested.
  *
- * The {@link Ext.drag.Info#getData} method may be called once the drop completes. The data for the relevant type
- * is retrieved. All values from this method return a {@link Ext.Promise} to allow for consistency when dealing
- * with synchronous and asynchronous data.
+ * The {@link Ext.drag.Info#getData} method may be called once the drop completes. The data for the
+ * relevant type is retrieved. All values from this method return a {@link Ext.Promise} to allow
+ * for consistency when dealing with synchronous and asynchronous data.
  *
  * ## Proxy
  *
- * A {@link #proxy} is an element that follows the mouse cursor during a drag. This may be the {@link #element},
- * a newly created element, or none at all (if the purpose is to just track the cursor).
+ * A {@link #proxy} is an element that follows the mouse cursor during a drag. This may be the
+ * {@link #element}, a newly created element, or none at all (if the purpose is to just track
+ * the cursor).
  *
  * See {@link Ext.drag.proxy.None for details}.
  *
@@ -86,7 +87,8 @@
  *
  * A {@link #handle} is a CSS selector that allows certain child elements of the {@link #element}
  * to begin a drag. This is useful in 2 case:
- * - Where only a certain part of the element should trigger a drag, but the whole element should move.
+ * - Where only a certain part of the element should trigger a drag, but the whole element should
+ * move.
  * - When there are several repeated elements that may represent objects. 
  * 
  * In the example below, each child element becomes draggable and
@@ -265,7 +267,7 @@ Ext.define('Ext.drag.Source', {
         // Use bracket syntax to prevent Cmd from creating an
         // auto dependency. Will be pulled in by the target if
         // required.
-        this.manager = Ext.drag['Manager'];
+        this.manager = Ext.drag['Manager']; // eslint-disable-line dot-notation
     },
 
     /**
@@ -345,6 +347,7 @@ Ext.define('Ext.drag.Source', {
         if (typeof activateOnLongPress === 'string') {
             activateOnLongPress = [activateOnLongPress];
         }
+        
         return activateOnLongPress;
     },
 
@@ -355,8 +358,10 @@ Ext.define('Ext.drag.Source', {
     },
 
     updateActiveCls: function(cls, oldCls) {
+        var el;
+        
         if (this.dragging) {
-            var el = this.getElement();
+            el = this.getElement();
 
             el.replaceCls(oldCls, cls);
         }
@@ -368,16 +373,20 @@ Ext.define('Ext.drag.Source', {
                 constrain = {
                     region: constrain
                 };
-            } else if (constrain.isElement || !Ext.isObject(constrain)) {
+            }
+            else if (constrain.isElement || !Ext.isObject(constrain)) {
                 constrain = {
                     element: constrain
                 };
             }
+            
             constrain = Ext.apply({
                 source: this
             }, constrain);
+            
             constrain = Ext.Factory.dragConstraint(constrain);
         }
+        
         return constrain;
     },
 
@@ -397,7 +406,7 @@ Ext.define('Ext.drag.Source', {
             // Suppress translation and delegation for this to avoid event firing on
             // synthetic dragstart published by Gesture from pointermove. We need the
             // native event here.
-            element.on('dragstart', 'stopNativeDrag', this, {translate: false, delegated: false});
+            element.on('dragstart', 'stopNativeDrag', this, { translate: false, delegated: false });
         }
 
         this.callParent([ element, oldElement ]);
@@ -413,6 +422,7 @@ Ext.define('Ext.drag.Source', {
         if (proxy) {
             proxy = Ext.Factory.dragproxy(proxy);
         }
+        
         return proxy;
     },
 
@@ -420,12 +430,13 @@ Ext.define('Ext.drag.Source', {
         if (oldProxy) {
             oldProxy.destroy();
         }
+        
         if (proxy) {
             proxy.setSource(this);
         }
     },
 
-    resolveListenerScope: function () {
+    resolveListenerScope: function() {
         var ownerCmp = this.ownerCmp,
             a = arguments;
 
@@ -442,6 +453,7 @@ Ext.define('Ext.drag.Source', {
         me.manager = me.initialEvent = null;
         me.setConstrain(null);
         me.setProxy(null);
+        
         me.callParent();
     },
 
@@ -473,6 +485,8 @@ Ext.define('Ext.drag.Source', {
 
         canActivateOnLongPress: function(e) {
             var activate = this.getActivateOnLongPress();
+            
+            /* eslint-disable-next-line max-len */
             return !!(activate && (activate === true || Ext.Array.contains(activate, e.pointerType)));
         },
 
@@ -495,6 +509,7 @@ Ext.define('Ext.drag.Source', {
             if (proxyEl) {
                 proxyEl.removeCls(me.draggingCls);
             }
+            
             proxy.cleanup(info);
 
             me.dragging = false;
@@ -506,13 +521,14 @@ Ext.define('Ext.drag.Source', {
          * @inheritdoc
          */
         getElListeners: function() {
-            var o = {
-                touchstart: 'handleTouchStart',
-                dragstart: 'handleDragStart',
-                drag: 'handleDragMove',
-                dragend: 'handleDragEnd',
-                dragcancel: 'handleDragCancel'
-            }, handle = this.getHandle();
+            var handle = this.getHandle(),
+                o = {
+                    touchstart: 'handleTouchStart',
+                    dragstart: 'handleDragStart',
+                    drag: 'handleDragMove',
+                    dragend: 'handleDragEnd',
+                    dragcancel: 'handleDragCancel'
+                };
 
             if (handle) {
                 o.dragstart = {
@@ -520,9 +536,11 @@ Ext.define('Ext.drag.Source', {
                     delegate: handle
                 };
             }
+            
             if (this.getActivateOnLongPress()) {
                 o.longpress = 'handleLongPress';
             }
+            
             return o;
         },
 
@@ -540,7 +558,9 @@ Ext.define('Ext.drag.Source', {
             if (manager) {
                 manager.onDragCancel(info, e);
             }
+            
             me.onDragCancel(info);
+            
             if (me.hasListeners.dragcancel) {
                 me.fireEvent('dragcancel', me, info, e);
             }
@@ -561,6 +581,7 @@ Ext.define('Ext.drag.Source', {
                 return;
             }
 
+            /* eslint-disable-next-line vars-on-top */
             var me = this,
                 manager = me.manager,
                 revert = me.getRevert(),
@@ -572,18 +593,23 @@ Ext.define('Ext.drag.Source', {
             if (manager) {
                 manager.onDragEnd(info, e);
             }
+            
             me.onDragEnd(info);
+            
             if (me.hasListeners.dragend) {
                 me.fireEvent('dragend', me, info, e);
             }
+            
             Ext.fireEvent('dragend', me, info, e);
 
             proxy = proxy.instance;
+            
             if (revert && proxy) {
-                proxy.dragRevert(info, me.revertCls, revert, function () {
+                proxy.dragRevert(info, me.revertCls, revert, function() {
                     me.dragCleanup(info);
                 });
-            } else {
+            }
+            else {
                 me.dragCleanup(info);
             }
         },
@@ -607,10 +633,13 @@ Ext.define('Ext.drag.Source', {
             e.claimGesture();
 
             info.update(e);
+            
             if (manager) {
                 manager.onDragMove(info, e);
             }
+            
             me.onDragMove(info);
+            
             if (me.hasListeners.dragmove) {
                 me.fireEvent('dragmove', me, info, e);
             }
@@ -658,6 +687,7 @@ Ext.define('Ext.drag.Source', {
 
             if (cancel) {
                 me.dragCleanup();
+                
                 return false;
             }
 
@@ -666,22 +696,29 @@ Ext.define('Ext.drag.Source', {
         
             cls = me.getActiveCls();
             el = me.getElement();
+            
             if (cls) {
                 el.addCls(cls);
             }
+            
             proxyEl = info.proxy.element;
+            
             if (proxyEl) {
                 proxyEl.addCls(me.draggingCls);
             }
 
             info.update(e);
+            
             if (manager) {
                 manager.onDragStart(info, e);
             }
+            
             me.onDragStart(info);
+            
             if (hasListeners.dragstart) {
                 me.fireEvent('dragstart', me, info, e);
             }
+            
             Ext.fireEvent('dragstart', me, info, e);
         },
 
@@ -692,7 +729,7 @@ Ext.define('Ext.drag.Source', {
          * @private
          */
         handleLongPress: function(e) {
-            if (!this.isDisabled() && this.canActivateOnLongPress(e)) { 
+            if (!this.isDisabled() && this.canActivateOnLongPress(e)) {
                 this.initialEvent = e;
                 e.startDrag();
             }

@@ -8,7 +8,7 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
             C: 67,
             X: 88,
             Y: 89,
-            Z: 90 
+            Z: 90
         };
     
     beforeEach(function() {
@@ -21,7 +21,7 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
                 config = {
                     target: el,
                     binding: config
-                }
+                };
             }
             else {
                 config = Ext.apply({
@@ -55,6 +55,16 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
         origProcessEvent = fireKey = defaultFn = map = createMap = el = null;
     });
     
+    describe("alternate class name", function() {
+        it("should have Ext.KeyMap as the alternate class name", function() {
+            expect(Ext.util.KeyMap.prototype.alternateClassName).toEqual("Ext.KeyMap");
+        });
+
+        it("should allow the use of Ext.KeyMap", function() {
+            expect(Ext.KeyMap).toBeDefined();
+        });
+    });
+
     describe("constructor", function() {
         describe("receiving element", function() {
             it("should take a string id", function() {
@@ -225,11 +235,12 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
     
     describe("ctrl/alt/shift", function() {
         
-        var createOverride = function(altKey, ctrlKey, shiftKey){
+        var createOverride = function(altKey, ctrlKey, shiftKey) {
             Ext.util.KeyMap.prototype.processEvent = function(event) {
                 event.altKey = altKey || false;
                 event.ctrlKey = ctrlKey || false;
                 event.shiftKey = shiftKey || false;
+
                 return event;
             };
         };
@@ -430,7 +441,7 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
                 fireKey(KEYS.X);
                 expect(defaultFn).toHaveBeenCalled();
             });
-        });    
+        });
         
         describe("combinations", function() {
             // these are just some of the combinations, but are sufficient for testing purposes
@@ -485,7 +496,7 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
                     }
                 });
                 fireKey(KEYS.A);
-                expect(actual).toEqual(map);    
+                expect(actual).toEqual(map);
             });
             
             it("should execute the callback in the passed scope", function() {
@@ -537,7 +548,7 @@ topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
                 
             createMap({
                 key: KEYS.Z,
-                handler: function(key, event){
+                handler: function(key, event) {
                     realKey = key;
                     realEvent = event;
                 }

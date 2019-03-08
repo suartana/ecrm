@@ -1,7 +1,7 @@
 Ext.define('Ext.locale.pt_BR.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
-    config:{
+    config: {
         message: 'Está no formato incorreto'
     }
 });

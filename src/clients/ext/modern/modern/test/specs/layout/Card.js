@@ -1,4 +1,4 @@
-describe("Ext.layout.Card", function() {
+topSuite("Ext.layout.Card", ['Ext.form.Panel', 'Ext.field.*', 'Ext.app.ViewModel'], function() {
     var ct,
         layout,
         animation;

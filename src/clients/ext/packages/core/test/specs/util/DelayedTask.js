@@ -87,18 +87,20 @@ topSuite("Ext.util.DelayedTask", function() {
         });
     });
     
-    it("should accept a delay of 0", function(){
+    it("should accept a delay of 0", function() {
         var called = true;
+
         var d = new Ext.util.DelayedTask(function() {
-            called = true;    
+            called = true;
         });
+
         d.delay(1000);
         d.delay(0);
         waits(50);
-        runs(function(){
+        runs(function() {
             // should fire almost straight away, will still be on a callback though
             // so we need at least some kind of delay
             expect(called).toBe(true);
         });
-    })
+    });
 });

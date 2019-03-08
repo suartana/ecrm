@@ -127,12 +127,13 @@ Ext.define('Ext.util.TaskRunner', {
      */
     timerId: null,
 
-    constructor: function (interval) {
+    constructor: function(interval) {
         var me = this;
 
         if (typeof interval === 'number') {
             me.interval = interval;
-        } else if (interval) {
+        }
+        else if (interval) {
             Ext.apply(me, interval);
         }
 
@@ -149,8 +150,9 @@ Ext.define('Ext.util.TaskRunner', {
      * @return {Ext.util.TaskRunner.Task} 
      * Ext.util.TaskRunner.Task instance, which can be useful for method chaining.
      */
-    newTask: function (config) {
+    newTask: function(config) {
         var task = new Ext.util.TaskRunner.Task(config);
+
         task.manager = this;
 
         //<debug>
@@ -211,7 +213,7 @@ Ext.define('Ext.util.TaskRunner', {
      * @param {Boolean} [task.fireOnStart=false] True to run the task immediately instead of 
      * waiting for the _interval's_ initial pass to call the _run_ function.
      */
-     start: function(task) {
+    start: function(task) {
         var me = this,
             now = Ext.Date.now();
 
@@ -228,7 +230,8 @@ Ext.define('Ext.util.TaskRunner', {
         if (!me.firing) {
             if (task.fireOnStart !== false) {
                 me.startTimer(0, now);
-            } else {
+            }
+            else {
                 me.startTimer(task.interval, now);
             }
         }
@@ -259,6 +262,7 @@ Ext.define('Ext.util.TaskRunner', {
                 task.onStop.call(task.scope || task, task);
             }
         }
+
         if (andRemove) {
             Ext.Array.remove(tasks, task);
         }
@@ -270,6 +274,7 @@ Ext.define('Ext.util.TaskRunner', {
                 pendingCount++;
             }
         }
+
         if (!pendingCount) {
             Ext.undefer(me.timerId);
             me.timerId = null;
@@ -301,7 +306,7 @@ Ext.define('Ext.util.TaskRunner', {
     /**
      * @private
      */
-    onTick: function () {
+    onTick: function() {
         var me = this,
             tasks = me.tasks,
             fireIdleEvent = me.fireIdleEvent, // null by default
@@ -311,7 +316,8 @@ Ext.define('Ext.util.TaskRunner', {
             expires, newTasks, i, task, rt, remove, args;
 
         //<debug>
-        var timer = Ext.Timer.get(me.timerId);
+        var timer = Ext.Timer.get(me.timerId); // eslint-disable-line vars-on-top, one-var
+
         if (timer) {
             timer.tasks = [];
         }
@@ -341,8 +347,10 @@ Ext.define('Ext.util.TaskRunner', {
                     task.taskRunCount++;
 
                     if (task.args) {
-                        args = task.addCountToArgs ? task.args.concat([task.taskRunCount]) : task.args;
-                    } else {
+                        args =
+                            task.addCountToArgs ? task.args.concat([task.taskRunCount]) : task.args;
+                    }
+                    else {
                         args = [task.taskRunCount];
                     }
 
@@ -370,12 +378,15 @@ Ext.define('Ext.util.TaskRunner', {
                                     msg: taskError,
                                     level: 'error'
                                 });
+
                                 // </debug>
                                 if (task.onError) {
                                     rt = task.onError.call(task.scope || task, task, taskError);
                                 }
                             }
-                            catch (ignore) { }
+                            catch (e) {
+                                // ignore
+                            }
                         }
                     //<debug>
                     }
@@ -413,7 +424,8 @@ Ext.define('Ext.util.TaskRunner', {
                     // which get added to me.tasks... so we will visit them in this loop
                     // and account for their expirations in nextExpires...
                 }
-            } else {
+            }
+            else {
                 if (newTasks) {
                     newTasks.push(task); // we've cloned the tasks[], so keep this one...
                 }
@@ -448,12 +460,12 @@ Ext.define('Ext.util.TaskRunner', {
         }
 
         Ext._suppressIdle = !fireIdleEvent;
-   },
+    },
 
-   /**
+    /**
     * @private
     */
-    startTimer: function (timeout, now) {
+    startTimer: function(timeout, now) {
         var me = this,
             expires = now + timeout,
             timerId = me.timerId;
@@ -473,15 +485,15 @@ Ext.define('Ext.util.TaskRunner', {
             me.nextExpires = expires;
 
             //<debug>
-            var timer = Ext.Timer.get(me.timerId);
+            var timer = Ext.Timer.get(me.timerId); // eslint-disable-line vars-on-top
+
             if (timer) {
                 timer.runner = me;
             }
             //</debug>
         }
     }
-},
-function () {
+}, function() {
     var me = this,
         proto = me.prototype;
 
@@ -505,49 +517,49 @@ function () {
          * @private
          */
         stopped: true, // this avoids the odd combination of !stopped && !pending
-
+        
         fireOnStart: false,
-
-        constructor: function (config) {
+        
+        constructor: function(config) {
             Ext.apply(this, config);
         },
-
+        
         /**
          * Restarts this task, clearing it duration, expiration and run count.
          * @param {Number} [interval] Optionally reset this task's interval.
          */
-        restart: function (interval) {
+        restart: function(interval) {
             if (interval !== undefined) {
                 this.interval = interval;
             }
-
+            
             this.manager.start(this);
         },
-
+    
         /**
          * Starts this task if it is not already started.
          * @param {Number} [interval] Optionally reset this task's interval.
          */
-        start: function (interval) {
+        start: function(interval) {
             if (this.stopped) {
                 this.restart(interval);
             }
         },
-
+        
         /**
          * Stops this task.
          */
-        stop: function (andRemove) {
+        stop: function(andRemove) {
             this.manager.stop(this, andRemove);
         },
-
+        
         destroy: function() {
-            this.stop(true)
+            this.stop(true);
         }
     });
 
     proto = me.Task.prototype;
-
+        
     /**
      * Destroys this instance, stopping this task's execution.
      * @method destroy

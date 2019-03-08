@@ -17,18 +17,21 @@ Ext.define('Ext.ux.event.Maker', {
         
         me.currentTiming = me.startAfter;
         
-        if(!Ext.isArray(config)) {
+        if (!Ext.isArray(config)) {
             config = [config];
         }
         
         Ext.Array.each(config, function(item) {
             item.el = item.el || 'el';
+            
             Ext.Array.each(Ext.ComponentQuery.query(item.cmpQuery), function(cmp) {
-                var event = {}, x, y, el;
+                var event = {},
+                    x, y, el;
              
                 if (!item.domQuery) {
                     el = cmp[item.el];
-                } else {
+                }
+                else {
                     el = cmp.el.down(item.domQuery);
                 }
 
@@ -41,7 +44,7 @@ Ext.define('Ext.ux.event.Maker', {
                 x = el.getX() + (el.getWidth() / 2);
                 y = el.getY() + (el.getHeight() / 2);
                 
-                event.xy = [x,y];
+                event.xy = [x, y];
                 
                 event.ts = me.currentTiming;
                 
@@ -54,6 +57,7 @@ Ext.define('Ext.ux.event.Maker', {
                 me.eventQueue[me.eventQueue.length - 1].screenshot = true;
             }
         });
+
         return me.eventQueue;
     }
 });

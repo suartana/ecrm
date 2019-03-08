@@ -1,5 +1,3 @@
-/* global expect, Ext, jasmine, it */
-
 topSuite("Ext.toolbar.Toolbar",
     ['Ext.button.Split', 'Ext.button.Segmented', 'Ext.form.field.Text', 'Ext.form.field.Radio',
      'Ext.slider.Single', 'Ext.layout.container.boxOverflow.Menu'],
@@ -14,11 +12,21 @@ function() {
         }, cfg || {}));
     }
 
-    afterEach(function () {
+    afterEach(function() {
         Ext.destroy(toolbar);
         toolbar = null;
     });
     
+    describe("alternate class name", function() {
+        it("should have Ext.Toolbar as the alternate class name", function() {
+            expect(Ext.toolbar.Toolbar.prototype.alternateClassName).toEqual("Ext.Toolbar");
+        });
+
+        it("should allow the use of Ext.Toolbar", function() {
+            expect(Ext.Toolbar).toBeDefined();
+        });
+    });
+
     it("should default to using a hbox layout", function() {
         createToolbar();
         expect(toolbar.getLayout() instanceof Ext.layout.container.HBox);
@@ -32,7 +40,7 @@ function() {
             }
         });
 
-        expect(function(){
+        expect(function() {
             toolbar.setLayout({
                 type: 'box',
                 vertical: true
@@ -40,9 +48,9 @@ function() {
         }).not.toThrow();
     });
 
-    describe('overflow', function () {
-        describe('when enableOverflow is false', function () {
-            it('should not create a menu', function () {
+    describe('overflow', function() {
+        describe('when enableOverflow is false', function() {
+            it('should not create a menu', function() {
                 // false is the default value.
                 createToolbar({
                     enableOverflow: false
@@ -51,15 +59,15 @@ function() {
             });
         });
 
-        describe('when enableOverflow is true', function () {
-            it('should create an overflow menu', function () {
+        describe('when enableOverflow is true', function() {
+            it('should create an overflow menu', function() {
                 createToolbar({
                     enableOverflow: true
                 });
                 expect(toolbar.layout.overflowHandler.menu).toBeDefined();
             });
 
-            it('should create an overflow menu with type "menu"', function () {
+            it('should create an overflow menu with type "menu"', function() {
                 createToolbar({
                     enableOverflow: true
                 });
@@ -70,16 +78,17 @@ function() {
         describe('overflow item values', function() {
             it('should sync the values between master and clone fields', function() {
                 var menu, barfield, menufield;
+
                 createToolbar({
                     enableOverflow: true,
                     width: 100,
-                    items : [{
-                        text : 'Foo'
-                    },{
-                        text : 'Bar'
-                    },{
-                        text : 'Test'
-                    },{
+                    items: [{
+                        text: 'Foo'
+                    }, {
+                        text: 'Bar'
+                    }, {
+                        text: 'Test'
+                    }, {
                         xtype: 'textfield'
                     }]
                 });
@@ -96,18 +105,19 @@ function() {
 
             it('should sync the radio field value master and clone when master has been checked', function() {
                 var menu, barfield, menufield;
+
                 createToolbar({
                     enableOverflow: true,
                     width: 100,
-                    items : [{
-                        text : 'Foo'
-                    },{
-                        text : 'Bar'
-                    },{
-                        text : 'Test'
-                    },{
+                    items: [{
+                        text: 'Foo'
+                    }, {
+                        text: 'Bar'
+                    }, {
+                        text: 'Test'
+                    }, {
                         xtype: 'radio',
-                        name : 'foo'
+                        name: 'foo'
                     }]
                 });
                 menu = toolbar.layout.overflowHandler.menu;
@@ -123,18 +133,19 @@ function() {
 
             it('should sync the radio field value master and clone when clone has been clicked', function() {
                 var menu, barfield, menufield;
+
                 createToolbar({
                     enableOverflow: true,
                     width: 100,
-                    items : [{
-                        text : 'Foo'
-                    },{
-                        text : 'Bar'
-                    },{
-                        text : 'Test'
-                    },{
+                    items: [{
+                        text: 'Foo'
+                    }, {
+                        text: 'Bar'
+                    }, {
+                        text: 'Test'
+                    }, {
                         xtype: 'radio',
-                        name : 'foo'
+                        name: 'foo'
                     }]
                 });
                 menu = toolbar.layout.overflowHandler.menu;
@@ -153,19 +164,20 @@ function() {
 
             it('should be able to check and uncheck Checkboxes', function() {
                 var menu, barfield, menufield;
+
                 createToolbar({
                     enableOverflow: true,
                     width: 100,
                     defaults: {
                         xtype: 'checkbox'
                     },
-                    items : [{
-                        boxLabel : 'Foo'
-                    },{
-                        boxLabel : 'Bar'
-                    },{
-                        boxLabel : 'Test'
-                    },{
+                    items: [{
+                        boxLabel: 'Foo'
+                    }, {
+                        boxLabel: 'Bar'
+                    }, {
+                        boxLabel: 'Test'
+                    }, {
                         boxLabel: 'Sencha'
                     }]
                 });

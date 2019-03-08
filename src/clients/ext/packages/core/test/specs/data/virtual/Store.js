@@ -22,14 +22,14 @@ topSuite("Ext.data.virtual.Store", function() {
         delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
         delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
         jasmine.CAPTURE_CALL_STACK = oldJasmineCaptureStack;
-        Ext.timer.captureStack = oldTimerCaptureStack;
+        Ext.Timer.captureStack = oldTimerCaptureStack;
     });
 
     function getLatestOperation() {
         return proxySpy.mostRecentCall.args[0];
     }
 
-    function makeData (count, base) {
+    function makeData(count, base) {
         var data = [],
             i;
 
@@ -67,7 +67,7 @@ topSuite("Ext.data.virtual.Store", function() {
         range = store.createActiveRange(cfg);
     }
 
-    function completeWithData (data, extraData) {
+    function completeWithData(data, extraData) {
         Ext.Ajax.mockCompleteWithData(Ext.apply({
             total: total,
             data: data
@@ -85,6 +85,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
     function expectAborted(spyCall) {
         var op = spyCall.args[0];
+
         expect(op.wasSuccessful()).toBe(false);
         expect(op.getError().statusText).toBe('transaction aborted');
     }
@@ -106,6 +107,7 @@ topSuite("Ext.data.virtual.Store", function() {
         if (reverse) {
             data.reverse();
         }
+
         return data;
     }
 
@@ -114,6 +116,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
         for (var i = 0; i < n; ++i) {
             completeOperation(proxySpy.mostRecentCall.args[0], extraData);
+
             if (i !== n - 1) {
                 flushNextLoad();
             }
@@ -126,6 +129,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
     function flushAllLoads() {
         flushNextLoad();
+
         while (Ext.Ajax.mockGetAllRequests().length) {
             completeLatest();
         }
@@ -165,6 +169,7 @@ topSuite("Ext.data.virtual.Store", function() {
     describe("reload", function() {
         function expectLoad(spyCall, page) {
             var op = spyCall.args[0];
+
             expect(op.getPage()).toBe(page);
         }
 
@@ -236,6 +241,7 @@ topSuite("Ext.data.virtual.Store", function() {
                     store.reload();
                     flushAllLoads();
                     expect(proxySpy.callCount).toBe(4);
+
                     for (var i = 0; i < 4; ++i) {
                         expectLoad(proxySpy.calls[i], i + 193);
                     }
@@ -344,6 +350,7 @@ topSuite("Ext.data.virtual.Store", function() {
                     store.reload();
                     flushAllLoads();
                     expect(proxySpy.callCount).toBe(4);
+
                     for (var i = 0; i < 4; ++i) {
                         expectLoad(proxySpy.calls[i], i + 5);
                     }
@@ -412,6 +419,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
             expect(spy.callCount).toBe(1);
             var args = spy.mostRecentCall.args;
+
             expect(args[0]).toBe(store);
             expect(args[1]).toBe(total);
             expect(args[2]).toBeNull();
@@ -441,12 +449,14 @@ topSuite("Ext.data.virtual.Store", function() {
             spy.reset();
 
             var oldTotal = total;
+
             total = 2500;
             range.goto(200, 350);
             flushNextLoad();
             completeLatest();
             expect(spy.callCount).toBe(1);
             var args = spy.mostRecentCall.args;
+
             expect(args[0]).toBe(store);
             expect(args[1]).toBe(total);
             expect(args[2]).toBe(oldTotal);
@@ -459,6 +469,7 @@ topSuite("Ext.data.virtual.Store", function() {
         describe("configuring", function() {
             it("should not fire an event if configured with a filter", function() {
                 var spy = jasmine.createSpy();
+
                 makeStore({
                     filters: [{
                         property: 'id',
@@ -504,6 +515,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var s = getLatestOperation().getFilters();
+
                 expect(s.length).toBe(1);
                 expect(s[0].serialize()).toEqual({
                     property: 'id',
@@ -518,9 +530,11 @@ topSuite("Ext.data.virtual.Store", function() {
                     f = op.getFilters();
 
                 expect(op.getPage()).toBe(page);
+                
                 if (!filter) {
                     expect(f.length).toBe(0);
-                } else {
+                }
+                else {
                     expect(f[0].serialize()).toEqual(filter);
                 }
             }
@@ -931,6 +945,7 @@ topSuite("Ext.data.virtual.Store", function() {
         describe("configuring", function() {
             it("should not fire an event if configured with a sort", function() {
                 var spy = jasmine.createSpy();
+
                 makeStore({
                     sorters: [{
                         property: 'id'
@@ -971,6 +986,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var s = getLatestOperation().getSorters();
+
                 expect(s.length).toBe(1);
                 expect(s[0].serialize()).toEqual({
                     property: 'id',
@@ -990,6 +1006,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var s = getLatestOperation().getSorters();
+
                 expect(s.length).toBe(1);
                 expect(s[0].serialize()).toEqual({
                     property: 'id',
@@ -1008,9 +1025,11 @@ topSuite("Ext.data.virtual.Store", function() {
                     s = op.getSorters();
 
                 expect(op.getPage()).toBe(page);
+                
                 if (!sorter) {
                     expect(s.length).toBe(0);
-                } else {
+                }
+                else {
                     expect(s[0].serialize()).toEqual(sorter);
                 }
             }
@@ -1050,6 +1069,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
                     it("should fire the sort event immediately", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('sort', spy);
 
                         makeRange();
@@ -1073,6 +1093,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
                     it("should fire the reload event", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('reload', spy);
 
                         makeRange();
@@ -1485,9 +1506,11 @@ topSuite("Ext.data.virtual.Store", function() {
 
             for (i = 0; i < total; ++i) {
                 id = i + 1;
+
                 if (id >= groupOffsets[groupIdx]) {
                     ++groupIdx;
                 }
+
                 groupMap[id] = 'g' + Ext.String.leftPad(groupIdx + 1, 2, '0');
             }
         }
@@ -1520,6 +1543,7 @@ topSuite("Ext.data.virtual.Store", function() {
         describe("configuring", function() {
             it("should not fire an event if configured with a grouper", function() {
                 var spy = jasmine.createSpy();
+
                 makeStore({
                     groupField: 'group',
                     listeners: {
@@ -1549,6 +1573,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var g = getLatestOperation().getGrouper();
+
                 expect(g.serialize()).toEqual({
                     property: 'group',
                     direction: 'ASC'
@@ -1567,6 +1592,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var g = getLatestOperation().getGrouper();
+
                 expect(g.serialize()).toEqual({
                     property: 'group',
                     direction: 'DESC'
@@ -1583,9 +1609,11 @@ topSuite("Ext.data.virtual.Store", function() {
                 var op = spyCall.args[0];
 
                 expect(op.getPage()).toBe(page);
+                
                 if (grouper) {
                     expect(op.getGrouper().serialize()).toEqual(grouper);
-                } else {
+                }
+                else {
                     expect(op.getGrouper()).toBeNull();
                 }
             }
@@ -1625,6 +1653,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
                     it("should fire the groupchange event immediately", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('groupchange', spy);
 
                         makeRange();
@@ -1648,6 +1677,7 @@ topSuite("Ext.data.virtual.Store", function() {
 
                     it("should fire the reload event", function() {
                         var spy = jasmine.createSpy();
+
                         store.on('reload', spy);
 
                         makeRange();
@@ -2085,10 +2115,12 @@ topSuite("Ext.data.virtual.Store", function() {
                 makeRange();
                 range.goto(0, pageSize);
                 flushAllLoads();
+
                 for (var i = 1; i <= size; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
                 }
+
                 // Cache full, but not overflowed, should have 1 single page left
                 expect(store.getGroups().get('g01')).not.toBeNull();
 
@@ -2180,9 +2212,11 @@ topSuite("Ext.data.virtual.Store", function() {
 
                 for (i = 0; i < total; ++i) {
                     id = i + 1;
+
                     if (id >= groupOffsets[groupIdx]) {
                         ++groupIdx;
                     }
+
                     groupMap[id] = 'g' + Ext.String.leftPad(groupIdx + 1, 2, '0');
                 }
             }
@@ -2221,6 +2255,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord()).toBeNull();
                 expect(groups.get('g02').getSummaryRecord()).toBeNull();
             });
@@ -2235,6 +2270,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord().get('rate')).toBe(1234);
                 expect(groups.get('g02').getSummaryRecord()).toBeNull();
             });
@@ -2249,6 +2285,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord().get('rate')).toBe(1234);
                 expect(groups.get('g02').getSummaryRecord()).toBeNull();
 
@@ -2275,6 +2312,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord().get('rate')).toBe(1111);
                 expect(groups.get('g02').getSummaryRecord().get('rate')).toBe(2222);
                 expect(groups.get('g03')).toBeUndefined();
@@ -2305,6 +2343,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord()).toBeNull();
                 expect(groups.get('g02').getSummaryRecord().get('rate')).toBe(2222);
 
@@ -2329,6 +2368,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
 
                 var groups = store.getGroups();
+
                 expect(groups.get('g01').getSummaryRecord().get('rate')).toBe(1111);
                 expect(groups.get('g02').getSummaryRecord().get('rate')).toBe(2222);
 
@@ -2353,10 +2393,12 @@ topSuite("Ext.data.virtual.Store", function() {
                         { group: 'g01', rate: 1111 }
                     ]
                 });
+
                 for (var i = 1; i <= size; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
                 }
+
                 // Cache full, but not overflowed, should have 1 single page left
                 expect(store.getGroups().get('g01').getSummaryRecord().get('rate')).toBe(1111);
 
@@ -2396,7 +2438,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushNextLoad();
                 expect(store.getSummaryRecord()).toBeNull();
                 completeLatest(1, {
-                    summary: { rate : 100 }
+                    summary: { rate: 100 }
                 });
                 expect(store.getSummaryRecord().get('rate')).toBe(100);
                 completeLatest(1, {
@@ -2419,7 +2461,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushNextLoad();
                 expect(store.getSummaryRecord()).toBeNull();
                 completeLatest(1, {
-                    summary: { rate : 100 }
+                    summary: { rate: 100 }
                 });
                 expect(store.getSummaryRecord().get('rate')).toBe(100);
                 completeLatest();
@@ -2478,7 +2520,9 @@ topSuite("Ext.data.virtual.Store", function() {
                 for (var i = 150; i < 250; ++i) {
                     expect(store.getAt(i)).toBeNull();
                 }
+
                 flushAllLoads();
+
                 for (i = 150; i < 250; ++i) {
                     expect(store.getAt(i).id).toBe(i + 1);
                 }
@@ -2532,7 +2576,9 @@ topSuite("Ext.data.virtual.Store", function() {
                 for (var i = 151; i < 251; ++i) {
                     expect(store.getById(i)).toBeNull();
                 }
+
                 flushAllLoads();
+
                 for (i = 151; i < 251; ++i) {
                     expect(store.getById(i).id).toBe(i);
                 }
@@ -2574,19 +2620,21 @@ topSuite("Ext.data.virtual.Store", function() {
                 flushAllLoads();
 
                 for (var i = 0; i < 100; ++i) {
-                    expect(store.indexOf(new M({ id: i + 1}))).toBe(-1);
+                    expect(store.indexOf(new M({ id: i + 1 }))).toBe(-1);
                 }
 
                 for (i = 450; i < 1000; ++i) {
-                    expect(store.indexOf(new M({ id: i + 1}))).toBe(-1);
+                    expect(store.indexOf(new M({ id: i + 1 }))).toBe(-1);
                 }
             });
 
             it("should return null for not-yet loaded records", function() {
                 for (var i = 150; i < 250; ++i) {
-                    expect(store.indexOf(new M({ id: i + 1}))).toBe(-1);
+                    expect(store.indexOf(new M({ id: i + 1 }))).toBe(-1);
                 }
+
                 flushAllLoads();
+
                 for (i = 150; i < 250; ++i) {
                     expect(store.indexOf(store.getAt(i))).toBe(i);
                 }
@@ -2640,7 +2688,9 @@ topSuite("Ext.data.virtual.Store", function() {
                 for (var i = 151; i < 251; ++i) {
                     expect(store.indexOfId(i)).toBe(-1);
                 }
+
                 flushAllLoads();
+
                 for (i = 151; i < 251; ++i) {
                     expect(store.indexOfId(i)).toBe(i - 1);
                 }

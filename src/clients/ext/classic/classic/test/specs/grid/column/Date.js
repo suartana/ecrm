@@ -10,6 +10,7 @@ topSuite("Ext.grid.column.Date", ['Ext.grid.Panel'], function() {
     
     function getCellText(rowIdx, colIdx) {
         var cell = getCell(rowIdx, colIdx);
+
         return cell.querySelector(grid.getView().innerSelector).innerHTML;
     }
     
@@ -28,7 +29,7 @@ topSuite("Ext.grid.column.Date", ['Ext.grid.Panel'], function() {
                 format: 'Y-m-d',
                 text: 'Col',
                 dataIndex: 'field',
-                flex: 1    
+                flex: 1
             }],
             width: 400,
             height: 100,
@@ -48,7 +49,7 @@ topSuite("Ext.grid.column.Date", ['Ext.grid.Panel'], function() {
         });
     });
     
-    afterEach(function(){
+    afterEach(function() {
         Ext.destroy(grid, store);
         colRef = store = grid = null;
         Ext.undefine('spec.TestModel');
@@ -59,9 +60,11 @@ topSuite("Ext.grid.column.Date", ['Ext.grid.Panel'], function() {
         it("should render render non-date values", function() {
             makeGrid(null);
             var text = getCellText(0, 0);
+
             if (text === '&nbsp;') {
-                text = '&#160;'
+                text = '&#160;';
             }
+
             expect(text).toBe('&#160;');
         });
         

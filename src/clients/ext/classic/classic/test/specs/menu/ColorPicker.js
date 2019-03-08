@@ -15,6 +15,7 @@ topSuite("Ext.menu.ColorPicker", function() {
         if (menu) {
             menu.destroy();
         }
+
         menu = null;
     });
 
@@ -63,8 +64,9 @@ topSuite("Ext.menu.ColorPicker", function() {
         });
 
         describe('clicking', function() {
-            it('should select a color', function () {
+            it('should select a color', function() {
                 var el = menu.picker.el.down('a.color-000000');
+
                 Ext.testHelper.tap(el);
                 expect(menu.picker.value).toBe('000000');
                 el.destroy();

@@ -1,10 +1,9 @@
-/* global expect, Ext, jasmine */
-
 topSuite("Ext.ZIndexManager",
     ['Ext.window.*', 'Ext.grid.Panel', 'Ext.form.field.*', 'Ext.Button', 'Ext.grid.plugin.CellEditing'],
 function() {
     function cancelFocus() {
         var task = Ext.focusTask;
+
         if (task) {
             task.cancel();
         }
@@ -177,6 +176,7 @@ function() {
                 floating: true,
                 html: 'Foo'
             });
+
             c.show();
             expect(c.getEl().getZIndex()).toBe(Ext.WindowManager.zseed);
             c.destroy();
@@ -190,7 +190,7 @@ function() {
             expect(c4.zIndexManager.mask.getZIndex()).toBeLessThan(c4.el.getZIndex());
         });
 
-        it('should maintain stacking order upon close os topmost window', function() {
+        (Ext.supports.Touch ? xit : it)('should maintain stacking order upon close os topmost window', function() {
             c1.showAt(0, 0);
             c2.showAt(20, 20);
             c3.showAt(40, 40);
@@ -421,16 +421,19 @@ function() {
                 height: 100,
                 autoShow: true
             });
+
             var b = new Ext.window.Window({
                 width: 100,
                 height: 100,
                 autoShow: true
             });
+
             var c = new Ext.window.Window({
                 width: 100,
                 height: 100,
                 autoShow: true
             });
+
             a.hide();
             expect(a.isVisible()).toBe(false);
             expect(b.isVisible()).toBe(true);
@@ -457,11 +460,13 @@ function() {
                 height: 100,
                 autoShow: true
             });
+
             var b = new Ext.window.Window({
                 width: 100,
                 height: 100,
                 autoShow: true
             });
+
             var c = new Ext.window.Window({
                 width: 100,
                 height: 100,
@@ -482,11 +487,13 @@ function() {
                 height: 100,
                 autoShow: true
             });
+
             var b = new Ext.window.Window({
                 width: 100,
                 height: 100,
                 autoShow: true
             });
+
             var c = new Ext.window.Window({
                 width: 100,
                 height: 100,
@@ -507,11 +514,13 @@ function() {
                 height: 100,
                 autoShow: true
             });
+
             var b = new Ext.window.Window({
                 width: 100,
                 height: 100,
                 autoShow: true
             });
+
             var c = new Ext.window.Window({
                 width: 100,
                 height: 100,
@@ -524,6 +533,7 @@ function() {
             expect(c.isVisible()).toBe(false);
 
             var mask = a.zIndexManager.mask;
+
             expect(mask.isVisible()).toBe(false);
 
             var d = new Ext.window.Window({
@@ -544,26 +554,27 @@ function() {
     // testcase for grid in a modal windows showing MessageBox on edit
     describe("Grid with modal windows and MessageBox", function() {
         var win, grid, cell, plugin;
+
         beforeEach(function() {
             win = new Ext.window.Window({
-                items : [{
-                    xtype   : 'grid',
-                    columns : [{
-                        dataIndex : 'f1',
-                        editor    : {}
+                items: [{
+                    xtype: 'grid',
+                    columns: [{
+                        dataIndex: 'f1',
+                        editor: {}
                     }],
-                    store   : {
-                        data   : [{ 
-                            f1 : 'edit me' 
+                    store: {
+                        data: [{
+                            f1: 'edit me'
                         }]
                     },
-                    plugins : {
-                        ptype : 'cellediting'
+                    plugins: {
+                        ptype: 'cellediting'
                     }
                 }],
-                width  : 400,
-                height : 130,
-                modal  : true
+                width: 400,
+                height: 130,
+                modal: true
             }).show();
 
             grid = win.down('grid');
@@ -590,7 +601,7 @@ function() {
 
             waitsForFocus(plugin.activeEditor.field, 'plugin to edit');
 
-            runs(function(){
+            runs(function() {
                 jasmine.fireKeyEvent(Ext.Element.getActiveElement(), 'keydown', Ext.event.Event.ENTER);
             });
 
@@ -625,8 +636,8 @@ function() {
                 window = new Ext.window.Window({
                     autoShow: true,
                     title: 'Test',
-                    x:200,
-                    y:0,
+                    x: 200,
+                    y: 0,
                     width: 400,
                     height: 400,
                     items: [
@@ -639,6 +650,7 @@ function() {
                         })
                     ]
                 });
+
             dateField.getPicker().setAlwaysOnTop(-1);
 
             // The combo dropdown should be below the window
@@ -674,6 +686,7 @@ function() {
                 height: 100,
                 autoShow: true
             });
+
             expect(Ext.WindowManager.bringToFront('theWin')).toBe(false);
             win.destroy();
         });
@@ -920,24 +933,24 @@ function() {
         });
     });
     
-    describe("Menu with modal window and MessageBox", function () {
-        it("should render the menu after the MessageBox has been closed", function () {
+    describe("Menu with modal window and MessageBox", function() {
+        it("should render the menu after the MessageBox has been closed", function() {
             var container = Ext.create('Ext.Container', {
                     items: [{
                         xtype: 'button',
                         itemId: 'menu-button',
                         text: 'Menu',
                         menu: {
-                            xtype : 'menu',
-                            items : [{
-                                text : 'Foo'
+                            xtype: 'menu',
+                            items: [{
+                                text: 'Foo'
                             }]
                         }
                     }, {
                         xtype: 'button',
                         itemId: 'modal-button',
                         text: 'Open modal',
-                        handler: function () {
+                        handler: function() {
                             msg = Ext.Msg.alert('Foo', 'Bar');
                         }
                     }],
@@ -959,17 +972,18 @@ function() {
             
             // click the menu to expand and then button to display the MessageBox,
             // then click the first visible button to close
-            runs(function () {
+            runs(function() {
                 jasmine.fireMouseEvent(menuBtn.el, 'click');
                 jasmine.fireMouseEvent(modalBtn.el, 'click');
                 
-                var btn = Ext.Array.findBy(msg.msgButtons, function (btn) { return btn.isVisible(); });
+                var btn = Ext.Array.findBy(msg.msgButtons, function(btn) { return btn.isVisible(); });
+
                 jasmine.fireMouseEvent(btn.el, 'click');
             });
             waits(500);
             
             // clicking the menu again should make it visible in the stack
-            runs(function () {
+            runs(function() {
                 jasmine.fireMouseEvent(menuBtn.el, 'click');
                 expect(menuBtn.menu.isVisible()).toBe(true);
                 

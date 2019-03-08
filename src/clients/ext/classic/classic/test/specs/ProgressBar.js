@@ -168,13 +168,14 @@ topSuite("Ext.ProgressBar", function() {
                 return c.text !== 'Foo...';
             }, 'callback text', 2000);
 
-            runs(function (){
+            runs(function() {
                 expect(c.text).toBe('Bar');
             });
         });
 
         it("should display %age if no text has been specified", function() {
-            var innerHtml; 
+            var innerHtml;
+            
             c.wait({
                 interval: 100,
                 duration: 1000
@@ -182,6 +183,7 @@ topSuite("Ext.ProgressBar", function() {
 
             waitsFor(function() {
                 innerHtml = c && c.textEl && c.textEl.elements[1].innerHTML;
+                
                 return innerHtml.length;
             });
 

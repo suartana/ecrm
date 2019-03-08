@@ -457,7 +457,7 @@ topSuite("Ext.SplitButton", function() {
         });
     });
 
-    describe("with arrowHandler", function() {
+    (Ext.os.is.iOS || Ext.os.is.Android ? xdescribe : describe)("with arrowHandler", function() {
         var pressKey = jasmine.pressKey,
             clickSpy, enterSpy, downSpy, handlerSpy, fooItem;
 
@@ -481,7 +481,6 @@ topSuite("Ext.SplitButton", function() {
             fooItem = button.getMenu().getItems().getAt(0);
         });
         
-        TODO(Ext.os.is.iOS || Ext.os.is.Android).
         it("should fire the handler on Space key", function() {
             jasmine.fireKeyEvent(button.splitArrowCoverElement, 'click', 'space');
 

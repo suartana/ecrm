@@ -36,7 +36,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
         }
     },
 
-    getElementId: function(element){
+    getElementId: function(element) {
         // usually when the element is destroyed the getId function is nullified
         return element.getId ? element.getId() : element.id;
     },
@@ -66,7 +66,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
         if (isReplaced || (!isInterrupted && !data.preserveEndState)) {
             toPropertyNames = data.toPropertyNames;
 
-            for (i = 0,ln = toPropertyNames.length; i < ln; i++) {
+            for (i = 0, ln = toPropertyNames.length; i < ln; i++) {
                 name = toPropertyNames[i];
 
                 if (runningNameMap && !runningNameMap.hasOwnProperty(name)) {
@@ -115,24 +115,25 @@ Ext.define('Ext.fx.runner.CssTransition', {
         var id = this.getElementId(element),
             runningAnimationsData = this.runningAnimationsData;
 
-        return runningAnimationsData.hasOwnProperty(id) && runningAnimationsData[id].sessions.length > 0;
+        return runningAnimationsData.hasOwnProperty(id) &&
+               runningAnimationsData[id].sessions.length > 0;
     },
 
     refreshRunningAnimationsData: function(element, propertyNames, interrupt, replace) {
         var id = this.getElementId(element),
             runningAnimationsData = this.runningAnimationsData,
-            runningData = runningAnimationsData[id];
+            runningData = runningAnimationsData[id],
+            hasCompletedSession = false,
+            nameMap, nameList, sessions, name, session, map, list,
+            i, ln, j, subLn;
 
         if (!runningData) {
             return;
         }
 
-        var nameMap = runningData.nameMap,
-            nameList = runningData.nameList,
-            sessions = runningData.sessions,
-            ln, j, subLn, name,
-            i, session, map, list,
-            hasCompletedSession = false;
+        nameMap = runningData.nameMap;
+        nameList = runningData.nameList;
+        sessions = runningData.sessions;
 
         interrupt = Boolean(interrupt);
         replace = Boolean(replace);
@@ -164,21 +165,22 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 map = session.map;
                 list = session.list;
 
-                for (j = 0,subLn = propertyNames.length; j < subLn; j++) {
+                for (j = 0, subLn = propertyNames.length; j < subLn; j++) {
                     name = propertyNames[j];
 
                     if (map[name]) {
                         delete map[name];
                         Ext.Array.remove(list, name);
                         session.length--;
-                        if (--nameMap[name] == 0) {
+                        
+                        if (--nameMap[name] === 0) {
                             delete nameMap[name];
                             Ext.Array.remove(nameList, name);
                         }
                     }
                 }
 
-                if (session.length == 0) {
+                if (session.length === 0) {
                     sessions.splice(i, 1);
                     i--;
                     ln--;
@@ -189,7 +191,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             }
         }
 
-        if (!replace && !interrupt && sessions.length == 0 && hasCompletedSession) {
+        if (!replace && !interrupt && sessions.length === 0 && hasCompletedSession) {
             this.onAllAnimationsEnd(element);
         }
     },
@@ -221,15 +223,20 @@ Ext.define('Ext.fx.runner.CssTransition', {
             if (testElement.ownerDocument.defaultView !== iframe.contentWindow) {
                 iframeDocument = iframe.contentDocument;
                 iframeDocument.body.appendChild(testElement);
+                
+                // eslint-disable-next-line max-len
                 me.testElementComputedStyle = iframeDocument.defaultView.getComputedStyle(testElement);
             }
-        } else {
+        }
+        else {
             iframe = me.iframe = document.createElement('iframe');
+            
             //<debug>
             // Set an attribute that tells the test runner to ignore this node when checking
             // for dom cleanup
             iframe.setAttribute('data-sticky', true);
             //</debug>
+            
             iframe.setAttribute('tabIndex', -1);
             iframeStyle = iframe.style;
             iframeStyle.setProperty('visibility', 'hidden', 'important');
@@ -249,6 +256,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             me.testElement = testElement = iframeDocument.createElement('div');
             testElement.style.setProperty('position', 'absolute', 'important');
             iframeDocument.body.appendChild(testElement);
+            
             me.testElementComputedStyle = iframeDocument.defaultView.getComputedStyle(testElement);
         }
 
@@ -263,7 +271,8 @@ Ext.define('Ext.fx.runner.CssTransition', {
         style.setProperty(name, value);
 
         if (Ext.browser.is.Firefox) {
-            // We force a repaint of the element in Firefox to make sure the computedStyle to be updated
+            // We force a repaint of the element in Firefox to make sure the computedStyle
+            // to be updated
             testElement.offsetHeight;
         }
 
@@ -313,6 +322,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             data[elementId] = data = Ext.merge({}, animation.getData());
 
             onBeforeStart = animation.getOnBeforeStart();
+            
             if (onBeforeStart) {
                 onBeforeStart.call(animation.scope || me, element);
             }
@@ -342,7 +352,8 @@ Ext.define('Ext.fx.runner.CssTransition', {
                         from[name] = fromFormattedValue = me.formatValue(from[name], name);
 
                         if (!isLengthProperty) {
-                            fromFormattedValue = me.getCssStyleValue(formattedName, fromFormattedValue);
+                            fromFormattedValue = me.getCssStyleValue(formattedName,
+                                                                     fromFormattedValue);
                         }
 
                         if (toFormattedValue !== fromFormattedValue) {
@@ -364,6 +375,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
             if (propertiesLength === 0) {
                 me.onAnimationEnd(element, data, animation);
+                
                 continue;
             }
 
@@ -372,7 +384,8 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
             if (runningSessions.length > 0) {
                 me.refreshRunningAnimationsData(
-                    element, Ext.Array.merge(fromPropertyNames, toPropertyNames), true, data.replacePrevious
+                    element, Ext.Array.merge(fromPropertyNames, toPropertyNames), true,
+                    data.replacePrevious
                 );
             }
 
@@ -380,6 +393,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             runningNameList = runningData.nameList;
 
             sessionNameMap = {};
+            
             for (j = 0; j < propertiesLength; j++) {
                 name = toPropertyNames[j];
                 sessionNameMap[name] = true;
@@ -401,6 +415,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 data: data,
                 animation: animation
             };
+            
             runningSessions.push(runningSession);
 
             animation.on('stop', 'onAnimationStop', me);
@@ -426,6 +441,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
             animation.startTime = Date.now();
         }
+        
         me.activeElement = null;
 
         message = me.$className;
@@ -447,11 +463,12 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 
                 if (Ext.isIE) {
                     // https://sencha.jira.com/browse/EXTJS-22362
-                    // In some cases IE will fail to animate if the "to" and "transition" styles are added
-                    // simultaneously.  That is the reason for the multi-delay below.  The first one
-                    // defines the transition parameters ('transition-property', 'transition-delay' etc)
-                    // and the second delay sets the values of the animating properties, or, the "to"
-                    // properties.  The second delay is what actually starts the animation.
+                    // In some cases IE will fail to animate if the "to" and "transition" styles
+                    // are added simultaneously. That is the reason for the multi-delay below.
+                    // The first one defines the transition parameters ('transition-property',
+                    // 'transition-delay' etc) and the second delay sets the values of the
+                    // animating properties, or, the "to" properties. The second delay
+                    // is what actually starts the animation.
                     me.applyStyles(me.transitionQueue.transitionData);
                     
                     if (!me.messageFollowupId) {
@@ -467,14 +484,14 @@ Ext.define('Ext.fx.runner.CssTransition', {
                         
                         me.messageFollowupId = Ext.raf(messageFollowupFn);
                     }
-                 }
-                 else {
+                }
+                else {
                     // In non-IE browsers the above approach can cause a flicker,
                     // so in these browsers we apply all the styles at the same time.
                     Ext.merge(me.transitionQueue.toData, me.transitionQueue.transitionData);
                     window.addEventListener('message', doApplyTo, false);
                     window.postMessage(message, '*');
-                 }
+                }
             };
             
             //<debug>
@@ -507,7 +524,9 @@ Ext.define('Ext.fx.runner.CssTransition', {
                     session = sessions[i];
                     
                     if (session.animation === animation) {
-                        me.refreshRunningAnimationsData(session.element, session.list.slice(), false);
+                        me.refreshRunningAnimationsData(session.element, session.list.slice(),
+                                                        false);
+                        
                         if (animation.destroying) {
                             stoppedAnimations++;
                         }
@@ -526,6 +545,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 Ext.unraf(me.messageTimerId);
                 me.messageTimerId = null;
             }
+            
             Ext.apply(me.transitionQueue, {
                 toData: {},
                 transitionData: {}

@@ -25,10 +25,10 @@ topSuite("Ext.data.virtual.Range", [
         delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
         delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
         jasmine.CAPTURE_CALL_STACK = oldJasmineCaptureStack;
-        Ext.timer.captureStack = oldTimerCaptureStack;
+        Ext.Timer.captureStack = oldTimerCaptureStack;
     });
 
-    function completeWithData (data, theTotal) {
+    function completeWithData(data, theTotal) {
         Ext.Ajax.mockCompleteWithData({
             total: theTotal === undefined ? total : theTotal,
             data: data
@@ -39,7 +39,7 @@ topSuite("Ext.data.virtual.Range", [
         completeWithData(makeDataForOperation(op));
     }
 
-    function makeData (count, base) {
+    function makeData(count, base) {
         var data = [],
             i;
 
@@ -61,7 +61,7 @@ topSuite("Ext.data.virtual.Range", [
         return makeData(limit, start);
     }
 
-    function makeStore (cfg) {
+    function makeStore(cfg) {
         store = new Ext.data.virtual.Store(Ext.apply({
             model: Model,
             pageSize: pageSize,
@@ -84,6 +84,7 @@ topSuite("Ext.data.virtual.Range", [
 
         for (var i = 0; i < n; ++i) {
             completeOperation(proxySpy.mostRecentCall.args[0]);
+
             if (i !== n - 1) {
                 flushNextLoad();
             }
@@ -100,6 +101,7 @@ topSuite("Ext.data.virtual.Range", [
 
     function flushAllLoads() {
         flushNextLoad();
+
         while (Ext.Ajax.mockGetAllRequests().length) {
             completeLatest();
         }
@@ -108,6 +110,7 @@ topSuite("Ext.data.virtual.Range", [
     function expectCallbacks(ranges) {
         expect(Ext.Array.map(callbackSpy.calls, function(call) {
             var args = call.args;
+
             return [args[1], args[2]];
         })).toEqual(ranges);
     }
@@ -170,7 +173,7 @@ topSuite("Ext.data.virtual.Range", [
         return pages;
     }
 
-    beforeEach(function () {
+    beforeEach(function() {
         total = 100000;
         pageSize = 25;
 
@@ -832,6 +835,7 @@ topSuite("Ext.data.virtual.Range", [
 
                     it("should use a passed scope", function() {
                         var scope = {};
+
                         makeRange({
                             scope: scope
                         });
@@ -846,6 +850,7 @@ topSuite("Ext.data.virtual.Range", [
                         var scope = {
                             theCallback: callbackSpy
                         };
+
                         makeRange({
                             callback: 'theCallback',
                             scope: scope
@@ -884,10 +889,12 @@ topSuite("Ext.data.virtual.Range", [
                 makeRange();
                 range.goto(0, 225);
                 flushNextLoad();
+
                 for (var i = 0; i < 8; ++i) {
                     expect(Ext.Ajax.mockGetAllRequests().length).toBe(2);
                     completeCall(i);
                 }
+
                 // Final request
                 expect(Ext.Ajax.mockGetAllRequests().length).toBe(1);
                 completeLatest();
@@ -930,10 +937,12 @@ topSuite("Ext.data.virtual.Range", [
                 makeRange();
                 range.goto(0, 25);
                 flushAllLoads();
+
                 for (var i = 1; i <= size + 1; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
                 }
+
                 proxySpy.reset();
                 // Page 0 should not exist in the cache
                 range.goto(0, 25);
@@ -945,6 +954,7 @@ topSuite("Ext.data.virtual.Range", [
                 makeRange();
                 range.goto(0, 25);
                 flushAllLoads();
+
                 for (var i = 1; i < size + 1; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
@@ -955,10 +965,12 @@ topSuite("Ext.data.virtual.Range", [
                 // Cache is exactly full now
                 range.goto(0, 25);
                 flushAllLoads();
+
                 for (i = 1; i < size + 1; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
                 }
+
                 expect(proxySpy).not.toHaveBeenCalled();
                 expect(callbackSpy).not.toHaveBeenCalled();
             });
@@ -967,10 +979,12 @@ topSuite("Ext.data.virtual.Range", [
                 makeRange();
                 range.goto(0, 25);
                 flushAllLoads();
+
                 for (var i = 1; i < size + 1; ++i) {
                     range.goto(i * pageSize, i * pageSize + pageSize);
                     flushAllLoads();
                 }
+
                 range.goto(0, 25);
                 flushAllLoads();
                 range.goto(1000, 1025);

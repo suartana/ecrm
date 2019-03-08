@@ -18,7 +18,8 @@ Ext.define('Ext.grid.column.ActionProxy', {
     setDisabled: function(disabled) {
         if (disabled) {
             this.column.disableAction(this.itemIndex);
-        } else {
+        }
+        else {
             this.column.enableAction(this.itemIndex);
         }
     },

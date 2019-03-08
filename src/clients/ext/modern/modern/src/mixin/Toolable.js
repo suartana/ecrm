@@ -73,6 +73,7 @@ Ext.define('Ext.mixin.Toolable', {
                 plus: 100,
                 minus: 110,
                 search: 120,
+                edit: 125,
                 save: 130,
                 print: 140,
 
@@ -85,7 +86,8 @@ Ext.define('Ext.mixin.Toolable', {
                 minimize: 200,
                 maximize: 210,
                 restore: 220,
-                close: 230
+                close: 230,
+                trash: 240
             }
         },
 
@@ -100,6 +102,7 @@ Ext.define('Ext.mixin.Toolable', {
             zone: 'end'
         },
 
+        // eslint-disable-next-line max-len
         // @cmd-auto-dependency {aliasPrefix: "widget.", defaultType: 'Ext.Tool', typeProperty: "xtype", defaultsProperty: "toolDefaults", isKeyedObject: true}
         /**
          * @cfg {Ext.Tool[]/Object/Object[]} tools
@@ -119,7 +122,7 @@ Ext.define('Ext.mixin.Toolable', {
      */
     toolAnchorName: 'bodyElement',
 
-    afterClassMixedIn: function (targetClass) {
+    afterClassMixedIn: function(targetClass) {
         var proto = targetClass.prototype,
             already = proto.toolDefaults,
             getRefItems = proto.getRefItems;
@@ -137,6 +140,7 @@ Ext.define('Ext.mixin.Toolable', {
         }
 
         already = proto.tools;
+
         if (already) {
             delete proto.tools;
 
@@ -149,7 +153,8 @@ Ext.define('Ext.mixin.Toolable', {
         // getRefItems needs to be augmented to also return the Tools
         if (getRefItems) {
             proto.getRefItems = function(deep) {
-                return Ext.Array.push(getRefItems.call(this, deep), this.getTools() || Ext.emptyArray);
+                return Ext.Array.push(getRefItems.call(this, deep),
+                                      this.getTools() || Ext.emptyArray);
             };
         }
         // Not a container - return getTools results;
@@ -160,7 +165,7 @@ Ext.define('Ext.mixin.Toolable', {
         }
     },
 
-    lookupTool: function (id) {
+    lookupTool: function(id) {
         var tools = this.getTools(),
             n = tools && tools.length,
             i, tool;
@@ -178,8 +183,9 @@ Ext.define('Ext.mixin.Toolable', {
 
     // tools
 
-    applyTools: function (tools) {
+    applyTools: function(tools) {
         if (tools) {
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 array = me.createTools(tools),
                 n = array.length,
@@ -207,7 +213,7 @@ Ext.define('Ext.mixin.Toolable', {
         return tools;
     },
 
-    updateTools: function (tools, oldTools) {
+    updateTools: function(tools, oldTools) {
         Ext.destroy(oldTools);
     },
 
@@ -254,7 +260,7 @@ Ext.define('Ext.mixin.Toolable', {
 
         hasToolZones: false,
 
-        adjustToolDefaults: function (tool, toolDefaults, defaultToolWeights) {
+        adjustToolDefaults: function(tool, toolDefaults, defaultToolWeights) {
             toolDefaults = toolDefaults || this.getToolDefaults();
 
             if (defaultToolWeights === undefined) {
@@ -278,7 +284,7 @@ Ext.define('Ext.mixin.Toolable', {
             return tool;
         },
 
-        createTools: function (tools, toolOwner) {
+        createTools: function(tools, toolOwner) {
             var me = this,
                 array = Ext.convertKeyedItems(tools, 'handler', 'handler'),
                 n = array.length,
@@ -320,7 +326,7 @@ Ext.define('Ext.mixin.Toolable', {
             return array;
         },
 
-        getToolZone: function (zoneName) {
+        getToolZone: function(zoneName) {
             var me = this,
                 zonePropName = me._toolZoneNames[zoneName],
                 zone = me[zonePropName],
@@ -368,12 +374,15 @@ Ext.define('Ext.mixin.Toolable', {
                 if (zoneName === 'head') {
                     zone.insertBefore(anchorElement);
                     anchorElement.addCls(me._headedCls);
-                } else if (zoneName === 'tail') {
+                }
+                else if (zoneName === 'tail') {
                     zone.insertAfter(anchorElement);
                     anchorElement.addCls(me._tailedCls);
-                } else if (zoneName === 'start') {
+                }
+                else if (zoneName === 'start') {
                     zone.insertBefore(me._headZone || anchorElement);
-                } else if (zoneName === 'end') {
+                }
+                else if (zoneName === 'end') {
                     zone.insertAfter(me._tailZone || anchorElement);
                 }
 

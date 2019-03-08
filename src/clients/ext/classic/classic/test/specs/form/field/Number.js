@@ -15,7 +15,18 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         if (component) {
             component.destroy();
         }
+
         component = makeComponent = null;
+    });
+
+    describe("alternate class name", function() {
+        it("should have Ext.form.NumberField as the alternate class name", function() {
+            expect(Ext.form.field.Number.prototype.alternateClassName).toEqual(["Ext.form.NumberField", "Ext.form.Number"]);
+        });
+
+        it("should allow the use of Ext.form.NumberField", function() {
+            expect(Ext.form.NumberField).toBeDefined();
+        });
     });
 
     describe("defaults", function() {
@@ -182,22 +193,22 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
 
-    describe("parsing invalid values", function(){
-        it("should be null if configured with no value", function(){
+    describe("parsing invalid values", function() {
+        it("should be null if configured with no value", function() {
             makeComponent();
-            expect(component.getValue()).toBeNull();    
-        });  
+            expect(component.getValue()).toBeNull();
+        });
         
-        it("should be null if configured with an invalid value", function(){
+        it("should be null if configured with an invalid value", function() {
             makeComponent({
                 value: "foo"
             });
-            expect(component.getValue()).toBeNull();   
+            expect(component.getValue()).toBeNull();
         });
 
         it("should set the field value to the parsed value on blur", function() {
             makeComponent({
-                inputType: 'text', //forcing to text, otherwise chrome ignores the whole value if it contains non-numeric chars
+                inputType: 'text', // forcing to text, otherwise chrome ignores the whole value if it contains non-numeric chars
                 renderTo: Ext.getBody()
             });
             jasmine.focusAndWait(component);
@@ -222,8 +233,8 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
 
-    describe("respecting allowDecimals", function(){
-        it("should round any decimals when allowDecimals is false", function(){
+    describe("respecting allowDecimals", function() {
+        it("should round any decimals when allowDecimals is false", function() {
             makeComponent({
                 allowDecimals: false
             });
@@ -235,22 +246,22 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             expect(component.getValue()).toEqual(8);
             
             component.setValue(2);
-            expect(component.getValue()).toEqual(2); 
-        });  
-        
-        it("should round any decimals when decimalPrecision is 0", function(){
-            makeComponent({
-                decimalPrecision: 0
-            });  
-            
-            component.setValue(3.14);
-            expect(component.getValue()).toEqual(3);  
-            
-            component.setValue(19);
-            expect(component.getValue()).toEqual(19); 
+            expect(component.getValue()).toEqual(2);
         });
         
-        it("should round values correctly", function(){
+        it("should round any decimals when decimalPrecision is 0", function() {
+            makeComponent({
+                decimalPrecision: 0
+            });
+            
+            component.setValue(3.14);
+            expect(component.getValue()).toEqual(3);
+            
+            component.setValue(19);
+            expect(component.getValue()).toEqual(19);
+        });
+        
+        it("should round values correctly", function() {
             makeComponent({
                 decimalPrecision: 3
             });
@@ -264,8 +275,8 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
     
-    describe("respecting decimalSeparator", function(){
-        it("should parse values containing the separator", function(){
+    describe("respecting decimalSeparator", function() {
+        it("should parse values containing the separator", function() {
             makeComponent({
                 decimalSeparator: ",",
                 decimalPrecision: 2
@@ -282,16 +293,16 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
     
-    describe("submitLocaleSeparator", function(){
-        it("should use the locale separator by default", function(){
+    describe("submitLocaleSeparator", function() {
+        it("should use the locale separator by default", function() {
             makeComponent({
                 decimalSeparator: ',',
                 value: 0.4
             });
             expect(component.getSubmitValue()).toBe('0,4');
-        });  
+        });
         
-        it("should replace the separator with the default number", function(){
+        it("should replace the separator with the default number", function() {
             makeComponent({
                 decimalSeparator: ',',
                 value: 0.4,
@@ -300,7 +311,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             expect(component.getSubmitValue()).toBe('0.4');
         });
         
-        it("should have no effect if we specify no custom separator", function(){
+        it("should have no effect if we specify no custom separator", function() {
             makeComponent({
                 value: 0.4
             });
@@ -308,12 +319,12 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
     
-    describe("validation", function(){
-        it("should have an error when the number is outside the bounds", function(){
+    describe("validation", function() {
+        it("should have an error when the number is outside the bounds", function() {
             makeComponent({
                 minValue: 5,
                 maxValue: 30
-            });    
+            });
             
             expect(component.getErrors(3)).toContain("The minimum value for this field is 5");
             
@@ -322,7 +333,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             expect(component.getErrors(7.2)).toEqual([]);
         });
         
-        it("should have an error when the number is invalid", function(){
+        it("should have an error when the number is invalid", function() {
             makeComponent();
             
             expect(component.getErrors("foo")).toContain("foo is not a valid number");
@@ -330,10 +341,10 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             expect(component.getErrors(17).length).toEqual(0);
         });
         
-        it("should have an error if the value is negative and minValue is 0", function(){
+        it("should have an error if the value is negative and minValue is 0", function() {
             makeComponent({
                 minValue: 0
-            }); 
+            });
             
             expect(component.getErrors(-3)).toContain("The value cannot be negative");
         });
@@ -343,7 +354,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         beforeEach(function() {
             makeComponent({
                 autoStripChars: true,
-                inputType: 'text', //forcing to text, since chrome doesn't allow setting non-numeric chars in number field
+                inputType: 'text', // forcing to text, since chrome doesn't allow setting non-numeric chars in number field
                 renderTo: Ext.getBody()
             });
         });
@@ -366,25 +377,25 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         });
     });
     
-    describe("enforceMaxLength", function(){
-        beforeEach(function(){
+    describe("enforceMaxLength", function() {
+        beforeEach(function() {
             makeComponent({
                 renderTo: Ext.getBody(),
                 maxLength: 2,
                 enforceMaxLength: true
-            });    
+            });
         });
-        it("should enforce the max length when spinning up", function(){
+        it("should enforce the max length when spinning up", function() {
             component.setValue(99);
             component.spinUp();
             expect(component.getValue()).toBe(99);
         });
         
-        it("should enforce the max length when spinning down", function(){
+        it("should enforce the max length when spinning down", function() {
             component.setValue(-9);
             component.spinDown();
             expect(component.getValue()).toBe(-9);
-        });  
+        });
     });
 
     describe("spinner buttons", function() {
@@ -465,31 +476,31 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
 
     describe('getSubmitData', function() {
         it("should return the field's numeric value", function() {
-            makeComponent({name: 'myname', value: 123});
-            expect(component.getSubmitData()).toEqual({myname: '123'});
+            makeComponent({ name: 'myname', value: 123 });
+            expect(component.getSubmitData()).toEqual({ myname: '123' });
         });
         it("should return empty string for an empty value", function() {
-            makeComponent({name: 'myname'});
-            expect(component.getSubmitData()).toEqual({myname: ''});
+            makeComponent({ name: 'myname' });
+            expect(component.getSubmitData()).toEqual({ myname: '' });
         });
         it("should return empty string for a non-numeric", function() {
-            makeComponent({name: 'myname', value: 'asdf'});
-            expect(component.getSubmitData()).toEqual({myname: ''});
+            makeComponent({ name: 'myname', value: 'asdf' });
+            expect(component.getSubmitData()).toEqual({ myname: '' });
         });
     });
 
     describe('getModelData', function() {
         it("should return the field's numeric value", function() {
-            makeComponent({name: 'myname', value: 123});
-            expect(component.getModelData()).toEqual({myname: 123});
+            makeComponent({ name: 'myname', value: 123 });
+            expect(component.getModelData()).toEqual({ myname: 123 });
         });
         it("should return null for an empty value", function() {
-            makeComponent({name: 'myname', value: ''});
-            expect(component.getModelData()).toEqual({myname: null});
+            makeComponent({ name: 'myname', value: '' });
+            expect(component.getModelData()).toEqual({ myname: null });
         });
         it("should return null for a non-numeric value", function() {
-            makeComponent({name: 'myname', value: ''});
-            expect(component.getModelData()).toEqual({myname: null});
+            makeComponent({ name: 'myname', value: '' });
+            expect(component.getModelData()).toEqual({ myname: null });
         });
     });
 

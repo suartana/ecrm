@@ -1,5 +1,4 @@
 topSuite("Ext.data.operation.Read", ['Ext.data.ArrayStore'], function() {
-    
     var op;
     
     function makeOperation(cfg) {
@@ -13,12 +12,16 @@ topSuite("Ext.data.operation.Read", ['Ext.data.ArrayStore'], function() {
     describe("execute", function() {
         it("should call the proxy read method and pass itself", function() {
             var proxy = new Ext.data.proxy.Proxy();
+            
             spyOn(proxy, 'read').andReturn(new Ext.data.Request());
+            
             makeOperation({
                 proxy: proxy
             });
+            
             op.execute();
+            
             expect(proxy.read).toHaveBeenCalledWith(op);
         });
-    });    
+    });
 });

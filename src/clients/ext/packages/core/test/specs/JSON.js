@@ -148,7 +148,7 @@ topSuite("Ext.JSON", function() {
                expect(encode(document.body)).toBe('undefined');
             });
             
-            it("should handle encoding unknown child objects", function(){
+            it("should handle encoding unknown child objects", function() {
                 expect(encode({
                     prop: document.body
                 })).toBe('{"prop":undefined}');
@@ -197,14 +197,14 @@ topSuite("Ext.JSON", function() {
             it("should format integers to have at least two digits", function() {
                 date = new Date("August 9, 1983 06:03:02");
                 
-                expect(encode(date)).toEqual("\"1983-08-09T06:03:02\"");            
+                expect(encode(date)).toEqual("\"1983-08-09T06:03:02\"");
             });
         });
         
         describe("mix all possibilities", function() {
             it("should encode data", function() {
                  expect(encode({
-                    arr: [1, Ext.emptyFn, undefined, 2, [1, 2, 3], {a: 1, b: null}],
+                    arr: [1, Ext.emptyFn, undefined, 2, [1, 2, 3], { a: 1, b: null }],
                     foo: "bar",
                     woo: {
                         chu: "a\tb"
@@ -217,24 +217,24 @@ topSuite("Ext.JSON", function() {
     describe("decode", function() {
         it("should decode data", function() {
             expect(Ext.decode("{\"arr\":[1,null,null,2,[1,2,3],{\"a\":1,\"b\":null}],\"foo\":\"bar\",\"woo\":{\"chu\":\"a\\tb\"}}")).toEqual({
-                    arr: [1, null, null, 2, [1, 2, 3], {a: 1, b: null}],
+                    arr: [1, null, null, 2, [1, 2, 3], { a: 1, b: null }],
                     foo: "bar",
                     woo: {
                         chu: "a\tb"
-                    }            
+                    }
             });
         });
         
         it("should raise an Ext.Error with invalid data", function() {
-            expect(function(){
+            expect(function() {
                 Ext.decode('{foo:"bar", x}');
             }).toThrow();
         });
             
-        describe("with safe param", function(){
+        describe("with safe param", function() {
             it("should decode valid data", function() {
                 expect(Ext.decode("{\"foo\":\"bar\"}", true)).toEqual({
-                    foo: "bar"        
+                    foo: "bar"
                 });
             });
             
@@ -244,7 +244,7 @@ topSuite("Ext.JSON", function() {
         });
     });
     
-    it('should encode and decode an object', function(){
+    it('should encode and decode an object', function() {
         var object = {
             a: [0, 1, 2],
             s: "It's-me-Jacky!!",
@@ -258,7 +258,7 @@ topSuite("Ext.JSON", function() {
                 sub: {
                     subMore: {
                         subEvenMore: {
-                            arr: [5,6,7, {
+                            arr: [5, 6, 7, {
                                 complex: true
                             }]
                         }

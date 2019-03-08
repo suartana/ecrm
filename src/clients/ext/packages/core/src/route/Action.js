@@ -83,7 +83,7 @@ Ext.define('Ext.route.Action', {
      */
     stopped: false,
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this;
 
         me.deferred = new Ext.Deferred();
@@ -111,7 +111,7 @@ Ext.define('Ext.route.Action', {
         return befores;
     },
 
-    destroy: function () {
+    destroy: function() {
         this.deferred = null;
 
         this
@@ -127,7 +127,7 @@ Ext.define('Ext.route.Action', {
      *
      * @return {Ext.route.Action} this
      */
-    resume: function () {
+    resume: function() {
         return this.next();
     },
 
@@ -136,7 +136,7 @@ Ext.define('Ext.route.Action', {
      *
      * @return {Ext.route.Action} this
      */
-    stop: function () {
+    stop: function() {
         this.stopped = true;
 
         return this.done();
@@ -149,7 +149,7 @@ Ext.define('Ext.route.Action', {
      * @private
      * @return {Ext.route.Action} this
      */
-    next: function () {
+    next: function() {
         var me = this,
             actions = me.getActions(),
             befores = me.getBefores(),
@@ -158,7 +158,8 @@ Ext.define('Ext.route.Action', {
 
         if (Ext.isArray(urlParams)) {
             args = urlParams.slice();
-        } else {
+        }
+        else {
             args = [urlParams];
         }
 
@@ -168,7 +169,8 @@ Ext.define('Ext.route.Action', {
             (actions ? !actions.length : true)
         ) {
             me.done();
-        } else {
+        }
+        else {
             if (befores && befores.length) {
                 config = befores.shift();
 
@@ -177,16 +179,22 @@ Ext.define('Ext.route.Action', {
                 ret = Ext.callback(config.fn, config.scope, args);
 
                 if (ret && ret.then) {
-                    ret.then(function (arg) { me.resume(arg) }, function (arg) { me.stop(arg); });
+                    ret.then(function(arg) {
+                        me.resume(arg);
+                    }, function(arg) {
+                        me.stop(arg);
+                    });
                 }
-            } else if (actions && actions.length) {
+            }
+            else if (actions && actions.length) {
                 config = actions.shift();
 
                 Ext.callback(config.fn, config.scope, args);
 
                 me.next();
-            } else {
-                //needed?
+            }
+            else {
+                // needed?
                 me.next();
             }
         }
@@ -199,7 +207,7 @@ Ext.define('Ext.route.Action', {
      *
      * @return {Ext.promise.Promise}
      */
-    run: function () {
+    run: function() {
         var deferred = this.deferred;
 
         if (!this.started) {
@@ -219,12 +227,13 @@ Ext.define('Ext.route.Action', {
      * @private
      * @return {Ext.route.Action} this
      */
-    done: function () {
+    done: function() {
         var deferred = this.deferred;
 
         if (this.stopped) {
             deferred.reject();
-        } else {
+        }
+        else {
             deferred.resolve();
         }
 
@@ -251,13 +260,14 @@ Ext.define('Ext.route.Action', {
      * the class that is adding the function to the before stack.
      * @return {Ext.route.Action} this
      */
-    before: function (first, fn, scope) {
+    before: function(first, fn, scope) {
         if (!Ext.isBoolean(first)) {
             scope = fn;
             fn = first;
             first = false;
         }
 
+        // eslint-disable-next-line vars-on-top
         var befores = this.getBefores(),
             config = {
                 fn: fn,
@@ -266,7 +276,8 @@ Ext.define('Ext.route.Action', {
 
         //<debug>
         if (this.destroyed) {
-            Ext.raise('This action has has already resolved and therefore will never execute this function.');
+            Ext.raise('This action has has already resolved and therefore will never ' +
+                      'execute this function.');
 
             return;
         }
@@ -275,10 +286,12 @@ Ext.define('Ext.route.Action', {
         if (befores) {
             if (first) {
                 befores.unshift(config);
-            } else {
+            }
+            else {
                 befores.push(config);
             }
-        } else {
+        }
+        else {
             this.setBefores(config);
         }
 
@@ -303,13 +316,14 @@ Ext.define('Ext.route.Action', {
      * the class that is adding the function to the action stack.
      * @return {Ext.route.Action} this
      */
-    action: function (first, fn, scope) {
+    action: function(first, fn, scope) {
         if (!Ext.isBoolean(first)) {
             scope = fn;
             fn = first;
             first = false;
         }
 
+        // eslint-disable-next-line vars-on-top
         var actions = this.getActions(),
             config = {
                 fn: fn,
@@ -318,7 +332,8 @@ Ext.define('Ext.route.Action', {
 
         //<debug>
         if (this.destroyed) {
-            Ext.raise('This action has has already resolved and therefore will never execute this function.');
+            Ext.raise('This action has has already resolved and therefore will never ' +
+                      'execute this function.');
 
             return;
         }
@@ -327,10 +342,12 @@ Ext.define('Ext.route.Action', {
         if (actions) {
             if (first) {
                 actions.unshift(config);
-            } else {
+            }
+            else {
                 actions.push(config);
             }
-        } else {
+        }
+        else {
             this.setActions(config);
         }
 
@@ -344,10 +361,11 @@ Ext.define('Ext.route.Action', {
      * @param {Function} reject The function to execute when a before function stopped this action.
      * @return {Ext.Promise}
      */
-    then: function (resolve, reject) {
+    then: function(resolve, reject) {
         //<debug>
         if (this.destroyed) {
-            Ext.raise('This action has has already resolved and therefore will never execute either function.');
+            Ext.raise('This action has has already resolved and therefore will never ' +
+                      'execute either function.');
 
             return;
         }

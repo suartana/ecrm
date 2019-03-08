@@ -16,7 +16,7 @@ Ext.define('Ext.data.request.Base', {
     // to use.
     factoryConfig: {
         type: 'request',
-        defaultType: 'ajax'  // this is the default deduced from the alias
+        defaultType: 'ajax' // this is the default deduced from the alias
     },
 
     result: null,
@@ -72,11 +72,14 @@ Ext.define('Ext.data.request.Base', {
         if (me.completed) {
             if (me.success) {
                 d.resolve(result);
-            } else {
+            }
+            else {
                 d.reject(result);
             }
         }
+        
         me.deferred = d;
+        
         return d;
     },
 
@@ -123,6 +126,7 @@ Ext.define('Ext.data.request.Base', {
                 deferred.reject(result);
             }
         }
+        
         me.completed = true;
     },
 
@@ -185,6 +189,7 @@ Ext.define('Ext.data.request.Base', {
 
         _getHeader: function(name) {
             var headers = this.headers;
+            
             return headers && headers[name.toLowerCase()];
         },
 

@@ -32,9 +32,11 @@ function() {
         for (i = 1; i < argumentsLength; i++) {
             checkboxes[i - 1] = Ext.getCmp(arguments[i]).el.dom;
         }
+
         checkboxesLength = checkboxes.length;
         
         expect(column.childNodes.length).toBe(checkboxesLength);
+
         for (i = 0; i < checkboxesLength; i++) {
             expect(column.childNodes[i]).toBe(checkboxes[i]);
         }
@@ -162,8 +164,8 @@ function() {
             makeGroup({
                 columns: 'auto',
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -188,8 +190,8 @@ function() {
         it("should distribute items automatically with missing columns config", function() {
             makeGroup({
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -215,8 +217,8 @@ function() {
             makeGroup({
                 columns: 3,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -258,8 +260,8 @@ function() {
                 columns: 3,
                 vertical: true,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -285,8 +287,8 @@ function() {
             makeGroup({
                 columns: 1,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -311,8 +313,8 @@ function() {
             makeGroup({
                 columns: 'auto',
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -336,8 +338,8 @@ function() {
             makeGroup({
                 columns: 'auto',
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -361,8 +363,8 @@ function() {
             makeGroup({
                 columns: 3,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
             
@@ -388,8 +390,8 @@ function() {
                 columns: 3,
                 vertical: true,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
 
@@ -416,8 +418,8 @@ function() {
             makeGroup({
                 columns: 1,
                 items: [
-                    { id: 'cb0', boxLabel: 'cb0'},
-                    { id: 'cb1', boxLabel: 'cb1'}
+                    { id: 'cb0', boxLabel: 'cb0' },
+                    { id: 'cb1', boxLabel: 'cb1' }
                 ]
             });
 

@@ -40,6 +40,7 @@ Ext.onReady(function() {
             return Ext.Date.dayNames[day].substring(0, 3);
         };
     }
+
     if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
@@ -266,10 +267,10 @@ Ext.define("Ext.locale.hu.window.MessageBox", {
         cancel: "Mégsem",
         yes: "Igen",
         no: "Nem"
-    }    
+    }
 });
 
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.hu.Component", {	
+Ext.define("Ext.locale.hu.Component", {
     override: "Ext.Component"
 });

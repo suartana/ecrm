@@ -16,7 +16,8 @@ topSuite("Ext.form.Panel", function() {
         });
 
         it("should be registered with the 'form' xtype", function() {
-            var component = Ext.create("Ext.form.Panel", {name: 'test'});
+            var component = Ext.create("Ext.form.Panel", { name: 'test' });
+
             expect(component instanceof Ext.form.Panel).toBe(true);
             expect(Ext.getClass(component).xtype).toBe("form");
             component.destroy();
@@ -70,6 +71,7 @@ topSuite("Ext.form.Panel", function() {
     describe("event relaying", function() {
         function testRelay(eventName) {
             var spy = jasmine.createSpy(eventName + ' handler');
+
             createPanel();
             panel.on(eventName, spy);
             panel.getForm().fireEvent(eventName);
@@ -114,7 +116,8 @@ topSuite("Ext.form.Panel", function() {
                 },
                 renderTo: Ext.getBody()
             });
-            var field = panel.add({xtype: 'textfield', name: 'myfield'});
+            var field = panel.add({ xtype: 'textfield', name: 'myfield' });
+
             expect(field.dummyConfig).toBe('foo');
         });
 
@@ -124,7 +127,8 @@ topSuite("Ext.form.Panel", function() {
                     dummyConfig: 'foo'
                 }
             });
-            var field = panel.add({xtype: 'textfield', name: 'myfield', dummyConfig: 'bar'});
+            var field = panel.add({ xtype: 'textfield', name: 'myfield', dummyConfig: 'bar' });
+
             expect(field.dummyConfig).toBe('bar');
         });
         
@@ -149,6 +153,7 @@ topSuite("Ext.form.Panel", function() {
                 }
             });
             var field = panel.down('#foo');
+
             expect(field.dummyConfig).toBe('foo');
         });
 
@@ -163,8 +168,10 @@ topSuite("Ext.form.Panel", function() {
                         text: 'foo'
                     }]
                 };
+
             createPanel(panelCfg);
             var docked = panel.getDockedItems();
+
             expect(docked[docked.length - 1].child('button').minWidth).toBe(1234);
         });
 
@@ -176,8 +183,10 @@ topSuite("Ext.form.Panel", function() {
                         minWidth: 2345
                     }]
                 };
+
             createPanel(panelCfg);
             var docked = panel.getDockedItems();
+
             expect(docked[docked.length - 1].child('button').minWidth).toBe(2345);
         });
     });
@@ -187,8 +196,8 @@ topSuite("Ext.form.Panel", function() {
         it("should call the load method of the BasicForm", function() {
             createPanel();
             spyOn(panel.getForm(), 'load');
-            panel.load({foo:'bar'});
-            expect(panel.getForm().load).toHaveBeenCalledWith({foo:'bar'});
+            panel.load({ foo: 'bar' });
+            expect(panel.getForm().load).toHaveBeenCalledWith({ foo: 'bar' });
         });
     });
 
@@ -196,8 +205,8 @@ topSuite("Ext.form.Panel", function() {
         it("should call the submit method of the BasicForm", function() {
             createPanel();
             spyOn(panel.getForm(), 'submit');
-            panel.submit({foo:'bar'});
-            expect(panel.getForm().submit).toHaveBeenCalledWith({foo:'bar'});
+            panel.submit({ foo: 'bar' });
+            expect(panel.getForm().submit).toHaveBeenCalledWith({ foo: 'bar' });
         });
     });
 

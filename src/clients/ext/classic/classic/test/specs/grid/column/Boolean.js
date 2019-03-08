@@ -18,6 +18,7 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
 
     function getCellInnerHtml(rowIdx, colIdx) {
         var cell = getCell(rowIdx, colIdx);
+
         return cell.querySelector(grid.getView().innerSelector).innerHTML;
     }
 
@@ -26,8 +27,9 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
 
         // Go down to the first textNode
         while (cell.nodeType !== 3) {
-            cell = cell.firstChild
+            cell = cell.firstChild;
         }
+
         return cell.data;
     }
 
@@ -45,7 +47,7 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
                 xtype: 'booleancolumn',
                 text: 'Col',
                 dataIndex: 'field',
-                flex: 1    
+                flex: 1
             }, colCfg)],
             width: 400,
             height: 100,
@@ -55,7 +57,7 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
         colRef = grid.getColumnManager().getColumns();
     }
     
-    afterEach(function(){
+    afterEach(function() {
         Ext.destroy(grid, store);
         colRef = store = grid = null;
     });
@@ -66,8 +68,9 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
                 makeGrid(undefined);
 
                 var text = getCellText(0, 0);
+
                 expect(text).toBe(colRef[0].undefinedText);
-            });    
+            });
         });
         
         describe("falseText", function() {
@@ -98,6 +101,7 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
             store.first().set('field', true);
             
             var text = getCellInnerHtml(0, 0).replace(/\"/g, '').toLowerCase();
+
             expect(text).toBe('<div class=foo>istrue</div>');
             
             store.first().set('field', false);
@@ -105,5 +109,5 @@ topSuite("Ext.grid.column.Boolean", ['Ext.grid.Panel'], function() {
             text = getCellInnerHtml(0, 0).replace(/\"/g, '').toLowerCase();
             expect(text).toBe('<div class=bar>isfalse</div>');
         });
-    })
+    });
 });

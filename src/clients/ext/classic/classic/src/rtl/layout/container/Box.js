@@ -12,7 +12,7 @@ Ext.define('Ext.rtl.layout.container.Box', {
         me.callParent(arguments);
     },
 
-    getRenderData: function () {
+    getRenderData: function() {
         var renderData = this.callParent();
 
         if (this.owner.getInherited().rtl) {

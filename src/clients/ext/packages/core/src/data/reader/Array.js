@@ -10,8 +10,10 @@
  *          extend: 'Ext.data.Model',
  *          fields: [
  *              'id',
- *              {name: 'name', mapping: 1},         // "mapping" only needed if an "id" field is present which
- *              {name: 'occupation', mapping: 2}    // precludes using the ordinal position as the index.
+ *              // "mapping" only needed if an "id" field is present which
+ *              // precludes using the ordinal position as the index.
+ *              { name: 'name', mapping: 1 },
+ *              { name: 'occupation', mapping: 2 }
  *          ]
  *      });
  *
@@ -27,7 +29,7 @@
 Ext.define('Ext.data.reader.Array', {
     extend: 'Ext.data.reader.Json',
     alternateClassName: 'Ext.data.ArrayReader',
-    alias : 'reader.array',
+    alias: 'reader.array',
 
     // For Array Reader, methods in the base which use these properties must not see the defaults
     config: {
@@ -60,7 +62,7 @@ Ext.define('Ext.data.reader.Array', {
     createFieldAccessor: function(field) {
         // In the absence of a mapping property, use the original ordinal position
         // at which the Model inserted the field into its collection.
-        var oldMap = field.mapping, 
+        var oldMap = field.mapping,
             index = field.hasMapping() ? oldMap : field.ordinal,
             result;
 
@@ -68,6 +70,7 @@ Ext.define('Ext.data.reader.Array', {
         field.mapping = index;
         result = this.callParent(arguments);
         field.mapping = oldMap;
+        
         return result;
     },
     

@@ -10,14 +10,15 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
         return tabPanel;
     }
 
-    //creates a tab panel with x children
+    // creates a tab panel with x children
     function createTabPanelWithTabs(count, config) {
-        var i, items = [];
+        var i,
+            items = [];
 
         for (i = 0; i < count; i++) {
             items[i] = {
                 xtype: 'panel',
-                html : 'test ' + (i + 1),
+                html: 'test ' + (i + 1),
                 title: 'test ' + (i + 1),
                 itemId: 'item' + (i + 1)
             };
@@ -61,7 +62,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
             expect(tabPanel.getActiveTab().id).toEqual(foo);
         });
-        it("should activate the activeTab by index if it does exist", function(){
+        it("should activate the activeTab by index if it does exist", function() {
             var foo = Ext.id(null, 'foo-'),
                 bar = Ext.id(null, 'bar-');
 
@@ -90,6 +91,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
     describe("activating other tabs on tab close", function() {
         var tb;
+
         it("should activate the next tab", function() {
             createTabPanelWithTabs(6, {
                 renderTo: document.body,
@@ -173,8 +175,8 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     dockedItems: [
                         {
                             xtype: 'panel',
-                            html : 'test',
-                            dock : 'top'
+                            html: 'test',
+                            dock: 'top'
                         }
                     ]
                 });
@@ -194,8 +196,8 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 createTabPanel({
                     dockedItems: {
                         xtype: 'panel',
-                        html : 'test',
-                        dock : 'top'
+                        html: 'test',
+                        dock: 'top'
                     }
                 });
             });
@@ -231,6 +233,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     });
                 }).not.toThrow();
                 var items = tabPanel.tabBar.items;
+
                 expect(items.getCount()).toBe(3);
                 expect(items.last().getText()).toBe('Foo');
             });
@@ -253,6 +256,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     });
                 }).not.toThrow();
                 var items = tabPanel.tabBar.items;
+
                 expect(items.getCount()).toBe(3);
                 expect(items.last().getText()).toBe('Foo');
             });
@@ -317,6 +321,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
     describe("after initialization", function() {
         it("should have created a tab for each child component", function() {
             var count = 0;
+
             createTabPanelWithTabs(2);
             tabPanel.getTabBar().items.each(function(item) {
                 if (item.is('tab')) {
@@ -326,7 +331,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             expect(count).toEqual(2);
         });
 
-        describe('activeTab config', function () {
+        describe('activeTab config', function() {
             it('if none, should set the first tab as active by default', function() {
                 createTabPanelWithTabs(2);
 
@@ -375,7 +380,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 return tabPanel.add(Ext.apply({
                     xtype: 'panel',
                     title: 'new',
-                    html : 'New Panel',
+                    html: 'New Panel',
                     itemId: 'newItem'
                 }, config));
             }
@@ -387,14 +392,14 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
             
             it("should give the tab a reference to the card", function() {
-                var newChild = addChild(),            
+                var newChild = addChild(),
                     newTab   = tabBar.items.first();
                 
                 expect(newTab.card).toEqual(newChild);
             });
             
             it("should give the tab a reference to the tabBar", function() {
-                var newChild = addChild(),            
+                var newChild = addChild(),
                     newTab   = tabBar.items.first();
                 
                 expect(newTab.tabBar).toEqual(tabBar);
@@ -416,8 +421,9 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
         it("should append a tab to the end", function() {
             createTabPanelWithTabs(3);
             var item = tabPanel.add({
-                title: 'foo'
-            }), tab, items;
+                    title: 'foo'
+                }),
+                tab, items;
 
             items = tabPanel.getTabBar().items;
             tab = items.getAt(3);
@@ -428,9 +434,11 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
         it("should insert a tab at the specified index", function() {
             createTabPanelWithTabs(3);
+            
             var item = tabPanel.insert(1, {
-                title: 'foo'
-            }), items, tab;
+                    title: 'foo'
+                }),
+                items, tab;
 
             items = tabPanel.getTabBar().items;
             tab = items.getAt(1);
@@ -474,6 +482,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
             tabPanel.remove(1);
             var items = tabPanel.getTabBar().items;
+
             expect(items.getCount()).toBe(2);
             expect(items.getAt(0).text).toBe('test 1');
             expect(items.getAt(1).text).toBe('test 3');
@@ -560,6 +569,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     var item = tabPanel.setActiveTab({
                         itemId: 'item5'
                     });
+
                     expect(item).toBe(tabPanel.down('#item5'));
                 });
             });
@@ -599,6 +609,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         tabPanel.setActiveTab(item2);
                         expect(beforeSpy.callCount).toBe(1);
                         var args = beforeSpy.mostRecentCall.args;
+
                         expect(args[0]).toBe(tabPanel);
                         expect(args[1]).toBe(item2);
                         expect(args[2]).toBe(item1);
@@ -615,6 +626,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         tabPanel.setActiveTab(item3);
                         expect(spy.callCount).toBe(1);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(tabPanel);
                         expect(args[1]).toBe(item3);
                         expect(args[2]).toBe(item1);
@@ -627,6 +639,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                             itemId: 'item5'
                         });
                         var item = tabPanel.down('#item5');
+
                         expect(beforeSpy.mostRecentCall.args[1]).toBe(item);
                         expect(spy.mostRecentCall.args[1]).toBe(item);
                     });
@@ -635,6 +648,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 describe("tab visibility", function() {
                     it("should not have the new tab visible when beforetabchange fires", function() {
                         var cardVisible, active;
+
                         beforeSpy.andCallFake(function() {
                             cardVisible = item2.isVisible();
                             active = tabPanel.getTabBar().activeTab;
@@ -646,6 +660,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     it("should have the new tab visible when tabchange fires", function() {
                         var cardVisible, active;
+
                         spy.andCallFake(function() {
                             cardVisible = item2.isVisible();
                             active = tabPanel.getTabBar().activeTab;
@@ -665,6 +680,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     tabPanel.on('beforetabchange', function() {
                         other.setSize(100, 100);
+
                         return false;
                     });
 
@@ -719,6 +735,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             function clickTab(item) {
                 runs(function() {
                     var target = item.tab.getEl().dom;
+
                     jasmine.fireMouseEvent(target, 'click');
                 });
                 
@@ -839,6 +856,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         runs(function() {
                             expect(beforeSpy.callCount).toBe(1);
                             var args = beforeSpy.mostRecentCall.args;
+
                             expect(args[0]).toBe(tabPanel);
                             expect(args[1]).toBe(item2);
                             expect(args[2]).toBe(item1);
@@ -853,6 +871,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         runs(function() {
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(tabPanel);
                             expect(args[1]).toBe(item2);
                             expect(args[2]).toBe(item1);
@@ -878,7 +897,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                             expect(spy).not.toHaveBeenCalled();
                         });
                     });
-                }); 
+                });
             });
             
             // Firefox and Safari on Mac will not focus <anchor> tags by default,
@@ -1137,7 +1156,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
             describe("and there is at least one tab after it", function() {
                 beforeEach(function() {
-                    createTabPanelWithTabs(3, {renderTo: document.body, activeTab: 1});
+                    createTabPanelWithTabs(3, { renderTo: document.body, activeTab: 1 });
                     firstItem  = tabPanel.items.first();
                     secondItem = tabPanel.items.getAt(1);
                     thirdItem = tabPanel.items.last();
@@ -1152,7 +1171,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             
             describe("and there is no tab before it but at least one after it", function() {
                 beforeEach(function() {
-                    createTabPanelWithTabs(2, {renderTo: document.body, activeTab: 0});
+                    createTabPanelWithTabs(2, { renderTo: document.body, activeTab: 0 });
                     firstItem  = tabPanel.items.items[0];
                     secondItem = tabPanel.items.items[1];
                 });
@@ -1291,6 +1310,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
             tabPanel.getViewModel().notify();
             var bar = tabPanel.getTabBar();
+
             expect(bar.items.first().getText()).toBe('Foo');
             expect(bar.items.last().getText()).toBe('Bar');
         });
@@ -1301,16 +1321,17 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 items: [{
                     bind: '{title}',
                     viewModel: {
-                        data: {title: 'Foo'}
+                        data: { title: 'Foo' }
                     }
                 }, {
                     bind: '{title}',
                     viewModel: {
-                        data: {title: 'Bar'}
+                        data: { title: 'Bar' }
                     }
                 }]
             });
             var bar = tabPanel.getTabBar();
+
             tabPanel.items.first().getViewModel().notify();
             tabPanel.items.last().getViewModel().notify();
             expect(bar.items.first().getText()).toBe('Foo');
@@ -1325,7 +1346,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 }, {
                     bind: '{title}',
                     viewModel: {
-                        data: {title: 'Bar'}
+                        data: { title: 'Bar' }
                     },
                     items: {
                         xtype: 'component',
@@ -1336,6 +1357,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 }]
             });
             var item = tabPanel.items.last();
+
             item.getViewModel().notify();
             expect(item.items.first().getConfig('viewModel', true).isViewModel).not.toBe(true);
         });
@@ -1344,6 +1366,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
     describe("removeAll", function() {
         it("should not activate any items", function() {
             var spy = jasmine.createSpy();
+
             tabPanel = new Ext.tab.Panel({
                 renderTo: Ext.getBody(),
                 items: [{
@@ -1366,6 +1389,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
         it("should not render any items during destroy", function() {
             var spy = jasmine.createSpy();
+
             tabPanel = new Ext.tab.Panel({
                 renderTo: Ext.getBody(),
                 items: [{
@@ -1390,6 +1414,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
     describe("cleanup", function() {
         it("should leave no orphans", function() {
             var count = Ext.ComponentManager.getCount();
+
             tabPanel = new Ext.tab.Panel({
                 renderTo: Ext.getBody(),
                 items: [{
@@ -1405,10 +1430,11 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
             tabPanel.destroy();
             expect(Ext.ComponentManager.getCount()).toBe(count);
-        }); 
+        });
 
         it("should not activate any items during destroy", function() {
             var spy = jasmine.createSpy();
+
             tabPanel = new Ext.tab.Panel({
                 renderTo: Ext.getBody(),
                 items: [{
@@ -1431,6 +1457,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
         it("should not render any items during destroy", function() {
             var spy = jasmine.createSpy();
+
             tabPanel = new Ext.tab.Panel({
                 renderTo: Ext.getBody(),
                 items: [{
@@ -1452,7 +1479,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
         });
     });
 
-    describe('Loader', function () {
+    describe('Loader', function() {
         var panel;
 
         function createPanel(cfg) {
@@ -1478,26 +1505,26 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
         }
 
-        beforeEach(function () {
+        beforeEach(function() {
             MockAjaxManager.addMethods();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             panel.destroy();
             panel = null;
             MockAjaxManager.removeMethods();
         });
 
-        it('should add to the number of tabs', function () {
+        it('should add to the number of tabs', function() {
             createPanel();
             tabPanel.loader.load();
             mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
             expect(tabPanel.tabBar.items.length).toEqual(4);
         });
 
-        describe('setActiveTab', function () {
-            describe('pre-existing tabs', function () {
-                it('should not call setActiveTab', function () {
+        describe('setActiveTab', function() {
+            describe('pre-existing tabs', function() {
+                it('should not call setActiveTab', function() {
                     createPanel();
                     spyOn(tabPanel, 'setActiveTab');
 
@@ -1507,7 +1534,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     expect(tabPanel.setActiveTab).not.toHaveBeenCalled();
                 });
 
-                it('should not call setActiveTab when activeItem is null', function () {
+                it('should not call setActiveTab when activeItem is null', function() {
                     createPanel({
                         activeTab: null
                     });
@@ -1520,8 +1547,8 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 });
             });
 
-            describe('no pre-existing tabs', function () {
-                it('should call setActiveTab', function () {
+            describe('no pre-existing tabs', function() {
+                it('should call setActiveTab', function() {
                     createPanel({
                         items: null
                     });
@@ -1535,7 +1562,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     expect(tabPanel.setActiveTab).toHaveBeenCalled();
                 });
 
-                it('should not call setActiveTab when activeItem is null', function () {
+                it('should not call setActiveTab when activeItem is null', function() {
                     createPanel({
                         activeTab: null,
                         items: null
@@ -1549,9 +1576,9 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 });
             });
 
-            describe('during a pending load', function () {
+            describe('during a pending load', function() {
                 // See EXTJS-16054.
-                beforeEach(function () {
+                beforeEach(function() {
                     createPanel({
                         items: null
                     });
@@ -1559,21 +1586,21 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     tabPanel.setActiveTab(1);
                 });
 
-                it('should not set the activeTab as null', function () {
+                it('should not set the activeTab as null', function() {
                     expect(tabPanel.getActiveTab()).not.toBeNull();
 
                     tabPanel.loader.load();
                     mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
                 });
 
-                it('should set the activeTab as undefined', function () {
+                it('should set the activeTab as undefined', function() {
                     expect(tabPanel.getActiveTab()).toBeUndefined();
 
                     tabPanel.loader.load();
                     mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
                 });
 
-                it('should set a default tab as active when load returns', function () {
+                it('should set a default tab as active when load returns', function() {
                     tabPanel.loader.load();
                     mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
 
@@ -1582,8 +1609,8 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
         });
 
-        describe('loading new tabs', function () {
-            it('should not set an active item when activeItem is null (pre-existing tabs)', function () {
+        describe('loading new tabs', function() {
+            it('should not set an active item when activeItem is null (pre-existing tabs)', function() {
                 createPanel({
                     activeTab: null
                 });
@@ -1591,11 +1618,11 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 tabPanel.loader.load();
                 mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
-                //expect(tabPanel.layout.getActiveItem()).toBe(null);
+                // expect(tabPanel.layout.getActiveItem()).toBe(null);
                 expect(tabPanel.layout.getActiveItem() === null).toBe(true);
             });
 
-            it('should not set an active item when activeItem is null (no pre-existing tabs)', function () {
+            it('should not set an active item when activeItem is null (no pre-existing tabs)', function() {
                 createPanel({
                     activeTab: null,
                     items: null
@@ -1608,18 +1635,18 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
         });
 
-        describe('tabchange event', function () {
+        describe('tabchange event', function() {
             var called = false;
 
-            afterEach(function () {
+            afterEach(function() {
                 called = false;
             });
 
-            describe('pre-existing tabs', function () {
-                it('should not fire', function () {
+            describe('pre-existing tabs', function() {
+                it('should not fire', function() {
                     createPanel();
 
-                    tabPanel.on('tabchange', function () {
+                    tabPanel.on('tabchange', function() {
                         called = true;
                     }, this);
 
@@ -1629,12 +1656,12 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     expect(called).toBe(false);
                 });
 
-                it('should not fire when activeItem is null', function () {
+                it('should not fire when activeItem is null', function() {
                     createPanel({
                         activeTab: null
                     });
 
-                    tabPanel.on('tabchange', function () {
+                    tabPanel.on('tabchange', function() {
                         called = true;
                     }, this);
 
@@ -1645,13 +1672,13 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 });
             });
 
-            describe('no pre-existing tabs', function () {
-                it('should fire', function () {
+            describe('no pre-existing tabs', function() {
+                it('should fire', function() {
                     createPanel({
                         items: null
                     });
 
-                    tabPanel.on('tabchange', function () {
+                    tabPanel.on('tabchange', function() {
                         called = true;
                     }, this);
 
@@ -1662,13 +1689,13 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     expect(called).toBe(true);
                 });
 
-                it('should not fire when activeItem is null', function () {
+                it('should not fire when activeItem is null', function() {
                     createPanel({
                         activeTab: null,
                         items: null
                     });
 
-                    tabPanel.on('tabchange', function () {
+                    tabPanel.on('tabchange', function() {
                         called = true;
                     }, this);
 
@@ -1855,6 +1882,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     text: 'hi'
                 }]
             };
+
             createTabPanelWithTabs(1, {
                 header: headerCfg,
                 tabBarHeaderPosition: 1
@@ -2088,6 +2116,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
         it("should only do a single layout when removing the active tab", function() {
             createTabPanelWithTabs(2);
             var cnt = tabPanel.componentLayoutCounter;
+
             tabPanel.items.first().destroy();
             expect(tabPanel.componentLayoutCounter - cnt).toBe(1);
         });

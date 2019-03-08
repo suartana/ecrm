@@ -219,11 +219,14 @@ Ext.define('Ext.mixin.Focusable', {
      * @private
      */
     isDestructing: function() {
-        for (var c = this; c; c = c.getRefOwner()) {
+        var c;
+        
+        for (c = this; c; c = c.getRefOwner()) {
             if (c.destroying || c.destroyed) {
                 return true;
             }
         }
+        
         return false;
     },
 
@@ -311,7 +314,7 @@ Ext.define('Ext.mixin.Focusable', {
             // for when focus is tracked within a tree, such as below an expanded ComboBox.
             focusTarget = me.findFocusTarget();
             
-            if (focusTarget && focusTarget != me) {
+            if (focusTarget && focusTarget !== me) {
                 return focusTarget.focus.apply(focusTarget, arguments);
             }
             else {
@@ -436,7 +439,7 @@ Ext.define('Ext.mixin.Focusable', {
             index = me.tabIndex;
         }
         
-        return index; 
+        return index;
     },
     
     /**
@@ -450,10 +453,13 @@ Ext.define('Ext.mixin.Focusable', {
         var me = this,
             ownerFC = me.ownerFocusableContainer,
             focusableIfDisabled = ownerFC && ownerFC.allowFocusingDisabledChildren,
+            wasFocusable = me.focusable,
             el;
         
         // See comments for definition of forceTabIndex as to why this is needed
-        if (!me.focusable && !me.forceTabIndex) {
+        // Return early if not focusable unless we are either forcing the tabIndex to
+        // be set, or we are removing the tabIndex attribute.
+        if (!wasFocusable && !(me.forceTabIndex || newTabIndex == null)) {
             return;
         }
         
@@ -464,8 +470,13 @@ Ext.define('Ext.mixin.Focusable', {
         if (me.destroying || me.destroyed || (me.isDisabled() && !focusableIfDisabled)) {
             return;
         }
-        
+
+        // getFocusEl does not return the element if focusable is false.
+        // If we are forcing the tabIndex, or setting it to null, we
+        // need it to return the focusEl.
+        me.focusable = true;
         el = focusEl || me.getFocusEl();
+        me.focusable = wasFocusable;
         
         if (el) {
             // getFocusEl may return a child Widget or Component
@@ -593,16 +604,17 @@ Ext.define('Ext.mixin.Focusable', {
 
                 fromComponent = focusEvent.fromComponent;
 
-                // If the default focus reversion target is in shifting ground, fall back to document.body
+                // If the default focus reversion target is in shifting ground, fall back
+                // to document.body
                 if (fromComponent && (fromComponent.destroyed || fromComponent.isDestructing())) {
                     focusTarget = document.body;
                 }
 
-                // Preferred focus target is the actual element from which focus entered this component.
-                // It will be up to its encapsulating component to handle this in an appropriate way.
-                // For example, a grid, upon having focus pushed to a certain cell will set its
-                // navigation position to that cell and highlight it as focused.
-                // Likewise an input field must handle its field acquiring focus.
+                // Preferred focus target is the actual element from which focus entered
+                // this component. It will be up to its encapsulating component to handle this
+                // in an appropriate way. For example, a grid, upon having focus pushed
+                // to a certain cell will set its navigation position to that cell and highlight it
+                // as focused. Likewise an input field must handle its field acquiring focus.
                 else {
                     focusTarget = focusEvent.relatedTarget;
                 }
@@ -610,6 +622,7 @@ Ext.define('Ext.mixin.Focusable', {
                 // If focus was from the body, try to keep it closer than that
                 if (focusTarget === document.body) {
                     fromComponent = me.findFocusTarget();
+                    
                     if (fromComponent) {
                         focusTarget = fromComponent.getFocusEl();
                     }
@@ -621,25 +634,28 @@ Ext.define('Ext.mixin.Focusable', {
                     }
                 }
                 
-                // If the element is in the document and focusable, then we're good. The owning component will handle it.
+                // If the element is in the document and focusable, then we're good. The owning
+                // component will handle it.
                 else if (Ext.getDoc().contains(focusTarget) && Ext.fly(focusTarget).isFocusable()) {
                     fromComponent = Ext.Component.from(focusTarget);
 
                     // Allow the focus recieving component to modify the focus sequence.
                     if (fromComponent) {
                         fromComponent.revertFocusTo(focusTarget);
-                    } else {
+                    }
+                    else {
                         focusTarget.focus();
                     }
                 }
 
-                // If the element has gone, or is hidden, we will have to rely on the intelligent focus diversion
-                // of components to send focus back to somewhere that is least surprising for the user.
+                // If the element has gone, or is hidden, we will have to rely on the intelligent
+                // focus diversion of components to send focus back to somewhere that is least
+                // surprising for the user.
                 else if (focusEvent.fromComponent && focusEvent.fromComponent.focus) {
                     reverted = focusEvent.fromComponent.focus();
 
                     // The component was not able to find a suitable target.
-                    // Important: Touch platforms do not blur programatically focused elements
+                    // Important: Touch platforms do not blur programmatically focused elements
                     // when they become hidden, so we must force the issue in order to maintain
                     // focus tracking.
                     if (!reverted) {
@@ -695,6 +711,7 @@ Ext.define('Ext.mixin.Focusable', {
             // will walk up looking for ancestors to revert focus to.
             //
             // First, find all enabled parents.
+            // eslint-disable-next-line max-len
             for (parentAxis = [], candidate = me.getRefOwner(); candidate; candidate = candidate.getRefOwner()) {
                 if (!candidate.isDisabled()) {
                     parentAxis.unshift(candidate);
@@ -706,6 +723,7 @@ Ext.define('Ext.mixin.Focusable', {
             // are potential sources of focus targets.
             for (i = 0, len = parentAxis.length; i < len; i++) {
                 candidate = parentAxis[i];
+                
                 if (candidate.destroying || !candidate.isVisible()) {
                     parentAxis.length = i;
                     break;
@@ -713,25 +731,29 @@ Ext.define('Ext.mixin.Focusable', {
             }
 
             // Walk up the parent axis checking each parent for focus targets.
-            for (i = parentAxis.length - 1; i >=0; i--) {
+            for (i = parentAxis.length - 1; i >= 0; i--) {
                 candidate = parentAxis[i];
-                // Use CQ to find a target that is fully focusable (:canfocus, NOT the theoretical :focusable)
-                // Cannot use :focusable(true) because that consults findFocusTarget and would cause infinite recursion.
+                // Use CQ to find a target that is fully focusable (:canfocus, NOT the theoretical
+                // :focusable). Cannot use :focusable(true) because that consults findFocusTarget
+                // and would cause infinite recursion.
                 // Exclude the component which currently has focus.
                 // Cannot use candidate.child() because the parent might not be a Container.
                 // Non-Container Components may still have ownership relationships with
                 // other Components. eg: BoundList with PagingToolbar
                 focusTargets = Ext.ComponentQuery.query(':canfocus()', candidate);
+                
                 if (focusTargets.length) {
+                    // eslint-disable-next-line max-len
                     focusIndex = Ext.Array.indexOf(focusTargets, Ext.ComponentManager.getActiveComponent());
 
                     // Return the next focusable, or the previous focusable, or the first focusable
-                    return focusTargets[focusIndex + 1] || focusTargets[focusIndex - 1]
-                        || focusTargets[0];
+                    return focusTargets[focusIndex + 1] || focusTargets[focusIndex - 1] ||
+                           focusTargets[0];
                 }
 
-                // We found no focusable siblings in our candidate, but the candidate may itself be focusable,
-                // it is not always a Container - could be the owning Field of a BoundList.
+                // We found no focusable siblings in our candidate, but the candidate may itself
+                // be focusable, it is not always a Container - could be the owning Field
+                // of a BoundList.
                 if (candidate.isFocusable && candidate.isFocusable()) {
                     return candidate;
                 }
@@ -741,10 +763,10 @@ Ext.define('Ext.mixin.Focusable', {
         /**
          * Sets up the focus listener on this Component's {@link #getFocusEl focusEl} if it has one.
          *
-         * Form Components which must implicitly participate in tabbing order usually have a naturally
-         * focusable element as their {@link #getFocusEl focusEl}, and it is the DOM event of that
-         * receiving focus which drives the Component's `onFocus` handling, and the DOM event of it
-         * being blurred which drives the `onBlur` handling.
+         * Form Components which must implicitly participate in tabbing order usually have
+         * a naturally focusable element as their {@link #getFocusEl focusEl}, and it is
+         * the DOM event of that receiving focus which drives the Component's `onFocus` handling,
+         * and the DOM event of it being blurred which drives the `onBlur` handling.
          * @private
          */
         initFocusableElement: function(force) {
@@ -803,7 +825,7 @@ Ext.define('Ext.mixin.Focusable', {
         /**
          * @private
          */
-        handleFocusEvent: function(e) {
+        handleFocusEvent: function(info) {
             var me = this,
                 event;
             
@@ -817,11 +839,11 @@ Ext.define('Ext.mixin.Focusable', {
             // whether focus/blur happens or not. This is necessary for components
             // that might have more than one focusable element within the component's
             // DOM structure, like Ext.button.Split.
-            if (me.isFocusing(e)) {
-                event = new Ext.event.Event(e.event);
+            if (me.isFocusing(info)) {
+                event = new Ext.event.Event(info.event);
                 event.type = 'focus';
-                event.relatedTarget = e.fromElement;
-                event.target = e.toElement;
+                event.relatedTarget = info.fromElement;
+                event.target = info.toElement;
                 
                 me.onFocus(event);
             }
@@ -830,7 +852,7 @@ Ext.define('Ext.mixin.Focusable', {
         /**
          * @private
          */
-        handleBlurEvent: function(e) {
+        handleBlurEvent: function(info) {
             var me = this,
                 event;
             
@@ -842,11 +864,11 @@ Ext.define('Ext.mixin.Focusable', {
             // Blurs caused by the app losing focus are processed synchronously
             // for obvious reasons, so the activeElement will still be the
             // focusEl, so isBlurring will return false, and reject this op.
-            if (e.toElement === document.body || me.isBlurring(e)) {
-                event = new Ext.event.Event(e.event);
+            if (info.toElement === document.body || me.isBlurring(info)) {
+                event = new Ext.event.Event(info.event);
                 event.type = 'blur';
-                event.target = e.fromElement;
-                event.relatedTarget = e.toElement;
+                event.target = info.fromElement;
+                event.relatedTarget = info.toElement;
                 
                 me.onBlur(event);
             }
@@ -1027,12 +1049,12 @@ Ext.define('Ext.mixin.Focusable', {
      * @since 6.5.0
      */
 
-    Ext.setKeyboardMode = Ext.setKeyboardMode || function (keyboardMode) {
+    Ext.setKeyboardMode = Ext.setKeyboardMode || function(keyboardMode) {
         Ext.keyboardMode = keyboardMode;
         Ext.getBody().toggleCls(keyboardModeCls, keyboardMode);
     };
     
-    Ext.isTouchMode = function () {
+    Ext.isTouchMode = function() {
         return (Ext.now() - Ext.lastTouchTime) < 500;
     };
 
@@ -1040,11 +1062,13 @@ Ext.define('Ext.mixin.Focusable', {
      * @private
      */
     Ext.syncKeyboardMode = function(e) {
+        var type;
+        
         if (!Ext.enableKeyboardMode) {
             return;
         }
         
-        var type = e.type;
+        type = e.type;
 
         if (type === 'pointermove') {
             // On pointer move we want to track that the user has switched from keyboard

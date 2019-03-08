@@ -1,7 +1,7 @@
 /**
- * Simple class that represents a Request that will be made by any {@link Ext.data.proxy.Server} subclass.
- * All this class does is standardize the representation of a Request as used by any ServerProxy subclass,
- * it does not contain any actual logic or perform the request itself.
+ * Simple class that represents a Request that will be made by any {@link Ext.data.proxy.Server}
+ * subclass. All this class does is standardize the representation of a Request as used by any
+ * ServerProxy subclass, it does not contain any actual logic or perform the request itself.
  */
 Ext.define('Ext.data.Request', {
     isDataRequest: true,
@@ -9,7 +9,8 @@ Ext.define('Ext.data.Request', {
     config: {
         /**
          * @cfg {String} action
-         * The name of the action this Request represents. Usually one of 'create', 'read', 'update' or 'destroy'.
+         * The name of the action this Request represents. Usually one of 'create', 'read',
+         * 'update' or 'destroy'.
          */
         action: undefined,
 
@@ -21,7 +22,8 @@ Ext.define('Ext.data.Request', {
 
         /**
          * @cfg {String} method
-         * The HTTP method to use on this Request. Should be one of 'GET', 'POST', 'PUT' or 'DELETE'.
+         * The HTTP method to use on this Request. Should be one of 'GET', 'POST', 'PUT',
+         * or 'DELETE'.
          */
         method: 'GET',
 
@@ -146,6 +148,7 @@ Ext.define('Ext.data.Request', {
         if (params) {
             return params[key];
         }
+        
         return val;
     },
     
@@ -156,7 +159,9 @@ Ext.define('Ext.data.Request', {
      */
     setParam: function(key, value) {
         var params = this.getParams() || {};
+        
         params[key] = value;
+        
         this.setParams(params);
     }
 });

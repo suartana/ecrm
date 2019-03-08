@@ -1,7 +1,9 @@
 /**
- * A split button that provides a built-in dropdown arrow that can fire an event separately from the default click event
- * of the button. Typically this would be used to display a dropdown menu that provides additional options to the
- * primary button action, but any custom handler can provide the arrowclick implementation.  Example usage:
+ * A split button that provides a built-in dropdown arrow that can fire an event separately
+ * from the default click event of the button. Typically this would be used to display a dropdown
+ * menu that provides additional options to the primary button action, but any custom handler
+ * can provide the arrowclick implementation.
+ * Example usage:
  *
  *     @example
  *     // display a dropdown menu:
@@ -21,8 +23,8 @@
  *         })
  *     });
  *
- * Instead of showing a menu, you can provide any type of custom functionality you want when the dropdown
- * arrow is clicked:
+ * Instead of showing a menu, you can provide any type of custom functionality you want when
+ * the dropdown arrow is clicked:
  *
  *     Ext.create('Ext.button.Split', {
  *         renderTo: 'button-ct',
@@ -92,7 +94,8 @@ Ext.define('Ext.button.Split', {
         // Don't warn if we're under the slicer. Only check hasListeners of the component
         // instance; there could be listeners on the EventBus inherited via prototype.
         if (me.menu && (me.arrowHandler || me.hasListeners.hasOwnProperty('arrowclick'))) {
-            Ext.ariaWarn(me,
+            Ext.ariaWarn(
+                me,
                 "Using both menu and arrowHandler config options in Split buttons " +
                 "leads to confusing user experience and conflicts with accessibility " +
                 "best practices. See WAI-ARIA 1.0 Authoring guide: " +
@@ -116,7 +119,7 @@ Ext.define('Ext.button.Split', {
         
         ariaAttr = me.ariaArrowElAttributes || {};
         
-        ariaAttr['aria-hidden']   = !!me.hidden;
+        ariaAttr['aria-hidden'] = !!me.hidden;
         ariaAttr['aria-disabled'] = !!me.disabled;
         
         if (me.arrowTooltip) {
@@ -174,7 +177,7 @@ Ext.define('Ext.button.Split', {
     onMouseDown: function(e) {
         var me = this;
         
-        if (me.separateArrowStyling && !me.disabled && e.button === 0 && 
+        if (me.separateArrowStyling && !me.disabled && e.button === 0 &&
             me.isWithinTrigger(e)) {
             e.preventDefault();
             me.arrowEl.focus();
@@ -190,7 +193,7 @@ Ext.define('Ext.button.Split', {
     onMouseUp: function(e) {
         var me = this;
         
-        if (me.separateArrowStyling && !me.destroyed && e.button === 0 && 
+        if (me.separateArrowStyling && !me.destroyed && e.button === 0 &&
             me.isWithinTrigger(e)) {
             me.removeCls(me._arrowPressedCls);
         }
@@ -235,10 +238,12 @@ Ext.define('Ext.button.Split', {
                 e.preventDefault();
                 me.maybeShowMenu(e);
                 me.fireEvent("arrowclick", me, e);
+                
                 if (me.arrowHandler) {
                     me.arrowHandler.call(me.scope || me, me, e);
                 }
-            } else {
+            }
+            else {
                 me.doToggle();
                 me.fireHandler(e);
             }
@@ -290,7 +295,7 @@ Ext.define('Ext.button.Split', {
                 arrowEl = me.arrowEl && me.arrowEl.dom;
             
             if (me.focusable) {
-                if (to === focusEl) { 
+                if (to === focusEl) {
                     return from === arrowEl ? false : true;
                 }
                 else if (to === arrowEl) {

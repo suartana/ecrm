@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-font-awesome",
     "SenchaExtName": "@sencha/ext-font-awesome",
     "SenchaExtReactName": "@sencha/ext-react-font-awesome",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "font-awesome",
         "namespace": "Ext",
@@ -15,7 +15,7 @@
         "creator": "Sencha",
         "summary": "Package wrapper for Font Awesome",
         "detailedDescription": "Sencha Cmd package wrapper for Font Awesome (http://fortawesome.github.io/Font-Awesome/)",
-        "version": "6.6.0.258",
+        "version": "4.7.0",
         "compatVersion": "4.3.0",
         "format": "1",
         "output": "${framework.dir}/build/packages/${package.name}",

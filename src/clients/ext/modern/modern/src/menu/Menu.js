@@ -150,6 +150,8 @@ Ext.define('Ext.menu.Menu', {
 
     autoSize: null,
 
+    twoWayBindable: 'groups',
+
     keyMap: {
         scope: 'this',
 
@@ -420,6 +422,8 @@ Ext.define('Ext.menu.Menu', {
                 groupName, members, len, i, item, value, oldValue;
 
             if (groups) {
+                me.updatingGroups = true;
+
                 for (groupName in groups) {
                     oldValue = currentGroups[groupName];
                     currentGroups[groupName] = value = groups[groupName];
@@ -436,11 +440,7 @@ Ext.define('Ext.menu.Menu', {
                     }
                 }
 
-                // Creates a bindable updater on first call after configuration is done.
-                // We only want one if this menu *has* RadioItem groups.
-                if (!isConfiguring) {
-                    me.addBindableUpdater('groups');
-                }
+                me.updatingGroups = false;
             }
 
             return currentGroups;

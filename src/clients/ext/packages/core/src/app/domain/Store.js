@@ -15,7 +15,7 @@ Ext.define('Ext.app.domain.Store', {
     
     type: 'store',
     prefix: 'store.',
-    idMatchRe: /^\#/,
+    idMatchRe: /^#/,
     
     constructor: function() {
         var me = this;
@@ -30,11 +30,14 @@ Ext.define('Ext.app.domain.Store', {
         
         if (selector === '*') {
             result = true;
-        } else if (this.idMatchRe.test(selector)) {
+        }
+        else if (this.idMatchRe.test(selector)) {
             result = target.getStoreId() === selector.substring(1);
-        } else if (alias) {
+        }
+        else if (alias) {
             result = Ext.Array.indexOf(alias, this.prefix + selector) > -1;
         }
+        
         return result;
     }
 });

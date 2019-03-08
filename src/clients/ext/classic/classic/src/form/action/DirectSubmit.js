@@ -73,7 +73,7 @@ Ext.define('Ext.form.action.DirectSubmit', {
             timeout = me.timeout || form.timeout,
             fn, formInfo, args;
         
-        fn       = me.resolveMethod('submit');
+        fn = me.resolveMethod('submit');
         formInfo = me.buildForm();
         
         args = fn.directCfg.method.getArgs({
@@ -96,10 +96,11 @@ Ext.define('Ext.form.action.DirectSubmit', {
         return (this.result = result);
     },
     
-    onComplete: function(data){
+    onComplete: function(data) {
         if (data) {
             this.onSuccess(data);
-        } else {
+        }
+        else {
             this.onFailure(null);
         }
     }

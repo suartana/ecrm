@@ -1,4 +1,4 @@
-describe("Ext.layout.Auto", function() {
+topSuite("Ext.layout.Auto", ['Ext.layout.*'], function() {
     var scrollbarSize = Ext.getScrollbarSize(),
         scrollbarWidth = scrollbarSize.width,
         scrollbarHeight = scrollbarSize.height,

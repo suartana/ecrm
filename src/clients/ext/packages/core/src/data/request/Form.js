@@ -5,7 +5,7 @@
  */
 Ext.define('Ext.data.request.Form', {
     extend: 'Ext.data.request.Base',
-    alias:  'request.form',
+    alias: 'request.form',
 
     start: function(data) {
         var me = this,
@@ -79,6 +79,7 @@ Ext.define('Ext.data.request.Form', {
         form = Ext.getDom(form);
         options = options || {};
 
+        /* eslint-disable-next-line vars-on-top */
         var frameDom = document.createElement('iframe'),
             frame = Ext.get(frameDom),
             id = frame.id,
@@ -138,12 +139,15 @@ Ext.define('Ext.data.request.Form', {
             for (name in obj) {
                 if (obj.hasOwnProperty(name)) {
                     value = obj[name];
+                    
                     if (Ext.isArray(value)) {
                         vLen = value.length;
+                        
                         for (v = 0; v < vLen; v++) {
                             addField(name, value[v]);
                         }
-                    } else {
+                    }
+                    else {
                         addField(name, value);
                     }
                 }
@@ -231,8 +235,8 @@ Ext.define('Ext.data.request.Form', {
                 // Opera will fire an extraneous load event on about:blank
                 // We want to ignore this since the load event will be fired twice
                 if (doc) {
-                    //TODO: See if this still applies vs Current opera-webkit releases
-                    if (Ext.isOpera && doc.location == Ext.SSL_SECURE_URL) {
+                    // TODO: See if this still applies vs Current opera-webkit releases
+                    if (Ext.isOpera && doc.location === Ext.SSL_SECURE_URL) {
                         return;
                     }
                     
@@ -240,8 +244,10 @@ Ext.define('Ext.data.request.Form', {
                         // Response sent as Content-Type: text/json or text/plain.
                         // Browser will embed it in a <pre> element.
                         // Note: The statement below tests the result of an assignment.
-                        if ((contentNode = doc.body.firstChild) && /pre/i.test(contentNode.tagName)) {
-                            response.responseText = contentNode.textContent || contentNode.innerText;
+                        if ((contentNode = doc.body.firstChild) &&
+                            /pre/i.test(contentNode.tagName)) {
+                            response.responseText = contentNode.textContent ||
+                                                    contentNode.innerText;
                         }
                         // Response sent as Content-Type: text/html. We must still support
                         // JSON response wrapped in textarea.
@@ -256,7 +262,7 @@ Ext.define('Ext.data.request.Form', {
                         }
                     }
                     
-                    //in IE the document may still have a body even if returns XML.
+                    // in IE the document may still have a body even if returns XML.
                     // TODO What is this about?
                     response.responseXML = doc.XMLDocument || doc;
                     callback = options.success;
@@ -264,7 +270,8 @@ Ext.define('Ext.data.request.Form', {
                     response.status = 200;
                 }
                 else {
-                    Ext.raise("Could not acquire a suitable connection for the file upload service.");
+                    Ext.raise("Could not acquire a suitable connection for the " +
+                              "file upload service.");
                 }
             }
             catch (e) {

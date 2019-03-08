@@ -204,6 +204,7 @@ Ext.define('Ext.panel.Title', {
                 (lastX + ((rotation === 1) ? lastBox.width : -lastBox.height)) + 'px'
             );
         }
+
         this.callParent();
     },
 
@@ -230,6 +231,7 @@ Ext.define('Ext.panel.Title', {
         if (!text) {
             text = '&#160;';
         }
+
         return text;
     },
     
@@ -317,10 +319,12 @@ Ext.define('Ext.panel.Title', {
             if (!glyph.isGlyph) {
                 glyph = new Ext.Glyph(glyph);
             }
+
             if (glyph.isEqual(oldGlyph)) {
                 glyph = undefined;
             }
         }
+
         return glyph;
     },
 
@@ -337,7 +341,8 @@ Ext.define('Ext.panel.Title', {
                 iconEl.dom.innerHTML = glyph.character;
                 iconEl.addCls(glyphCls);
                 iconEl.setStyle('font-family', glyph.fontFamily);
-            } else if (oldGlyph !== glyph) {
+            }
+            else if (oldGlyph !== glyph) {
                 iconEl.dom.innerHTML = '';
                 iconEl.removeCls(glyphCls);
             }
@@ -349,15 +354,17 @@ Ext.define('Ext.panel.Title', {
     },
 
     updateIcon: function(icon, oldIcon) {
-        icon = icon || '';
         var me = this,
             iconEl;
 
+        icon = icon || '';
+        
         if (me.rendered && icon !== oldIcon) {
             me._syncIconVisibility();
             iconEl = me.iconEl;
             
-            iconEl.setStyle('background-image', icon ? 'url(' + icon + ')': '');
+            iconEl.setStyle('background-image', icon ? 'url(' + icon + ')' : '');
+
             if (me._didIconStateChange(oldIcon, icon)) {
                 me.updateLayout();
             }
@@ -376,13 +383,15 @@ Ext.define('Ext.panel.Title', {
             if (oldAlign) {
                 iconWrapEl.removeCls(iconAlignClasses[oldAlign]);
             }
+
             iconWrapEl.addCls(iconAlignClasses[align]);
 
             // here we move the iconWrap to the correct position in the dom - before the
             // title el for top/left alignments, and after the title el for right/bottom
             if (align === 'top' || align === 'left') {
                 el.insertFirst(iconWrapEl);
-            } else {
+            }
+            else {
                 el.appendChild(iconWrapEl);
             }
             
@@ -391,10 +400,11 @@ Ext.define('Ext.panel.Title', {
     },
 
     updateIconCls: function(cls, oldCls) {
-        cls = cls || '';
         var me = this,
             iconEl;
 
+        cls = cls || '';
+        
         if (me.rendered && oldCls !== cls) {
             me._syncIconVisibility();
             iconEl = me.iconEl;
@@ -402,7 +412,9 @@ Ext.define('Ext.panel.Title', {
             if (oldCls) {
                 iconEl.removeCls(oldCls);
             }
+
             iconEl.addCls(cls);
+
             if (me._didIconStateChange(oldCls, cls)) {
                 me.updateLayout();
             }
@@ -421,6 +433,7 @@ Ext.define('Ext.panel.Title', {
             me.addCls(rotationClasses[rotation]);
 
             el.setHorizontal();
+
             if (rotation) {
                 el.setVertical(me._rotationAngles[rotation]);
             }
@@ -457,6 +470,7 @@ Ext.define('Ext.panel.Title', {
             if (oldAlign) {
                 me.removeCls(textAlignClasses[oldAlign]);
             }
+
             me.addCls(textAlignClasses[align]);
 
             me.updateLayout();
@@ -471,6 +485,7 @@ Ext.define('Ext.panel.Title', {
 
         _didIconStateChange: function(old, current) {
             var currentEmpty = Ext.isEmpty(current);
+
             return Ext.isEmpty(old) ? !currentEmpty : currentEmpty;
         },
 

@@ -24,9 +24,11 @@ Ext.define(null, {
 
                 if (xInf || yInf) {
                     maxPosition = me.getMaxPosition();
+                    
                     if (xInf) {
                         x = maxPosition.x;
                     }
+                    
                     if (yInf) {
                         y = maxPosition.y;
                     }
@@ -53,19 +55,24 @@ Ext.define(null, {
                             scrollLeft: x
                         }
                     }, animate);
+                    
                     deferred = new Ext.Deferred();
                     callback = animate.callback;
+                    
                     animate.callback = function() {
                         if (callback) {
                             callback.call(animate.scope || Ext.global, arguments);
                         }
+                        
                         // The callback will be called if the element is destroyed
                         if (me.destroyed) {
                             deferred.reject();
-                        } else {
+                        }
+                        else {
                             deferred.resolve();
                         }
                     };
+                    
                     element.animate(animate);
                     ret = deferred.promise;
                 }
@@ -101,12 +108,14 @@ Ext.define(null, {
                         +dom.scrollTop;
                         dom.scrollTop = y;
                     }
+                    
                     ret = Ext.Deferred.getCachedResolved();
                 }
 
                 // Our position object will need refreshing before returning.
                 me.positionDirty = true;
-            } else {
+            }
+            else {
                 ret = Ext.Deferred.getCachedRejected();
             }
 

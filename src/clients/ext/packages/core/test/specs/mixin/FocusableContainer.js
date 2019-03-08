@@ -1,10 +1,8 @@
-/* global jasmine, Ext, spyOn, expect */
-
 topSuite("Ext.mixin.FocusableContainer",
-    Ext.isModern ?
-        ['Ext.Container', 'Ext.Button', 'Ext.form.Text', 'Ext.form.Select', 'Ext.form.Slider']
-    :  ['Ext.Container', 'Ext.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox',
-        'Ext.slider.Single'],
+    Ext.isModern
+        ? ['Ext.Container', 'Ext.Button', 'Ext.form.Text', 'Ext.form.Select', 'Ext.form.Slider']
+        : ['Ext.Container', 'Ext.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox',
+           'Ext.slider.Single'],
 function() {
     var isModern = Ext.toolkit === 'modern',
         forward = true,
@@ -60,7 +58,7 @@ function() {
                     if (isModern && !('tabIndex' in item)) {
                         item.tabIndex = 0;
                     }
-                };
+                }
             }
         }
         
@@ -1054,8 +1052,10 @@ function() {
                     })(i));
                 }
                 else if (typeof want === 'number') {
+                    /* eslint-disable-next-line multiline-ternary */
                     desc = want === -1 ? "should keep " + itemId + " child inactive"
-                         :               "should activate " + itemId + " child";
+                         :               "should activate " + itemId + " child"
+                         ;
                     
                     // Close over item index *and* expected value
                     it(desc, (function(itemIndex, value) {
@@ -1074,8 +1074,10 @@ function() {
                     })(i, want));
                 }
                 else {
+                    // eslint-disable-next-line multiline-ternary
                     desc = want ? "should keep " + itemId + " child tabbable"
-                         :        "should make " + itemId + " child non-tabbable";
+                         :        "should make " + itemId + " child non-tabbable"
+                         ;
                     
                     // Ditto
                     it(desc, (function(itemIndex, value) {
@@ -1185,7 +1187,7 @@ function() {
                                         })(item, method);
                                     }
                                 }
-                            }
+                            };
                         })(method, sequence));
                     }
                 }
@@ -1396,7 +1398,7 @@ function() {
                         makeResetSuite([focusSecond, { disable: [2, 3, 1] }, { enable: [1, 2, 3] }], true, [0, -1, -1], null);
                         makeResetSuite([focusSecond, { disable: [2, 1] }], true, [null, null, 0], 3);
                         makeResetSuite([focusSecond, { disable: [2, 1, 3] }], false, [null, null, null], null);
-                        makeResetSuite([focusSecond, { disable: [2, 1, 3] }, { enable: [1, 2, 3]} ], true, [0, -1, -1], null);
+                        makeResetSuite([focusSecond, { disable: [2, 1, 3] }, { enable: [1, 2, 3] } ], true, [0, -1, -1], null);
                         makeResetSuite([focusSecond, { disable: 3 }], true, [-1, 0, null], 2);
                         makeResetSuite([focusSecond, { disable: [3, 2] }], true, [0, null, null], 1);
                         makeResetSuite([focusSecond, { disable: [3, 2, 1] }], false, [null, null, null], null);
@@ -1663,7 +1665,7 @@ function() {
                         makeResetSuite([focusSecond, { hide: [2, 3, 1] }, { show: [1, 2, 3] }], true, [0, -1, -1], null);
                         makeResetSuite([focusSecond, { hide: [2, 1] }], true, [false, false, 0], 3);
                         makeResetSuite([focusSecond, { hide: [2, 1, 3] }], false, [false, false, false], null);
-                        makeResetSuite([focusSecond, { hide: [2, 1, 3] }, { show: [1, 2, 3]} ], true, [0, -1, -1], null);
+                        makeResetSuite([focusSecond, { hide: [2, 1, 3] }, { show: [1, 2, 3] } ], true, [0, -1, -1], null);
                         makeResetSuite([focusSecond, { hide: 3 }], true, [-1, 0, false], 2);
                         makeResetSuite([focusSecond, { hide: [3, 2] }], true, [0, false, false], 1);
                         makeResetSuite([focusSecond, { hide: [3, 2, 1] }], false, [false, false, false], null);

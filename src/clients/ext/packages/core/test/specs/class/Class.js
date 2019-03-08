@@ -1,12 +1,14 @@
+/* global Foo */
+
 topSuite("Ext.Class", function() {
-    var emptyFn = function(){},
+    var emptyFn = function() {},
         defaultInitConfig = function(config) {
             this.initConfig(config);
         },
         cls, sub, fn, subClass, parentClass, mixinClass1, mixinClass2, o;
         
     beforeEach(function() {
-        fn = function(){};
+        fn = function() {};
         
         mixinClass1 = Ext.define(null, {
             config: {
@@ -107,6 +109,7 @@ topSuite("Ext.Class", function() {
         
         beforeEach(function() {
             fn = function() {};
+
             Ext.define('spec.Base', {
                 aProp: 1,
                 
@@ -141,6 +144,7 @@ topSuite("Ext.Class", function() {
         
         it("should have superclass reference", function() {
             var parentPrototype = spec.Base.prototype;
+
             cls = Ext.define(null, {
                 extend: spec.Base
             });
@@ -172,7 +176,7 @@ topSuite("Ext.Class", function() {
         
         describe("getter/setter creation", function() {
         
-            it("should create getter if not exists", function() {            
+            it("should create getter if not exists", function() {
                 cls = Ext.define(null, {
                     config: {
                         someName: 'someValue'
@@ -188,6 +192,7 @@ topSuite("Ext.Class", function() {
                         someName: 'someValue'
                     }
                 });
+
                 expect(cls.prototype.getSomeName).toBe(fn);
             });
             
@@ -213,13 +218,13 @@ topSuite("Ext.Class", function() {
             it("should allow a custom getter to call the generated getter", function() {
                 cls = Ext.define(null, {
                     config: {
-                        someName: 'foo'    
+                        someName: 'foo'
                     },
                     constructor: defaultInitConfig,
                     getSomeName: function() {
                         return this.callParent().toUpperCase();
-                    }    
-                });  
+                    }
+                });
                 
                 o = new cls();
                 expect(o.getSomeName()).toBe('FOO');
@@ -228,14 +233,15 @@ topSuite("Ext.Class", function() {
             it("should allow a custom setter to call the generated setter", function() {
                 cls = Ext.define(null, {
                     config: {
-                        someName: 'foo'    
+                        someName: 'foo'
                     },
                     constructor: defaultInitConfig,
                     setSomeName: function(someName) {
                         someName = someName.toUpperCase();
+
                         return this.callParent([someName]);
-                    }    
-                });  
+                    }
+                });
                 
                 o = new cls();
                 expect(o.getSomeName()).toBe('FOO');
@@ -243,6 +249,7 @@ topSuite("Ext.Class", function() {
             
             it("should not set the value if the applier returns undefined", function() {
                 var called = false;
+
                 cls = Ext.define(null, {
                     config: {
                         foo: 1
@@ -251,8 +258,10 @@ topSuite("Ext.Class", function() {
                     applyFoo: function(foo) {
                         if (!called) {
                             called = true;
+
                             return foo;
                         }
+
                         return undefined;
                     }
                 });
@@ -264,6 +273,7 @@ topSuite("Ext.Class", function() {
             
             it("should not call the updater if the value does not change", function() {
                 var count = 0;
+
                 cls = Ext.define(null, {
                     config: {
                         foo: 1
@@ -281,6 +291,7 @@ topSuite("Ext.Class", function() {
             
             it("should check using === to see if the value changed", function() {
                 var count = 0;
+
                 cls = Ext.define(null, {
                     config: {
                         foo: 1
@@ -296,14 +307,14 @@ topSuite("Ext.Class", function() {
                 expect(count).toBe(2);
             });
 
-            it("should allow defining a config named 'configurator'", function () {
+            it("should allow defining a config named 'configurator'", function() {
                 cls = Ext.define(null, {
                     config: {
                         configurator: 1
                     },
                     constructor: defaultInitConfig,
                     applyConfigurator: function(v) {
-                        return v+1;
+                        return v + 1;
                     }
                 });
 
@@ -334,6 +345,7 @@ topSuite("Ext.Class", function() {
                         },
                         applyBar: function(bar) {
                             ++applyCount;
+
                             return bar;
                         },
                         updateBar: function() {
@@ -380,6 +392,7 @@ topSuite("Ext.Class", function() {
                     
                         it("should not initialize with a custom setter", function() {
                             var called = false;
+
                             cls = Ext.define(null, {
                                 config: {
                                     foo: null
@@ -390,11 +403,12 @@ topSuite("Ext.Class", function() {
                                 }
                             });
                             o = new cls();
-                            expect(called).toBe(false);  
+                            expect(called).toBe(false);
                         });
                         
                         it("should not initialize with an applier", function() {
                             var called = false;
+
                             cls = Ext.define(null, {
                                 config: {
                                     foo: null
@@ -405,11 +419,12 @@ topSuite("Ext.Class", function() {
                                 }
                             });
                             o = new cls();
-                            expect(called).toBe(false);  
+                            expect(called).toBe(false);
                         });
                         
                         it("should not initialize with an updater", function() {
                             var called = false;
+
                             cls = Ext.define(null, {
                                 config: {
                                     foo: null
@@ -420,7 +435,7 @@ topSuite("Ext.Class", function() {
                                 }
                             });
                             o = new cls();
-                            expect(called).toBe(false);  
+                            expect(called).toBe(false);
                         });
                     });
                     
@@ -509,6 +524,7 @@ topSuite("Ext.Class", function() {
                 describe("dependencies", function() {
                     it("should force an initialization if the getter is called during init time for a primitive", function() {
                         var secondVal;
+
                         cls = Ext.define(null, {
                             config: {
                                 first: undefined,
@@ -529,6 +545,7 @@ topSuite("Ext.Class", function() {
                     
                     it("should have a non-config applied by the time any setter is called with non-strict mode", function() {
                         var secondVal;
+
                         cls = Ext.define(null, {
                             config: {
                                 first: undefined
@@ -565,10 +582,10 @@ topSuite("Ext.Class", function() {
                 });
             });
 
-            describe('dependency ordering', function () {
+            describe('dependency ordering', function() {
                 var order;
 
-                function declareClass () {
+                function declareClass() {
                     order = [];
                     cls = Ext.define(null, {
                         config: {
@@ -579,28 +596,28 @@ topSuite("Ext.Class", function() {
 
                         constructor: defaultInitConfig,
 
-                        applyA: function (value) {
+                        applyA: function(value) {
                             order.push('a=' + value);
                         },
-                        applyB: function (value) {
+                        applyB: function(value) {
                             this.getA();
                             order.push('b=' + value);
                         },
-                        applyC: function (value) {
+                        applyC: function(value) {
                             this.getB();
                             order.push('c=' + value);
                         }
                     });
                 }
 
-                it('should initialize dependent config first', function () {
+                it('should initialize dependent config first', function() {
                     declareClass();
                     var o = new cls();
 
                     expect(order).toEqual(['a=aaa', 'b=bbb', 'c=ccc']);
                 });
 
-                it('should update configs in dependency order', function () {
+                it('should update configs in dependency order', function() {
                     declareClass();
                     var o = new cls();
 
@@ -649,7 +666,7 @@ topSuite("Ext.Class", function() {
                         foo: 1,
                         bar: 2,
                         bletch: 3
-                    });    
+                    });
                 });
             
                 it("should return undefined when asking for a config name that does not exist", function() {
@@ -731,7 +748,7 @@ topSuite("Ext.Class", function() {
                     o.setConfig({
                         foo: 6,
                         bar: 8
-                    });    
+                    });
                     expect(o.getFoo()).toBe(6);
                     expect(o.getBar()).toBe(8);
                 });
@@ -772,7 +789,7 @@ topSuite("Ext.Class", function() {
                     expect(function() {
                         o.setConfig(null);
                         o.setConfig(undefined);
-                    }).not.toThrow();    
+                    }).not.toThrow();
                 });
                 
                 it("should return the current instance", function() {
@@ -784,6 +801,7 @@ topSuite("Ext.Class", function() {
         
         it("should merge properly", function() {
             var obj = new subClass;
+
             expect(obj.config).toEqual({
                 mixinConfig: 'mixinConfig',
                 name: 'subClass',
@@ -801,6 +819,7 @@ topSuite("Ext.Class", function() {
 
         it("should apply default config", function() {
             var obj = new subClass;
+
             expect(obj.getName()).toBe('subClass');
             expect(obj.getIsCool()).toBe(true);
             expect(obj.getHobbies()).toEqual(['sleeping', 'eating', 'movies']);
@@ -841,7 +860,7 @@ topSuite("Ext.Class", function() {
                 m2 = o2.getMembers();
                 
             expect(m1).not.toBe(m2);
-            expect(m1).toEqual(m2);    
+            expect(m1).toEqual(m2);
         });
 
         it("should not clone dom nodes in an object", function() {
@@ -853,11 +872,13 @@ topSuite("Ext.Class", function() {
             });
 
             var el = document.createElement('div');
+
             var o = new cls({
                 foo: {
                     bar: el
                 }
             });
+
             expect(o.getFoo().bar).toBe(el);
         });
         
@@ -869,7 +890,7 @@ topSuite("Ext.Class", function() {
                 h2 = o2.getHobbies();
                 
             expect(h1).not.toBe(h2);
-            expect(h1).toEqual(h2);    
+            expect(h1).toEqual(h2);
         });
         
         describe("values", function() {
@@ -881,7 +902,7 @@ topSuite("Ext.Class", function() {
                     }
                 });
                 expect((new cls()).getFoo()).toBe('bar');
-            });  
+            });
             
             it("should be able to set the config", function() {
                 cls = Ext.define(null, {
@@ -937,8 +958,8 @@ topSuite("Ext.Class", function() {
                     constructor: defaultInitConfig,
                     config: {
                         foo: 'bar'
-                    }    
-                });  
+                    }
+                });
                 
                 sub = Ext.define(null, {
                     extend: cls,
@@ -946,15 +967,15 @@ topSuite("Ext.Class", function() {
                 });
                 
                 expect((new sub()).getFoo()).toBe('baz');
-            });  
+            });
             
             it("should remove the property from the prototype", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
                     config: {
                         foo: 'bar'
-                    }    
-                });  
+                    }
+                });
                 
                 sub = Ext.define(null, {
                     extend: cls,
@@ -969,7 +990,7 @@ topSuite("Ext.Class", function() {
                     foo: 'baz',
                     config: {
                         foo: 'bar'
-                    }    
+                    }
                 });
                 expect((new cls()).getFoo()).toBe('bar');
             });
@@ -995,8 +1016,8 @@ topSuite("Ext.Class", function() {
                     foo: 'baz',
                     config: {
                         foo: 'bar'
-                    }    
-                });  
+                    }
+                });
                 
                 sub = Ext.define(null, {
                     extend: cls,
@@ -1030,7 +1051,7 @@ topSuite("Ext.Class", function() {
                             foo: 'bar'
                         },
                         constructor: defaultInitConfig,
-                        baz: function () {}
+                        baz: function() {}
                     });
 
                     expect(function() {
@@ -1049,7 +1070,7 @@ topSuite("Ext.Class", function() {
                             foo: 'bar'
                         },
                         constructor: defaultInitConfig,
-                        baz: function () {}
+                        baz: function() {}
                     });
 
                     o = new cls({
@@ -1216,7 +1237,7 @@ topSuite("Ext.Class", function() {
                             foo: 'bar'
                         },
                         constructor: defaultInitConfig,
-                        baz: function () {}
+                        baz: function() {}
                     });
 
                     o = new spec.MyClass();
@@ -1239,7 +1260,7 @@ topSuite("Ext.Class", function() {
                             foo: 'bar'
                         },
                         constructor: defaultInitConfig,
-                        baz: function () {}
+                        baz: function() {}
                     });
 
                     o = new cls();
@@ -1372,8 +1393,8 @@ topSuite("Ext.Class", function() {
                     expect(Ext.log.warn).not.toHaveBeenCalled();
                 });
 
-                describe('defaults', function () {
-                    it('should set default value', function () {
+                describe('defaults', function() {
+                    it('should set default value', function() {
                         cls = Ext.define(null, {
                             config: {
                                 foo: null
@@ -1393,7 +1414,7 @@ topSuite("Ext.Class", function() {
                         expect(o.getFoo()).toBe('bar');
                     });
 
-                    it('should set default value when config has default value', function () {
+                    it('should set default value when config has default value', function() {
                         cls = Ext.define(null, {
                             config: {
                                 foo: 'foobar'
@@ -1413,7 +1434,7 @@ topSuite("Ext.Class", function() {
                         expect(o.getFoo()).toBe('bar');
                     });
 
-                    it('should not set default value', function () {
+                    it('should not set default value', function() {
                         cls = Ext.define(null, {
                             config: {
                                 foo: null
@@ -1445,8 +1466,8 @@ topSuite("Ext.Class", function() {
                     config: {
                         foo: defaultValue || 'bar'
                     },
-                    constructor: defaultInitConfig    
-                });  
+                    constructor: defaultInitConfig
+                });
             };
             
             it("should use the config name as the instance property when false", function() {
@@ -1456,7 +1477,7 @@ topSuite("Ext.Class", function() {
             });
             
             it("should use _config name as the instance property when true", function() {
-                defineCls(true); 
+                defineCls(true);
                 o = new cls();
                 expect(o._foo).toBe('bar');
             });
@@ -1479,7 +1500,7 @@ topSuite("Ext.Class", function() {
         });
 
         describe("meta configs", function() {
-            describe('mixins', function () {
+            describe('mixins', function() {
                 it("should inherit meta configs from mixins", function() {
                     var calls = 0;
 
@@ -1496,11 +1517,12 @@ topSuite("Ext.Class", function() {
                         mixins: {
                             mix: Mix
                         },
-                        constructor: function (config) {
+                        constructor: function(config) {
                             this.initConfig(config);
                         },
-                        applyFoo: function (newValue, oldValue) {
+                        applyFoo: function(newValue, oldValue) {
                             ++calls;
+
                             return newValue;
                         }
                     });
@@ -1536,11 +1558,12 @@ topSuite("Ext.Class", function() {
                                 $value: 2
                             }
                         },
-                        constructor: function (config) {
+                        constructor: function(config) {
                             this.initConfig(config);
                         },
-                        applyFoo: function (newValue, oldValue) {
+                        applyFoo: function(newValue, oldValue) {
                             ++calls;
+
                             return newValue;
                         }
                     });
@@ -1605,21 +1628,24 @@ topSuite("Ext.Class", function() {
                                 baz: 3
                             },
 
-                            applyFoo: function (foo) {
+                            applyFoo: function(foo) {
                                 var v = foo * this.getBar(); // fwd dependency
+
                                 log.push('applyFoo:' + foo);
                                 log.push('applyFoo:' + v);
+
                                 return v;
                             },
 
-                            applyBar: function (bar) {
+                            applyBar: function(bar) {
                                 log.push('applyBar:' + bar);
 
                                 return bar * 5;
                             },
 
-                            applyBaz: function (baz) {
+                            applyBaz: function(baz) {
                                 var v = baz * this.getFoo(); // backward dependency
+
                                 log.push('applyBaz:' + baz);
                                 log.push('applyBaz:' + v);
 
@@ -1689,6 +1715,7 @@ topSuite("Ext.Class", function() {
                             applyFoo: function(foo) {
                                 ++count;
                                 o.foo = foo;
+
                                 return o;
                             }
                         });
@@ -1699,7 +1726,7 @@ topSuite("Ext.Class", function() {
                         expect(count).toBe(1);
                         expect(a.getFoo()).toBe(o);
                         expect(b.getFoo()).toBe(o);
-                        expect(c.getFoo()).toBe(o); 
+                        expect(c.getFoo()).toBe(o);
                     });
                     
                     it("should call the updater only once", function() {
@@ -1779,7 +1806,7 @@ topSuite("Ext.Class", function() {
                         o = new sub();
                         expect(sub.prototype._foo).toBe('bar');
                         expect(o.getFoo()).toBe('bar');
-                    });  
+                    });
                     
                     it("should be able to override the default value", function() {
                         cls = Ext.define(null, {
@@ -1823,9 +1850,11 @@ topSuite("Ext.Class", function() {
                             applyFoo: function(foo) {
                                 if (this.self === cls) {
                                     ++parentCount;
-                                } else if (this.self === sub) {
+                                }
+                                else if (this.self === sub) {
                                     ++subCount;
                                 }
+
                                 return foo;
                             }
                         });
@@ -1907,7 +1936,7 @@ topSuite("Ext.Class", function() {
                                         $value: null
                                     }
                                 }
-                            });    
+                            });
                             
                             new cls();
                             new sub();
@@ -1933,7 +1962,7 @@ topSuite("Ext.Class", function() {
                                         $value: 1
                                     }
                                 }
-                            }); 
+                            });
                             
                             new cls();
                             new sub();
@@ -1949,7 +1978,7 @@ topSuite("Ext.Class", function() {
                                         $value: 1
                                     }
                                 },
-                                constructor: defaultInitConfig    
+                                constructor: defaultInitConfig
                             });
                             
                             var B = Ext.define(null, {
@@ -1995,6 +2024,7 @@ topSuite("Ext.Class", function() {
                             }
                         });
                         var cfg = cls.getConfigurator();
+
                         expect(cfg.cachedConfigs).toEqual({
                             foo: true
                         });
@@ -2015,6 +2045,7 @@ topSuite("Ext.Class", function() {
                 describe("basic construction", function() {
                     it("should not call the applier when instantiated without a config value", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2028,6 +2059,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the applier when instantiated with a config value", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2043,6 +2075,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the updater when instantiated without a config value", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2056,6 +2089,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the updater when instantiated with a config value", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2089,6 +2123,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the applier on subsequent get calls", function() {
                         var spy = jasmine.createSpy().andReturn(1);
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: Ext.apply({
@@ -2109,6 +2144,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the updater on subsequent get calls", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: Ext.apply({
@@ -2135,7 +2171,9 @@ topSuite("Ext.Class", function() {
                                 constructor: defaultInitConfig,
                                 config: makeLazy(1)
                             });
+
                             var o = new Cls();
+
                             expect(o._foo).toBe(1);
                         });
 
@@ -2144,7 +2182,9 @@ topSuite("Ext.Class", function() {
                                 constructor: defaultInitConfig,
                                 config: makeLazy({})
                             });
+
                             var o = new Cls();
+
                             expect(o._foo).not.toBeDefined();
                         });
                     });
@@ -2155,9 +2195,11 @@ topSuite("Ext.Class", function() {
                                 constructor: defaultInitConfig,
                                 config: makeLazy({})
                             });
+
                             var o = new Cls({
                                 foo: {}
                             });
+
                             expect(o._foo).not.toBeDefined();
                         });
                     });
@@ -2168,10 +2210,13 @@ topSuite("Ext.Class", function() {
                             config: makeLazy(1),
                             setFoo: function() {
                                 this.callParent(arguments);
+
                                 return this;
                             }
                         });
+
                         var o = new Cls();
+
                         expect(o._foo).not.toBeDefined();
                     });
 
@@ -2181,7 +2226,9 @@ topSuite("Ext.Class", function() {
                             config: makeLazy(1),
                             applyFoo: Ext.identityFn
                         });
+
                         var o = new Cls();
+
                         expect(o._foo).not.toBeDefined();
                     });
 
@@ -2191,18 +2238,23 @@ topSuite("Ext.Class", function() {
                             config: makeLazy(1),
                             updateFoo: Ext.emptyFn
                         });
+
                         var o = new Cls();
+
                         expect(o._foo).not.toBeDefined();
                     });
 
                     it("should not call the getter if set is called", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
                             getFoo: spy
                         });
+
                         var o = new Cls();
+
                         o.setFoo(2);
                         expect(spy).not.toHaveBeenCalled();
                     });
@@ -2211,6 +2263,7 @@ topSuite("Ext.Class", function() {
                 describe("first call to get", function() {
                     it("should call the applier on the first get call", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2225,6 +2278,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the applier on subsequent get calls", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2241,6 +2295,7 @@ topSuite("Ext.Class", function() {
 
                     it("should call the updater on the first get call", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2255,6 +2310,7 @@ topSuite("Ext.Class", function() {
 
                     it("should not call the updater on subsequent get calls", function() {
                         var spy = jasmine.createSpy();
+
                         var Cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2297,6 +2353,7 @@ topSuite("Ext.Class", function() {
                 describe("subclassing", function() {
                     it("should inherit laziness from the parent", function() {
                         var spy = jasmine.createSpy();
+
                         var A = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2307,6 +2364,7 @@ topSuite("Ext.Class", function() {
                         var B = Ext.define(null, {
                             extend: A
                         });
+
                         o = new B();
                         expect(spy).not.toHaveBeenCalled();
                         o.getFoo();
@@ -2317,6 +2375,7 @@ topSuite("Ext.Class", function() {
                         var spy = jasmine.createSpy().andCallFake(function(v) {
                             return v;
                         });
+
                         var A = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2330,6 +2389,7 @@ topSuite("Ext.Class", function() {
                                 foo: 9876
                             }
                         });
+
                         o = new B();
                         expect(spy).not.toHaveBeenCalled();
                         expect(o.getFoo()).toBe(9876);
@@ -2337,6 +2397,7 @@ topSuite("Ext.Class", function() {
 
                     it("should be able to go from lazy -> !lazy", function() {
                         var spy = jasmine.createSpy();
+
                         var A = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2360,6 +2421,7 @@ topSuite("Ext.Class", function() {
 
                     it("should be able to go from !lazy -> lazy", function() {
                         var spy = jasmine.createSpy();
+
                         var A = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: {
@@ -2382,6 +2444,7 @@ topSuite("Ext.Class", function() {
 
                     it("should retain laziness on the superclass", function() {
                         var spy = jasmine.createSpy();
+
                         var A = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: makeLazy(1),
@@ -2409,6 +2472,7 @@ topSuite("Ext.Class", function() {
 
             describe("merge", function() {
                 var spy, A, B;
+
                 beforeEach(function() {
                     spy = jasmine.createSpy();
                 });
@@ -2471,6 +2535,7 @@ topSuite("Ext.Class", function() {
 
                     describe("merge values", function() {
                         var possible = [undefined, null, true, 'aString', 1, new Date(), {}, []];
+
                         describe("for subclasses", function() {
                             it("should call the merge function for all value combinations", function() {
                                 Ext.Array.forEach(possible, function(superValue) {
@@ -2504,6 +2569,7 @@ topSuite("Ext.Class", function() {
                             defineInherit(o1, o2);
 
                             var call = spy.mostRecentCall;
+
                             var args = call.args;
 
                             // When merge is called the "this" pointer should be the
@@ -2521,6 +2587,7 @@ topSuite("Ext.Class", function() {
                             it("should pass the mixinClass", function() {
                                 defineMixin({}, {});
                                 var args = spy.mostRecentCall.args;
+
                                 expect(args[2]).toBe(A);
                                 expect(args[3]).toBe(B);
                             });
@@ -2547,6 +2614,7 @@ topSuite("Ext.Class", function() {
 
                 describe("instance values", function() {
                     var A;
+
                     function defineAndInstance(classVal, instanceVal) {
                         A = Ext.define(null, {
                             constructor: defaultInitConfig,
@@ -2570,6 +2638,7 @@ topSuite("Ext.Class", function() {
                     describe("merge values", function() {
                         it("should call the merge function for all value combinations", function() {
                             var possible = [undefined, null, true, 'aString', 1, new Date(), {}, []];
+
                             Ext.Array.forEach(possible, function(clsValue) {
                                 Ext.Array.forEach(possible, function(instanceValue) {
                                     spy.reset();
@@ -2668,6 +2737,7 @@ topSuite("Ext.Class", function() {
 
                     it("should be able to override the merge on a superclass", function() {
                         var superSpy = jasmine.createSpy();
+
                         spy = jasmine.createSpy().andReturn({});
 
                         A = Ext.define(null, {
@@ -2858,7 +2928,7 @@ topSuite("Ext.Class", function() {
                 extend: cls,
                 statics: {
                     someName: 'someOtherValue',
-                    someMethod: function(){}
+                    someMethod: function() {}
                 }
             });
 
@@ -3073,7 +3143,7 @@ topSuite("Ext.Class", function() {
             var called = false;
 
             subClass.addStatics({
-                staticMethod: function(){
+                staticMethod: function() {
                     called = true;
                 }
             });
@@ -3087,7 +3157,7 @@ topSuite("Ext.Class", function() {
         it("multiple with object map argument", function() {
             subClass.addStatics({
                 staticProperty: 'something',
-                staticMethod: function(){}
+                staticMethod: function() {}
             });
 
             expect(subClass.staticProperty).toBe('something');
@@ -3099,7 +3169,7 @@ topSuite("Ext.Class", function() {
     describe("override", function() {
         it("should override", function() {
             subClass.override({
-                myOwnMethod: function(){
+                myOwnMethod: function() {
                     this.isOverridden = true;
 
                     this.callOverridden(arguments);
@@ -3107,6 +3177,7 @@ topSuite("Ext.Class", function() {
             });
 
             var obj = new subClass;
+
             obj.myOwnMethod();
 
             expect(obj.isOverridden).toBe(true);
@@ -3148,107 +3219,107 @@ topSuite("Ext.Class", function() {
         });
     });
 
-    describe('private methods', function () {
+    describe('private methods', function() {
         var Base;
 
-        beforeEach(function () {
+        beforeEach(function() {
             // This is to silence console log errors
             spyOn(Ext, 'log');
             Base = Ext.define(null, {
-                bar: function () {},
+                bar: function() {},
 
                 privates: {
-                    foo: function () {}
+                    foo: function() {}
                 }
             });
         });
 
-        describe('extend', function () {
-            it('should allow derived class to override a private method w/a private method', function () {
-                expect(function () {
+        describe('extend', function() {
+            it('should allow derived class to override a private method w/a private method', function() {
+                expect(function() {
                     Ext.define(null, {
                         extend: Base,
 
                         privates: {
-                            foo: function () {}
+                            foo: function() {}
                         }
                     });
                 }).not.toThrow();
             });
 
-            it('should allow derived class to override a public method w/a private method', function () {
-                expect(function () {
+            it('should allow derived class to override a public method w/a private method', function() {
+                expect(function() {
                     Ext.define(null, {
                         extend: Base,
 
                         privates: {
-                            bar: function () {}
+                            bar: function() {}
                         }
                     });
                 }).not.toThrow();
             });
 
-            it('should throw when derived class overrides a private method', function () {
-                expect(function () {
+            it('should throw when derived class overrides a private method', function() {
+                expect(function() {
                     Ext.define(null, {
                         extend: Base,
 
-                        foo: function () {}
+                        foo: function() {}
                     });
                 }).toThrow();
             });
 
-            it('should throw when derived class overrides a private method w/a foreign private method', function () {
-                expect(function () {
+            it('should throw when derived class overrides a private method w/a foreign private method', function() {
+                expect(function() {
                     Ext.define(null, {
                         extend: Base,
 
                         privates: {
                             privacy: 'user',
 
-                            foo: function () {}
+                            foo: function() {}
                         }
                     });
                 }).toThrow();
             });
         });
 
-        describe('override', function () {
-            it('should throw when overriding a private method', function () {
-                expect(function () {
+        describe('override', function() {
+            it('should throw when overriding a private method', function() {
+                expect(function() {
                     Base.override({
-                        foo: function () {}
+                        foo: function() {}
                     });
                 }).toThrow();
             });
 
-            it('should allow overriding a public method w/a private method', function () {
-                expect(function () {
+            it('should allow overriding a public method w/a private method', function() {
+                expect(function() {
                     Base.override({
                         privates: {
-                            bar: function () {}
+                            bar: function() {}
                         }
                     });
                 }).not.toThrow();
             });
 
-            it('should allow overriding a private method w/a private method', function () {
-                expect(function () {
+            it('should allow overriding a private method w/a private method', function() {
+                expect(function() {
                     Base.override({
                         privates: {
-                            foo: function () {}
+                            foo: function() {}
                         }
                     });
                 }).not.toThrow();
             });
 
-            it('should throw when derived class overrides a private method w/a foreign private method', function () {
-                expect(function () {
+            it('should throw when derived class overrides a private method w/a foreign private method', function() {
+                expect(function() {
                     Base.override({
                         privates: {
                             privacy: 'user',
 
-                            foo: function () {}
+                            foo: function() {}
                         }
                     });
                 }).toThrow();
@@ -3260,18 +3331,18 @@ topSuite("Ext.Class", function() {
         var obj,
             createFnsCalled;
 
-        beforeEach(function () {
+        beforeEach(function() {
             createFnsCalled = [];
 
-            function onCreated () {
+            function onCreated() {
                 createFnsCalled.push(this.$className);
             }
 
             Ext.define('Foo.UnusedOverride', {
                 override: 'Foo.Nothing',
 
-                foo: function (x) {
-                    return this.callParent([x*2]);
+                foo: function(x) {
+                    return this.callParent([x * 2]);
                 }
             }, onCreated);
 
@@ -3279,28 +3350,28 @@ topSuite("Ext.Class", function() {
             Ext.define('Foo.SingletonOverride', {
                 override: 'Foo.Singleton',
 
-                foo: function (x) {
-                    return this.callParent([x*2]);
+                foo: function(x) {
+                    return this.callParent([x * 2]);
                 }
             }, onCreated);
 
             Ext.define('Foo.Singleton', {
                 singleton: true,
-                foo: function (x) {
+                foo: function(x) {
                     return x;
                 }
             });
 
             Ext.define('Foo.SomeBase', {
-                patchedMethod: function (x) {
+                patchedMethod: function(x) {
                     return x + 'A';
                 },
 
                 statics: {
-                    patchedStaticMethod: function (x) {
+                    patchedStaticMethod: function(x) {
                         return x + 'a';
                     },
-                    staticMethod: function (x) {
+                    staticMethod: function(x) {
                         return 'A' + x;
                     }
                 }
@@ -3311,7 +3382,7 @@ topSuite("Ext.Class", function() {
 
                 prop: 1,
 
-                constructor: function () {
+                constructor: function() {
                     this.prop = 2;
                 },
 
@@ -3319,16 +3390,16 @@ topSuite("Ext.Class", function() {
                     return 'b' + x;
                 },
                 
-                patchedMethod: function () {
+                patchedMethod: function() {
                     return this.callParent() + 'B';
                 },
 
                 statics: {
-                    patchedStaticMethod: function (x) {
+                    patchedStaticMethod: function(x) {
                         return this.callParent(arguments) + 'b';
                     },
 
-                    staticMethod: function (x) {
+                    staticMethod: function(x) {
                         return 'B' + this.callParent(arguments);
                     }
                 }
@@ -3338,32 +3409,32 @@ topSuite("Ext.Class", function() {
             Ext.define('Foo.SomeClassOverride', {
                 override: 'Foo.SomeClass',
 
-                constructor: function () {
+                constructor: function() {
                     this.callParent(arguments);
                     this.prop *= 21;
                 },
 
                 method1: function(x) {
-                    return 'a' + this.callParent([x*2]) + 'c';
+                    return 'a' + this.callParent([x * 2]) + 'c';
                 },
 
                 method2: function() {
                     return 'two';
                 },
 
-                patchedMethod: function (x) {
+                patchedMethod: function(x) {
                     return this.callSuper(arguments) + 'C';
                 },
 
                 statics: {
-                    newStatic: function () {
+                    newStatic: function() {
                         return 'boo';
                     },
-                    patchedStaticMethod: function (x) {
+                    patchedStaticMethod: function(x) {
                         return this.callSuper(arguments) + 'c';
                     },
-                    staticMethod: function (x) {
-                        return 'Z' + this.callParent([x*2]) + '!';
+                    staticMethod: function(x) {
+                        return 'Z' + this.callParent([x * 2]) + '!';
                     }
                 }
             }, onCreated);
@@ -3371,10 +3442,10 @@ topSuite("Ext.Class", function() {
             obj = Ext.create('Foo.SomeClass');
         });
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.each(['Foo.SingletonOverride', 'Foo.Singleton', 'Foo.SomeClassOverride',
                       'Foo.SomeBase', 'Foo.SomeClass'],
-                function (className) {
+                function(className) {
                     Ext.undefine(className);
                 });
 
@@ -3385,7 +3456,7 @@ topSuite("Ext.Class", function() {
             obj = createFnsCalled = null;
         });
 
-        it("should call the createdFn", function () {
+        it("should call the createdFn", function() {
             expect(createFnsCalled.length).toBe(2);
             expect(createFnsCalled[0]).toBe('Foo.Singleton');
             expect(createFnsCalled[1]).toBe('Foo.SomeClass');
@@ -3419,7 +3490,7 @@ topSuite("Ext.Class", function() {
             expect(Foo.SomeClass.patchedStaticMethod('X')).toBe('Xac');
         });
 
-        it('works with singletons', function () {
+        it('works with singletons', function() {
             expect(Foo.Singleton.foo(21)).toBe(42);
         });
     });
@@ -3427,6 +3498,7 @@ topSuite("Ext.Class", function() {
     describe("mixin", function() {
         it("should have all properties of mixins", function() {
             var obj = new subClass;
+
             expect(obj.mixinProperty1).toBe('mixinProperty1');
             expect(obj.mixinProperty2).toBe('mixinProperty2');
             expect(obj.mixinMethod1).toBeDefined();
@@ -3448,6 +3520,7 @@ topSuite("Ext.Class", function() {
                     foo: 2
                 }
             });
+
             o = new Cls();
             expect(o.getFoo()).toBe(2);
             Ext.undefine('spec.Mixin');
@@ -3466,7 +3539,7 @@ topSuite("Ext.Class", function() {
                 extend: 'Ext.Mixin',
 
                 mixinConfig: {
-                    extended: function (base, derived, body) {
+                    extended: function(base, derived, body) {
                         extendLog.push(derived.$className + ' extends ' + base.$className);
                     }
                 },
@@ -3490,7 +3563,7 @@ topSuite("Ext.Class", function() {
                         bar: 'doBar'
                     }
                 },
-                doBar: function (s) {
+                doBar: function(s) {
                     // This flavor will work since this is a normal class method
                     this.callParent(arguments);
                     fooResult += 'M2.bar' + s;
@@ -3523,6 +3596,7 @@ topSuite("Ext.Class", function() {
                 foo: function(s) {
                     this.callParent(arguments);
                     fooResult += 'C.foo' + s;
+
                     return 'C.foo';
                 },
                 bar: function(s) {
@@ -3538,11 +3612,13 @@ topSuite("Ext.Class", function() {
                 foo: function(s) {
                     this.callParent(arguments);
                     fooResult += 'D.foo' + s;
+
                     return 'D.foo';
                 },
                 bar: function(s) {
                     this.callParent(arguments);
                     fooResult += 'D.bar' + s;
+
                     return 42;
                 }
             });
@@ -3594,8 +3670,9 @@ topSuite("Ext.Class", function() {
             expect(result).toBe(42);
         });
 
-        it('should process extended option', function () {
+        it('should process extended option', function() {
             var s = extendLog.join('/');
+
             expect(s).toBe('Foo.E extends Foo.C');
         });
     });
@@ -3603,16 +3680,19 @@ topSuite("Ext.Class", function() {
     describe("overriden methods", function() {
         it("should call self constructor", function() {
             var obj = new subClass;
+
             expect(obj.subConstructorCalled).toBeTruthy();
         });
 
         it("should call parent constructor", function() {
             var obj = new subClass;
+
             expect(obj.parentConstructorCalled).toBeTruthy();
         });
 
         it("should call mixins constructors", function() {
             var obj = new subClass;
+
             expect(obj.mixinConstructor1Called).toBeTruthy();
             expect(obj.mixinConstructor2Called).toBeTruthy();
         });
@@ -3653,6 +3733,7 @@ topSuite("Ext.Class", function() {
         
         describe("override", function() {
             var base;
+
             beforeEach(function() {
                 base = Ext.define('spec.Base', {});
             });
@@ -3663,6 +3744,7 @@ topSuite("Ext.Class", function() {
             
             it("should set the scope to the overridden class", function() {
                 var val;
+
                 Ext.define('spec.Override', {
                     override: 'spec.Base'
                 }, function() {
@@ -3684,12 +3766,12 @@ topSuite("Ext.Class", function() {
         });
     });
 
-    describe('platformConfig', function () {
+    describe('platformConfig', function() {
         var realPlatformTags,
             log = [],
             Base, Derived;
 
-        beforeEach(function () {
+        beforeEach(function() {
             log.length = 0;
             realPlatformTags = Ext.platformTags;
             Ext.platformTags = {
@@ -3698,7 +3780,7 @@ topSuite("Ext.Class", function() {
             };
 
             Base = Ext.define(null, {
-                constructor: function (config) {
+                constructor: function(config) {
                     this.initConfig(config);
                 },
 
@@ -3706,7 +3788,7 @@ topSuite("Ext.Class", function() {
                     foo: 'abc'
                 },
 
-                updateFoo: function (value) {
+                updateFoo: function(value) {
                     log.push('updateFoo: ' + value);
                 }
             });
@@ -3720,12 +3802,12 @@ topSuite("Ext.Class", function() {
 
                 jaz: 13,
 
-                updateBar: function (value) {
+                updateBar: function(value) {
                     this.getFoo();
                     log.push('updateBar: ' + value);
                 },
 
-                updateJaz: function (value) {
+                updateJaz: function(value) {
                     this.getBar();
                     log.push('updateJaz: ' + value);
                 },
@@ -3748,52 +3830,54 @@ topSuite("Ext.Class", function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.platformTags = realPlatformTags;
         });
 
-        describe('derivation', function () {
+        describe('derivation', function() {
             var instance;
 
-            beforeEach(function () {
+            beforeEach(function() {
                 instance = new Derived({
                     herp: 'derp'
                 });
             });
 
-            it('should set the old-school config on the prototype', function () {
+            it('should set the old-school config on the prototype', function() {
                 expect(Derived.prototype.jaz).toBe(427);
             });
 
-            it('should set the old-school config for the instance', function () {
+            it('should set the old-school config for the instance', function() {
                 expect(instance.jaz).toBe(427);
             });
 
-            it('should set a new Proper config to longest rules value', function () {
+            it('should set a new Proper config to longest rules value', function() {
                 var v = instance.getBar();
+
                 expect(v).toBe('aaa');
             });
 
-            it('should set an inherited Proper config', function () {
+            it('should set an inherited Proper config', function() {
                 var v = instance.getFoo();
+
                 expect(v).toBe('ABC');
             });
 
-            it('should apply initial values in one pass', function () {
+            it('should apply initial values in one pass', function() {
                 // Since "jaz" is not a proper Config, the updater should not be called
-                expect(log).toEqual([ 'updateFoo: ABC' , 'updateBar: aaa' ]);
+                expect(log).toEqual([ 'updateFoo: ABC', 'updateBar: aaa' ]);
             });
 
-            it('should only call updateJaz manually', function () {
+            it('should only call updateJaz manually', function() {
                 instance.updateJaz(10);
-                expect(log).toEqual([ 'updateFoo: ABC' , 'updateBar: aaa', 'updateJaz: 10' ]);
+                expect(log).toEqual([ 'updateFoo: ABC', 'updateBar: aaa', 'updateJaz: 10' ]);
             });
         }); // derivation
 
-        describe('instances', function () {
+        describe('instances', function() {
             var instance;
 
-            beforeEach(function () {
+            beforeEach(function() {
                 instance = new Derived({
                     platformConfig: {
                         'chrome && desktop': {
@@ -3809,50 +3893,52 @@ topSuite("Ext.Class", function() {
                 });
             });
 
-            it('should set the old-school config for the instance', function () {
+            it('should set the old-school config for the instance', function() {
                 expect(instance.jaz).toBe(427); // ensure it wasn't smashed
             });
 
-            it('should set a new Proper config to longest rules value', function () {
+            it('should set a new Proper config to longest rules value', function() {
                 var v = instance.getBar();
+
                 expect(v).toBe('bbb');
             });
 
-            it('should set an inherited Proper config', function () {
+            it('should set an inherited Proper config', function() {
                 var v = instance.getFoo();
+
                 expect(v).toBe(321);
             });
 
-            it('should apply initial values in one pass', function () {
+            it('should apply initial values in one pass', function() {
                 // Since "jaz" is not a proper Config, the updater should not be called
-                expect(log).toEqual([ 'updateFoo: 321' , 'updateBar: bbb' ]);
+                expect(log).toEqual([ 'updateFoo: 321', 'updateBar: bbb' ]);
             });
 
-            it('should only call updateJaz manually', function () {
+            it('should only call updateJaz manually', function() {
                 instance.updateJaz(10);
-                expect(log).toEqual([ 'updateFoo: 321' , 'updateBar: bbb', 'updateJaz: 10' ]);
+                expect(log).toEqual([ 'updateFoo: 321', 'updateBar: bbb', 'updateJaz: 10' ]);
             });
         }); // instances
     }); // platformConfig
 
-    describe('deprecated config', function () {
+    describe('deprecated config', function() {
         var warnings = [],
             warn = Ext.log.warn;
 
-        beforeEach(function () {
+        beforeEach(function() {
             warnings.length = 0;
 
-            Ext.log.warn = function (msg) {
+            Ext.log.warn = function(msg) {
                 warnings.push(msg);
             };
         });
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.log.warn = warn;
         });
 
         var C = Ext.define(null, {
-            constructor: function (config) {
+            constructor: function(config) {
                 this.initConfig(config);
             },
 
@@ -3871,30 +3957,34 @@ topSuite("Ext.Class", function() {
             }
         });
 
-        it('should warn about dead configs', function () {
+        it('should warn about dead configs', function() {
             var c = new C({ dead: 42 });
+
             expect(warnings.length).toBe(1);
             expect(warnings[0].indexOf('#dead')).toBeGE(0);
             expect('dead' in c).toBe(false);
         });
 
-        it('should warn about renamed configs', function () {
+        it('should warn about renamed configs', function() {
             var c = new C({ renamed: 42 });
+
             expect(warnings.length).toBe(1);
             expect(warnings[0].indexOf('#renamed')).toBeGE(0);
             expect(warnings[0].indexOf('newName')).toBeGE(0);
             expect('renamed' in c).toBe(false);
         });
 
-        it('should warn about removed configs', function () {
+        it('should warn about removed configs', function() {
             var c = new C({ removed: 42 });
+
             expect(warnings.length).toBe(1);
             expect(warnings[0].indexOf('pixie dust')).toBeGE(0);
             expect('removed' in c).toBe(false);
         });
 
-        it('should warn about all deprecated configs', function () {
+        it('should warn about all deprecated configs', function() {
             var c = new C({ dead: 42, renamed: 42, removed: 42 });
+
             expect(warnings.length).toBe(3);
             expect('dead' in c).toBe(false);
             expect('renamed' in c).toBe(false);

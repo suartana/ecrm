@@ -29,19 +29,27 @@
  *   field's `serialize` method.
  */
 Ext.define('Ext.data.writer.Writer', {
-    mixins: [
-        'Ext.mixin.Factoryable'
-    ],
-
     alias: 'writer.base',
-    factoryConfig: {
-        defaultType: null
-    },
 
     alternateClassName: [
         'Ext.data.DataWriter',
         'Ext.data.Writer'
     ],
+
+    mixins: [
+        'Ext.mixin.Factoryable'
+    ],
+
+    factoryConfig: {
+        defaultType: null
+    },
+
+    /**
+     * @property {Boolean} isWriter
+     * `true` to identify an object as an instance of this class, or subclass thereof.
+     * @readonly
+     */
+    isWriter: true,
 
     config: {
         /**
@@ -206,10 +214,11 @@ Ext.define('Ext.data.writer.Writer', {
         /**
          * @cfg {Function|Object} [transform]
          * If a transform function is set, it will be invoked just before {@link #writeRecords} 
-         * executes. It is passed the unserialized data object and the {@link Ext.data.Request request}
-         * object. The transform function returns a data object, which can be a modified version of the original 
-         * data object, or a completely new data object. The transform can be a function, or an object 
-         * with a 'fn' key and an optional 'scope' key. Example usage:
+         * executes. It is passed the unserialized data object and the
+         * {@link Ext.data.Request request} object. The transform function returns a data object,
+         * which can be a modified version of the original  data object, or a completely new data
+         * object. The transform can be a function, or an object  with a 'fn' key and an optional
+         * 'scope' key. Example usage:
          *
          *     Ext.create('Ext.data.Store', {
          *         model: 'User',
@@ -234,12 +243,6 @@ Ext.define('Ext.data.writer.Writer', {
     },
 
     /**
-     * @property {Boolean} isWriter
-     * `true` in this class to identify an object as an instantiated Writer, or subclass thereof.
-     */
-    isWriter: true,
-
-    /**
      * Creates new Writer.
      * @param {Object} [config] Config object.
      */
@@ -250,10 +253,12 @@ Ext.define('Ext.data.writer.Writer', {
     applyTransform: function(transform) {
         if (transform) {
             if (Ext.isFunction(transform)) {
-                transform = {fn:transform};
+                transform = { fn: transform };
             }
+            
             return transform.fn.bind(transform.scope || this);
         }
+        
         return transform;
     },
 
@@ -293,29 +298,29 @@ Ext.define('Ext.data.writer.Writer', {
      *
      * @param {Ext.data.Model} record The record that we are writing to the server.
      * @param {Ext.data.operation.Operation} [operation] An operation object.
-     * @return {Object} An object literal of name/value keys to be written to the server.
-     * By default this method returns the data property on the record.
+     * @return {Object} An object of name/value keys to be written to the server.
      */
-    getRecordData: function (record, operation) {
+    getRecordData: function(record, operation) {
         var me = this,
             nameProperty = me.getNameProperty(),
             mapping = nameProperty !== 'name',
             idField = record.self.idField,
-            key = idField[nameProperty] || idField.name, // setup for idField first
+            key = idField ? (idField[nameProperty] || idField.name) : 'id',
             value = record.id,
             writeAll = me.getWriteAllFields(),
             ret, dateFormat, phantom,
             options, clientIdProperty,
             fieldsMap, data, field;
 
-        if (idField.serialize) {
+        if (idField && idField.serialize) {
             value = idField.serialize(value);
         }
 
         if (!writeAll && operation && operation.isDestroyOperation) {
             ret = {};
             ret[key] = value;
-        } else {
+        }
+        else {
             dateFormat = me.getDateFormat();
             phantom = record.phantom;
             options = (phantom || writeAll) ? me.getAllDataOptions() : me.getPartialDataOptions();
@@ -347,13 +352,15 @@ Ext.define('Ext.data.writer.Writer', {
                     if (mapping) {
                         ret[key] = value;
                     }
-                } else {
+                }
+                else {
                     // Allow this Writer to take over formatting date values if it has a
                     // dateFormat specified. Only check isDate on fields declared as dates
                     // for efficiency.
                     if (field.isDateField && dateFormat && Ext.isDate(value)) {
                         value = Ext.Date.format(value, dateFormat);
-                    } else if (field.serialize) {
+                    }
+                    else if (field.serialize) {
                         value = field.serialize(value, record);
                     }
 

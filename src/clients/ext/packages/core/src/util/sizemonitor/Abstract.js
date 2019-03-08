@@ -89,6 +89,7 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
             return false;
         }
 
+        // eslint-disable-next-line vars-on-top
         var me = this,
             size = element.measure(),
             width = size.width,
@@ -106,7 +107,8 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
         me.contentWidth = contentWidth;
         me.contentHeight = contentHeight;
 
-        flag = ((currentContentWidth !== contentWidth ? 1 : 0) + (currentContentHeight !== contentHeight ? 2 : 0));
+        flag = ((currentContentWidth !== contentWidth ? 1 : 0) +
+                (currentContentHeight !== contentHeight ? 2 : 0));
 
         if (flag > 0) {
             info.width = width;

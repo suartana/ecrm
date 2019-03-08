@@ -1,5 +1,3 @@
-/* global Ext, spec, expect, xit, xdescribe */
-
 topSuite('Ext.form.Labelable', ['Ext.Component'], function() {
     var separator = ':',
         component;
@@ -16,8 +14,9 @@ topSuite('Ext.form.Labelable', ['Ext.Component'], function() {
                 return Ext.applyIf(this.callParent(), this.getLabelableRenderData());
             },
             privates: {
-                initRenderTpl: function () {
+                initRenderTpl: function() {
                     this.renderTpl = this.lookupTpl('labelableRenderTpl');
+
                     return this.callParent();
                 }
             }
@@ -388,6 +387,7 @@ topSuite('Ext.form.Labelable', ['Ext.Component'], function() {
                         hideLabel: true
                     });
                     var count = component.componentLayoutCounter;
+
                     component.setHideLabel(false);
                     expect(component.componentLayoutCounter).toBe(count + 1);
                     count = component.componentLayoutCounter;
@@ -497,6 +497,7 @@ topSuite('Ext.form.Labelable', ['Ext.Component'], function() {
                         hideEmptyLabel: true
                     });
                     var count = component.componentLayoutCounter;
+
                     component.setHideEmptyLabel(false);
                     expect(component.componentLayoutCounter).toBe(count + 1);
                     count = component.componentLayoutCounter;

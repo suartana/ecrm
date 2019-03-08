@@ -2,6 +2,11 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
     var E = Ext.dom.Element,
         topEl, el, dom;
     
+    var fakeScope = {
+        id: "fakeScope",
+        fakeScope: true
+    };
+    
     function createElement(markup, selector) {
         if (topEl) {
             topEl.destroy();
@@ -38,13 +43,13 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
         
         it("should mask all iframes when resizing an element with shim and unmask when done.", function() {
             iframe = Ext.getBody().createChild({
-                tag : 'iframe',
+                tag: 'iframe',
                 src: 'about:blank',
                 style: 'position:absolute;left:0px;top:0px;width:200px;height:100px;'
             });
             
             win = new Ext.window.Window({
-                width : 100,
+                width: 100,
                 height: 100,
                 title: 'Test',
                 shim: true
@@ -426,12 +431,13 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
     });
 
     function describeMethods(fly) {
-        describe('methods (using ' + (fly ? 'Ext.fly()' : 'new Ext.dom.Element()') + ')', function(){
+        describe('methods (using ' + (fly ? 'Ext.fly()' : 'new Ext.dom.Element()') + ')', function() {
             var domEl, element;
 
             function addElement(tag) {
                 domEl = document.createElement(tag || 'div');
                 document.body.appendChild(domEl);
+
                 return fly ? Ext.fly(domEl) : Ext.get(domEl);
             }
 
@@ -446,8 +452,10 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
 
             describe("hover", function() {
                 var overFn, outFn, options;
+
                 beforeEach(function() {
                     element = addElement('div');
+
                     overFn = function() {
                         return 1;
                     };
@@ -514,10 +522,12 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
                         
                         if (styleSheet.insertRule) {
                             styleSheet.insertRule(selector + '{' + props + '}', styleSheet.cssRules.length);
-                        } else {
+                        }
+                        else {
                             // IE8
                             styleSheet.addRule(selector, props);
                         }
+                        
                         element = addElement('div');
                         element.setWidth(100);
                         element.setHeight(30);
@@ -527,10 +537,12 @@ topSuite("Ext.overrides.dom.Element", [false, 'Ext.dom.Element', 'Ext.window.Win
 
                     afterEach(function() {
                         var styleSheet = document.styleSheets[0];
+                        
                         if (styleSheet.deleteRule) {
 
                             styleSheet.deleteRule(1);
-                        } else {
+                        }
+                        else {
                             // IE8
                             styleSheet.removeRule(styleSheet.rules.length - 1);
                         }

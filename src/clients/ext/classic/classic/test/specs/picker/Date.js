@@ -13,9 +13,11 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
         makeRange = function(min, max) {
             var out = [],
                 i = min;
-            for(; i <= max; ++i) {
+
+            for (; i <= max; ++i) {
                 out.push(i);
             }
+
             return out;
         };
     });
@@ -24,11 +26,22 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
         if (component) {
             component.destroy();
         }
+
         component = makeComponent = makeRange = null;
     });
     
-    describe("rendering", function(){
-        it("should respect the showToday config", function(){
+    describe("alternate class name", function() {
+        it("should have Ext.DatePicker as the alternate class name", function() {
+            expect(Ext.picker.Date.prototype.alternateClassName).toEqual("Ext.DatePicker");
+        });
+
+        it("should allow the use of Ext.DatePicker", function() {
+            expect(Ext.DatePicker).toBeDefined();
+        });
+    });
+
+    describe("rendering", function() {
+        it("should respect the showToday config", function() {
             makeComponent({
                 showToday: false
             });
@@ -108,8 +121,8 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
         });
 
         // https://sencha.jira.com/browse/EXTJS-15718
-        describe("when rendered within a td element", function () {
-            function setupTable () {
+        describe("when rendered within a td element", function() {
+            function setupTable() {
                 Ext.DomHelper.append(Ext.getBody(), {
                     tag: 'table',
                     id: 'ownerTable',
@@ -126,13 +139,13 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 });
             }
 
-            afterEach(function () {
+            afterEach(function() {
                 component = Ext.destroy(component);
                 Ext.get('nestedDiv').destroy();
                 Ext.get('ownerTable').destroy();
             });
 
-            it("should display the day header", function () {
+            it("should display the day header", function() {
                 var node;
 
                 setupTable();
@@ -147,7 +160,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(node.firstChild.innerHTML).toBe('S');
             });
 
-            it("should select the correct item", function () {
+            it("should select the correct item", function() {
                 var node, value, pickerValue;
 
                 setupTable();
@@ -169,40 +182,42 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
         });
     });
     
-    describe("restrictions", function(){
+    describe("restrictions", function() {
         var isDisabled;
         
-        beforeEach(function(){
-            isDisabled = function(range, title){
+        beforeEach(function() {
+            isDisabled = function(range, title) {
                 var i = 0,
                     cells = component.cells.elements,
                     len = range.length,
                     cell, cellTitle,
                     checkTitle = title !== null;
                     
-                for(; i < len; ++i) {
+                for (; i < len; ++i) {
                     cell = cells[range[i]];
                     cellTitle = cell.getAttribute('data-qtip');
+
                     if (cell.className.indexOf(component.disabledCellCls) === -1 || (checkTitle && cellTitle !== title)) {
                         return false;
                     }
                 }
+
                 return true;
             };
         });
         
-        afterEach(function(){
+        afterEach(function() {
             isDisabled = null;
         });
         
-        describe("max date", function(){
-            it("should not have any max date set if not specified", function(){
+        describe("max date", function() {
+            it("should not have any max date set if not specified", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4) // 4th Nov 2010
                 });
                 
                 // go way into the future
-                for(var i = 0; i < 10; ++i) {
+                for (var i = 0; i < 10; ++i) {
                     component.showNextYear();
                 }
                 
@@ -210,16 +225,16 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 
             });
             
-            it("should set the class and title on elements over the max date 1", function(){
+            it("should set the class and title on elements over the max date 1", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4), // 4th Nov 2010
-                    maxDate: new Date(2010, 10, 18) //18th Nov, 2010
+                    maxDate: new Date(2010, 10, 18) // 18th Nov, 2010
                 });
                     
                 expect(isDisabled(makeRange(19, 41), component.maxText)).toBeTruthy();
             });
             
-            it("should set the class and title on elements over the max date 2", function(){
+            it("should set the class and title on elements over the max date 2", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2017
                     maxDate: new Date(2007, 4, 7) // 7th May 2007
@@ -228,7 +243,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(isDisabled(makeRange(9, 41), component.maxText)).toBeTruthy();
             });
             
-            it("should not set the class/title if the max date isn't on the current page", function(){
+            it("should not set the class/title if the max date isn't on the current page", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2007
                     maxDate: new Date(2010, 4, 7) // 7th May 2010
@@ -238,13 +253,13 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     len = cells.getCount(),
                     i = 0;
                     
-                for(; i < len; ++i) {
+                for (; i < len; ++i) {
                     expect(cells.item(i).dom.title).not.toEqual(component.maxText);
                     expect(cells.item(i).dom.className).not.toEqual(component.disabledCellCls);
                 }
             });
             
-            it("should update the class/title if required when changing the active 'page'", function(){
+            it("should update the class/title if required when changing the active 'page'", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2007
                     maxDate: new Date(2007, 5, 15) // 15th Jun 2007
@@ -262,16 +277,16 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
 
                 expect(component.getValue()).toEqual(component.maxDate);
             });
-        });  
+        });
         
-        describe("min date", function(){
-            it("should not have any min date set if not specified", function(){
+        describe("min date", function() {
+            it("should not have any min date set if not specified", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4) // 4th Nov 2010
                 });
                 
                 // go way into the future
-                for(var i = 0; i < 10; ++i) {
+                for (var i = 0; i < 10; ++i) {
                     component.showPrevYear();
                 }
                 
@@ -279,16 +294,16 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 
             });
             
-            it("should set the class and title on elements under the min date 1", function(){
+            it("should set the class and title on elements under the min date 1", function() {
                 makeComponent({
                     value: new Date(2010, 8, 18), // 18th Sep 2010
-                    minDate: new Date(2010, 8, 4) //4th Sep, 2010
+                    minDate: new Date(2010, 8, 4) // 4th Sep, 2010
                 });
                 
                 expect(isDisabled(makeRange(0, 5), component.minText)).toBeTruthy();
             });
             
-            it("should set the class and title on elements over the min date 2", function(){
+            it("should set the class and title on elements over the min date 2", function() {
                 makeComponent({
                     value: new Date(2006, 2, 3), // 3rd Mar 2006
                     minDate: new Date(2006, 2, 7) // 7th Mar 2006
@@ -297,7 +312,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(isDisabled(makeRange(0, 8), component.minText)).toBeTruthy();
             });
             
-            it("should not set the class/title if the min date isn't on the current page", function(){
+            it("should not set the class/title if the min date isn't on the current page", function() {
                 makeComponent({
                     minDate: new Date(2007, 2, 3), // 3rd Mar 2007
                     value: new Date(2010, 2, 7) // 7th Mar 2010
@@ -307,13 +322,13 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     len = cells.getCount(),
                     i = 0;
                     
-                for(; i < len; ++i) {
+                for (; i < len; ++i) {
                     expect(cells.item(i).dom.title).not.toEqual(component.minText);
                     expect(cells.item(i).dom.className).not.toEqual(component.disabledCellCls);
                 }
             });
             
-            it("should update the class/title if required when changing the active 'page'", function(){
+            it("should update the class/title if required when changing the active 'page'", function() {
                 makeComponent({
                     minDate: new Date(2007, 4, 3), // 3rd May 2017
                     value: new Date(2007, 5, 15) // 15th Jun 2007
@@ -333,43 +348,43 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             });
         });
         
-        describe("disabledDays", function(){
-            it("should not disabled anything if there any no disabledDays", function(){
+        describe("disabledDays", function() {
+            it("should not disabled anything if there any no disabledDays", function() {
                 makeComponent();
                 expect(component.el.select('.' + component.disabledCellCls).getCount()).toEqual(0);
             });
             
-            it("should disable the appropriate days 1", function(){
+            it("should disable the appropriate days 1", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     disabledDays: [0, 6] // sat, sun
-                });    
+                });
                 
                 expect(isDisabled([0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35], component.disabledDaysText)).toBeTruthy();
             });
             
-            it("should disable the appropriate days 2", function(){
+            it("should disable the appropriate days 2", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     disabledDays: [1, 5] // mon, fri
-                });    
+                });
                 
                 expect(isDisabled([1, 5, 8, 12, 15, 19, 22, 26, 29, 33, 36, 40], component.disabledDaysText)).toBeTruthy();
             });
         });
         
-        describe("disabledDates", function(){
-            it("should disabled specific dates", function(){
+        describe("disabledDates", function() {
+            it("should disabled specific dates", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/07', '2010/11/14']
-                });    
+                });
                 
                 expect(isDisabled([7, 14], null)).toBeTruthy();
             });
             
-            it("should disabled specific dates according to regex - year", function(){
+            it("should disabled specific dates according to regex - year", function() {
                 
                 var date = new Date(2010, 10, 4),
                     range = makeRange(0, 41);
@@ -378,39 +393,41 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     value: date,
                     format: 'Y/m/d',
                     disabledDates: ['2010/*']
-                });  
+                });
                 
                 while (date.getFullYear() === 2010) {
                     if (date.getMonth() > 0) {
                         expect(isDisabled(range, null)).toBeTruthy();
-                    } else {
+                    }
+                    else {
                         expect(isDisabled(makeRange(5, 41), null)).toBeTruthy();
                     }
+                    
                     date = Ext.Date.add(date, Ext.Date.MONTH, -1);
                     component.showPrevMonth();
-                }  
+                }
             });
             
-            it("should disabled specific dates according to regex - month", function(){
+            it("should disabled specific dates according to regex - month", function() {
                 
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/*']
-                });  
+                });
                 
                 expect(isDisabled(makeRange(1, 30), null)).toBeTruthy();
                 component.showPrevMonth();
                 expect(isDisabled(makeRange(0, 35), null)).toBeFalsy();
             });
             
-            it("should disabled specific dates according to regex - day", function(){
+            it("should disabled specific dates according to regex - day", function() {
                 
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/1*']
-                });  
+                });
                 
                 expect(isDisabled(makeRange(14, 23), null)).toBeTruthy();
             });
@@ -689,7 +706,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             });
             
             it("should select the day a week ago", function() {
-                expectDate(eDate.add(today, eDate.DAY, -7));
+                expectDate(eDate.add(today, eDate.DAY, -7, true));
             });
             
             it("should prevent default on the event", function() {

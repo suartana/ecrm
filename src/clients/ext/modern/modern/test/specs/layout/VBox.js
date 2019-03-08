@@ -1,4 +1,4 @@
-describe("Ext.layout.VBox", function(){
+topSuite("Ext.layout.VBox", function(){
     var ct, c, hasWebkitHeightConstraintBug;
 
     (function() {

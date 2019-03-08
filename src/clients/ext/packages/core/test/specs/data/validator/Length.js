@@ -6,6 +6,7 @@ topSuite("Ext.data.validator.Length", function() {
             min: min,
             max: max
         });
+
         return v.validate(value);
     }
     
@@ -19,37 +20,39 @@ topSuite("Ext.data.validator.Length", function() {
     
     describe("invalid values", function() {
         it("should not validate undefined", function() {
-            expect(validate(undefined)).toBe(v.getEmptyMessage());    
+            expect(validate(undefined)).toBe(v.getEmptyMessage());
         });
         
         it("should not validate null", function() {
-            expect(validate(null)).toBe(v.getEmptyMessage());    
+            expect(validate(null)).toBe(v.getEmptyMessage());
         });
         
         describe("min only", function() {
             it("should not validate if the value is less than the minimum", function() {
                 var min = 5;
-                expect(validate('Foo', min)).toBe(f(v.getMinOnlyMessage(), min));    
+
+                expect(validate('Foo', min)).toBe(f(v.getMinOnlyMessage(), min));
             });
         });
         
         describe("max only", function() {
             it("should not validate if the value is greater than the maximum", function() {
                 var max = 3;
-                expect(validate('LongValue', undefined, max)).toBe(f(v.getMaxOnlyMessage(), max));    
+
+                expect(validate('LongValue', undefined, max)).toBe(f(v.getMaxOnlyMessage(), max));
             });
         });
         
         describe("min & max", function() {
-            var min = 5, 
+            var min = 5,
                 max = 10;
                 
             it("should not validate if the value is less than the minimum", function() {
-                expect(validate('Foo', min, max)).toBe(f(v.getBothMessage(), min, max));    
+                expect(validate('Foo', min, max)).toBe(f(v.getBothMessage(), min, max));
             });
             
             it("should not validate if the value is greater than the maximum", function() {
-                expect(validate('ReallyLongValue', min, max)).toBe(f(v.getBothMessage(), min, max));    
+                expect(validate('ReallyLongValue', min, max)).toBe(f(v.getBothMessage(), min, max));
             });
         });
     });
@@ -58,7 +61,7 @@ topSuite("Ext.data.validator.Length", function() {
         describe("min only", function() {
             it("should validate if the value is equal to the minimum", function() {
                 expect(validate('Foo', 3)).toBe(true);
-            });  
+            });
             
             it("should validate if the value is greater than the minimum", function() {
                 expect(validate('FooBar', 5)).toBe(true);
@@ -68,7 +71,7 @@ topSuite("Ext.data.validator.Length", function() {
         describe("max only", function() {
             it("should validate if the value is equal to the maximum", function() {
                 expect(validate('Foo', undefined, 3)).toBe(true);
-            });  
+            });
             
             it("should validate if the value is less than the maximum", function() {
                 expect(validate('FooBar', undefined, 7)).toBe(true);
@@ -96,7 +99,7 @@ topSuite("Ext.data.validator.Length", function() {
     
     describe("casting", function() {
         it("should check the length of numeric values", function() {
-            expect(validate(123456789, undefined, 5)).not.toBe(true);    
+            expect(validate(123456789, undefined, 5)).not.toBe(true);
             expect(validate(123, undefined, 5)).toBe(true);
             
             expect(validate(1, 3)).not.toBe(true);
@@ -104,7 +107,7 @@ topSuite("Ext.data.validator.Length", function() {
         });
         
         it("should check the length of boolean values", function() {
-            expect(validate(false, undefined, 3)).not.toBe(true);    
+            expect(validate(false, undefined, 3)).not.toBe(true);
             expect(validate(false, undefined, 5)).toBe(true);
             
             expect(validate(true, 5)).not.toBe(true);

@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-modern",
     "SenchaExtName": "@sencha/ext-modern",
     "SenchaExtReactName": "@sencha/ext-react-modern",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "modern",
         "namespace": "Ext",
@@ -16,7 +16,7 @@
         "creator": "Sencha",
         "summary": "The Modern UI Toolkit",
         "detailedDescription": "UI components for modern browsers",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${framework.dir}/build",

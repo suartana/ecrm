@@ -96,9 +96,6 @@ function() {
         store = clipboard = grid = record = column = field = Ext.destroy(grid);
     }
 
-    // IE11 pops up a modal dialog:
-    // Do you want to allow this webpage to access your Clipboard?
-    TODO(Ext.isIE11).
     describe("Copy to clipboard", function() {
         beforeEach(function() {
             makeGrid();

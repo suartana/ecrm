@@ -3,4 +3,3 @@ Ext.define('Ext.theme.neptune.menu.Separator', {
     
     border: true
 });
-    

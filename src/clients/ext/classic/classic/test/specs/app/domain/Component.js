@@ -62,10 +62,10 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
         expect(handler).toHaveBeenCalled();
     });
 
-    describe('looking up a menu as the direct child of a menu item', function () {
+    describe('looking up a menu as the direct child of a menu item', function() {
         var handler, menu;
 
-        beforeEach(function () {
+        beforeEach(function() {
             handler = jasmine.createSpy('foo handler');
 
             menu = new Ext.menu.Menu({
@@ -83,12 +83,12 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.destroy(menu);
             handler = menu = null;
         });
 
-        it('should find the owner of the menu as a descendant of the menu item', function () {
+        it('should find the owner of the menu as a descendant of the menu item', function() {
             ctrl.control({
                 '#foobar menu': {
                     foo: handler
@@ -100,7 +100,7 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
             expect(handler).toHaveBeenCalled();
         });
 
-        it('should find the owner of the menu as a direct child of the menu item', function () {
+        it('should find the owner of the menu as a direct child of the menu item', function() {
             ctrl.control({
                 '#foobar > menu': {
                     foo: handler

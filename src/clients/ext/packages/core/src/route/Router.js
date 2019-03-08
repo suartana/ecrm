@@ -11,9 +11,9 @@
  * routes.
  */
 Ext.define('Ext.route.Router', {
-    singleton : true,
+    singleton: true,
 
-    requires : [
+    requires: [
         'Ext.route.Action',
         'Ext.route.Route',
         'Ext.util.History'
@@ -40,8 +40,8 @@ Ext.define('Ext.route.Router', {
      * @event routereject
      * @member Ext.GlobalEvents
      *
-     * Fires when a route was rejected from either a before action, {@link Ext.GlobalEvents#beforeroutes} event
-     * or {@link Ext.GlobalEvents#beforeroute} event.
+     * Fires when a route was rejected from either a before action,
+     * {@link Ext.GlobalEvents#beforeroutes} event or {@link Ext.GlobalEvents#beforeroute} event.
      *
      * @param {Ext.route.Route} route The route which had it's execution rejected.
      */
@@ -74,7 +74,7 @@ Ext.define('Ext.route.Router', {
      * @property {Boolean} isSuspended `true` if the router is currently suspended.
      */
 
-    constructor: function () {
+    constructor: function() {
         var History = Ext.util.History;
 
         if (!History.ready) {
@@ -88,7 +88,7 @@ Ext.define('Ext.route.Router', {
         this.clear();
     },
 
-    updateHashbang: function (hashbang) {
+    updateHashbang: function(hashbang) {
         Ext.util.History.hashbang = hashbang;
     },
 
@@ -98,7 +98,7 @@ Ext.define('Ext.route.Router', {
      * @private
      * @param {String} token The token to react to.
      */
-    onStateChange: function (token) {
+    onStateChange: function(token) {
         var me = this,
             tokens = token.split(me.getMultipleToken()),
             queue, i, length;
@@ -106,19 +106,20 @@ Ext.define('Ext.route.Router', {
         if (me.isSuspended) {
             queue = me.suspendedQueue;
             i = 0;
-            length = tokens.length
+            length = tokens.length;
 
             if (queue) {
                 for (; i < length; i++) {
                     token = tokens[i];
 
-                    //shouldn't keep track of duplicates
+                    // shouldn't keep track of duplicates
                     if (!Ext.Array.contains(queue, token)) {
                         queue.push(token);
                     }
                 }
             }
-        } else {
+        }
+        else {
             me.handleBefore(tokens);
         }
     },
@@ -131,13 +132,14 @@ Ext.define('Ext.route.Router', {
      * @param {String[]} tokens The individual tokens that were split from the hash
      * using {@link #multipleToken}.
      */
-    handleBefore: function (tokens) {
+    handleBefore: function(tokens) {
         var me = this,
             action = new Ext.route.Action();
 
         if (Ext.fireEvent('beforeroutes', action, tokens) === false) {
             action.destroy();
-        } else {
+        }
+        else {
             action
                 .run()
                 .then(me.handleBeforeRoute.bind(me, tokens), Ext.emptyFn);
@@ -152,7 +154,7 @@ Ext.define('Ext.route.Router', {
      * @param {String[]} tokens The individual tokens that were split from the hash
      * using {@link #multipleToken}.
      */
-    handleBeforeRoute: function (tokens) {
+    handleBeforeRoute: function(tokens) {
         var me = this,
             beforeRoute = me.getByName('*');
 
@@ -160,8 +162,9 @@ Ext.define('Ext.route.Router', {
             beforeRoute
                 .execute()
                 .then(me.doRun.bind(me, tokens), Ext.emptyFn);
-        } else {
-            //no befores, go ahead with route determination
+        }
+        else {
+            // no befores, go ahead with route determination
             me.doRun(tokens);
         }
     },
@@ -174,7 +177,7 @@ Ext.define('Ext.route.Router', {
      * @param {String[]} tokens The individual tokens that were split from the hash
      * using {@link #multipleToken}.
      */
-    doRun: function (tokens) {
+    doRun: function(tokens) {
         var me = this,
             app = me.application,
             routes = me.routes,
@@ -210,14 +213,15 @@ Ext.define('Ext.route.Router', {
                     if (!matched[name]) {
                         matched[name] = 1;
                     }
-                } else if (!matched[name]) {
+                }
+                else if (!matched[name]) {
                     unmatched.push(route);
                 }
             }
 
             if (!found) {
                 if (app) {
-                    //backwards compat
+                    // backwards compat
                     app.fireEvent('unmatchedroute', token);
                 }
 
@@ -237,7 +241,7 @@ Ext.define('Ext.route.Router', {
      * @private
      * Called when a route was rejected.
      */
-    onRouteRejection: function (route, error) {
+    onRouteRejection: function(route, error) {
         Ext.fireEvent('routereject', route, error);
 
         if (error) {
@@ -256,7 +260,7 @@ Ext.define('Ext.route.Router', {
      * {@link Ext.route.Route}
      * @return {Ext.route.Handler} The handler that was added.
      */
-    connect: function (url, config, instance) {
+    connect: function(url, config, instance) {
         var routes = this.routes,
             delimiter = this.getMultipleToken(),
             name = config.name || url,
@@ -267,8 +271,10 @@ Ext.define('Ext.route.Router', {
             if (!Ext.util.History.hashbang) {
                 Ext.log({
                     level: 'error',
-                    msg: 'Route found with "!" ("' + url + '"). Should use new hashbang functionality instead. ' +
-                        'Please see the router guide for more: https://docs.sencha.com/extjs/' + Ext.getVersion().version + '/guides/application_architecture/router.html'
+                    msg: 'Route found with "!" ("' + url +
+                         '"). Should use new hashbang functionality instead. ' +
+                        'Please see the router guide for more: https://docs.sencha.com/extjs/' +
+                        Ext.getVersion().version + '/guides/application_architecture/router.html'
                 });
             }
             //</debug>
@@ -296,6 +302,7 @@ Ext.define('Ext.route.Router', {
         route.addHandler(handler);
 
         if (handler.lazy) {
+            // eslint-disable-next-line vars-on-top
             var currentHash = Ext.util.History.getToken(),
                 tokens = currentHash.split(delimiter),
                 length = tokens.length,
@@ -326,7 +333,7 @@ Ext.define('Ext.route.Router', {
      * configurations. This can also be the actual {@link Ext.route.Handler handler}
      * instance.
      */
-    disconnect: function (instance, config) {
+    disconnect: function(instance, config) {
         var routes = this.routes,
             route, name;
 
@@ -336,7 +343,8 @@ Ext.define('Ext.route.Router', {
             if (route) {
                 route.removeHandler(instance, config);
             }
-        } else {
+        }
+        else {
             for (name in routes) {
                 route = routes[name];
 
@@ -353,7 +361,7 @@ Ext.define('Ext.route.Router', {
      * @return {Object/Boolean} If the url was recognized, the controller and action to
      * call, else `false`.
      */
-    recognize: function (url) {
+    recognize: function(url) {
         var routes = this.routes,
             matches = [],
             name, arr, i, length, route, urlParams;
@@ -393,14 +401,14 @@ Ext.define('Ext.route.Router', {
      *
      * @param {Function} fn The function to call
      */
-    draw: function (fn) {
+    draw: function(fn) {
         fn.call(this, this);
     },
 
     /**
      * Clear all the recognized routes.
      */
-    clear: function () {
+    clear: function() {
         this.routes = {};
     },
 
@@ -409,7 +417,7 @@ Ext.define('Ext.route.Router', {
      * @param {String} [token] If passed, only clear matching routes.
      * @private
      */
-    clearLastTokens: function (token) {
+    clearLastTokens: function(token) {
         var routes = this.routes,
             name, route;
 
@@ -428,7 +436,7 @@ Ext.define('Ext.route.Router', {
      * @return {Ext.route.Route[]} If no routes found, `undefined` will be returned otherwise
      * the array of {@link Ext.route.Route Routes} will be returned.
      */
-    getByName: function (name) {
+    getByName: function(name) {
         var routes = this.routes;
 
         if (routes) {
@@ -442,7 +450,7 @@ Ext.define('Ext.route.Router', {
      * @param {Boolean} [trackTokens] `false` to prevent any tokens to be
      * queued while being suspended.
      */
-    suspend: function (trackTokens) {
+    suspend: function(trackTokens) {
         this.isSuspended = true;
 
         if (!this.suspendedQueue && trackTokens !== false) {
@@ -456,7 +464,7 @@ Ext.define('Ext.route.Router', {
      * @param {Boolean} [discardQueue] `true` to prevent any previously queued
      * tokens from being enacted on.
      */
-    resume: function (discardQueue) {
+    resume: function(discardQueue) {
         var me = this,
             queue = me.suspendedQueue,
             token;

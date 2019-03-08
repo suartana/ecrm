@@ -6,7 +6,7 @@ function() {
         chart = Ext.destroy(chart);
     });
     
-    jasmine.supportsTouch ? xdescribe : describe("multiTooltips", function() {
+    (jasmine.supportsTouch ? xdescribe : describe)("multiTooltips", function() {
         var layoutSpy, series1Spy, series2Spy, series3Spy, series4Spy,
             tooltips;
         

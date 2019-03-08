@@ -1,7 +1,6 @@
 /**
  * @class Ext.mixin.Focusable
  */
-
 Ext.define('Ext.overrides.mixin.Focusable', {
     override: 'Ext.Component',
     
@@ -20,14 +19,18 @@ Ext.define('Ext.overrides.mixin.Focusable', {
      *
      * If this component is disabled, a close relation will be targeted for focus instead
      * to keep focus localized for keyboard users.
-     * @param {Mixed} [selectText] If applicable, `true` to also select all the text in this component, or an array consisting of start and end (defaults to start) position of selection.
-     * @param {Boolean/Number} [delay] Delay the focus this number of milliseconds (true for 10 milliseconds).
-     * @param {Function} [callback] Only needed if the `delay` parameter is used. A function to call upon focus.
-     * @param {Function} [scope] Only needed if the `delay` parameter is used. The scope (`this` reference) in which to execute the callback.
+     * @param {Mixed} [selectText] If applicable, `true` to also select all the text in this
+     * component, or an array consisting of start and end (defaults to start) position of selection.
+     * @param {Boolean/Number} [delay] Delay the focus this number of milliseconds (true for
+     * 10 milliseconds).
+     * @param {Function} [callback] Only needed if the `delay` parameter is used. A function to call
+     * upon focus.
+     * @param {Function} [scope] Only needed if the `delay` parameter is used. The scope (`this`
+     * reference) in which to execute the callback.
      * @return {Ext.Component} The focused Component. Usually `this` Component. Some Containers may
-     * delegate focus to a descendant Component ({@link Ext.window.Window Window}s can do this through their
-     * {@link Ext.window.Window#defaultFocus defaultFocus} config option. If this component is disabled, a closely
-     * related component will be focused and that will be returned.
+     * delegate focus to a descendant Component ({@link Ext.window.Window Window}s can do this
+     * through their {@link Ext.window.Window#defaultFocus defaultFocus} config option. If this
+     * component is disabled, a closely related component will be focused and that will be returned.
      */
     focus: function(selectText, delay, callback, scope) {
         var me = this,
@@ -39,7 +42,11 @@ Ext.define('Ext.overrides.mixin.Focusable', {
 
         // If delay is wanted, queue a call to this function.
         if (delay) {
-            me.getFocusTask().delay(Ext.isNumber(delay) ? delay : 10, me.focus, me, [selectText, false, callback, scope]);
+            me.getFocusTask().delay(
+                Ext.isNumber(delay) ? delay : 10, me.focus, me,
+                [selectText, false, callback, scope]
+            );
+            
             return me;
         }
 
@@ -221,9 +228,7 @@ Ext.define('Ext.overrides.mixin.Focusable', {
             }
         }
     }
-},
-
-function() {
+}, function() {
     // One global DelayedTask to assign focus
     // So that the last focus call wins.
     if (!Ext.focusTask) {

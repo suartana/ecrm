@@ -17,15 +17,15 @@ topSuite("Ext.util.ProtoElement", function() {
         });
         
         it("should set the clsProp to 'cls'", function() {
-            expect(el.clsProp).toBe('cls');    
+            expect(el.clsProp).toBe('cls');
         });
         
         it("should set the styleProp to 'style'", function() {
-            expect(el.styleProp).toBe('style');    
+            expect(el.styleProp).toBe('style');
         });
         
         it("should set the removedProp to 'removed'", function() {
-            expect(el.removedProp).toBe('removed');    
+            expect(el.removedProp).toBe('removed');
         });
     });
     
@@ -34,21 +34,21 @@ topSuite("Ext.util.ProtoElement", function() {
             it("should accept an array of classes", function() {
                 makeEl({
                     cls: ['foo', 'bar']
-                });    
+                });
                 expect(el.writeTo({}).cls).toBe('foo bar');
             });
         
             it("should accept a single class name", function() {
                 makeEl({
                     cls: 'foo'
-                });    
+                });
                 expect(el.writeTo({}).cls).toBe('foo');
             });
         
             it("should accept a string of classes", function() {
                 makeEl({
                     cls: 'foo bar baz'
-                });    
+                });
                 expect(el.writeTo({}).cls).toBe('foo bar baz');
             });
         });
@@ -57,7 +57,7 @@ topSuite("Ext.util.ProtoElement", function() {
             it("should accept a style string", function() {
                 makeEl({
                     style: 'border: 1px solid red; color: blue;'
-                });    
+                });
                 expect(el.writeTo({}).style).toEqual({
                     border: '1px solid red',
                     color: 'blue'
@@ -70,7 +70,7 @@ topSuite("Ext.util.ProtoElement", function() {
                         color: 'red',
                         margin: '5px'
                     }
-                });    
+                });
                 expect(el.writeTo({}).style).toEqual({
                     color: 'red',
                     margin: '5px'
@@ -83,7 +83,7 @@ topSuite("Ext.util.ProtoElement", function() {
                         return {
                             color: 'yellow',
                             padding: '2px'
-                        }
+                        };
                     }
                 });
                 
@@ -104,17 +104,17 @@ topSuite("Ext.util.ProtoElement", function() {
                 });
             
                 it("should accept an array of classes", function() {
-                    el.addCls(['foo', 'bar']);    
+                    el.addCls(['foo', 'bar']);
                     expect(el.writeTo({}).cls).toBe('foo bar');
                 });
         
                 it("should accept a single class name", function() {
-                    el.addCls('foo');       
+                    el.addCls('foo');
                     expect(el.writeTo({}).cls).toBe('foo');
                 });
         
                 it("should accept a string of classes", function() {
-                    el.addCls('foo bar baz');          
+                    el.addCls('foo bar baz');
                     expect(el.writeTo({}).cls).toBe('foo bar baz');
                 });
             
@@ -137,17 +137,17 @@ topSuite("Ext.util.ProtoElement", function() {
                 });
             
                 it("should accept an array of classes", function() {
-                    el.removeCls(['foo', 'bar']);    
+                    el.removeCls(['foo', 'bar']);
                     expect(el.writeTo({}).cls).toBe('baz');
                 });
         
                 it("should accept a single class name", function() {
-                    el.removeCls('foo');    
+                    el.removeCls('foo');
                     expect(el.writeTo({}).cls).toBe('bar baz');
                 });
         
                 it("should accept a string of classes", function() {
-                    el.removeCls('bar baz');          
+                    el.removeCls('bar baz');
                     expect(el.writeTo({}).cls).toBe('foo');
                 });
             
@@ -168,7 +168,7 @@ topSuite("Ext.util.ProtoElement", function() {
             });
             
             it("should return false when just created", function() {
-                expect(el.hasCls('foo')).toBe(false);    
+                expect(el.hasCls('foo')).toBe(false);
             });
             
             it("should return false when the class doesn't exist", function() {
@@ -221,9 +221,10 @@ topSuite("Ext.util.ProtoElement", function() {
         
         it("should modify the passed object", function() {
             var o = {};
+
             el.addCls('foo');
             el.writeTo(o);
-            expect(o.cls).toBe('foo');    
+            expect(o.cls).toBe('foo');
         });
         
         it("should return the passed object", function() {
@@ -232,7 +233,7 @@ topSuite("Ext.util.ProtoElement", function() {
                 
             el.addCls('foo');
             ret = el.writeTo(o);
-            expect(ret).toBe(o);    
+            expect(ret).toBe(o);
         });
         
         it("should write out the class list", function() {
@@ -262,28 +263,28 @@ topSuite("Ext.util.ProtoElement", function() {
         describe("addCls", function() {
             it("should return only added classes after flushing", function() {
                 el.addCls('foo');
-                el.flush();   
+                el.flush();
                 el.addCls('bar');
             
-                expect(el.writeTo({}).cls).toBe('bar'); 
+                expect(el.writeTo({}).cls).toBe('bar');
             });
             
             it("should ignore already added classes", function() {
                 el.addCls('foo');
                 el.flush();
-                el.addCls('foo'); 
+                el.addCls('foo');
                 
-                expect(el.writeTo({}).cls).toBe('');    
+                expect(el.writeTo({}).cls).toBe('');
             });
         
             it("should be able to flush multiple times", function() {
                 el.addCls('foo');
-                el.flush();   
+                el.flush();
                 el.addCls('bar');
                 el.flush();
                 el.addCls('baz');
             
-                expect(el.writeTo({}).cls).toBe('baz'); 
+                expect(el.writeTo({}).cls).toBe('baz');
             });
         });
         
@@ -292,22 +293,22 @@ topSuite("Ext.util.ProtoElement", function() {
                 el.addCls('foo');
                 el.flush();
                 el.addCls('bar');
-                expect(el.hasCls('foo')).toBe(true);    
-            });  
+                expect(el.hasCls('foo')).toBe(true);
+            });
             
             it("should keep the class when removed and re-added", function() {
                 el.addCls('foo');
                 el.flush();
                 el.removeCls('foo');
                 el.addCls('foo');
-                expect(el.hasCls('foo')).toBe(true);    
-            }); 
+                expect(el.hasCls('foo')).toBe(true);
+            });
             
             it("should respect removed classes removed after a flush", function() {
                 el.addCls('foo');
                 el.flush();
                 el.removeCls('foo');
-                expect(el.hasCls('foo')).toBe(false);    
+                expect(el.hasCls('foo')).toBe(false);
             });
         });
         
@@ -316,14 +317,14 @@ topSuite("Ext.util.ProtoElement", function() {
                 el.addCls('foo');
                 el.flush();
                 el.removeCls('bar');
-                expect(el.writeTo({}).removed).toBeUndefined();    
+                expect(el.writeTo({}).removed).toBeUndefined();
             });
             
             it("should remove an existing class", function() {
                 el.addCls('foo');
                 el.flush();
                 el.removeCls('foo');
-                expect(el.writeTo({}).removed).toEqual('foo');     
+                expect(el.writeTo({}).removed).toEqual('foo');
             });
         });
         
@@ -334,8 +335,8 @@ topSuite("Ext.util.ProtoElement", function() {
                 el.setStyle('color', 'blue');
                 expect(el.writeTo({}).style).toEqual({
                     color: 'blue'
-                });    
-            });  
+                });
+            });
             
             it("should only contain new styles", function() {
                 el.setStyle('color', 'red');
@@ -343,8 +344,8 @@ topSuite("Ext.util.ProtoElement", function() {
                 el.setStyle('margin', '2px');
                 expect(el.writeTo({}).style).toEqual({
                     margin: '2px'
-                });    
-            }); 
+                });
+            });
         });
     });
     

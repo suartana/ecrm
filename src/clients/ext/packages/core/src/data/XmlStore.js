@@ -52,7 +52,8 @@
  *      </ItemSearchResponse>
  *
  * An object literal of this form could also be used as the {@link #cfg-data} config option.
- * **Note:** This class accepts all of the configuration options of {@link Ext.data.reader.Xml XmlReader}.
+ * **Note:** This class accepts all of the configuration options of
+ * {@link Ext.data.reader.Xml XmlReader}.
  */
 Ext.define('Ext.data.XmlStore', {
     extend: 'Ext.data.Store',
@@ -64,7 +65,7 @@ Ext.define('Ext.data.XmlStore', {
         'Ext.data.writer.Xml'
     ],
     
-    constructor: function(config){
+    constructor: function(config) {
         config = Ext.apply({
             proxy: {
                 type: 'ajax',

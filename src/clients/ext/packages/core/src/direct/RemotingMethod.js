@@ -40,14 +40,14 @@ Ext.define('Ext.direct.RemotingMethod', {
 
             for (p = 0; p < pLen; p++) {
                 param = params[p];
-                name  = Ext.isObject(param) ? param.name : param;
+                name = Ext.isObject(param) ? param.name : param;
                 me.params[name] = true;
             }
         }
         
         if (metadataCfg) {
             params = metadataCfg.params;
-            len    = metadataCfg.len;
+            len = metadataCfg.len;
             
             if (Ext.isNumeric(len)) {
                 //<debug>
@@ -89,7 +89,6 @@ Ext.define('Ext.direct.RemotingMethod', {
         var me = this,
             params = config.params,
             paramOrder = config.paramOrder,
-            paramsAsArray = config.paramsAsArray,
             metadata = config.metadata,
             options = config.options,
             args = [],
@@ -97,7 +96,8 @@ Ext.define('Ext.direct.RemotingMethod', {
         
         if (me.ordered) {
             if (me.len > 0) {
-                // If a paramOrder was specified, add the params into the argument list in that order.
+                // If a paramOrder was specified, add the params into the argument list
+                // in that order.
                 if (paramOrder) {
                     // Direct proxy uses this configuration for its CRUD operations.
                     // We only do this kind of thing for ordered Methods that accept 1 argument,
@@ -108,7 +108,8 @@ Ext.define('Ext.direct.RemotingMethod', {
                     if (flatten) {
                         if (Ext.isArray(params)) {
                             for (i = 0, len = params.length; i < len; i++) {
-                                args.push(me.convertParams(params[i], paramOrder, paramOrder.length, true));
+                                args.push(me.convertParams(params[i], paramOrder,
+                                                           paramOrder.length, true));
                             }
                         }
                         else {
@@ -179,7 +180,7 @@ Ext.define('Ext.direct.RemotingMethod', {
     getCallData: function(args) {
         var me = this,
             data = null,
-            len  = me.len,
+            len = me.len,
             params = me.params,
             strict = me.strict,
             form, callback, scope, name, options, metadata;
@@ -189,24 +190,24 @@ Ext.define('Ext.direct.RemotingMethod', {
         // instead of empty array when len === 0
         if (me.ordered) {
             callback = args[len];
-            scope    = args[len + 1];
-            options  = args[len + 2];
+            scope = args[len + 1];
+            options = args[len + 2];
             
             if (len !== 0) {
                 data = args.slice(0, len);
             }
         }
         else if (me.formHandler) {
-            form     = args[0];
+            form = args[0];
             callback = args[1];
-            scope    = args[2];
-            options  = args[3];
+            scope = args[2];
+            options = args[3];
         }
         else {
-            data     = Ext.apply({}, args[0]);
+            data = Ext.apply({}, args[0]);
             callback = args[1];
-            scope    = args[2];
-            options  = args[3];
+            scope = args[2];
+            options = args[3];
 
             // filter out any non-existent properties unless !strict
             if (strict) {

@@ -1,5 +1,3 @@
-/* global expect, jasmine, Ext, spyOn, xdescribe, describe, it */
-
 topSuite("Ext.menu.Menu",
     ['Ext.Panel', 'Ext.Button', 'Ext.form.field.Date',
      'Ext.layout.container.Accordion', 'Ext.layout.container.Fit'],
@@ -8,6 +6,7 @@ function() {
 
     function makeMenu(cfg) {
         menu = new Ext.menu.Menu(cfg || {});
+        
         return menu;
     }
 
@@ -19,7 +18,8 @@ function() {
         if (jasmine.supportsTouch) {
             Ext.testHelper.touchStart(targetEl, { x: x, y: y });
             Ext.testHelper.touchEnd(targetEl, { x: x, y: y });
-        } else {
+        }
+        else {
             jasmine.fireMouseEvent(targetEl, 'mouseover');
         }
     }
@@ -32,7 +32,8 @@ function() {
         if (jasmine.supportsTouch) {
             Ext.testHelper.touchStart(targetEl, { x: x, y: y });
             Ext.testHelper.touchEnd(targetEl, { x: x, y: y });
-        } else {
+        }
+        else {
             jasmine.fireMouseEvent(targetEl, 'click');
         }
     }
@@ -45,7 +46,8 @@ function() {
 
         if (jasmine.supportsTouch) {
             Ext.testHelper.touchStart(el, { x: x, y: y });
-        } else {
+        }
+        else {
             jasmine.fireMouseEvent(el, 'mousedown');
         }
     }
@@ -58,7 +60,8 @@ function() {
 
         if (jasmine.supportsTouch) {
             Ext.testHelper.touchEnd(el, { x: x, y: y });
-        } else {
+        }
+        else {
             jasmine.fireMouseEvent(el, 'mouseup');
         }
     }
@@ -97,7 +100,7 @@ function() {
         it("should allow a custom default", function() {
             makeMenu({
                 defaultType: 'menucheckitem',
-                items: [{}, {}, {checked: true}]
+                items: [{}, {}, { checked: true }]
             });
             expect(menu.items.getAt(0).$className).toBe('Ext.menu.CheckItem');
             expect(menu.items.getAt(1).$className).toBe('Ext.menu.CheckItem');
@@ -105,8 +108,8 @@ function() {
         });
     });
 
-    describe('dockedItems', function () {
-        it('should move body below docked title', function () {
+    describe('dockedItems', function() {
+        it('should move body below docked title', function() {
             makeMenu({
                 title: 'Some Menu',
 
@@ -120,8 +123,11 @@ function() {
             menu.show();
 
             var bodyXY = menu.body.getXY();
+
             var title = menu.dockedItems.items[0];
+
             var titleHeight = title.el.getHeight();
+
             var titleXY = title.el.getXY();
 
             expect(bodyXY[1]).toBe(titleXY[1] + titleHeight);
@@ -199,9 +205,9 @@ function() {
             });
     
             it("should hide multiple menus", function() {
-                var m1 = makeMenu({items: {text: 'M1'}, allowOtherMenus: true}),
-                    m2 = makeMenu({items: {text: 'M2'}, allowOtherMenus: true}),
-                    m3 = makeMenu({items: {text: 'M3'}, allowOtherMenus: true});
+                var m1 = makeMenu({ items: { text: 'M1' }, allowOtherMenus: true }),
+                    m2 = makeMenu({ items: { text: 'M2' }, allowOtherMenus: true }),
+                    m3 = makeMenu({ items: { text: 'M3' }, allowOtherMenus: true });
     
                 m1.show();
                 m2.show();
@@ -234,6 +240,7 @@ function() {
     
                 menu.show();
                 var item = menu.items.first();
+
                 item.activated = true;
                 item.expandMenu(null, 0);
     
@@ -247,9 +254,9 @@ function() {
             });
     
             it("should only hide menus visible at the time of being called", function() {
-                var m1 = makeMenu({allowOtherMenus: true, items: {text: 'Foo'}}),
-                    m2 = makeMenu({allowOtherMenus: true, items: {text: 'Bar'}}),
-                    m3 = makeMenu({allowOtherMenus: true, items: {text: 'Baz'}});
+                var m1 = makeMenu({ allowOtherMenus: true, items: { text: 'Foo' } }),
+                    m2 = makeMenu({ allowOtherMenus: true, items: { text: 'Bar' } }),
+                    m3 = makeMenu({ allowOtherMenus: true, items: { text: 'Baz' } });
     
                 m1.show();
                 m2.show();
@@ -365,11 +372,12 @@ function() {
                 delete menu.menuClickBuffer;
 
                 var other = new Ext.menu.Menu({
-                    items: [{
-                        text: 'Child',
-                        menuExpandDelay: 0
-                    }]
-                }), item;
+                        items: [{
+                            text: 'Child',
+                            menuExpandDelay: 0
+                        }]
+                    }),
+                    item;
 
                 item = other.items.getAt(0);
                 item.setMenu(menu);
@@ -402,12 +410,13 @@ function() {
                 });
 
                 var other = new Ext.menu.Menu({
-                    items: [{
-                        text: 'Child',
-                        menuExpandDelay: 0,
-                        menu: menu
-                    }]
-                }), item;
+                        items: [{
+                            text: 'Child',
+                            menuExpandDelay: 0,
+                            menu: menu
+                        }]
+                    }),
+                    item;
 
                 item = other.items.getAt(0);
 
@@ -560,8 +569,8 @@ function() {
                 renderTo: Ext.getBody()
             });
 
-            var m1 = makeMenu({allowOtherMenus: true, items: [{text: 'Foo'}]}),
-                m2 = makeMenu({allowOtherMenus: true, items: [{text: 'Bar'}]});
+            var m1 = makeMenu({ allowOtherMenus: true, items: [{ text: 'Foo' }] }),
+                m2 = makeMenu({ allowOtherMenus: true, items: [{ text: 'Bar' }] });
 
             m1.showAt(100, 100);
             m2.showAt(100, 150);
@@ -574,28 +583,28 @@ function() {
         });
     });
 
-    describe('binding an ownerRef', function () {
+    describe('binding an ownerRef', function() {
         var ctn;
 
-        beforeEach(function () {
+        beforeEach(function() {
             ctn = new Ext.container.Container({
                 renderTo: Ext.getBody()
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             ctn.destroy();
             ctn = null;
         });
 
-        it('should bind an ownerCt reference to the menu if added as an item to a container (but not rendered)', function () {
+        it('should bind an ownerCt reference to the menu if added as an item to a container (but not rendered)', function() {
             makeMenu();
             ctn.add(menu);
 
             expect(menu.ownerCt).toBe(ctn);
         });
 
-        it('should bind an floatParent reference to the menu when shown/rendered', function () {
+        it('should bind an floatParent reference to the menu when shown/rendered', function() {
             makeMenu();
             ctn.add(menu);
             menu.show();
@@ -603,7 +612,7 @@ function() {
             expect(menu.floatParent).toBe(ctn);
         });
 
-        it('should not have an ownerRef if not a child item of a container', function () {
+        it('should not have an ownerRef if not a child item of a container', function() {
             makeMenu();
             menu.show();
 
@@ -612,8 +621,8 @@ function() {
         });
     });
 
-    describe("not floating", function(){
-        it("should set constrain false", function(){
+    describe("not floating", function() {
+        it("should set constrain false", function() {
             makeMenu({
                 floating: false
             });
@@ -727,12 +736,12 @@ function() {
         });
     });
 
-    describe('registering with an owner', function () {
-        describe('constrainTo', function () {
-            describe('when owner is a button', function () {
+    describe('registering with an owner', function() {
+        describe('constrainTo', function() {
+            describe('when owner is a button', function() {
                 var button;
 
-                beforeEach(function () {
+                beforeEach(function() {
                     makeMenu({
                         width: 200,
                         items: [{
@@ -741,12 +750,12 @@ function() {
                     });
                 });
 
-                afterEach(function () {
+                afterEach(function() {
                     button.destroy();
                     button = null;
                 });
 
-                it('should not constrain itself to the button', function () {
+                it('should not constrain itself to the button', function() {
                     button = new Ext.button.Button({
                         menu: menu,
                         renderTo: Ext.getBody()
@@ -759,14 +768,14 @@ function() {
             });
         });
     });
-
-    // These specs use a hashchange listener which is not supported in IE9m.
-    // We decided to disable for all IE b/c it was too difficult to test in those browsers.
-    (Ext.isIE ? xdescribe : describe)('navigation', function () {
+    
+    // These and corresponding specs in Ext.menu.Item and Ext.menu.KeyNav test suites
+    // disabled because they don't work as expected.
+    xdescribe('navigation', function() {
         var hash = '#foo',
             hashChangeHandler;
 
-        beforeEach(function () {
+        beforeEach(function() {
             hashChangeHandler = jasmine.createSpy();
             Ext.getWin().on('hashchange', hashChangeHandler);
             location.hash = hash;
@@ -776,7 +785,7 @@ function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             var callCount = hashChangeHandler.callCount;
 
             location.hash = '';
@@ -812,7 +821,7 @@ function() {
             });
         });
 
-        it("should not navigate when a child item does not have an href config", function () {
+        it("should not navigate when a child item does not have an href config", function() {
             makeMenu({
                 renderTo: Ext.getBody(),
                 width: 400,
@@ -935,7 +944,7 @@ function() {
                             }, {
                                 text: 'item 2'
                             }, {
-                                text: 'submenu 2', 
+                                text: 'submenu 2',
                                 menu: {
                                     itemId: 'submenu2',
                                     items: [{
@@ -1447,6 +1456,7 @@ function() {
                     charCode: 65, // char 'A'
                     target: menu.el.dom
                 });
+
                 menu.onShortcutKey(65, event);
             }).not.toThrow();
         });
@@ -1473,8 +1483,8 @@ function() {
     });
 
     // https://sencha.jira.com/browse/EXTJS-20962
-    describe("adding separator by shortcut to menu that has defaults", function () {
-        beforeEach(function () {
+    describe("adding separator by shortcut to menu that has defaults", function() {
+        beforeEach(function() {
             makeMenu({
                 defaults: {
                     iconCls: 'x-fa fa-truck'
@@ -1487,13 +1497,13 @@ function() {
             });
         });
 
-        it("should not apply defaults to separator", function () {
+        it("should not apply defaults to separator", function() {
             expect(menu.items.getAt(0).iconCls).toBe('x-fa fa-truck');
             expect(menu.items.getAt(1).iconCls).toBeUndefined();
             expect(menu.items.getAt(2).iconCls).toBe('x-fa fa-truck');
         });
 
-        it("should successfully add an instance of Ext.menu.Separator", function () {
+        it("should successfully add an instance of Ext.menu.Separator", function() {
             expect(menu.items.getAt(1).getXType()).toBe('menuseparator');
         });
     });
@@ -1505,9 +1515,10 @@ function() {
             window.onerror = oldOnError;
         });
         it('should not throw an error on mousedown of the header', function() {
-            var header, onErrorSpy = jasmine.createSpy();
+            var header,
+                onErrorSpy = jasmine.createSpy();
 
-            function getSampleMenuItems () {
+            function getSampleMenuItems() {
                 return [
                     { text: 'Menu Item 1' },
                     { text: 'Menu Item 2' },

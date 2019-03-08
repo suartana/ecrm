@@ -36,8 +36,8 @@
  *      }
  *
  * This method of configuring API is not recommended because this way the Direct functions
- * need to be created very early in the application lifecycle, long before {@link Ext.app.Application}
- * instance is initialized.
+ * need to be created very early in the application lifecycle, long before
+ * {@link Ext.app.Application} instance is initialized.
  *
  * You can also use the {@link #directFn} configuration instead of {@link #api}. This will use
  * the same Direct function for all types of requests.
@@ -300,6 +300,7 @@ Ext.define('Ext.data.proxy.Direct', {
         if (Ext.isString(paramOrder)) {
             paramOrder = paramOrder.split(this.paramOrderRe);
         }
+        
         return paramOrder;
     },
 
@@ -335,15 +336,15 @@ Ext.define('Ext.data.proxy.Direct', {
 
     doRequest: function(operation) {
         var me = this,
-            writer, request, action, params, args, api, fn, callback;
+            writer, request, action, params, args, api, fn;
         
         if (!me.methodsResolved) {
             me.resolveMethods();
         }
         
         request = me.buildRequest(operation);
-        action  = request.getAction();
-        api     = me.getApi();
+        action = request.getAction();
+        api = me.getApi();
 
         if (api) {
             fn = api[action];

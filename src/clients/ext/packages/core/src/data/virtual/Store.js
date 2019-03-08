@@ -90,7 +90,7 @@ Ext.define('Ext.data.virtual.Store', {
      */
     trackRemoved: false,
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this;
 
         me.sortByPage = me.sortByPage.bind(me);
@@ -104,13 +104,14 @@ Ext.define('Ext.data.virtual.Store', {
         me.callParent([ config ]);
     },
 
-    doDestroy: function () {
+    doDestroy: function() {
         this.pageMap.destroy();
         this.callParent();
     },
 
-    applyGrouper: function (grouper) {
+    applyGrouper: function(grouper) {
         this.group(grouper);
+        
         return this.grouper;
     },
 
@@ -120,7 +121,7 @@ Ext.define('Ext.data.virtual.Store', {
      * @method contains
      * @inheritdoc
      */
-    contains: function (record) {
+    contains: function(record) {
         return this.indexOf(record) > -1;
     },
 
@@ -131,7 +132,7 @@ Ext.define('Ext.data.virtual.Store', {
      * @return {Ext.data.virtual.Range}
      * @since 6.5.0
      */
-    createActiveRange: function (config) {
+    createActiveRange: function(config) {
         var range = Ext.apply({
             leadingBufferZone: this.getLeadingBufferZone(),
             trailingBufferZone: this.getTrailingBufferZone(),
@@ -145,8 +146,8 @@ Ext.define('Ext.data.virtual.Store', {
      * @method getAt
      * @inheritdoc
      */
-    getAt: function (index) {
-        var page = this.pageMap.getPageOf(index, /*autoCreate=*/false),
+    getAt: function(index) {
+        var page = this.pageMap.getPageOf(index, /* autoCreate= */false),
             ret;
 
         if (page && page.records) { // if (page is loaded)
@@ -165,25 +166,26 @@ Ext.define('Ext.data.virtual.Store', {
      * @param {Mixed} id The id of the Record to find.
      * @return {Ext.data.Model} The Record with the passed id. Returns null if not found.
      */
-    getById: function (id) {
+    getById: function(id) {
         return this.pageMap.byId[id] || null;
     },
 
-    getCount: function () {
+    getCount: function() {
         return this.totalCount || 0;
     },
 
-    getGrouper: function () {
+    getGrouper: function() {
         return this.grouper;
     },
 
-    getGroups: function () {
+    getGroups: function() {
         var me = this,
             groups = me.groupCollection;
 
         if (!groups) {
             me.groupCollection = groups = new Ext.util.Collection();
         }
+        
         return groups;
     },
 
@@ -191,11 +193,11 @@ Ext.define('Ext.data.virtual.Store', {
         return this.summaryRecord || null;
     },
 
-    isGrouped: function () {
+    isGrouped: function() {
         return !!this.grouper;
     },
 
-    group: function (grouper, direction) {
+    group: function(grouper, direction) {
         var me = this;
 
         grouper = grouper || null;
@@ -211,7 +213,9 @@ Ext.define('Ext.data.virtual.Store', {
             if (!grouper.isGrouper) {
                 grouper = new Ext.util.Grouper(grouper);
             }
+            
             grouper.setRoot('data');
+            
             me.getGroups().getSorters().splice(0, 1, {
                 property: 'id',
                 direction: grouper.getDirection()
@@ -238,7 +242,7 @@ Ext.define('Ext.data.virtual.Store', {
      * @param {Ext.data.Model} record The record to find.
      * @return {Number} The index of the `record` or -1 if not found.
      */
-    indexOf: function (record) {
+    indexOf: function(record) {
         return this.pageMap.indexOf(record);
     },
 
@@ -250,8 +254,9 @@ Ext.define('Ext.data.virtual.Store', {
      * @param {String} id The id of the record to find.
      * @return {Number} The index of the record or -1 if not found.
      */
-    indexOfId: function (id) {
+    indexOfId: function(id) {
         var rec = this.getById(id);
+        
         return rec ? this.indexOf(rec) : -1;
     },
 
@@ -262,6 +267,7 @@ Ext.define('Ext.data.virtual.Store', {
             };
         }
 
+        /* eslint-disable-next-line vars-on-top */
         var me = this,
             page = (options && options.page) || 1,
             pageSize = me.getPageSize(),
@@ -276,17 +282,18 @@ Ext.define('Ext.data.virtual.Store', {
             }, options));
 
         operation.execute();
+        
         return operation;
     },
 
     reload: function(options) {
+        var me = this;
+
         if (typeof options === 'function') {
             options = {
                 callback: options
             };
         }
-
-        var me = this;
 
         if (me.fireEvent('beforereload') === false) {
             return null;
@@ -304,23 +311,23 @@ Ext.define('Ext.data.virtual.Store', {
         return me.load(options);
     },
 
-    //TODO load?
-    //TODO reload?
+    // TODO load?
+    // TODO reload?
 
-    removeAll: function () {
+    removeAll: function() {
         var activeRanges = this.activeRanges,
             i;
 
         this.pageMap.clear();
 
-        for (i = activeRanges.length; i-- > 0; ) {
+        for (i = activeRanges.length; i-- > 0;) {
             activeRanges[i].reset();
         }
     },
 
     //---------------------------------------------------------------------
 
-    applyProxy: function (proxy) {
+    applyProxy: function(proxy) {
         proxy = this.callParent([proxy]);
 
         // This store asks for pages.
@@ -340,15 +347,15 @@ Ext.define('Ext.data.virtual.Store', {
     //     return result;
     // },
 
-    createFiltersCollection: function () {
+    createFiltersCollection: function() {
         return new Ext.util.FilterCollection();
     },
 
-    createSortersCollection: function () {
+    createSortersCollection: function() {
         return new Ext.util.SorterCollection();
     },
 
-    onFilterEndUpdate: function () {
+    onFilterEndUpdate: function() {
         var me = this,
             filters = me.getFilters(false);
 
@@ -359,7 +366,7 @@ Ext.define('Ext.data.virtual.Store', {
         }
     },
 
-    onSorterEndUpdate: function () {
+    onSorterEndUpdate: function() {
         var me = this,
             sorters = me.getSorters().getRange(),
             fire = !me.isConfiguring;
@@ -367,20 +374,22 @@ Ext.define('Ext.data.virtual.Store', {
         if (fire) {
             me.fireEvent('beforesort', me, sorters);
         }
+        
         if (fire) {
             me.reload();
             me.fireEvent('sort', me, sorters);
         }
     },
 
-    updatePageSize: function (pageSize) {
+    updatePageSize: function(pageSize) {
         var totalCount = this.totalCount;
+        
         if (totalCount !== null) {
             this.pageMap.setPageCount(Math.ceil(totalCount / pageSize));
         }
     },
 
-    updateTotalCount: function (totalCount, oldTotalCount) {
+    updateTotalCount: function(totalCount, oldTotalCount) {
         var me = this,
             pageMap = me.pageMap;
 
@@ -395,15 +404,15 @@ Ext.define('Ext.data.virtual.Store', {
     // Unsupported API's
 
     //<debug>
-    add: function () {
+    add: function() {
         Ext.raise('Virtual stores do not support the add() method');
     },
 
-    insert: function () {
+    insert: function() {
         Ext.raise('Virtual stores do not support the insert() method');
     },
 
-    filter: function () {
+    filter: function() {
         if (!this.getRemoteFilter()) {
             Ext.raise('Virtual stores do not support local filtering');
         }
@@ -412,19 +421,19 @@ Ext.define('Ext.data.virtual.Store', {
         this.callParent(arguments);
     },
 
-    filterBy: function () {
+    filterBy: function() {
         Ext.raise('Virtual stores do not support local filtering');
     },
 
-    loadData: function () {
+    loadData: function() {
         Ext.raise('Virtual stores do not support the loadData() method');
     },
 
-    applyData: function () {
+    applyData: function() {
         Ext.raise('Virtual stores do not support direct data loading');
     },
 
-    updateRemoteFilter: function (remoteFilter, oldRemoteFilter) {
+    updateRemoteFilter: function(remoteFilter, oldRemoteFilter) {
         if (remoteFilter === false) {
             Ext.raise('Virtual stores are always remotely filtered.');
         }
@@ -432,7 +441,7 @@ Ext.define('Ext.data.virtual.Store', {
         this.callParent([remoteFilter, oldRemoteFilter]);
     },
 
-    updateRemoteSort: function (remoteSort, oldRemoteSort) {
+    updateRemoteSort: function(remoteSort, oldRemoteSort) {
         if (remoteSort === false) {
             Ext.raise('Virtual stores are always remotely sorted.');
         }
@@ -440,7 +449,7 @@ Ext.define('Ext.data.virtual.Store', {
         this.callParent([remoteSort, oldRemoteSort]);
     },
 
-    updateTrackRemoved: function (value) {
+    updateTrackRemoved: function(value) {
         if (value !== false) {
             Ext.raise('Virtual stores do not support trackRemoved.');
         }
@@ -460,10 +469,13 @@ Ext.define('Ext.data.virtual.Store', {
             }
 
             summary = resultSet.getGroupData();
+            
             if (summary) {
                 grouper = me.getGrouper();
+                
                 if (grouper) {
                     me.groupSummaryData = data = {};
+                    
                     for (i = 0, len = summary.length; i < len; ++i) {
                         rec = summary[i];
                         data[grouper.getGroupString(rec)] = rec;
@@ -485,6 +497,7 @@ Ext.define('Ext.data.virtual.Store', {
 
                 for (i = 0; i < len; ++i) {
                     range = activeRanges[i];
+                    
                     if (pageMap.canSatisfy(range)) {
                         range.reload();
                     }
@@ -492,13 +505,13 @@ Ext.define('Ext.data.virtual.Store', {
             }
         },
 
-        loadVirtualPage: function (page, callback, scope) {
+        loadVirtualPage: function(page, callback, scope) {
             var me = this,
                 pageMapGeneration = me.pageMap.generation;
 
             return me.load({
                 page: page.number + 1, // store loads are 1 based
-                internalCallback: function (op) {
+                internalCallback: function(op) {
                     var resultSet = op.getResultSet();
 
                     if (pageMapGeneration === me.pageMap.generation) {
@@ -529,10 +542,12 @@ Ext.define('Ext.data.virtual.Store', {
             for (i = 0; i < len; ++i) {
                 rec = records[i];
                 groupKey = grouper.getGroupString(rec);
+                
                 if (!groupInfo[groupKey]) {
                     groupInfo[groupKey] = rec;
 
                     group = groups.get(groupKey);
+                    
                     if (!group) {
                         group = new Ext.data.virtual.Group(groupKey);
                         groups.add(group);
@@ -544,13 +559,16 @@ Ext.define('Ext.data.virtual.Store', {
                     // the order at this point, so just shift it on to the end.
                     firstRecords = group.firstRecords;
                     first = firstRecords[0];
+                    
                     if (first && n < pageMap.getPageIndex(first)) {
                         firstRecords.unshift(rec);
-                    } else {
+                    }
+                    else {
                         firstRecords.push(rec);
                     }
 
                     summaryRec = groupSummaryData && groupSummaryData[groupKey];
+                    
                     if (summaryRec) {
                         group.summaryRecord = summaryRec;
                     }
@@ -586,6 +604,7 @@ Ext.define('Ext.data.virtual.Store', {
 
         readTotalCount: function(resultSet) {
             var total = resultSet.getRemoteTotal();
+            
             if (!isNaN(total)) {
                 this.setTotalCount(total);
             }
@@ -605,10 +624,12 @@ Ext.define('Ext.data.virtual.Store', {
                 // means the group no longer has records
                 if (firstRecords.length === 1) {
                     groups.remove(group);
-                } else if (firstRecords[0] === first) {
+                }
+                else if (firstRecords[0] === first) {
                     firstRecords.shift();
                     firstRecords.sort(this.sortByPage);
-                } else {
+                }
+                else {
                     Ext.Array.remove(firstRecords, first);
                 }
             }
@@ -617,6 +638,7 @@ Ext.define('Ext.data.virtual.Store', {
         sortByPage: function(rec1, rec2) {
             // Bound to this instance in the constructor
             var map = this.pageMap;
+            
             return map.getPageIndex(rec1) - map.getPageIndex(rec2);
         }
     }

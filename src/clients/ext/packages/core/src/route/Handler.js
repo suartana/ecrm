@@ -69,7 +69,7 @@ Ext.define('Ext.route.Handler', {
      * the handlers will be resolved from this scope.
      */
 
-     /**
+    /**
       * @cfg {Boolean} single
       * Controls if this handler should be removed after first execution. There are
       * a veriety of values that control when in the execution this should be removed:
@@ -104,7 +104,7 @@ Ext.define('Ext.route.Handler', {
          * @param {Ext.Base} scope The scope the handlers will be called/resolved with.
          * @return {Ext.route.Handler}
          */
-        fromRouteConfig: function (config, scope) {
+        fromRouteConfig: function(config, scope) {
             var handler = {
                 action: config.action,
                 before: config.before,
@@ -118,7 +118,7 @@ Ext.define('Ext.route.Handler', {
         }
     },
 
-    constructor: function (config) {
+    constructor: function(config) {
         Ext.apply(this, config);
     }
 });

@@ -8,24 +8,29 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+            
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+            
             return this;
         };
     
     function makeToolbar(cfg, preventRender) {
         cfg = cfg || {};
+        
         if (!preventRender) {
             cfg.renderTo = Ext.getBody();
         }
+        
         if (cfg.store === undefined) {
             cfg.store = makeStore();
         }
+        
         tb = new Ext.toolbar.Paging(cfg);
-    }   
+    }
     
-    function makeStore (pageSize) {
+    function makeStore(pageSize) {
         store = new Ext.data.Store({
             model: 'spec.PagingToolbarModel',
             storeId: 'pagingToolbarStore',
@@ -40,6 +45,7 @@ function() {
                 }
             }
         });
+
         return store;
     }
     
@@ -95,10 +101,20 @@ function() {
         Ext.data.Model.schema.clear();
     });
 
+    describe("alternate class name", function() {
+        it("should have Ext.PagingToolbar as the alternate class name", function() {
+            expect(Ext.toolbar.Paging.prototype.alternateClassName).toEqual("Ext.PagingToolbar");
+        });
+
+        it("should allow the use of Ext.PagingToolbar", function() {
+            expect(Ext.PagingToolbar).toBeDefined();
+        });
+    });
+
     describe("auto store", function() {
         var view;
 
-        beforeEach(function () {
+        beforeEach(function() {
             view = Ext.create({
                 xtype: 'grid',
                 store: makeStore(20),
@@ -117,15 +133,16 @@ function() {
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             view = Ext.destroy(view);
         });
 
-        it('should associate to owner store', function () {
+        it('should associate to owner store', function() {
             store.load();
             mockComplete(makeData(200, 0));
 
             var c = view.down('pagingtoolbar');
+
             expect(c.store).toBe(view.store);
             expect(c.store).toBe(store);
 
@@ -147,7 +164,7 @@ function() {
                     store: null
                 });
             }).not.toThrow();
-        });  
+        });
         
         it("should accept a store instance", function() {
             store = makeStore();
@@ -155,23 +172,23 @@ function() {
                 store: store
             });
             expect(tb.getStore()).toBe(store);
-        });  
+        });
         
         it("should accept a store config", function() {
             makeToolbar({
                 store: {
                     model: 'spec.PagingToolbarModel'
                 }
-            });  
-            expect(tb.getStore().model).toBe(spec.PagingToolbarModel);  
+            });
+            expect(tb.getStore().model).toBe(spec.PagingToolbarModel);
         });
         
         it("should accept a store id", function() {
             store = makeStore();
             makeToolbar({
                 store: 'pagingToolbarStore'
-            });   
-            expect(tb.getStore()).toBe(store);   
+            });
+            expect(tb.getStore()).toBe(store);
         });
 
         it("should update the toolbar info if the store is already loaded at render time", function() {
@@ -248,6 +265,7 @@ function() {
                 displayInfo: true
             });
             var items = tb.items;
+
             expect(items.getAt(items.getCount() - 2).isXType('tbfill')).toBe(true);
             expect(items.last().getItemId()).toBe('displayItem');
         });
@@ -256,11 +274,11 @@ function() {
     describe("disabling/enabling items", function() {
         function expectEnabled(id) {
             expectState(id, false);
-        }   
+        }
         
         function expectDisabled(id) {
             expectState(id, true);
-        } 
+        }
         
         function expectState(id, state) {
             expect(tb.child('#' + id).disabled).toBe(state);
@@ -279,7 +297,7 @@ function() {
         describe("store loads before render", function() {
             it("should set the state if the store is loaded", function() {
                 makeToolbar({}, true);
-                store.load();    
+                store.load();
                 mockComplete(makeData(20, 0));
                 tb.render(Ext.getBody());
                 expectDisabled('first');
@@ -294,7 +312,7 @@ function() {
         describe("store loads after render", function() {
             it("should set the state if the store is loaded", function() {
                 makeToolbar();
-                store.load();    
+                store.load();
                 mockComplete(makeData(20, 0));
                 expectDisabled('first');
                 expectDisabled('prev');
@@ -308,7 +326,7 @@ function() {
         describe("based on current page", function() {
             it("should disable first/prev buttons on the first page", function() {
                 makeToolbar();
-                store.loadPage(1);    
+                store.loadPage(1);
                 mockComplete(makeData(20, 0));
                 expectDisabled('first');
                 expectDisabled('prev');
@@ -320,7 +338,7 @@ function() {
         
             it("should disable next/last buttons on the last page", function() {
                 makeToolbar();
-                store.loadPage(4);    
+                store.loadPage(4);
                 mockComplete(makeData(20, 0));
                 expectEnabled('first');
                 expectEnabled('prev');
@@ -332,7 +350,7 @@ function() {
         
             it("should enable all buttons when the page is not first or last", function() {
                 makeToolbar();
-                store.loadPage(2);    
+                store.loadPage(2);
                 mockComplete(makeData(20, 0));
                 expectEnabled('first');
                 expectEnabled('prev');
@@ -371,14 +389,15 @@ function() {
                 expectDisabled('next');
                 expectDisabled('last');
                 expectEnabled('refresh');
-            });    
+            });
         });
     });
     
     describe("move/refresh methods", function() {
         var spy;
+
         beforeEach(function() {
-            makeToolbar();    
+            makeToolbar();
             store.load();
             mockComplete(makeData(20, 0));
             spy = jasmine.createSpy();
@@ -404,7 +423,7 @@ function() {
             it("should return true & load the store with the first page", function() {
                 spyOn(store, 'loadPage');
                 expect(tb.moveFirst()).toBe(true);
-                expect(store.loadPage.mostRecentCall.args[0]).toBe(1);    
+                expect(store.loadPage.mostRecentCall.args[0]).toBe(1);
             });
         });
         
@@ -434,7 +453,7 @@ function() {
                 store.loadPage(3);
                 mockComplete(makeData(20, 10));
                 expect(tb.movePrevious()).toBe(true);
-                expect(store.previousPage).toHaveBeenCalled();    
+                expect(store.previousPage).toHaveBeenCalled();
             });
         });
         
@@ -462,7 +481,7 @@ function() {
             it("should return true & load the store with the next page", function() {
                 spyOn(store, 'nextPage');
                 expect(tb.moveNext()).toBe(true);
-                expect(store.nextPage).toHaveBeenCalled();    
+                expect(store.nextPage).toHaveBeenCalled();
             });
         });
         
@@ -482,7 +501,7 @@ function() {
             it("should return true & load the store with the last page", function() {
                 spyOn(store, 'loadPage');
                 expect(tb.moveLast()).toBe(true);
-                expect(store.loadPage.mostRecentCall.args[0]).toBe(4);    
+                expect(store.loadPage.mostRecentCall.args[0]).toBe(4);
             });
         });
         
@@ -502,7 +521,7 @@ function() {
             it("should return true & load the store with the last page", function() {
                 spyOn(store, 'loadPage');
                 expect(tb.doRefresh()).toBe(true);
-                expect(store.loadPage.mostRecentCall.args[0]).toBe(1);    
+                expect(store.loadPage.mostRecentCall.args[0]).toBe(1);
             });
         });
     });
@@ -531,7 +550,7 @@ function() {
                 fromRecord: 11,
                 toRecord: 15
             });
-        });  
+        });
         
         it("should not fire if configured with an empty store", function() {
             makeToolbar(undefined, true);
@@ -572,6 +591,7 @@ function() {
         
         function triggerKeyEvent(key) {
             var dom = tb.down('#inputItem').inputEl.dom;
+
             dom.focus();
             jasmine.fireKeyEvent(dom, keyEvent, key);
         }
@@ -606,7 +626,7 @@ function() {
             });
         });
         
-        describe('reconfiguring a grid using buffered rendering and grouping', function () {
+        describe('reconfiguring a grid using buffered rendering and grouping', function() {
             // This test demonstrates that the paging toolbar will update its input item when the grid
             // is configured in a very specific way.
             //
@@ -618,18 +638,18 @@ function() {
             // See EXTJSIV-11860 and EXTJSIV-11892.
             var grid;
 
-            afterEach(function () {
+            afterEach(function() {
                 grid.destroy();
                 grid = null;
             });
 
-            it('should update the input item when paging', function () {
+            it('should update the input item when paging', function() {
                 grid = Ext.create('Ext.grid.Panel', {
                     width: 100,
                     height: 100,
                     store: makeStore(),
-                    features: [{ftype:'grouping'}],
-                    columns:[{
+                    features: [{ ftype: 'grouping' }],
+                    columns: [{
                         text: 'Name',
                         dataIndex: 'name',
                         width: 100
@@ -689,6 +709,7 @@ function() {
                             e.shiftKey = true;
                             Ext.toolbar.Paging.prototype.processKeyEvent.call(tb, field, e);
                         });
+
                         triggerKeyEvent(PAGE_DOWN);
                         expect(tb.getInputItem().getValue()).toBe(3);
                     });
@@ -757,6 +778,7 @@ function() {
                             e.shiftKey = true;
                             Ext.toolbar.Paging.prototype.processKeyEvent.call(tb, field, e);
                         });
+
                         triggerKeyEvent(PAGE_UP);
                         expect(tb.getInputItem().getValue()).toBe(1);
                     });
@@ -808,7 +830,7 @@ function() {
                     tb.getInputItem().setRawValue(3);
                     spyOn(store, 'loadPage');
                     triggerKeyEvent(ENTER);
-                    expect(store.loadPage.mostRecentCall.args[0]).toBe(3);    
+                    expect(store.loadPage.mostRecentCall.args[0]).toBe(3);
                 });
                 
                 it("should do nothing if the value isn't valid", function() {
@@ -839,7 +861,7 @@ function() {
                     tb.getInputItem().setRawValue(-2);
                     spyOn(store, 'loadPage');
                     triggerKeyEvent(ENTER);
-                    expect(store.loadPage.mostRecentCall.args[0]).toBe(1);  
+                    expect(store.loadPage.mostRecentCall.args[0]).toBe(1);
                 });
                 
                 it("should limit the value up to the maximum", function() {
@@ -849,7 +871,7 @@ function() {
                     tb.getInputItem().setRawValue(50);
                     spyOn(store, 'loadPage');
                     triggerKeyEvent(ENTER);
-                    expect(store.loadPage.mostRecentCall.args[0]).toBe(4);  
+                    expect(store.loadPage.mostRecentCall.args[0]).toBe(4);
                 });
                 
                 it("should fire the beforechange event with the toolbar & the new page", function() {
@@ -859,6 +881,7 @@ function() {
                     tb.getInputItem().setRawValue(3);
                     
                     var spy = jasmine.createSpy();
+
                     tb.on('beforechange', spy);
                     triggerKeyEvent(ENTER);
                     expect(spy.mostRecentCall.args[0]).toBe(tb);
@@ -886,7 +909,7 @@ function() {
         it("should load the largest available page when we've gone outside the dataset", function() {
             var spy = jasmine.createSpy();
                 
-            makeToolbar();    
+            makeToolbar();
             store.loadPage(5);
             mockComplete(makeData(25, 20));
             tb.on('change', spy);
@@ -894,7 +917,7 @@ function() {
             spyOn(store, 'loadPage');
             mockComplete(makeData(10, 5));
             expect(spy).not.toHaveBeenCalled();
-            expect(store.loadPage.mostRecentCall.args[0]).toBe(2);  
-        });  
+            expect(store.loadPage.mostRecentCall.args[0]).toBe(2);
+        });
     });
 });

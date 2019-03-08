@@ -1,8 +1,8 @@
 /**
  * A 'Toast' is a simple message that is displayed on the screen and then automatically closed by a
  * timeout. Think about it like a text only alert box that will self destruct. **A Toast should not
- * be instantiated manually** but creating by calling 'Ext.toast(message, timeout)'. This will create
- * one reusable toast container and content will be swapped out as toast messages are queued
+ * be instantiated manually** but creating by calling 'Ext.toast(message, timeout)'. This will
+ * create one reusable toast container and content will be swapped out as toast messages are queued
  * or displayed.
  *
  * # Simple Toast
@@ -83,9 +83,9 @@ Ext.define('Ext.Toast', {
 
         /**
          * @cfg {Number} maxQueue
-         * The the maximum number of toasts that can be queued up.  When there are this many toasts queued up and
-         * a new call to Ext.toast() is made, the oldest queued Toast that is not yet displayed will be dropped
-         * from the queue.
+         * The the maximum number of toasts that can be queued up.  When there are this many toasts
+         * queued up and a new call to Ext.toast() is made, the oldest queued Toast that is not yet
+         * displayed will be dropped from the queue.
          */
         maxQueue: 3,
 
@@ -126,7 +126,7 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    applyMessage: function (value) {
+    applyMessage: function(value) {
         var config = {
             html: value,
             cls: this.baseCls + '-text'
@@ -138,7 +138,7 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    updateMessage: function (newMessage) {
+    updateMessage: function(newMessage) {
         if (newMessage) {
             this.add(newMessage);
         }
@@ -147,20 +147,22 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    startTimer: function () {
+    startTimer: function() {
         var timeout = this.getTimeout();
+
         if (this._timeoutID) {
             Ext.undefer(this._timeoutID);
         }
 
         if (!Ext.isEmpty(timeout)) {
             this._timeoutID = Ext.defer(this.onTimeout.bind(this), timeout);
-        } else {
+        }
+        else {
             this.onTimeout();
         }
     },
 
-    stopTimer: function () {
+    stopTimer: function() {
         Ext.undefer(this._timeoutID);
         this._timeoutID = null;
     },
@@ -171,15 +173,17 @@ Ext.define('Ext.Toast', {
      */
     next: Ext.emptyFn,
 
-    getIsAnimating: function () {
+    getIsAnimating: function() {
         var messageContainer = this.getMessage();
-        return (messageContainer && Ext.Animator.hasRunningAnimations(messageContainer)) || Ext.Animator.hasRunningAnimations(this);
+
+        return (messageContainer && Ext.Animator.hasRunningAnimations(
+            messageContainer)) || Ext.Animator.hasRunningAnimations(this);
     },
 
     /**
      * @private
      */
-    showToast: function (config) {
+    showToast: function(config) {
         var me = this,
             message = config.message,
             timeout = config.timeout,
@@ -190,13 +194,13 @@ Ext.define('Ext.Toast', {
         if (me.isRendered() && me.isHidden() === false) {
             messageContainer.onAfter({
                 // After the hide is complete
-                hiddenchange: function () {
+                hiddenchange: function() {
                     me.setMessage(message);
                     me.setTimeout(timeout);
                     messageContainer.onAfter({
                         scope: me,
                         // After the show is complete
-                        hiddenchange: function () {
+                        hiddenchange: function() {
                             me.startTimer();
                         },
                         single: true
@@ -208,10 +212,11 @@ Ext.define('Ext.Toast', {
             });
 
             messageContainer.hide(msgAnimation);
-        } else {
+        }
+        else {
             Ext.util.InputBlocker.blockInputs();
 
-            //if it has not been added to a container, add it to the Viewport.
+            // if it has not been added to a container, add it to the Viewport.
             if (!me.getParent() && Ext.Viewport) {
                 Ext.Viewport.add(me);
             }
@@ -235,7 +240,7 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    beforeHide: function (animation) {
+    beforeHide: function(animation) {
         this.callParent(arguments);
 
         // If the message is animating cancel this hide
@@ -244,6 +249,7 @@ Ext.define('Ext.Toast', {
         }
 
         this.stopTimer();
+
         if (!this.next()) {
             return false;
         }
@@ -252,7 +258,7 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    onTimeout: function () {
+    onTimeout: function() {
         if (this._timeoutID !== null) {
             this.hide();
         }
@@ -262,13 +268,14 @@ Ext.define('Ext.Toast', {
         this.stopTimer();
         this.callParent();
     }
-}, function (Toast) {
+}, function(Toast) {
     var _queue = [];
 
     function getInstance() {
         if (!Ext.Toast._instance) {
             Ext.Toast._instance = Ext.create('Ext.Toast');
         }
+
         return Ext.Toast._instance;
     }
 
@@ -285,7 +292,7 @@ Ext.define('Ext.Toast', {
     };
     //</debug>
 
-    Toast.prototype.next = function () {
+    Toast.prototype.next = function() {
         var config = _queue.shift();
 
         if (config) {
@@ -306,7 +313,8 @@ Ext.define('Ext.Toast', {
             Ext.Toast._instance = null;
         }
     };
-    Ext.toast = function (message, timeout) {
+
+    Ext.toast = function(message, timeout) {
         var toast = getInstance(),
             maxQueue = Ext.Toast.prototype.config.maxQueue,
             config = message;
@@ -339,6 +347,5 @@ Ext.define('Ext.Toast', {
         }
 
         return toast;
-    }
+    };
 });
-

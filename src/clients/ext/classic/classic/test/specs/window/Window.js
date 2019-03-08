@@ -1,5 +1,3 @@
-/* global Ext, expect, jasmine, xit */
-
 topSuite("Ext.window.Window",
     ['Ext.Button', 'Ext.form.field.Text', 'Ext.layout.container.Fit',
      'Ext.layout.container.Form'],
@@ -24,18 +22,29 @@ function() {
         return win;
     }
 
-    afterEach(function(){
+    afterEach(function() {
         if (win && !win.destroyed) {
             win.hide();
             Ext.destroy(win);
             win = null;
         }
+
         if (container) {
             Ext.destroy(container);
             container = null;
         }
     });
     
+    describe("alternate class name", function() {
+        it("should have Ext.Window as the alternate class name", function() {
+            expect(Ext.window.Window.prototype.alternateClassName).toEqual("Ext.Window");
+        });
+
+        it("should allow the use of Ext.Window", function() {
+            expect(Ext.Window).toBeDefined();
+        });
+    });
+
     describe("tools", function() {
         var tool;
         
@@ -143,7 +152,7 @@ function() {
                 width: 200,
                 height: 100,
                 expandOnShow: true
-            });    
+            });
             win.show();
             expect(win.getHeight()).toBe(100);
             expect(win.collapsed).toBe(false);
@@ -157,11 +166,11 @@ function() {
                 width: 200,
                 height: 100,
                 expandOnShow: false
-            });    
+            });
             win.show();
             expect(win.getHeight()).toBe(win.header.getHeight());
             expect(win.collapsed).toBe(true);
-        });  
+        });
     });
 
     describe('toFront on mousedown', function() {
@@ -174,6 +183,7 @@ function() {
                 height: 100,
                 expandOnShow: true
             });
+
             win = new Ext.window.Window({
                 title: 'Foo',
                 collapsible: true,
@@ -214,6 +224,7 @@ function() {
             win.updateLayout();
             
             var winWidth = win.getWidth();
+
             var w = win.el.shadow.el.getWidth();
 
             if (Ext.isIE8) {
@@ -264,9 +275,9 @@ function() {
 
             // Wait for restoration to original size and position
             waitsFor(function() {
-                return win.el.shadow.hidden === false
-                    && win.el.isVisible() === true
-                    && win.getRegion().equals(winRegion);
+                return win.el.shadow.hidden === false &&
+                       win.el.isVisible() === true &&
+                       win.getRegion().equals(winRegion);
             });
             
             runs(function() {
@@ -275,10 +286,11 @@ function() {
         });
     });
 
-    describe("animations & setPagePosition", function(){
-        it("should normalize position to 'renderTo' element", function(){
+    describe("animations & setPagePosition", function() {
+        it("should normalize position to 'renderTo' element", function() {
             var fxQueue;
-            runs(function(){
+
+            runs(function() {
                 container = Ext.widget({
                     xtype: 'panel',
                     x: 20,
@@ -307,11 +319,11 @@ function() {
                 fxQueue = Ext.fx.Manager.getFxQueue(win.ghostPanel.id);
             });
 
-            waitsFor(function(){
+            waitsFor(function() {
                 return fxQueue.length === 0;
             });
 
-            runs(function(){
+            runs(function() {
                 var pos = win.el.getXY(),
                     cpos = container.el.getXY(),
                     tbar = container.items.first().dockedItems.first(),
@@ -388,7 +400,7 @@ function() {
             expect(win.el.getXY()).toEqual(pos);
         });
         it('Should apply constraint insets and not allow moving past them', function() {
-            var cw,ww,x,y,box,diff;
+            var cw, ww, x, y, box, diff;
 
             container = Ext.create('Ext.panel.Panel', {
                 renderTo: document.body,
@@ -406,7 +418,7 @@ function() {
                 }]
             });
             win = Ext.getCmp('constrainedWin');
-            win.setPosition([0,0]);
+            win.setPosition([0, 0]);
             x = win.getLocalX();
             y = win.getLocalY();
             cw = container.getWidth();
@@ -414,22 +426,22 @@ function() {
             box = Ext.Element.parseBox(win.constraintInsets);
             // We need to subtract 1 because the position
             // is constraintInset exclusive
-            diff = (cw - ww - x - 1); 
+            diff = (cw - ww - x - 1);
             
             // Testing top left            
-            win.setPosition([-500,-500]);
-            expect(win.getLocalXY()).toEqual([x,y]);
+            win.setPosition([-500, -500]);
+            expect(win.getLocalXY()).toEqual([x, y]);
             // Testing top right
-            win.setPosition([500,-500]);
-            expect(win.getLocalXY()).toEqual([x+diff-box.left,y]);
+            win.setPosition([500, -500]);
+            expect(win.getLocalXY()).toEqual([x + diff - box.left, y]);
 
             // Testing bottom left
-            win.setPosition([-500,500]);
-            expect(win.getLocalXY()).toEqual([x,y+diff-box.top]);
+            win.setPosition([-500, 500]);
+            expect(win.getLocalXY()).toEqual([x, y + diff - box.top]);
 
             // Testing bottom right
-            win.setPosition([500,500]);
-            expect(win.getLocalXY()).toEqual([x+diff+box.right,y+diff+box.bottom]);
+            win.setPosition([500, 500]);
+            expect(win.getLocalXY()).toEqual([x + diff + box.right, y + diff + box.bottom]);
         });
     });
     
@@ -468,7 +480,7 @@ function() {
             expect(win.getHeight()).toBe(Ext.dom.Element.getViewportHeight());
         });
         
-        describe("tools", function(){
+        describe("tools", function() {
             beforeEach(function() {
                 win = new Ext.window.Window({
                     width: 100,
@@ -482,29 +494,29 @@ function() {
             });
             
             describe("maximizing", function() {
-                it("should change the maximize tool's type to 'restore'", function(){
+                it("should change the maximize tool's type to 'restore'", function() {
                     expect(win.tools.maximize.type).toBe('restore');
                 });
 
-                it("should hide the collapse tool", function(){
+                it("should hide the collapse tool", function() {
                     expect(win.collapseTool.isVisible()).toBe(false);
                 });
             });
             
             describe("restoring", function() {
-                it("should change the maximize tool's type back to 'mazimize'", function(){
+                it("should change the maximize tool's type back to 'mazimize'", function() {
                     win.restore();
                     expect(win.tools.maximize.type).toBe('maximize');
                 });
 
-                it("should show the collapse tool", function(){
+                it("should show the collapse tool", function() {
                     win.restore();
                     expect(win.collapseTool.isVisible()).toBe(true);
                 });
             });
         });
         
-        describe("events", function(){
+        describe("events", function() {
             beforeEach(function() {
                 win = new Ext.window.Window({
                     width: 100,
@@ -516,56 +528,56 @@ function() {
                 });
             });
             
-            it("should fire a maximize event and pass the window", function(){
+            it("should fire a maximize event and pass the window", function() {
                 var theWin;
                 
                 win.on('maximize', function(arg) {
                     theWin = arg;
-                });    
+                });
                 win.maximize();
                 expect(theWin).toBe(win);
             });
             
-            it("should not fire an event if the window is already maximized", function(){
+            it("should not fire an event if the window is already maximized", function() {
                 var called = false;
                    
                 win.maximize();
                 win.on('maximize', function() {
                     called = true;
-                }); 
+                });
                 win.maximize();
                 expect(called).toBe(false);
             });
             
-            it("should fire a restore event and pass the window", function(){
+            it("should fire a restore event and pass the window", function() {
                 var theWin;
                 
                 win.on('restore', function(arg) {
                     theWin = arg;
-                });    
+                });
                 win.setPosition(100, 100);
                 win.maximize();
-                expect(win.getPosition()).toEqual([0,0]);
+                expect(win.getPosition()).toEqual([0, 0]);
                 win.restore();
-                expect(win.getPosition()).toEqual([100,100]);
+                expect(win.getPosition()).toEqual([100, 100]);
                 expect(theWin).toBe(win);
             });
             
-            it("should not fire an event if the window is already restored", function(){
+            it("should not fire an event if the window is already restored", function() {
                 var called = false;
 
                 win.maximize();
                 win.restore();
                 win.on('restore', function() {
                     called = true;
-                }); 
+                });
                 win.restore();
                 expect(called).toBe(false);
             });
         });
         
-        describe("sizing", function(){
-            it("should fill the container when maximizing", function(){
+        describe("sizing", function() {
+            it("should fill the container when maximizing", function() {
                 win = new Ext.window.Window({
                     width: 100,
                     height: 100,
@@ -577,7 +589,7 @@ function() {
                 expect(win.getSize()).toEqual(Ext.getBody().getViewSize());
             });
             
-            it("should restore to the previous size when configured", function(){
+            it("should restore to the previous size when configured", function() {
                 win = new Ext.window.Window({
                     width: 100,
                     height: 100,
@@ -588,6 +600,7 @@ function() {
                 win.maximize();
                 win.restore();
                 var size = win.getSize();
+
                 expect(size.width).toBe(100);
                 expect(size.height).toBe(100);
             });
@@ -603,15 +616,17 @@ function() {
                 });
                 
                 var initSize = win.getSize();
+
                 win.maximize();
                 win.restore();
                 
                 var size = win.getSize();
+
                 expect(size.width).toBe(initSize.width);
                 expect(size.height).toBe(initSize.height);
             });
 
-            it("should restore a shrink wrapped height", function(){
+            it("should restore a shrink wrapped height", function() {
                 win = new Ext.window.Window({
                     width: 100,
                     title: 'Win',
@@ -628,13 +643,14 @@ function() {
                     }]
                 });
                 var frameSize = win.getHeight() - 200;
+
                 win.maximize();
                 win.items.last().hide();
                 win.restore();
                 expect(win.getHeight()).toBe(frameSize + 100);
             });
             
-            it("should restore a shrink wrapped width", function(){
+            it("should restore a shrink wrapped width", function() {
                 win = new Ext.window.Window({
                     height: 100,
                     title: 'Win',
@@ -651,13 +667,14 @@ function() {
                     }]
                 });
                 var frameSize = win.getWidth() - 100;
+
                 win.maximize();
                 win.items.last().hide();
                 win.restore();
                 expect(win.getWidth()).toBe(frameSize + 50);
             });
             
-            it("should restore the position", function(){
+            it("should restore the position", function() {
                 win = new Ext.window.Window({
                     width: 100,
                     height: 100,
@@ -670,12 +687,13 @@ function() {
                 win.maximize();
                 win.restore();
                 var pos = win.getPosition();
+
                 expect(pos[0]).toBe(40);
                 expect(pos[1]).toBe(70);
             });
         });
 
-        describe('in a panel', function () {
+        describe('in a panel', function() {
             // See EXTJS-13923, EXTJS-14076.
             var panel, panelBody, borderTop, winXY;
 
@@ -689,7 +707,7 @@ function() {
                 }
             }
 
-            beforeEach(function () {
+            beforeEach(function() {
                 panel = Ext.widget({
                     xtype: 'panel',
                     title: 'mypanel',
@@ -717,18 +735,18 @@ function() {
                 borderTop = parseInt(win.header.el.getStyle('border-top'), 10);
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 panel = panelBody = borderTop = winXY = Ext.destroy(panel);
             });
 
-            it('should not inherit absolute positions from its floatParent when maximized', function () {
+            it('should not inherit absolute positions from its floatParent when maximized', function() {
                 // When maximized, the window header should be flush against the bottom of the panel header.
                 win.maximize();
 
                 expect(win.getY()).toBe(panelBody.getY() + panelBody.getBorderWidth('t'));
             });
 
-            it('should retain the same resize position when toggling maximize/restore', function () {
+            it('should retain the same resize position when toggling maximize/restore', function() {
                 winXY = win.getXY();
 
                 toggle(8);
@@ -742,7 +760,7 @@ function() {
                         maximized: true
                     });
                     expect(win.dd.disabled).toBe(true);
-                }); 
+                });
 
                 it("should disable the resizer", function() {
                     makeWindow({
@@ -758,6 +776,7 @@ function() {
                         closable: false
                     });
                     var tool = win.tools[0];
+
                     expect(tool.type).toBe('restore');
                     expect(tool.toolEl).toHaveCls('x-tool-maximize');
                 });
@@ -857,7 +876,7 @@ function() {
                     runs(function() {
                         expect(win.dd.disabled).toBe(true);
                     });
-                }); 
+                });
 
                 it("should disable the resizer", function() {
                     makeAnimWindow({
@@ -878,6 +897,7 @@ function() {
                     waitsForAnim();
                     runs(function() {
                         var tool = win.tools[0];
+
                         expect(tool.type).toBe('restore');
                         expect(tool.toolEl).toHaveCls('x-tool-maximize');
                     });
@@ -930,7 +950,7 @@ function() {
                         waitsForAnim();
                         runs(function() {
                             expect(win.getWidth()).toBeApprox(250, 1);
-                            expect(win.getHeight()).toBeApprox(250,1);
+                            expect(win.getHeight()).toBeApprox(250, 1);
                         });
                     });
 
@@ -986,10 +1006,10 @@ function() {
                 win.show();
             });
 
-        it("should tolerate destruction during dragging", function(){
+        it("should tolerate destruction during dragging", function() {
             var offset = 5;
 
-            runs(function(){
+            runs(function() {
                 jasmine.fireMouseEvent(win.header.el, 'mouseover', offset, offset);
                 jasmine.fireMouseEvent(win.header.el, 'mousedown', offset, offset);
                 jasmine.fireMouseEvent(win.header.el, 'mousemove', 100, 0);
@@ -1008,7 +1028,7 @@ function() {
             // let the browser process everything
             waits(1);
 
-            runs(function(){
+            runs(function() {
                 // It should continue running to this point with no errors
                 expect(win.destroyed).toBe(true);
             });
@@ -1024,7 +1044,7 @@ function() {
             width: 300,
             closable: true,
             maximizable: true,
-            tools: [{type: 'pin'}],
+            tools: [{ type: 'pin' }],
             header: {
                 title: 'Title',
                 titlePosition: 2
@@ -1050,7 +1070,7 @@ function() {
             maximizable: true,
             x: 0,
             y: 0,
-            tools: [{type: 'pin'}],
+            tools: [{ type: 'pin' }],
             header: {
                 title: 'Title',
                 titlePosition: 2
@@ -1105,7 +1125,7 @@ function() {
             maximizable: true,
             x: 0,
             y: 0,
-            tools: [{type: 'pin'}],
+            tools: [{ type: 'pin' }],
             header: {
                 title: 'Title',
                 titlePosition: 2
@@ -1373,7 +1393,7 @@ function() {
         });
     });
 
-    describe("stateful", function(){
+    describe("stateful", function() {
         afterEach(function() {
             Ext.state.Manager.set('foo', null);
         });
@@ -1383,7 +1403,7 @@ function() {
                 stateId: 'foo'
             });
 
-            win.setPosition(20,20);
+            win.setPosition(20, 20);
             win.saveState();
             win.destroy();
 
@@ -1392,16 +1412,17 @@ function() {
                 stateId: 'foo'
             });
 
-            expect(win.getPosition()).toEqual([20,20]);
+            expect(win.getPosition()).toEqual([20, 20]);
 
         });
 
         it("should restore the correct position when window has an owner", function() {
             var panel  = new Ext.panel.Panel({
-                renderTo: document.body,
-                width: 500,
-                height: 500
-            }), position;
+                    renderTo: document.body,
+                    width: 500,
+                    height: 500
+                }),
+                position;
 
             makeWindow({
                 stateful: true,
@@ -1414,7 +1435,9 @@ function() {
             win.setPosition(150, 200);
             win.saveState();
             position = win.getPosition();
+            
             win.destroy();
+            
             makeWindow({
                 stateful: true,
                 stateId: 'foo',
@@ -1810,10 +1833,10 @@ function() {
                 modal: true,
                 defaultType: 'button',
                 items: [{
-                    xtype	: 'button',
-                    text	: 'Open Window 2',
+                    xtype: 'button',
+                    text: 'Open Window 2',
                     listeners: {
-                        click	: function() {
+                        click: function() {
                             win2 = win1.add({
                                 xtype: 'testtwowindow'
                             });
@@ -1821,11 +1844,11 @@ function() {
                         }
                     }
                 }, {
-                    xtype	: 'button',
-                    text	: 'Test Button 1'
+                    xtype: 'button',
+                    text: 'Test Button 1'
                 }, {
                     xtype: 'button',
-                    text:' Test Button 2'
+                    text: ' Test Button 2'
                 }]
             });
 
@@ -1842,14 +1865,14 @@ function() {
                 }, {
                     xtype: 'textfield'
                 }, {
-                    xtype	: 'button',
-                    text	: 'Open Window 3'
-                }, {
-                    xtype	: 'button',
-                    text	: 'Test Button 3'
+                    xtype: 'button',
+                    text: 'Open Window 3'
                 }, {
                     xtype: 'button',
-                    text:' Test Button 4'
+                    text: 'Test Button 3'
+                }, {
+                    xtype: 'button',
+                    text: ' Test Button 4'
                 }]
             });
         });
@@ -1875,7 +1898,7 @@ function() {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
-                        xtype:'button',
+                        xtype: 'button',
                         text: 'Open Window 1',
                         handler: function() {
                             win1 = Ext.create({
@@ -1903,7 +1926,7 @@ function() {
                 jasmine.fireMouseEvent(button2.el, 'click');
             });
             
-            waitsFor(function(){
+            waitsFor(function() {
                 return win1.el.findTabbableElements().length === 0 &&
 
                 // Three buttons, two input fields in the body, before and after tab guard.

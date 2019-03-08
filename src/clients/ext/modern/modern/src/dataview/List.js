@@ -87,7 +87,7 @@ Ext.define('Ext.dataview.List', {
         'Ext.dataview.ItemHeader',
         'Ext.dataview.SimpleListItem'
     ],
-    
+
     mixins: [
         'Ext.mixin.Bufferable'
     ],
@@ -201,7 +201,7 @@ Ext.define('Ext.dataview.List', {
          */
         onItemDisclosure: {
             $value: null,
-            merge: function (value, oldValue, target) {
+            merge: function(value, oldValue, target) {
                 // When onItemDisclose is declared on a class, we need to consider
                 // it as the first candidate for controllership...
                 var t = value && target && target.$isClass && typeof value;
@@ -308,7 +308,10 @@ Ext.define('Ext.dataview.List', {
          * @private
          * @since 6.5.0
          */
-        horizontalOverflow: null,
+        horizontalOverflow: {
+            evented: true,
+            $value: null
+        },
 
         /**
          * @private
@@ -477,7 +480,7 @@ Ext.define('Ext.dataview.List', {
      *
      * @since 6.5.0
      */
-    
+
     bufferableMethods: {
         syncVerticalOverflow: 1
     },
@@ -559,7 +562,7 @@ Ext.define('Ext.dataview.List', {
      * @param {Ext.event.Event} event The event object
      */
 
-    beforeInitialize: function (config) {
+    beforeInitialize: function(config) {
         var me = this,
             // We are ready to initialize our configs, so get this one in first for
             // convenient access... from here on (it is immutable):
@@ -605,24 +608,20 @@ Ext.define('Ext.dataview.List', {
             scope: me
         });
 
+        me.selfPartner = [me];
         me.stickyItems = [];
-        me.stickyItemsByRecordId = {};  // keyed by record internalId
+        me.stickyItemsByRecordId = {}; // keyed by record internalId
 
-        me.callParent([ config ]);
+        me.callParent([config]);
     },
 
-    doDestroy: function () {
+    doDestroy: function() {
         var me = this,
-            groupingInfo = me.groupingInfo,
-            scrollInfo = me.scrollInfo;
+            groupingInfo = me.groupingInfo;
 
         // Don't need to destroy headers/footers attached to dataItems,
         // since they will be in the container they will be removed. Any
         // unused headers/footers still need to be disposed of.
-
-        if (scrollInfo) {
-            Ext.unraf(scrollInfo.timer);
-        }
 
         Ext.destroy(
             me.resyncListener,
@@ -633,7 +632,7 @@ Ext.define('Ext.dataview.List', {
         me.callParent();
     },
 
-    createIndexBar: function (config) {
+    createIndexBar: function(config) {
         return Ext.apply({
             xtype: 'indexbar',
             $initParent: this,
@@ -642,15 +641,16 @@ Ext.define('Ext.dataview.List', {
         }, config);
     },
 
-    createPinnedFooter: function (config) {
+    createPinnedFooter: function(config) {
         var ret = this.createPinnedHeaderFooter(config);
 
         ret.bottom = 0;
         ret.pinned = 'bottom';
+
         return ret;
     },
 
-    createPinnedHeader: function (config) {
+    createPinnedHeader: function(config) {
         var me = this,
             groupedHeader = me.getGroupHeader(),
             ret = me.createPinnedHeaderFooter(config),
@@ -687,23 +687,26 @@ Ext.define('Ext.dataview.List', {
      * This method will return `true` if the passed record index or
      * {@link Ext.data.Model record} is represented in the DOM.
      *
-     * @param {Number/Ext.data.Model} recordIndex The {@link Ext.data.Model record} or record index to test.
+     * @param {Number/Ext.data.Model} recordIndex The {@link Ext.data.Model record} or record
+     * index to test.
      * @return {Boolean} `true` if the record is rendered.
      */
     isRecordRendered: function(recordIndex) {
-        if (!this.infinite) {
+        var me = this,
+            renderInfo = me.renderInfo;
+
+        if (!me.infinite) {
             return true;
         }
 
-        var renderInfo = this.renderInfo;
-
         if (recordIndex.isEntity) {
-            recordIndex = this.store.indexOf(recordIndex);
+            recordIndex = me.store.indexOf(recordIndex);
         }
+
         return recordIndex >= renderInfo.indexTop && recordIndex < renderInfo.indexBottom;
     },
 
-    mapToViewIndex: function (value) {
+    mapToViewIndex: function(value) {
         var me = this,
             indexOffset;
 
@@ -713,7 +716,7 @@ Ext.define('Ext.dataview.List', {
             value -= indexOffset;
         }
 
-        return me.callParent([ value, indexOffset ]);
+        return me.callParent([value, indexOffset]);
     },
 
     /**
@@ -722,16 +725,16 @@ Ext.define('Ext.dataview.List', {
      * @param {Ext.data.Model} record Record in the store to scroll to.
      * @param {Boolean} [animation=false] Determines if scrolling is animated.
      */
-    scrollToRecord: function (record, animation) {
+    scrollToRecord: function(record, animation) {
         return this.ensureVisible({
             record: record,
             animation: animation
         });
     },
 
-    shouldSelectItem: function (e) {
+    shouldSelectItem: function(e) {
         var me = this,
-            no = !me.callParent([ e ]),
+            no = !me.callParent([e]),
             cmp;
 
         if (!no) {
@@ -757,7 +760,7 @@ Ext.define('Ext.dataview.List', {
 
     //-----------------------------------------------------------------------------
 
-    onBodyResize: function (el, info) {
+    onBodyResize: function(el, info) {
         var me = this,
             height = info.height,
             width = info.width;
@@ -773,10 +776,11 @@ Ext.define('Ext.dataview.List', {
             me.suspendSync = false;
 
             me.setVisibleWidth(width);
+            me.refreshScrollerSize();
         }
     },
 
-    onItemAdd: function (item, index) {
+    onItemAdd: function(item, index) {
         var me = this;
 
         if (me.infinite) {
@@ -791,15 +795,15 @@ Ext.define('Ext.dataview.List', {
             }
         }
 
-        return me.callParent([ item, index ]);
+        return me.callParent([item, index]);
     },
 
-    onItemRemove: function (item, index, destroying) {
+    onItemRemove: function(item, index, destroying) {
         var me = this,
             height = item.$height,
             scrollDock = item.scrollDock;
 
-        me.callParent([ item, index, destroying ]);
+        me.callParent([item, index, destroying]);
 
         if (scrollDock && height) {
             Ext.Array.remove(me.scrollDockedItems[scrollDock].items, item);
@@ -808,7 +812,7 @@ Ext.define('Ext.dataview.List', {
         }
     },
 
-    onStoreAdd: function (store, records, index) {
+    onStoreAdd: function(store, records, index) {
         var me = this;
 
         me.syncEmptyState();
@@ -818,7 +822,8 @@ Ext.define('Ext.dataview.List', {
                 me.refreshGrouping();
                 me.resyncOnPaint();
             }
-        } else {
+        }
+        else {
             me.refreshGroupIndices();
             me.setItemCount(store.getCount());
             // The item before us may have a footer associated with it,
@@ -827,7 +832,7 @@ Ext.define('Ext.dataview.List', {
         }
     },
 
-    onStoreRemove: function (store, records, index) {
+    onStoreRemove: function(store, records, index) {
         var me = this,
             navModel = this.getNavigationModel(),
             location;
@@ -839,9 +844,10 @@ Ext.define('Ext.dataview.List', {
             }
 
             me.syncEmptyState();
-        } else {
+        }
+        else {
             me.refreshGroupIndices();
-            me.callParent([ store, records, index ]);
+            me.callParent([store, records, index]);
         }
 
         if (navModel.location) {
@@ -850,14 +856,29 @@ Ext.define('Ext.dataview.List', {
         }
     },
 
-    onStoreUpdate: function (store, record, type, modifiedFieldNames, info) {
-        var me = this;
+    onStoreUpdate: function(store, record, type, modifiedFieldNames, info) {
+        var me = this,
+            partners = me.allPartners,
+            len, i, h, p, item;
 
         if (info && info.groupChanged && me.isGrouping()) {
             me.refreshGrouping();
             me.syncRows();
-        } else {
+        }
+        else {
             me.callParent([store, record, type, modifiedFieldNames, info]);
+
+            if (me.partnerManager && me.isActivePartner()) {
+                h = me.measurePartners(record);
+
+                if (h !== null) {
+                    for (i = 0, len = partners.length; i < len; ++i) {
+                        p = partners[i];
+                        item = p.itemFromRecord(record);
+                        p.handleItemResize(item, h, true);
+                    }
+                }
+            }
         }
     },
 
@@ -866,7 +887,7 @@ Ext.define('Ext.dataview.List', {
 
     // grouped
 
-    updateGrouped: function () {
+    updateGrouped: function() {
         var me = this;
 
         if (me.initialized) {
@@ -877,7 +898,7 @@ Ext.define('Ext.dataview.List', {
 
     // groupFooter
 
-    updateGroupFooter: function (footer) {
+    updateGroupFooter: function(footer) {
         var groupingInfo = this.groupingInfo;
 
         if (groupingInfo) {
@@ -889,7 +910,7 @@ Ext.define('Ext.dataview.List', {
 
     // groupHeader
 
-    applyGroupHeader: function (header) {
+    applyGroupHeader: function(header) {
         var tpl = header && header.tpl;
 
         // As a cached config, we can take advantage of this moment to create
@@ -902,7 +923,7 @@ Ext.define('Ext.dataview.List', {
         return header;
     },
 
-    updateGroupHeader: function (header) {
+    updateGroupHeader: function(header) {
         var groupingInfo = this.groupingInfo;
 
         if (groupingInfo) {
@@ -914,11 +935,11 @@ Ext.define('Ext.dataview.List', {
 
     // indexBar
 
-    applyIndexBar: function (config, existing) {
+    applyIndexBar: function(config, existing) {
         return Ext.updateWidget(existing, config, this, 'createIndexBar');
     },
 
-    updateIndexBar: function (indexBar) {
+    updateIndexBar: function(indexBar) {
         if (indexBar) {
             this.add(indexBar);
         }
@@ -926,8 +947,8 @@ Ext.define('Ext.dataview.List', {
 
     // itemConfig
 
-    applyItemConfig: function (itemConfig, oldItemConfig) {
-        var ret = this.callParent([ itemConfig, oldItemConfig ]),
+    applyItemConfig: function(itemConfig, oldItemConfig) {
+        var ret = this.callParent([itemConfig, oldItemConfig]),
             disclosure, tools;
 
         if (this.getOnItemDisclosure()) {
@@ -944,7 +965,7 @@ Ext.define('Ext.dataview.List', {
 
     // infinite
 
-    updateInfinite: function (infinite) {
+    updateInfinite: function(infinite) {
         var me = this;
 
         me.infinite = infinite;
@@ -1011,9 +1032,10 @@ Ext.define('Ext.dataview.List', {
                 indexTop: 0
             };
 
-            me.scrollInfo = {};
             me.getScrollable().on({
                 scope: me,
+                offsetychange: 'onOffsetChange',
+                offsetxchange: 'onOffsetChange',
                 scroll: 'onContainerScroll',
                 scrollstart: 'onContainerScrollStart',
                 scrollend: 'onContainerScrollEnd'
@@ -1022,7 +1044,7 @@ Ext.define('Ext.dataview.List', {
     },
 
     // pinFooters
-    updatePinFooters: function (pinFooters) {
+    updatePinFooters: function(pinFooters) {
         var me = this,
             pinnedFooter = me.pinnedFooter;
 
@@ -1036,20 +1058,22 @@ Ext.define('Ext.dataview.List', {
             if (me.infinite) {
                 me.syncPinnedFooter();
             }
-        } else if (pinnedFooter) {
+        }
+        else if (pinnedFooter) {
             me.setItemHidden(pinnedFooter, true);
         }
     },
 
     // pinnedFooter
 
-    applyPinnedFooter: function (config, existing) {
+    applyPinnedFooter: function(config, existing) {
         var me = this,
             ret = Ext.updateWidget(existing, config, me, 'createPinnedFooter'),
             index;
 
         if (!existing) {
             index = me.getIndexBar();
+
             if (index) {
                 index = me.indexOf(index);
                 me.insert(index, ret);
@@ -1064,7 +1088,7 @@ Ext.define('Ext.dataview.List', {
         return ret;
     },
 
-    updatePinnedFooter: function (pinnedFooter) {
+    updatePinnedFooter: function(pinnedFooter) {
         var me = this;
 
         // Since this is a lazy config, we store a direct reference here so we can
@@ -1079,7 +1103,7 @@ Ext.define('Ext.dataview.List', {
     },
 
     // pinHeaders
-    updatePinHeaders: function (pinHeaders) {
+    updatePinHeaders: function(pinHeaders) {
         var me = this,
             pinnedHeader = me.pinnedHeader;
 
@@ -1093,14 +1117,15 @@ Ext.define('Ext.dataview.List', {
             if (me.infinite) {
                 me.syncPinnedHeader();
             }
-        } else if (pinnedHeader) {
+        }
+        else if (pinnedHeader) {
             me.setItemHidden(pinnedHeader, true);
         }
     },
 
     // pinnedHeader
 
-    applyPinnedHeader: function (config, existing) {
+    applyPinnedHeader: function(config, existing) {
         var me = this,
             ret = Ext.updateWidget(existing, config, me, 'createPinnedHeader');
 
@@ -1113,7 +1138,7 @@ Ext.define('Ext.dataview.List', {
         return ret;
     },
 
-    updatePinnedHeader: function (pinnedHeader) {
+    updatePinnedHeader: function(pinnedHeader) {
         var me = this;
 
         // Since this is a lazy config, we store a direct reference here so we can
@@ -1129,13 +1154,28 @@ Ext.define('Ext.dataview.List', {
 
     // rowLines
 
-    updateRowLines: function (rowLines) {
+    updateRowLines: function(rowLines) {
         this.innerCt.toggleCls(this.noRowLinesCls, rowLines === false);
+    },
+
+    // scrollable
+
+    createScrollable: function(defaults) {
+        var scrollable = this.callParent([defaults]);
+
+        if (this.infinite) {
+            scrollable = Ext.apply({
+                type: 'virtual',
+                innerElement: this.innerCt
+            }, scrollable);
+        }
+
+        return scrollable;
     },
 
     // useSimpleItems
 
-    updateUseSimpleItems: function (useSimpleItems) {
+    updateUseSimpleItems: function(useSimpleItems) {
         //<debug>
         if (!this.self._updateUseSimpleItemsWarning) {
             this.self._updateUseSimpleItemsWarning = true;
@@ -1144,6 +1184,7 @@ Ext.define('Ext.dataview.List', {
         }
         //</debug>
 
+        // eslint-disable-next-line vars-on-top
         var itemConfig = this.getItemConfig();
 
         itemConfig = Ext.applyIf({
@@ -1155,7 +1196,7 @@ Ext.define('Ext.dataview.List', {
 
     // variableHeights
 
-    updateVariableHeights: function (variableHeights) {
+    updateVariableHeights: function(variableHeights) {
         this.variableHeights = variableHeights;
     },
 
@@ -1180,103 +1221,62 @@ Ext.define('Ext.dataview.List', {
         discardMeasureRow: false,
         gapAfter: 0,
         groupingInfo: null,
+        manageHorizontalOverflow: true,
         measuredFirstRow: false,
         pinnedFooter: null,
         pinnedHeader: null,
         lastAdjustedPosition: null,
         measuredHeight: null,
-        renderInfo: null,  // used if infinite
+        renderInfo: null, // used if infinite
         suspendSync: false,
 
         //--------------------------------------------------------
         // Event handlers
 
-        onAnimationFrame: function() {
-            var me = this,
-                info = me.scrollInfo,
-                x = info.x,
-                y = info.y;
-
-            if (x !== null) {
-                me.setVisibleLeft(x);
-            }
-
-            if (y !== null) {
-                me.setVisibleTop(y);
-            }
-
-            info.timer = null;
-        },
-
-        onContainerScroll: function (scroller, x, y, dx, dy) {
-            var me = this,
-                info = me.scrollInfo;
-
-            if (!me.blockingScroll) {
-                info.x = dx ? x : null;
-                info.y = dy ? y : null;
-
-                if (!info.timer) {
-                    info.timer = Ext.raf(me.onAnimationFrame, me);
-                }
+        onContainerScroll: function(scroller, x, y) {
+            if (!this.blockingScroll) {
+                // Since the underlying scrolling of items may happen due to our list
+                // and scroller partners, these may do little other than update the
+                // stored config values... but that is important to keep in sync with
+                // the scroller's x/y values:
+                this.setVisibleLeft(x);
+                this.setVisibleTop(y);
             }
         },
 
         onContainerScrollStart: function() {
-            this.toggleHoverCls(false);
-            this.doHover = false;
+            var me = this,
+                pm = me.partnerManager;
+
+            if (me.variableHeights && pm) {
+                pm.claimActivePartner(me);
+            }
+
+            me.toggleHoverCls(false);
+            me.doHover = false;
         },
 
         onContainerScrollEnd: function() {
-            this.doHover = true;
-            this.toggleHoverCls(true);
-        },
-
-        onDataItemResize: function (item, width, height) {
             var me = this,
-                dataItems = me.dataItems,
-                renderInfo = me.renderInfo,
-                row = item.$dataRow || item, // look at row not header/footer
-                bottomUp, count, index, y;
+                pm = me.partnerManager;
 
-            height += item.el.getMargin('tb');
+            me.doHover = true;
+            me.toggleHoverCls(true);
 
-            // Items can change size for many reasons (data binding being one of the
-            // most likely). We only need to do stuff if the layout size ($height) is
-            // not correct.
-            if (item.$height !== height) {
-                // console.log('itemResize', item.$dataItem, item.id, height);
-                item.$height = height;
-
-                // From here on we do *not* use "item" but "row" instead. This is
-                // because headers/footers are not in dataItems and are not used
-                // in the layout loop but are instead managed by proxy via their
-                // associated dataItem (or row).
-                index = dataItems.indexOf(row);
-
-                if (index > -1) {
-                    if (renderInfo.indexTop && renderInfo.indexBottom >= me.store.getCount()) {
-                        // When at the end of the store and there are records above
-                        // the rendered range, we need to a bottom-up update starting
-                        // with the modified row.
-                        bottomUp = true;
-                        count = index + 1;
-                        y = row.$y1;
-                    }
-                    else {
-                        // If we are rendering the top of the range or there are records
-                        // below the range, we want a top-down update starting with the
-                        // modified row.
-                        count = dataItems.length - index;
-                        y = row.$y0;
-                    }
-
-                    me.positionItems(y, bottomUp, count);
-                }
+            if (me.variableHeights && pm) {
+                pm.releaseActivePartner(me);
             }
         },
 
-        onItemDisclosureTap: function (item, e) {
+        onDataItemResize: function(item, width, height, oldWidth, oldHeight) {
+            if (oldWidth === null && oldHeight === null) {
+                return;
+            }
+
+            this.handleItemResize(item, height);
+        },
+
+        onItemDisclosureTap: function(item, e) {
             var me = this,
                 record = item.getRecord(),
                 index = me.store.indexOf(record);
@@ -1302,13 +1302,23 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        onRangeAvailable: function () {
+        onOffsetChange: function(scroller, offsetY) {
+            var dataItems = this.dataItems,
+                ln = dataItems.length,
+                i;
+
+            for (i = 0; i < ln; i++) {
+                scroller.syncOffsets(dataItems[i].getTranslatable());
+            }
+        },
+
+        onRangeAvailable: function() {
             // This method is called by virtual stores when records become
             // available (or possibly reload).
             this.syncRows();
         },
 
-        onScrollDockItemHide: function (item) {
+        onScrollDockItemHide: function(item) {
             var height = item.$height;
 
             if (height) {
@@ -1320,7 +1330,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        onScrollDockItemResize: function (item, width, height) {
+        onScrollDockItemResize: function(item, width, height) {
             var was = item.$height;
 
             if (was !== height) {
@@ -1329,7 +1339,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        onScrollDockItemShow: function (item) {
+        onScrollDockItemShow: function(item) {
             var height = item.$height;
 
             if (height == null) {
@@ -1339,14 +1349,14 @@ Ext.define('Ext.dataview.List', {
             this.adjustScrollDockHeight(item.scrollDock, height);
         },
 
-        onStoreGroupChange: function () {
+        onStoreGroupChange: function() {
             if (this.initialized) {
                 this.refreshGrouping();
                 this.syncRows();
             }
         },
 
-        onStoreTotalCountChange: function () {
+        onStoreTotalCountChange: function() {
             if (this.getVisibleHeight()) {
                 this.syncRowsToHeight();
             }
@@ -1357,18 +1367,22 @@ Ext.define('Ext.dataview.List', {
         //--------------------------------------------------------
         // General methods
 
-        addDataItem: function (item, at) {
+        addDataItem: function(item, at) {
             var me = this,
                 ret;
 
-            ret = me.callParent([ item, at ]);
+            ret = me.callParent([item, at]);
+
+            if (me.infinite) {
+                me.getScrollable().syncOffsets(ret.getTranslatable());
+            }
 
             ret.$height = me.variableHeights ? null : me.rowHeight;
 
             return ret;
         },
 
-        addScrollDockedItem: function (item) {
+        addScrollDockedItem: function(item) {
             var me = this;
 
             if (me.infinite) {
@@ -1399,11 +1413,13 @@ Ext.define('Ext.dataview.List', {
                 me.setItemPosition(row, row.$position + adjust);
 
                 decoration = row.$header;
+
                 if (decoration) {
                     me.setItemPosition(decoration, decoration.$position + adjust);
                 }
 
                 decoration = row.$footer;
+
                 if (decoration) {
                     me.setItemPosition(decoration, decoration.$position + adjust);
                 }
@@ -1419,6 +1435,7 @@ Ext.define('Ext.dataview.List', {
 
                     for (i = 0; i < len; ++i) {
                         item = items[i];
+
                         if (!item.getHidden()) {
                             me.setItemPosition(item, item.$position + adjust);
                         }
@@ -1431,6 +1448,7 @@ Ext.define('Ext.dataview.List', {
 
                     for (i = 0; i < len; ++i) {
                         item = items[i];
+
                         if (!item.getHidden()) {
                             me.setItemPosition(item, item.$position + adjust);
                         }
@@ -1439,7 +1457,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        adjustScrollDockHeight: function (which, amount) {
+        adjustScrollDockHeight: function(which, amount) {
             var me = this,
                 scrollDock = me.scrollDockedItems;
 
@@ -1451,8 +1469,21 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        adjustRenderedRows: function (y, oldY) {
+        //<debug>
+        _doActivePartnerCheck: function() {
+            if (!this.isActivePartner()) {
+                Ext.raise('Should not be called by non-active partner');
+            }
+        },
+        //</debug>
+
+        adjustRenderedRows: function(y, oldY) {
+            //<debug>
+            this._doActivePartnerCheck();
+            //</debug>
             // console.log('adjustRenderedRows', 'y=', y, 'oldY=', oldY, this.renderInfo);
+
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 bufferSize = me.getBufferSize(),
                 minimumBufferDistance = me.getMinimumBufferDistance(),
@@ -1463,7 +1494,7 @@ Ext.define('Ext.dataview.List', {
                 rowCount = rows.length,
                 height = me.getVisibleHeight(),
                 storeCount = me.store.getCount(),
-                //TODO what if we only have 1 item?
+                // TODO what if we only have 1 item?
                 visibleTopIndex = me.recordIndexByPosition(y),
                 visibleBottomIndex = me.recordIndexByPosition(y + height),
                 newIndexTop, delta;
@@ -1528,7 +1559,8 @@ Ext.define('Ext.dataview.List', {
                     return;
                 }
                 // vbi > 130 - 5 (= 125)
-            } else { // else (moving up)
+            }
+            else { // else (moving up)
                 if (visibleTopIndex - indexTop >= minimumBufferDistance) {
                     return;
                 }
@@ -1556,7 +1588,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        bindStore: function (store) {
+        bindStore: function(store) {
             var me = this,
                 Model = store.getModel(),
                 tombstoneRec = new Model();
@@ -1566,6 +1598,7 @@ Ext.define('Ext.dataview.List', {
                 Ext.raise('Did you mean to use Ext.data.virtual.Store? ' +
                     '(Ext.data.BufferedStore is not supported)');
             }
+
             if (store.isVirtualStore && !me.infinite) {
                 Ext.raise('Virtual stores require infinite:true');
             }
@@ -1585,7 +1618,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        bisectPosition: function (y) {
+        bisectPosition: function(y) {
             var rows = this.dataItems,
                 begin = 0,
                 end = rows.length - 1,
@@ -1596,16 +1629,17 @@ Ext.define('Ext.dataview.List', {
             }
 
             while (begin <= end) {
-                middle = (begin + end) >>> 1;  // unsigned right shift = Math.floor(x/2)
+                middle = (begin + end) >>> 1; // unsigned right shift = Math.floor(x/2)
                 midVal = rows[middle].$y0;
 
                 if (y === midVal) {
                     return middle;
                 }
+
                 if (midVal < y) {
                     begin = middle + 1;
                 }
-                else{
+                else {
                     end = middle - 1;
                 }
             }
@@ -1639,7 +1673,7 @@ Ext.define('Ext.dataview.List', {
             return scroller.scrollTo(null, y, anim);
         },
 
-        changeHeaderFooter: function (item, recordIndex, def, enabled) {
+        changeHeaderFooter: function(item, recordIndex, def, enabled) {
             var me = this,
                 property = def.name,
                 decoration = item[property] || null,
@@ -1675,7 +1709,7 @@ Ext.define('Ext.dataview.List', {
 
                     // item is hidden after all, so just get it out of the main
                     // items area
-                    me.reorderItem(decoration);  // defaults to "end"
+                    me.reorderItem(decoration); // defaults to "end"
                 }
 
                 decoration = null;
@@ -1684,19 +1718,19 @@ Ext.define('Ext.dataview.List', {
             item[property] = decoration;
         },
 
-        changeItem: function (itemIndex, recordIndex) {
+        changeItem: function(itemIndex, recordIndex) {
             var me = this,
-                options = me.callParent([ itemIndex, recordIndex ]),
+                options = me.callParent([itemIndex, recordIndex]),
                 item = options.item;
 
             if (me.infinite && me.variableHeights) {
-                item.$height = null;  // re-measure... re-position?
+                item.$height = null; // re-measure... re-position?
             }
 
             return options;
         },
 
-        changeItemGrouping: function (options) {
+        changeItemGrouping: function(options) {
             var me = this,
                 enabled = me.isGrouping(),
                 groupingInfo = me.groupingInfo,
@@ -1707,13 +1741,14 @@ Ext.define('Ext.dataview.List', {
             me.changeHeaderFooter(item, recordIndex, groupingInfo.footers, enabled);
         },
 
-        changeItemIsFirst: function (options) {
+        changeItemIsFirst: function(options) {
             if (options.isFirstChanged) {
+                // eslint-disable-next-line vars-on-top
                 var me = this,
                     items = me.scrollDockedItems,
                     i, len;
 
-                me.callParent([ options ]); // no point to call if !isFirstChanged
+                me.callParent([options]); // no point to call if !isFirstChanged
 
                 if (items && !options.isFirst && me.infinite) {
                     items = items.start.items;
@@ -1726,13 +1761,14 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        changeItemIsLast: function (options) {
+        changeItemIsLast: function(options) {
             if (options.isLastChanged) {
+                // eslint-disable-next-line vars-on-top
                 var me = this,
                     items = me.scrollDockedItems,
                     i, len;
 
-                me.callParent([ options ]); // no point to call if !isFirstChanged
+                me.callParent([options]); // no point to call if !isFirstChanged
 
                 if (items && !options.isLast && me.infinite) {
                     items = items.end.items;
@@ -1745,7 +1781,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        changeItemRecord: function (options) {
+        changeItemRecord: function(options) {
             var me = this,
                 itemClasses = options.itemClasses,
                 tombstoneCls = me.tombstoneCls;
@@ -1754,7 +1790,8 @@ Ext.define('Ext.dataview.List', {
                 delete itemClasses[tombstoneCls];
 
                 // We could callParent but all it does is call syncItemRecord
-                //me.callParent([ options ]);
+                // me.callParent([ options ]);
+
                 me.syncItemRecord(options);
             }
             else {
@@ -1764,7 +1801,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        changeItemStuck: function (options) {
+        changeItemStuck: function(options) {
             // This item processor must be the first to run so that it can prevent
             // stickyItems from being reassigned improperly.
             var me = this,
@@ -1804,7 +1841,7 @@ Ext.define('Ext.dataview.List', {
             headers.length = footers.length = 0;
         },
 
-        constrainStickyItem: function (item) {
+        constrainStickyItem: function(item) {
             var me = this,
                 pinnedFooter = me.pinnedFooter,
                 pinnedHeader = me.pinnedHeader,
@@ -1821,12 +1858,14 @@ Ext.define('Ext.dataview.List', {
 
             if (options.floated) {
                 me.setItemHidden(item, false);
+
                 return null;
             }
 
             if (pinnedHeader) {
                 y0 += me.measureItem(pinnedHeader);
             }
+
             if (pinnedFooter) {
                 y1 -= me.measureItem(pinnedFooter);
             }
@@ -1864,7 +1903,7 @@ Ext.define('Ext.dataview.List', {
             return ret;
         },
 
-        createGroupFooter: function () {
+        createGroupFooter: function() {
             var me = this,
                 footer = me.getGroupFooter();
 
@@ -1883,7 +1922,7 @@ Ext.define('Ext.dataview.List', {
             return footer;
         },
 
-        createGroupHeader: function () {
+        createGroupHeader: function() {
             var me = this,
                 header = me.getGroupHeader();
 
@@ -1902,7 +1941,7 @@ Ext.define('Ext.dataview.List', {
             return header;
         },
 
-        createPinnedHeaderFooter: function (config) {
+        createPinnedHeaderFooter: function(config) {
             return Ext.merge({
                 translatable: {
                     type: 'csstransform'
@@ -1912,7 +1951,7 @@ Ext.define('Ext.dataview.List', {
             }, config);
         },
 
-        dislodgeItem: function (item, options, replacement) {
+        dislodgeItem: function(item, options, replacement) {
             var me = this,
                 dataItems = me.dataItems,
                 sticky = item.$sticky;
@@ -1947,12 +1986,13 @@ Ext.define('Ext.dataview.List', {
             }
 
             sticky = replacement.$sticky;
+
             if (sticky) {
                 sticky.dislodged = false;
             }
         },
 
-        doClear: function () {
+        doClear: function() {
             var me = this,
                 groupingInfo = me.groupingInfo,
                 headers = groupingInfo.headers.unused,
@@ -1963,7 +2003,7 @@ Ext.define('Ext.dataview.List', {
             footers.length = headers.length = 0;
 
             if (me.infinite) {
-                //TODO verify that these are handled by syncPinnedHeader/Footer
+                // TODO verify that these are handled by syncPinnedHeader/Footer
                 // item = me.pinnedFooter;
                 // if (item) {
                 //     me.setItemHidden(item, true);
@@ -1992,7 +2032,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        doDisclose: function (me, record, item, index, e) {
+        doDisclose: function(me, record, item, index, e) {
             var onItemDisclosure = me.getOnItemDisclosure(),
                 handler = onItemDisclosure,
                 scope;
@@ -2007,7 +2047,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        doRefresh: function (scrollToTop) {
+        doRefresh: function(scrollToTop) {
             var me = this,
                 scroller = me.getScrollable(),
                 store = me.store,
@@ -2054,12 +2094,12 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        ensureVisibleScroll: function (plan) {
+        ensureVisibleScroll: function(plan) {
             var me = this,
                 recIndex = plan.recordIndex,
                 item = plan.item || (plan.item = me.itemFromRecord(recIndex)),
                 scroller = me.getScrollable(),
-                promise, y;
+                promise, size, y;
 
             if (item) {
                 return scroller.ensureVisible(item.el, {
@@ -2072,21 +2112,26 @@ Ext.define('Ext.dataview.List', {
 
             // An infinite list can records in the store that aren't rendered or in
             // a virtual store we may not even have the records...
-            y = Math.floor(scroller.getSize().y * (recIndex / me.store.getCount()));
+            size = scroller.getSize();
+            y = Math.floor((size ? size.y : 0) * (recIndex / me.store.getCount()));
+
             // TODO: allow animation in infinite
             plan.animation = false;
             me.nextTeleportTopIndex = recIndex;
             me.setVisibleTop(y);
+
             delete me.nextTeleportTopIndex;
+
             promise = me.blockAndScrollTo(y, false);
             plan.item = me.itemFromRecord(recIndex);
 
-            return promise.then(function () {
+            return promise.then(function() {
                 if (!me.destroyed) {
                     // Now that we've made it to the proper scroll position, we can
                     // remap the recIndex to item and we should be good.
                     plan.item = me.itemFromRecord(recIndex);
                 }
+
                 return plan;
             });
         },
@@ -2109,7 +2154,8 @@ Ext.define('Ext.dataview.List', {
 
             if (this.infinite) {
                 y = item.$y0;
-            } else {
+            }
+            else {
                 y = this.getScrollable().getEnsureVisibleXY(item.element, {
                     align: {
                         y: 'start?'
@@ -2120,19 +2166,32 @@ Ext.define('Ext.dataview.List', {
             return y;
         },
 
-        getPositionedItemTarget: function (item) {
+        getPositionedItemTarget: function(item) {
             if (item && item.layer === 'inner') {
-                return this.callParent([ item ]);
+                return this.callParent([item]);
             }
 
             return this.bodyElement;
+        },
+
+        getRenderPartners: function() {
+            var partners = this.allPartners;
+
+            // The only case where we want partner based rendering
+            // is where we need to synchronize heights, so that means
+            // we must be variable height and we have partners.
+            if (!(partners && this.variableHeights)) {
+                partners = this.selfPartner;
+            }
+
+            return partners;
         },
 
         getRenderTarget: function() {
             return this.innerCt;
         },
 
-        getScrollerTarget: function () {
+        getScrollerTarget: function() {
             return this.outerCt;
         },
 
@@ -2145,7 +2204,59 @@ Ext.define('Ext.dataview.List', {
             return this.isGrouping() ? Math.max(0, index - 1) : index;
         },
 
-        itemFromRecord: function (rec) {
+        handleItemResize: function(item, height, force) {
+            var me = this,
+                dataItems = me.dataItems,
+                renderInfo = me.renderInfo,
+                row = item.$dataRow || item, // look at row not header/footer
+                bottomUp, count, index, y;
+
+            height += item.el.getMargin('tb');
+
+            // Items can change size for many reasons (data binding being one of the
+            // most likely). We only need to do stuff if the layout size ($height) is
+            // not correct.
+            if (force || item.$height !== height) {
+                // console.log('itemResize', item.$dataItem, item.id, height);
+                item.$height = height;
+
+                // From here on we do *not* use "item" but "row" instead. This is
+                // because headers/footers are not in dataItems and are not used
+                // in the layout loop but are instead managed by proxy via their
+                // associated dataItem (or row).
+                index = dataItems.indexOf(row);
+
+                if (index > -1) {
+                    if (renderInfo.indexTop && renderInfo.indexBottom >= me.store.getCount()) {
+                        // When at the end of the store and there are records above
+                        // the rendered range, we need to a bottom-up update starting
+                        // with the modified row.
+                        bottomUp = true;
+                        count = index + 1;
+                        y = row.$y1;
+                    }
+                    else {
+                        // If we are rendering the top of the range or there are records
+                        // below the range, we want a top-down update starting with the
+                        // modified row.
+                        count = dataItems.length - index;
+                        y = row.$y0;
+                    }
+
+                    me.positionItems(y, bottomUp, count);
+                }
+            }
+        },
+
+        isActivePartner: function() {
+            if (this.variableHeights && this.partnerManager) {
+                return this.partnerManager.isActivePartner(this);
+            }
+
+            return true;
+        },
+
+        itemFromRecord: function(rec) {
             var me = this,
                 store = me.store,
                 index, item;
@@ -2163,57 +2274,63 @@ Ext.define('Ext.dataview.List', {
             return item || null;
         },
 
-        measureItem: function (item, heightCache) {
-            var height = item.$height;
+        measureItem: function(item, heightCache) {
+            var height = item.$height,
+                measured;
 
             if (height == null) {
                 if (this.variableHeights || !heightCache || !(height = heightCache.rowHeight)) {
-                    height = item.el.measure('h') + item.el.getMargin('tb');
+                    measured = item.el.measure('h');
+                    height = measured + item.el.getMargin('tb');
+
                     if (heightCache) {
                         heightCache.rowHeight = height;
                     }
                 }
 
-                item.$height = height;
-
-                if (item.$pinnedFooter) {
-                    this.setPinnedFooterHeight(height);
-                }
-                else if (item.$pinnedHeader) {
-                    this.setPinnedHeaderHeight(height);
-                }
+                this.setItemHeight(item, height);
+                item.$measured = measured;
             }
 
             return height;
         },
 
-        measureItems: function () {
+        measureItems: function() {
             var me = this,
                 scrollDock = me.scrollDockedItems,
                 rows = me.dataItems,
                 i = rows.length,
-                decoration, h, item, items, row, rowHeight,
-                hasItemVm = me.hasItemVm;
+                active = me.partnerManager && me.isActivePartner(),
+                hasItemVm = me.hasItemVm,
+                decoration, h, item, items, row, rowHeight;
 
             if (me.variableHeights) {
                 if (hasItemVm) {
                     me.lookupViewModel().notify();
                 }
+
                 while (i-- > 0) {
                     row = rows[i];
 
-                    if (row.$height == null) {
-                        row.$height = me.measureItem(row);
+                    if (active) {
+                        me.measurePartners(row);
                     }
+                    else {
+                        if (row.$height == null) {
+                            row.$height = me.measureItem(row);
+                        }
 
-                    decoration = row.$header;
-                    if (decoration && decoration.$height == null) {
-                        decoration.$height = me.measureItem(decoration);
-                    }
+                        decoration = row.$header;
 
-                    decoration = row.$footer;
-                    if (decoration) {
-                        decoration.$height = me.measureItem(decoration);
+                        if (decoration && decoration.$height == null) {
+                            decoration.$height = me.measureItem(decoration);
+                        }
+
+                        decoration = row.$footer;
+
+                        if (decoration) {
+                            decoration.$height = me.measureItem(decoration);
+                        }
                     }
                 }
             }
@@ -2221,19 +2338,24 @@ Ext.define('Ext.dataview.List', {
                 if (hasItemVm) {
                     me.lookupViewModel().notify();
                 }
+
                 me.measuredFirstRow = true;
                 row = rows[0];
                 row.$height = null;
                 me.rowHeight = rowHeight = me.measureItem(row);
+
                 while (i-- > 0) {
                     rows[i].$height = rowHeight;
                 }
             }
 
+            // TODO: height sync
             if (scrollDock) {
                 // We respond to resize events on scrollDock items, but that event may
                 // not have fired by the time we need to know...
-                for (h = 0, items = scrollDock.start.items, i = items.length; i-- > 0; ) {
+                items = scrollDock.start.items;
+
+                for (h = 0, i = items.length; i-- > 0; /* empty */) {
                     item = items[i];
 
                     if (!item.getHidden()) {
@@ -2242,8 +2364,9 @@ Ext.define('Ext.dataview.List', {
                 }
 
                 scrollDock.start.height = h;
+                items = scrollDock.end.items;
 
-                for (h = 0, items = scrollDock.end.items, i = items.length; i-- > 0; ) {
+                for (h = 0, i = items.length; i-- > 0; /* empty */) {
                     item = items[i];
 
                     if (!item.getHidden()) {
@@ -2255,57 +2378,147 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
+        measurePartners: function(record, preventNotify) {
+            var me = this,
+                partners = me.allPartners,
+                len = partners.length,
+                items = new Array(len),
+                largest = 0,
+                min = 0,
+                allEqual = true,
+                item, h, fullH, oldH, p, i, changed;
+
+            if (record.isDataViewItem) {
+                record = record.getRecord();
+            }
+
+            if (me.hasItemVm && !preventNotify) {
+                me.lookupViewModel().notify();
+            }
+
+            for (i = 0; i < len; ++i) {
+                p = partners[i];
+                item = p.itemFromRecord(record);
+                items[i] = item;
+                item.setMinHeight(null);
+            }
+
+            for (i = 0; i < len; ++i) {
+                item = items[i];
+                oldH = item.$height;
+
+                delete item.$height;
+
+                h = partners[i].measureItem(item);
+                fullH = item.$measured;
+                changed = changed || oldH !== h;
+
+                if (i === 0) {
+                    largest = h;
+                    min = fullH;
+                }
+
+                if (h !== largest) {
+                    allEqual = false;
+
+                    if (h > largest) {
+                        largest = h;
+                        min = fullH;
+                    }
+                }
+            }
+
+            if (!allEqual) {
+                for (i = 0; i < len; ++i) {
+                    item = items[i];
+                    item.setMinHeight(min);
+                    partners[i].setItemHeight(item, largest);
+                }
+            }
+
+            return changed ? min : null;
+        },
+
         onInnerCtResize: function(innerCt) {
             this.syncVerticalOverflow();
         },
 
-        positionItems: function (position, bottomUp, count) {
+        positionItems: function(position, bottomUp, count) {
             var me = this,
                 renderInfo = me.renderInfo,
                 rows = me.dataItems,
                 len = rows.length,
                 scrollDock = me.scrollDockedItems,
-                i, item, items, y;
+                partners = me.getRenderPartners(),
+                partnerLen = partners.length,
+                i, j, item, items, y, p;
 
-            if (bottomUp) {
-                me.positionItemsBottomUp(position, count);
-            }
-            else {
-                me.positionItemsTopDown(position, count);
+            for (i = 0; i < partnerLen; ++i) {
+                p = partners[i];
+
+                if (bottomUp) {
+                    p.positionItemsBottomUp(position, count);
+                }
+                else {
+                    p.positionItemsTopDown(position, count);
+                }
             }
 
             if (len) {
                 renderInfo.top = rows[0].$y0;
                 renderInfo.bottom = rows[len - 1].$y1;
             }
-            else if (scrollDock) {
-                renderInfo.top = renderInfo.bottom = scrollDock.start.height || 0;
+            else {
+                renderInfo.top = renderInfo.bottom = scrollDock && scrollDock.start.height || 0;
             }
 
             renderInfo.height = renderInfo.bottom - renderInfo.top;
 
-            if (renderInfo.atEnd) {
-                y = renderInfo.bottom;
+            for (i = 0; i < partnerLen; ++i) {
+                p = partners[i];
 
-                y += me.gapAfter;
+                if (renderInfo.atEnd) {
+                    y = renderInfo.bottom;
 
-                if (scrollDock) {
-                    items = scrollDock.end.items;
-                    len = items.length;
+                    y += p.gapAfter;
 
-                    for (i = 0; i < len; ++i) {
-                        item = items[i];
-                        if (!item.getHidden()) {
-                            y += me.setItemPosition(item, y);
+                    scrollDock = p.scrollDockedItems;
+
+                    if (scrollDock) {
+                        items = scrollDock.end.items;
+                        len = items.length;
+
+                        for (j = 0; j < len; ++j) {
+                            item = items[j];
+
+                            if (!item.getHidden()) {
+                                y += p.setItemPosition(item, y);
+                            }
                         }
                     }
                 }
+
+                p.refreshScrollerSize();
             }
 
-            me.refreshScrollerSize();
+            /*
+            var prev;
+            for (i = 0; i < len; ++i) {
+                for (j = 0; j < partnerLen; ++j) {
+                    if (j === 0) {
+                        continue;
+                    }
+                    prev = partners[j - 1].dataItems[i];
+                    item = partners[j].dataItems[i];
+                    if (prev.$height !== item.$height || prev.$position !== item.$position) {
+                        debugger;
+                    }
+                }
+            }
+            */
         },
 
-        positionItemsBottomUp: function (position, count) {
+        positionItemsBottomUp: function(position, count) {
             var me = this,
                 groupingInfo = me.groupingInfo,
                 footers = groupingInfo.footers,
@@ -2319,12 +2532,11 @@ Ext.define('Ext.dataview.List', {
 
             // When going bottomUp we start at the count-1'th row and work
             // backwards.
-            for (i = count; i-- > 0; ) {
+            for (i = count; i-- > 0; /* empty */) {
                 row = rows[i];
-
                 y1 = y;
-
                 decoration = row.$footer;
+
                 if (decoration) {
                     if ((ht = decoration.$height) == null) {
                         // For variableHeights, we pre-measure all the heights, but
@@ -2352,6 +2564,7 @@ Ext.define('Ext.dataview.List', {
                 }
 
                 decoration = row.$header;
+
                 if (decoration) {
                     if ((ht = decoration.$height) == null) {
                         // For variableHeights, we pre-measure all the heights, but
@@ -2376,7 +2589,7 @@ Ext.define('Ext.dataview.List', {
             if (renderInfo.atBegin && scrollDock) {
                 scrollDock = scrollDock.start.items;
 
-                for (i = scrollDock.length; i-- > 0; ) {
+                for (i = scrollDock.length; i-- > 0; /* empty */) {
                     item = scrollDock[i];
 
                     if (!item.getHidden()) {
@@ -2392,7 +2605,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        positionItemsTopDown: function (position, count) {
+        positionItemsTopDown: function(position, count) {
             var me = this,
                 groupingInfo = me.groupingInfo,
                 footers = groupingInfo.footers,
@@ -2415,6 +2628,7 @@ Ext.define('Ext.dataview.List', {
 
                     for (i = 0; i < scrollDock.length; ++i) {
                         item = scrollDock[i];
+
                         if (!item.getHidden()) {
                             y += me.setItemPosition(item, y);
                         }
@@ -2434,6 +2648,7 @@ Ext.define('Ext.dataview.List', {
                 y += me.gapMap[indexTop + i] || 0;
 
                 decoration = row.$header;
+
                 if (decoration) {
                     if (decoration.$height == null) {
                         // For variableHeights, we pre-measure all the heights, but
@@ -2458,6 +2673,7 @@ Ext.define('Ext.dataview.List', {
                 }
 
                 decoration = row.$footer;
+
                 if (decoration) {
                     if (decoration.$height == null) {
                         // For variableHeights, we pre-measure all the heights, but
@@ -2474,7 +2690,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        refreshGrouping: function () {
+        refreshGrouping: function() {
             var me = this,
                 grouped = me.isGrouping(),
                 infinite = me.infinite,
@@ -2487,11 +2703,13 @@ Ext.define('Ext.dataview.List', {
                 // and need it, otherwise check the pinnedFooter property we track via
                 // the updater in case it is already around...
                 item = (grouped && me.getPinFooters()) ? me.getPinnedFooter() : me.pinnedFooter;
+
                 if (item) {
                     me.setItemHidden(item, true);
                 }
 
                 item = (grouped && me.getPinHeaders()) ? me.getPinnedHeader() : me.pinnedHeader;
+
                 if (item) {
                     me.setItemHidden(item, true);
                 }
@@ -2538,19 +2756,19 @@ Ext.define('Ext.dataview.List', {
                 i = store.getCount() - 1;
                 footerIndices.push(i);
                 footerMap[i] = group;
-            } else {
+            }
+            else {
                 headers.map = headers.indices = footers.map = footers.indices = null;
             }
         },
 
-        refreshScrollerSize: function () {
+        refreshScrollerSize: function() {
             var me = this,
                 store = me.store,
                 h, renderInfo, scrollDock, storeCount;
 
             if (store && me.infinite) {
                 me.syncContentTop();
-
                 renderInfo = me.renderInfo;
                 scrollDock = me.scrollDockedItems;
                 storeCount = store.getCount();
@@ -2559,6 +2777,7 @@ Ext.define('Ext.dataview.List', {
                     (storeCount - renderInfo.indexBottom) * me.rowHeight;
 
                 scrollDock = scrollDock && scrollDock.end;
+
                 if (scrollDock) {
                     h += scrollDock.height;
                 }
@@ -2569,6 +2788,7 @@ Ext.define('Ext.dataview.List', {
                 });
 
                 me.setVerticalOverflow(h > me.getVisibleHeight());
+                me.refreshPinnedAreas();
             }
         },
 
@@ -2587,17 +2807,20 @@ Ext.define('Ext.dataview.List', {
          * insert `item` after `ref`.
          * @private
          */
-        reorderItem: function (item, ref, offset) {
+        reorderItem: function(item, ref, offset) {
             offset = offset || 0;
 
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 innerItems = me.innerItems,
                 innerCount = innerItems.length,
-                innerIndex = (ref == null) ? innerCount
-                    // offset is for ref as a widget to switch from "before" to "after":
+                innerIndex = (ref == null)
+                    ? innerCount
+                // offset is for ref as a widget to switch from "before" to "after":
                     : (ref.isWidget ? innerItems.indexOf(ref) + offset : ref),
                 items = me.items,
-                index = (innerIndex < innerCount) ? items.indexOf(innerItems[innerIndex])
+                index = (innerIndex < innerCount)
+                    ? items.indexOf(innerItems[innerIndex])
                     : items.length;
 
             if (!item.isWidget || !me.infinite || me.maintainChildNodes || item.parent !== me) {
@@ -2610,6 +2833,7 @@ Ext.define('Ext.dataview.List', {
                 items.insert(index, item);
 
                 index = innerItems.indexOf(item);
+
                 if (index > -1) {
                     innerItems.splice(index, 1);
 
@@ -2631,26 +2855,30 @@ Ext.define('Ext.dataview.List', {
 
         getRecordIndexFromPoint: function(x, y) {
             if (this.infinite) {
-                return this.recordIndexByPosition(Math.max(0,
-                    Math.min(y, this.getScrollable().getSize().y)));
-            } else {
-                return this.callParent([x, y]);
+                return this.recordIndexByPosition(
+                    Math.max(0,
+                             Math.min(y, this.getScrollable().getSize().y))
+                );
             }
+
+            return this.callParent([x, y]);
         },
 
         getItemFromPoint: function(x, y) {
-            if (this.infinite) {
-                return this.dataItems[
-                    this.recordIndexByPosition(Math.max(0,
-                        Math.min(y, this.getScrollable().getSize().y)
-                        )) - this.renderInfo.indexTop
-                    ];
-            } else {
-                return this.callParent([x, y]);
+            var me = this,
+                index, pos;
+
+            if (me.infinite) {
+                pos = Math.max(0, Math.min(y, me.getScrollable().getSize().y));
+                index = me.recordIndexByPosition(pos);
+
+                return me.dataItems[index - me.renderInfo.indexTop];
             }
+
+            return me.callParent([x, y]);
         },
 
-        recordIndexByPosition: function (y) {
+        recordIndexByPosition: function(y) {
             var me = this,
                 renderInfo = me.renderInfo,
                 renderTop = renderInfo.top,
@@ -2667,7 +2895,7 @@ Ext.define('Ext.dataview.List', {
             else {
                 y -= renderBottom;
                 ret = Math.min(renderInfo.indexBottom +
-                               Math.floor(y / me.rowHeight), me.store.getCount() - 1);
+                    Math.floor(y / me.rowHeight), me.store.getCount() - 1);
             }
 
             return ret;
@@ -2688,6 +2916,7 @@ Ext.define('Ext.dataview.List', {
             }
 
             item.$header = item.$footer = null;
+
             return me.callParent([item, preventCache]);
         },
 
@@ -2703,11 +2932,12 @@ Ext.define('Ext.dataview.List', {
             return destroyed;
         },
 
-        resync: function (force) {
+        resync: function(force) {
             var me = this,
                 height = me.outerCt.measure('h');
 
             me.resyncListener = null;
+
             if (height) {
                 if (height === me.getVisibleHeight()) {
                     me.syncRowsToHeight(force);
@@ -2722,17 +2952,24 @@ Ext.define('Ext.dataview.List', {
             this.whenVisible('resync', [true]);
         },
 
-        rollDown: function (count) {
+        rollDown: function(count) {
+            //<debug>
+            this._doActivePartnerCheck();
+            //</debug>
+
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 dataItems = me.dataItems,
                 renderInfo = me.renderInfo,
                 indexBottom = renderInfo.indexBottom,
                 tailItem = dataItems[dataItems.length - 1],
-                innerTailIndex = me.innerItems.indexOf(tailItem) + 1,
-                adjust, decoration, i, row;
+                innerTailStart = me.innerItems.indexOf(tailItem) + 1,
+                partners = me.getRenderPartners(),
+                len = partners.length,
+                adjust, decoration, i, j, p, row, innerTailIndex;
 
             if (tailItem.$footer) {
-                ++innerTailIndex;
+                ++innerTailStart;
             }
 
             /*
@@ -2758,6 +2995,7 @@ Ext.define('Ext.dataview.List', {
                     :               :                   :               :
                     :      ...      :                   :      ...      :
 
+            Or:
 
                 dataItems                        [0]   [1]   [2]   [3]   [4]   [5]
                 innerItems                [0]    [1]   [2]   [3]   [4]   [5]   [6]
@@ -2777,49 +3015,63 @@ Ext.define('Ext.dataview.List', {
 
             me.setTopRenderedIndex(renderInfo.indexTop + count);
 
-            for (i = 0; i < count; i++) {
-                row = dataItems.shift();
-                dataItems.push(row);
+            for (i = 0; i < len; ++i) {
+                p = partners[i];
+                dataItems = p.dataItems;
+                innerTailIndex = innerTailStart;
 
-                adjust = (row.$header ? 1 : 0) + (row.$footer ? 1 : 0);  // 2
+                for (j = 0; j < count; j++) {
+                    row = dataItems.shift();
+                    dataItems.push(row);
 
-                me.changeItem(-1, indexBottom + i);
+                    adjust = (row.$header ? 1 : 0) + (row.$footer ? 1 : 0); // 2
 
-                // Set adjust to the delta in the header/footer decorations for the
-                // row since this change by changeItem() impacts the index values
-                // beyond the row in question (such as the tail)
-                adjust -= (row.$header ? 1 : 0) + (row.$footer ? 1 : 0); // - 1 = 1
-                innerTailIndex -= adjust;
+                    p.changeItem(-1, indexBottom + j);
 
-                decoration = row.$header;
-                if (decoration) {
-                    me.reorderItem(decoration, innerTailIndex);
-                }
+                    // Set adjust to the delta in the header/footer decorations for the
+                    // row since this change by changeItem() impacts the index values
+                    // beyond the row in question (such as the tail)
+                    adjust -= (row.$header ? 1 : 0) + (row.$footer ? 1 : 0); // - 1 = 1
+                    innerTailIndex -= adjust;
 
-                me.reorderItem(row, innerTailIndex);
+                    decoration = row.$header;
 
-                decoration = row.$footer;
-                if (decoration) {
-                    me.reorderItem(decoration, innerTailIndex);
+                    if (decoration) {
+                        p.reorderItem(decoration, innerTailIndex);
+                    }
+
+                    p.reorderItem(row, innerTailIndex);
+
+                    decoration = row.$footer;
+
+                    if (decoration) {
+                        p.reorderItem(decoration, innerTailIndex);
+                    }
                 }
             }
 
             me.measureItems();
-            me.positionItems(renderInfo.bottom, /*bottomUp=*/false, count);
+            me.positionItems(renderInfo.bottom, /* bottomUp= */ false, count);
         },
 
-        rollUp: function (count) {
+        rollUp: function(count) {
+            //<debug>
+            this._doActivePartnerCheck();
+            //</debug>
+
+            // eslint-disable-next-line vars-on-top
             var me = this,
                 dataItems = me.dataItems,
-                innerItems = me.innerItems,
                 renderInfo = me.renderInfo,
                 indexTop = renderInfo.indexTop,
                 headItem = dataItems[0],
-                innerHeadIndex = innerItems.indexOf(headItem),
-                decoration, i, row;
+                innerHeadStart = me.innerItems.indexOf(headItem),
+                partners = me.getRenderPartners(),
+                len = partners.length,
+                decoration, i, j, p, row, innerHeadIndex;
 
             if (headItem.$header) {
-                --innerHeadIndex;
+                --innerHeadStart;
             }
 
             /*
@@ -2845,6 +3097,7 @@ Ext.define('Ext.dataview.List', {
                     :               :                   :               :
                     :      ...      :                   :      ...      :
 
+            Or:
 
                 dataItems                        [0]   [1]   [2]   [3]   [4]   [5]
                 innerItems                [0]    [1]   [2]   [3]   [4]   [5]   [6]
@@ -2863,32 +3116,40 @@ Ext.define('Ext.dataview.List', {
              */
 
             me.setTopRenderedIndex(indexTop - count);
-            --indexTop;  // start at row above current indexTop
+            --indexTop; // start at row above current indexTop
 
-            for (i = 0; i < count; i++) {
-                row = dataItems.pop();
-                dataItems.unshift(row);
+            for (i = 0; i < len; ++i) {
+                p = partners[i];
+                dataItems = p.dataItems;
+                innerHeadIndex = innerHeadStart;
 
-                me.changeItem(0, indexTop - i);
+                for (j = 0; j < count; j++) {
+                    row = dataItems.pop();
+                    dataItems.unshift(row);
 
-                decoration = row.$footer;
-                if (decoration) {
-                    me.reorderItem(decoration, innerHeadIndex);
-                }
+                    p.changeItem(0, indexTop - j);
 
-                me.reorderItem(row, innerHeadIndex);
+                    decoration = row.$footer;
 
-                decoration = row.$header;
-                if (decoration) {
-                    me.reorderItem(decoration, innerHeadIndex);
+                    if (decoration) {
+                        p.reorderItem(decoration, innerHeadIndex);
+                    }
+
+                    p.reorderItem(row, innerHeadIndex);
+
+                    decoration = row.$header;
+
+                    if (decoration) {
+                        p.reorderItem(decoration, innerHeadIndex);
+                    }
                 }
             }
 
             me.measureItems();
-            me.positionItems(renderInfo.top, /*bottomUp=*/true, count);
+            me.positionItems(renderInfo.top, /* bottomUp= */ true, count);
         },
 
-        setGaps: function (gaps) {
+        setGaps: function(gaps) {
             var me = this;
 
             gaps = gaps || {};
@@ -2900,7 +3161,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        setItemHiddenInfinite: function (item, hide) {
+        setItemHiddenInfinite: function(item, hide) {
             // This method replaces setItemHidden (see updateInfinite)
 
             if (!hide) {
@@ -2909,12 +3170,13 @@ Ext.define('Ext.dataview.List', {
             else if (!item.$hidden) {
                 item.$hidden = true;
                 item.$position = null;
+
                 item.translate(0, -1e4);
-                //TODO a11y
+                // TODO a11y
             }
         },
 
-        setItemPosition: function (item, y) {
+        setItemPosition: function(item, y) {
             if (item.$hidden) {
                 this.setItemHidden(item, false);
             }
@@ -2924,17 +3186,18 @@ Ext.define('Ext.dataview.List', {
                 item.translate(null, y);
             }
 
-            return item.$height;  // very often need to advance
+            return item.$height; // very often need to advance
         },
 
         setupFooterPinning: function() {
             var me = this;
 
-            return me.setupGroupPinning(me.getPinFooters(), me.pinnedFooter,
+            return me.setupGroupPinning(
+                me.getPinFooters(), me.pinnedFooter,
                 me.hasPinnedFooterCls, 'setPinnedFooterHeight');
         },
 
-        setupGroupPinning: function (pin, item, cls, setter) {
+        setupGroupPinning: function(pin, item, cls, setter) {
             var isPinning = pin && !!item;
 
             if (!isPinning) {
@@ -2942,17 +3205,19 @@ Ext.define('Ext.dataview.List', {
             }
 
             this.el.toggleCls(cls, isPinning);
+
             return isPinning;
         },
 
         setupHeaderPinning: function() {
             var me = this;
 
-            return me.setupGroupPinning(me.getPinHeaders(), me.pinnedHeader,
+            return me.setupGroupPinning(
+                me.getPinHeaders(), me.pinnedHeader,
                 me.hasPinnedHeaderCls, 'setPinnedHeaderHeight');
         },
 
-        shouldHideDisclosure: function (record) {
+        shouldHideDisclosure: function(record) {
             var name, show;
 
             if (this.getOnItemDisclosure()) {
@@ -2963,7 +3228,7 @@ Ext.define('Ext.dataview.List', {
             return !show;
         },
 
-        stickItem: function (item, options) {
+        stickItem: function(item, options) {
             var me = this,
                 opt = item.$sticky,
                 record = item.getRecord(),
@@ -3037,15 +3302,14 @@ Ext.define('Ext.dataview.List', {
             }
 
             adjust = visibleTop + visibleHeight - (renderInfo.bottom - bufferZone);
-            // If adjust < 0 we have enough content on the bottom edge, so we're ok
-            if (adjust < 0) {
-                return;
-            }
 
-            me.getScrollable().scrollBy(null, -adjust, false);
+            // If adjust < 0 we have enough content on the bottom edge, so we're ok
+            if (adjust >= 0) {
+                me.getScrollable().scrollBy(null, -adjust, false);
+            }
         },
 
-        syncIndexBar: function () {
+        syncIndexBar: function() {
             var me = this,
                 indexBar = me.getIndexBar(),
                 store = me.store;
@@ -3055,7 +3319,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        syncPinnedFooter: function (visibleTop) {
+        syncPinnedFooter: function(visibleTop) {
             var me = this,
                 dataItems = me.dataItems,
                 len = dataItems.length,
@@ -3129,7 +3393,7 @@ Ext.define('Ext.dataview.List', {
                     pinnedFooter.setGroup(footers.map[footerIndices[index]]);
 
                     if (visibleBottomIndex === footerIndices[index] &&
-                            dataItems[visibleBottomIndex - indexTop].$y1 === bottom) {
+                        dataItems[visibleBottomIndex - indexTop].$y1 === bottom) {
                         // When the last footer is exactly at the bottom, we just
                         // hide the pinned footer.
                         hide = true;
@@ -3140,6 +3404,7 @@ Ext.define('Ext.dataview.List', {
                         // If there are groups above the group whose footer we are
                         // showing, find the distance of its footer to visible bottom.
                         index = footerIndices[index - 1];
+
                         if (index < indexTop) {
                             // The footer record is so far above it is not rendered,
                             // so fully reveal the pinned footer.
@@ -3148,8 +3413,8 @@ Ext.define('Ext.dataview.List', {
                         else {
                             // Set "y" to the bottom of the approaching footer.
                             y = dataItems[index - indexTop].$y1;
-
                             gap = me.gapMap[index + 1] || 0;
+
                             if (gap) {
                                 // If the next record has a gap, we want that gap to
                                 // push the footer off the bottom. If it fully pushes
@@ -3189,7 +3454,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        syncPinnedHeader: function (visibleTop) {
+        syncPinnedHeader: function(visibleTop) {
             var me = this,
                 dataItems = me.dataItems,
                 len = dataItems.length,
@@ -3301,7 +3566,7 @@ Ext.define('Ext.dataview.List', {
                         // if it should nudge the pinnedHeader up a bit...
                         ++index;
 
-                        if (index < headerIndices.length) {  // if (record is rendered)
+                        if (index < headerIndices.length) { // if (record is rendered)
                             index = headerIndices[index] - indexTop;
 
                             // If we haven't yet rendered items out that far, then the
@@ -3342,7 +3607,7 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
-        syncPinnedHorz: function (item) {
+        syncPinnedHorz: function(item) {
             var me = this,
                 scroller = item.getScrollable();
 
@@ -3355,27 +3620,47 @@ Ext.define('Ext.dataview.List', {
                 scroller = item.getScrollable();
             }
 
-            if (item.isItemHeader) {
+            item.el.setWidth(me.getScrollable().getClientSize().x);
+
+            if (item.isItemHeader && me.getHorizontalOverflow()) {
                 item.setContentWidth(me.getInnerWidth());
             }
 
-            scroller.scrollTo(me.getVisibleLeft(), null);
+            /*
+                As this function can get called due to scrolling on partner as well, 
+                so, we need to be sure, if current List is horizontally scrollable and 
+                scrolling event is coming on the own scroller itself. (So, scroll events 
+                on partner should not distrub other item header). It will ensure, the
+                sync between own scroller and item scroller
+
+            */
+            if (me.getHorizontalOverflow() && me.getScrollable().isPrimary !== false) {
+                scroller.scrollTo(me.getVisibleLeft(), null);
+            }
         },
 
-        syncRows: function (bottomUp) {
+        syncRows: function(bottomUp) {
             var me = this,
                 renderInfo = me.renderInfo,
                 scrollDock = me.scrollDockedItems,
-                maxHeight = me.getMaxHeight(),
-                i, position, indexTop, len, innerCt, contentHeight, height;
+                partners = me.getRenderPartners(),
+                i, position, indexTop, len, innerCt,
+                maxHeight, contentHeight, height, partnerLen, j, p;
 
             if (!me.infinite) {
                 me.syncItemRange();
+
                 return;
             }
 
+            if (!me.isActivePartner()) {
+                return;
+            }
+
+            maxHeight = me.getMaxHeight();
             len = me.dataItems.length;
             indexTop = renderInfo.indexTop;
+            partnerLen = partners.length;
 
             if (len) {
                 if (bottomUp) {
@@ -3389,44 +3674,53 @@ Ext.define('Ext.dataview.List', {
                     }
                 }
 
-                for (i = 0; i < len; ++i) {
-                    me.changeItem(i, indexTop + i);
+                for (i = 0; i < partnerLen; ++i) {
+                    for (j = 0; j < len; ++j) {
+                        partners[i].changeItem(j, indexTop + j);
+                    }
                 }
             }
 
             me.measureItems();
             me.positionItems(position, bottomUp, len);
 
-            if (me.pinnedHeader) {
-                me.syncPinnedHeader();
-            }
+            for (i = 0; i < partnerLen; ++i) {
+                p = partners[i];
 
-            if (me.pinnedFooter) {
-                me.syncPinnedFooter();
-            }
-
-            if (me.stickyItems.length) {
-                me.syncStickyItems();
-            }
-
-            if (maxHeight) {
-                innerCt = me.innerCt;
-
-                contentHeight = renderInfo.bottom + me.gapAfter;
-                if (scrollDock) {
-                    contentHeight += scrollDock.end.height;
+                if (p.pinnedHeader) {
+                    p.syncPinnedHeader();
                 }
 
-                height = innerCt.measure('h'); // height set by previous pass
-                height = me.el.measure('h') - height + me.el.getBorderWidth('tb'); // of docked items
-                height = Math.min(maxHeight - height, contentHeight);
+                if (p.pinnedFooter) {
+                    p.syncPinnedFooter();
+                }
 
-                me.setInnerCtHeight(height);
+                if (p.stickyItems.length) {
+                    p.syncStickyItems();
+                }
+
+                if (maxHeight) {
+                    innerCt = p.innerCt;
+
+                    contentHeight = renderInfo.bottom + p.gapAfter;
+                    scrollDock = p.scrollDockedItems;
+
+                    if (scrollDock) {
+                        contentHeight += scrollDock.end.height;
+                    }
+
+                    height = innerCt.measure('h'); // height set by previous pass
+                    height = p.el.measure('h') - height + p.el.getBorderWidth('tb'); // docked items
+                    height = Math.min(maxHeight - height, contentHeight);
+
+                    p.setInnerCtHeight(height);
+                }
             }
         },
 
-        syncRowsToHeight: function (force) {
+        syncRowsToHeight: function(force) {
             var me = this,
+                partners = me.allPartners,
                 bufferZone = me.getBufferSize(),
                 infinite = me.infinite,
                 rowCountWas = me.getItemCount(),
@@ -3439,7 +3733,11 @@ Ext.define('Ext.dataview.List', {
                 // of rows to render. We set the height of our innerCt (which is
                 // position:relative) to provide a height to the list (see syncRows).
                 visibleHeight = me.getMaxHeight() || me.getVisibleHeight(),
-                indexTop, row, rowCount;
+                indexTop, row, rowCount, i, len, p, active;
+
+            if (!me.isActivePartner()) {
+                return;
+            }
 
             if (firstTime) {
                 // On our first call here, we need to create at least one row so we
@@ -3452,6 +3750,14 @@ Ext.define('Ext.dataview.List', {
                 row = me.dataItems[0];
                 row.$height = null; // force measure
                 me.rowHeight = rowHeight = me.measureItem(row);
+
+                if (me.variableHeights && partners) {
+                    len = partners.length;
+
+                    for (i = 0; i < len; ++i) {
+                        partners[i].rowHeight = rowHeight;
+                    }
+                }
 
                 if (!rowCountWas && me.discardMeasureRow) {
                     row.destroy();
@@ -3470,42 +3776,50 @@ Ext.define('Ext.dataview.List', {
                 rowCount = storeCount;
             }
 
-            me.setItemCount(rowCount);
+            partners = me.getRenderPartners();
+            len = partners.length;
 
-            // Virtual stores have to be booted into life the first time through here.
-            if ((firstTime && me.store.isVirtualStore) || rowCountWas !== rowCount || storeCount < oldIndexBottom) {
-                if (infinite) {
-                    indexTop = Math.min(storeCount - rowCount, renderInfo.indexTop);
-                    indexTop = Math.max(0, indexTop);
+            for (i = 0; i < len; ++i) {
+                p = partners[i];
+                active = p.isActivePartner();
+                p.setItemCount(rowCount);
 
-                    if (indexTop === me.getTopRenderedIndex()) {
-                        // Directly call the updater
-                        me.updateTopRenderedIndex(indexTop);
+                // Virtual stores have to be booted into life the first time through here.
+                if ((firstTime && me.store.isVirtualStore) || rowCountWas !== rowCount ||
+                    storeCount < oldIndexBottom) {
+                    if (infinite && active) {
+                        indexTop = Math.min(storeCount - rowCount, renderInfo.indexTop);
+                        indexTop = Math.max(0, indexTop);
+
+                        if (indexTop === p.getTopRenderedIndex()) {
+                            // Directly call the updater
+                            p.updateTopRenderedIndex(indexTop);
+                        }
+                        else {
+                            p.setTopRenderedIndex(indexTop);
+                        }
                     }
-                    else {
-                        me.setTopRenderedIndex(indexTop);
+
+                    if (!rowCountWas) {
+                        p.refreshGrouping();
                     }
-                }
 
-                if (firstTime) {
-                    me.refreshGrouping();
-                }
+                    force = force !== false;
 
-                force = force !== false;
-
-                if (force && storeCount < oldIndexBottom) {
-                    // Changing the amount of rows because the data in the store is
-                    // no longer sufficient to fill the view
-                    renderInfo.top = renderInfo.indexTop * me.rowHeight;
+                    if (force && storeCount < oldIndexBottom && active) {
+                        // Changing the amount of rows because the data in the store is
+                        // no longer sufficient to fill the view
+                        renderInfo.top = renderInfo.indexTop * me.rowHeight;
+                    }
                 }
             }
 
-            if (force) {
+            if (force || firstTime) {
                 me.syncRows();
             }
         },
 
-        syncStickyItems: function () {
+        syncStickyItems: function() {
             var me = this,
                 stickyItems = me.stickyItems,
                 n = stickyItems.length,
@@ -3530,7 +3844,18 @@ Ext.define('Ext.dataview.List', {
             this.lastAdjustedPosition = this._visibleTop = null;
         },
 
-        teleport: function (y) {
+        setItemHeight: function(item, height) {
+            item.$height = height;
+
+            if (item.$pinnedFooter) {
+                this.setPinnedFooterHeight(height);
+            }
+            else if (item.$pinnedHeader) {
+                this.setPinnedHeaderHeight(height);
+            }
+        },
+
+        teleport: function(y) {
             var me = this,
                 scrollSize = me.getScrollable().getSize(),
                 renderInfo = me.renderInfo,
@@ -3542,11 +3867,16 @@ Ext.define('Ext.dataview.List', {
                 nextTeleportTopIndex = me.nextTeleportTopIndex,
                 bottomUp, indexTop;
 
+            //<debug>
+            me._doActivePartnerCheck();
+            //</debug>
+
             // If we end up here, we've had ensureVisible come through and decide what the top
             // should be. If it's been decided, then we need to honour it.
             if (nextTeleportTopIndex !== undefined) {
                 indexTop = nextTeleportTopIndex;
-            } else {
+            }
+            else {
                 indexTop = Math.floor(y / scrollSize.y * storeCount);
             }
 
@@ -3556,7 +3886,7 @@ Ext.define('Ext.dataview.List', {
 
                 // Back off from the indexTop as calculated from y by half the
                 // bufferSize.
-                backOff = Math.min(indexTop, backOff >>> 1);  // but not negative
+                backOff = Math.min(indexTop, backOff >>> 1); // but not negative
                 indexTop -= backOff;
 
                 // Subtract the approx height of the backoff from y:
@@ -3581,7 +3911,73 @@ Ext.define('Ext.dataview.List', {
             me.syncRows(bottomUp);
         },
 
-        traverseItem: function (item, delta) {
+        toggleHoverCls: function(on) {
+            var me = this,
+                target = me.mouseOverItem,
+                cls = me.hoveredCls,
+                partners = me.partners,
+                len, i, rec;
+
+            me.callParent([on]);
+
+            if (partners && target) {
+                rec = target.getRecord();
+
+                for (i = 0, len = partners.length; i < len; ++i) {
+                    partners[i].itemFromRecord(rec).toggleCls(cls, on);
+                }
+            }
+        },
+
+        // For selection among grids, here we are setting the items for partners in selected state
+        setItemSelection: function(records, selected) {
+
+            var me = this,
+                len,
+                i, j, selectable, partnerLen,
+                partners = me.partners || [];
+
+            me.callParent([records, selected]);
+
+            if (!me.isActivePartner()) {
+                return;
+            }
+
+            // For each record update the selectable model of partners as well
+            for (i = 0, len = records.length; i < len; i++) {
+                for (j = 0, partnerLen = partners.length; j < partnerLen; ++j) {
+                    selectable = partners[j].getSelectable();
+                    selected
+                        ? selectable.setSelectedRecord(records[i])
+                        : selectable.deselect(records[i], true);
+                }
+            }
+        },
+
+        // Update the selection among grids when column is moved to new region
+        syncItemRecord: function(options, tombstoneRec) {
+            var me = this,
+                ret,
+                partners = this.partners || [],
+                j, partnerLen, selectable,
+                record = options.item.getRecord();
+
+            ret = me.callParent([options, tombstoneRec]);
+
+            for (j = 0, partnerLen = partners.length; j < partnerLen; ++j) {
+                selectable = partners[j].getSelectable();
+
+                if (selectable.isRowSelected(record)) {
+                    // If this is selected for any partner, lets select it
+                    me.getSelectable().setSelectedRecord(record);
+                    break;
+                }
+            }
+
+            return ret;
+        },
+
+        traverseItem: function(item, delta) {
             var me = this,
                 dataItems = me.dataItems,
                 renderInfo = me.renderInfo,
@@ -3604,7 +4000,7 @@ Ext.define('Ext.dataview.List', {
 
             // if we assigned next it will be 1 too large to avoid 0...
 
-            return next ? next - 1 : this.callParent([ item, delta ]);
+            return next ? next - 1 : this.callParent([item, delta]);
         },
 
         //--------------------------------------------------------
@@ -3612,25 +4008,25 @@ Ext.define('Ext.dataview.List', {
 
         // emptyState
 
-        updateEmptyState: function (empty, was) {
-            this.callParent([ empty, was ]);
+        updateEmptyState: function(empty, was) {
+            this.callParent([empty, was]);
 
             this.syncIndexBar();
         },
 
         // horizontalOverflow
 
-        updateHorizontalOverflow: function (overflow) {
-            // console.log('overflowX', overflow);
-
+        updateHorizontalOverflow: function(overflow) {
             // We need to do this for sub-pixel flickering issues
             var scroller = this.getScrollable();
 
-            scroller.setX(overflow);
+            if (this.manageHorizontalOverflow) {
+                scroller.setX(overflow);
 
-            if (!overflow) {
-                // When we remove overflow-x we need to be sure we get back to x=0
-                scroller.scrollTo(0, null);
+                if (!overflow) {
+                    // When we remove overflow-x we need to be sure we get back to x=0
+                    scroller.scrollTo(0, null);
+                }
             }
         },
 
@@ -3642,11 +4038,12 @@ Ext.define('Ext.dataview.List', {
 
         // innerWidth
 
-        updateInnerWidth: function (innerWidth) {
+        updateInnerWidth: function(innerWidth) {
             var me = this,
                 innerCt = me.innerCt,
                 pinnedHeader = me.pinnedHeader,
                 pinnedFooter = me.pinnedFooter,
+                scrollWidth = 0,
                 width;
 
             if (innerWidth == null) {
@@ -3657,8 +4054,13 @@ Ext.define('Ext.dataview.List', {
                 innerCt.setStyle('width', innerWidth + 'px');
 
                 width = me.getVisibleWidth();
+
                 if (width != null) { // if (we have gotten our first resize)
-                    me.setHorizontalOverflow(width < innerWidth);
+                    if (me.getVerticalOverflow()) {
+                        scrollWidth = me.getScrollable().getScrollbarSize().width;
+                    }
+
+                    me.setHorizontalOverflow(width < (innerWidth + scrollWidth));
                 }
             }
 
@@ -3671,9 +4073,22 @@ Ext.define('Ext.dataview.List', {
             }
         },
 
+        // itemCount
+
+        updateItemCount: function(value, oldValue) {
+            var me = this,
+                renderInfo = me.infinite && me.renderInfo;
+
+            me.callParent([value, oldValue]);
+
+            if (!value && renderInfo) {
+                renderInfo.atBegin = renderInfo.atEnd = true;
+            }
+        },
+
         // pinnedFooterHeight
 
-        updatePinnedFooterHeight: function (height) {
+        updatePinnedFooterHeight: function(height) {
             var me = this;
 
             if (!me.destroyed && !me.destroying) {
@@ -3683,7 +4098,7 @@ Ext.define('Ext.dataview.List', {
 
         // pinnedHeaderHeight
 
-        updatePinnedHeaderHeight: function (height) {
+        updatePinnedHeaderHeight: function(height) {
             var me = this;
 
             if (!me.destroyed && !me.destroying) {
@@ -3693,7 +4108,7 @@ Ext.define('Ext.dataview.List', {
 
         // topRenderedIndex
 
-        updateTopRenderedIndex: function (top) {
+        updateTopRenderedIndex: function(top) {
             var me = this,
                 store = me.store,
                 renderInfo = me.renderInfo,
@@ -3708,22 +4123,24 @@ Ext.define('Ext.dataview.List', {
             if (top === bottom && store.isVirtualStore) {
                 bottom = top + store.getPageSize();
             }
+
             me.dataRange.goto(top, bottom);
         },
 
         // verticalOverflow
 
-        updateVerticalOverflow: function (overflow) {
+        updateVerticalOverflow: function(overflow, oldOverflow) {
             var me = this,
                 items = me.items.items,
                 n = items.length,
                 i, item, width;
 
             if (me.infinite) {
-                width = overflow ? Ext.getScrollbarSize().reservedWidth : null;
+                width = me.getScrollable().getScrollbarSize().reservedWidth;
 
                 for (i = 0; i < n; ++i) {
                     item = items[i];
+
                     if (item.isPinnedItem) {
                         item.el.setStyle('width', width);
                     }
@@ -3731,6 +4148,10 @@ Ext.define('Ext.dataview.List', {
 
                 me.syncPinnedHeader();
                 me.syncPinnedFooter();
+
+                if (oldOverflow != null && overflow !== oldOverflow) {
+                    me.updateVisibleWidth(me.bodyElement.getWidth());
+                }
             }
 
             me.fireEvent('verticaloverflowchange', me, overflow);
@@ -3738,69 +4159,89 @@ Ext.define('Ext.dataview.List', {
 
         // visibleHeight
 
-        updateVisibleHeight: function () {
+        updateVisibleHeight: function() {
             var me = this;
 
             if (me.infinite) {
                 if (me.store) {
                     me.syncRowsToHeight();
                 }
-            } else {
+            }
+            else {
                 me.syncVerticalOverflow();
             }
         },
 
         // visibleLeft
-
-        updateVisibleLeft: function () {
+        updateVisibleLeft: function() {
             var me = this;
 
             if (me.infinite && !me.suspendSync) {
-                me.syncPinnedHeader();
-                me.syncPinnedFooter();
-
-                if (me.stickyItems.length) {
-                    me.syncStickyItems();
-                }
+                me.refreshPinnedAreas();
             }
-
         },
 
         // visibleTop
-
-        updateVisibleTop: function (y) {
+        updateVisibleTop: function(y) {
             var me = this,
-                oldY = me.lastAdjustedPosition;
+                oldY = me.lastAdjustedPosition,
+                adjusted, len, i, p, partners;
+
+            if (!me.isActivePartner()) {
+                return;
+            }
 
             if (me.infinite) {
-                if (me.dataItems.length && (oldY == null || Math.abs(y - oldY) > me.rowHeight)) {
-                    me.lastAdjustedPosition = y;
+                adjusted = me.dataItems.length &&
+                    (oldY == null || Math.abs(y - oldY) > me.rowHeight);
 
+                if (adjusted) {
+                    me.lastAdjustedPosition = y;
                     me.adjustRenderedRows(y, oldY);
                 }
 
-                me.syncPinnedHeader(y);
-                me.syncPinnedFooter(y);
+                partners = me.getRenderPartners();
 
-                if (me.stickyItems.length) {
-                    me.syncStickyItems();
+                for (i = 0, len = partners.length; i < len; ++i) {
+                    p = partners[i];
+
+                    if (adjusted) {
+                        p.lastAdjustedPosition = y;
+                    }
+
+                    p.refreshPinnedAreas(y);
                 }
             }
         },
 
         // visibleWidth
-
-        updateVisibleWidth: function (width) {
+        updateVisibleWidth: function(width) {
             var me = this,
-                innerWidth = me.getInnerWidth();
+                innerWidth = me.getInnerWidth(),
+                scrollWidth = 0;
 
             if (innerWidth != null) {
-                me.setHorizontalOverflow(width < innerWidth);
+                if (me.getVerticalOverflow()) {
+                    scrollWidth = me.getScrollable().getScrollbarSize().width;
+                }
+
+                me.setHorizontalOverflow(width < (innerWidth + scrollWidth));
+            }
+        },
+
+        refreshPinnedAreas: function(y) {
+            var me = this;
+
+            me.syncPinnedHeader(y);
+            me.syncPinnedFooter(y);
+
+            if (me.stickyItems.length) {
+                me.syncStickyItems();
             }
         }
     } // privates
-},
-function (List) {
+
+}, function(List) {
     var proto = List.prototype,
         handlers = proto._itemChangeHandlers = proto._itemChangeHandlers.slice();
 

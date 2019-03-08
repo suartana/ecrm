@@ -1,10 +1,9 @@
-/* global expect, Ext, jasmine */
-
 topSuite("Ext.layout.container.Accordion",
     ['Ext.panel.Panel', 'Ext.button.Button', 'Ext.form.field.Text', 'Ext.layout.container.Fit'],
 function() {
     describe("single item", function() {
         var panel, child;
+        
         function makePanel(multi, fill) {
             panel = new Ext.panel.Panel({
                 width: 100,
@@ -23,6 +22,7 @@ function() {
                 }],
                 renderTo: Ext.getBody()
             });
+            
             child = panel.items.getAt(0);
         }
 
@@ -69,15 +69,15 @@ function() {
                         multi: isMulti
                     },
                     items: items
-                });    
+                });
             };
             
             expectCollapsed = function(index) {
-                expect(ct.items.getAt(index).collapsed).toBeTruthy();    
+                expect(ct.items.getAt(index).collapsed).toBeTruthy();
             };
             
             expectExpanded = function(index) {
-                expect(ct.items.getAt(index).collapsed).toBeFalsy();    
+                expect(ct.items.getAt(index).collapsed).toBeFalsy();
             };
         });
         
@@ -94,6 +94,7 @@ function() {
                 var c = new Ext.panel.Panel({
                     title: 'Dynamic'
                 });
+
                 ct.add(c);
                 expectCollapsed(1);
             });
@@ -105,6 +106,7 @@ function() {
                 var c = new Ext.panel.Panel({
                     title: 'Dynamic'
                 });
+
                 ct.add(c);
                 c.expand();
                 expectCollapsed(0);
@@ -134,6 +136,7 @@ function() {
                 var c = new Ext.panel.Panel({
                     title: 'Dynamic'
                 });
+
                 ct.add(c);
                 expectExpanded(1);
             });
@@ -146,6 +149,7 @@ function() {
                     title: 'Dynamic',
                     collapsed: true
                 });
+
                 ct.add(c);
                 expectCollapsed(1);
             });
@@ -158,6 +162,7 @@ function() {
                     title: 'Dynamic',
                     collapsed: true
                 });
+
                 ct.add(c);
                 c.expand();
                 expectExpanded(0);
@@ -172,6 +177,7 @@ function() {
                     title: 'Dynamic',
                     collapsed: true
                 });
+
                 ct.add(c);
                 c.expand();
                 c.collapse();
@@ -198,16 +204,18 @@ function() {
                         fill: fill === false ? false : true
                     },
                     items: items
-                });    
+                });
             };
             
             expectCollapsed = function(index) {
                 var item = ct.items.getAt(index);
+
                 expect(item.collapsed).toBeTruthy();
             };
             
             expectExpanded = function(index) {
                 var item = ct.items.getAt(index);
+
                 expect(item.collapsed).toBeFalsy();
             };
         });
@@ -352,12 +360,12 @@ function() {
                     expectExpanded(1);
                     expectCollapsed(2);
                 });
-            });  
+            });
         };
         
         // The behaviour for the accordion should be the same for both fill values
         describe("fill: true", function() {
-           tests(true); 
+           tests(true);
         });
         
         describe("fill: false", function() {
@@ -379,20 +387,20 @@ function() {
                         animate: false
                     },
                     items: items
-                });    
+                });
             };
             
             expectCollapsed = function(index) {
                 var item = ct.items.getAt(index);
 
-                expect(item.collapsed).toBeTruthy();    
+                expect(item.collapsed).toBeTruthy();
                 expect(item.getInherited().collapsed).toBeTruthy();
             };
             
             expectExpanded = function(index) {
                 var item = ct.items.getAt(index);
 
-                expect(item.collapsed).toBeFalsy();    
+                expect(item.collapsed).toBeFalsy();
                 expect(item.getInherited().collapsed).toBeFalsy();
             };
         });
@@ -437,10 +445,12 @@ function() {
             ct.items.last().show();
             expectCollapsed(2);
         });
-    });  
+    });
 
     describe("filling", function() {
-        var ct, h = 300;
+        var ct,
+            h = 300;
+        
         function makeCt(items, multi, fill) {
             ct = new Ext.container.Container({
                 width: 100,
@@ -468,7 +478,7 @@ function() {
                         title: 'Item 1',
                         html: 'I1'
                     }], false, true);
-                    expect(ct.items.first().getHeight()).toBe(h);    
+                    expect(ct.items.first().getHeight()).toBe(h);
                 });
             
                 it("should stretch the item to the height - the other panel headers", function() {
@@ -478,10 +488,12 @@ function() {
                     }, {
                         title: 'Item 2',
                         html: 'I2'
-                    }], false, true);    
+                    }], false, true);
+                    
                     var left = ct.items.last().getHeight();
+                    
                     expect(ct.items.first().getHeight()).toBe(h - left);
-                });  
+                });
             });
             
             describe("multi", function() {
@@ -490,7 +502,7 @@ function() {
                         title: 'Item 1',
                         html: 'I1'
                     }], true, true);
-                    expect(ct.items.first().getHeight()).toBe(h);    
+                    expect(ct.items.first().getHeight()).toBe(h);
                 });
                 
                 it("should stretch the item to the height - the other panel headers", function() {
@@ -500,10 +512,11 @@ function() {
                     }, {
                         title: 'Item 2',
                         html: 'I2'
-                    }], true, true);    
+                    }], true, true);
                     var left = ct.items.last().getHeight();
+
                     expect(ct.items.first().getHeight()).toBe(h - left);
-                }); 
+                });
                 
                 it("should stretch the both items evenly", function() {
                     makeCt([{
@@ -516,7 +529,7 @@ function() {
                         collapsed: false
                     }], true, true);
                     expect(ct.items.first().getHeight()).toBe(h / 2);
-                    expect(ct.items.last().getHeight()).toBe(h / 2);        
+                    expect(ct.items.last().getHeight()).toBe(h / 2);
                 });
             });
         });
@@ -529,7 +542,7 @@ function() {
                         html: 'I1'
                     }], false, false);
                     // We don't know the exact height, but it should be smaller
-                    expect(ct.items.first().getHeight()).toBeLessThan(100);    
+                    expect(ct.items.first().getHeight()).toBeLessThan(100);
                 });
             
                 it("should not stretch either item height", function() {
@@ -539,11 +552,11 @@ function() {
                     }, {
                         title: 'Item 2',
                         html: 'I2'
-                    }], false, false);    
+                    }], false, false);
                     // We don't know the exact height, but it should be smaller
                     expect(ct.items.first().getHeight()).toBeLessThan(100);
-                    expect(ct.items.last().getHeight()).toBeLessThan(100);  
-                });  
+                    expect(ct.items.last().getHeight()).toBeLessThan(100);
+                });
             });
             
             describe("multi", function() {
@@ -553,7 +566,7 @@ function() {
                         html: 'I1'
                     }], true, false);
                     // We don't know the exact height, but it should be smaller
-                    expect(ct.items.first().getHeight()).toBeLessThan(100);    
+                    expect(ct.items.first().getHeight()).toBeLessThan(100);
                 });
                 
                 it("should not stretch either item height", function() {
@@ -563,11 +576,11 @@ function() {
                     }, {
                         title: 'Item 2',
                         html: 'I2'
-                    }], true, false);    
+                    }], true, false);
                     // We don't know the exact height, but it should be smaller
                     expect(ct.items.first().getHeight()).toBeLessThan(100);
                     expect(ct.items.last().getHeight()).toBeLessThan(100);
-                }); 
+                });
                 
                 it("should not stretch either item", function() {
                     makeCt([{
@@ -580,18 +593,20 @@ function() {
                         collapsed: false
                     }], true, false);
                     expect(ct.items.first().getHeight()).toBeLessThan(100);
-                    expect(ct.items.last().getHeight()).toBeLessThan(100);        
+                    expect(ct.items.last().getHeight()).toBeLessThan(100);
                 });
             });
         });
     });
     
     describe("collapseFirst", function() {
-        var makePanel, panel, tools = [{
-            type: 'print'    
-        }, {
-            type: 'refresh'
-        }];
+        var makePanel, panel,
+            tools = [{
+                type: 'print'
+            }, {
+                type: 'refresh'
+            }];
+        
         beforeEach(function() {
             makePanel = function(items, collapseFirst) {
                 panel = new Ext.panel.Panel({
@@ -606,12 +621,12 @@ function() {
                     renderTo: Ext.getBody()
                 });
             };
-        }); 
+        });
         
         afterEach(function() {
             Ext.destroy(panel);
             makePanel = panel = null;
-        });   
+        });
         
         it("should use the collapseFirst option on the child items as a default", function() {
             makePanel([{
@@ -622,7 +637,7 @@ function() {
                 collapseFirst: false,
                 title: 'B',
                 tools: tools
-            }]);    
+            }]);
             var p1 = panel.items.first(),
                 p2 = panel.items.last();
                 
@@ -642,7 +657,7 @@ function() {
             }, {
                 title: 'B',
                 tools: tools
-            }], false);    
+            }], false);
             
             var p1 = panel.items.first(),
                 p2 = panel.items.last();
@@ -663,7 +678,7 @@ function() {
             }, {
                 title: 'B',
                 tools: tools
-            }], true);    
+            }], true);
             
             var p1 = panel.items.first(),
                 p2 = panel.items.last();
@@ -697,12 +712,12 @@ function() {
                     renderTo: Ext.getBody()
                 });
             };
-        }); 
+        });
         
         afterEach(function() {
             Ext.destroy(panel);
             makePanel = panel = null;
-        });  
+        });
         
         it("should move initial active item to the top", function() {
             var c1 = new Ext.panel.Panel({
@@ -713,7 +728,7 @@ function() {
                 }),
                 c3 = new Ext.panel.Panel({
                     title: 'C',
-                    collapsed: false 
+                    collapsed: false
                 });
                 
             makePanel([c1, c2, c3]);
@@ -745,7 +760,8 @@ function() {
                 }),
                 c3 = new Ext.panel.Panel({
                     title: 'C'
-                }), newItem;
+                }),
+                newItem;
                 
             makePanel([c1, c2, c3]);
             newItem = panel.insert(0, {});
@@ -765,20 +781,22 @@ function() {
                     animate: false
                 },
                 items: [{
-                    title: 'A'    
+                    title: 'A'
                 }, {
                     title: 'B'
                 }, {
                     title: 'C'
                 }]
             });
+
             ct.remove(0);
             expect(ct.items.first().collapsed).toBe(false);
             ct.destroy();
-        });   
+        });
         
         it("should not attempt to expand any items when destroying the container", function() {
             var count = 0;
+
             var ct = new Ext.container.Container({
                 width: 200,
                 height: 200,
@@ -787,7 +805,7 @@ function() {
                     animate: false
                 },
                 items: [{
-                    title: 'A'   
+                    title: 'A'
                 }, {
                     title: 'B'
                 }, {
@@ -820,7 +838,7 @@ function() {
                 }, {
                     title: 'P3'
                 }]
-            }); 
+            });
             
             var outer = new Ext.panel.Panel({
                 width: 200,
@@ -834,7 +852,7 @@ function() {
             p.getComponent(1).expand();
             expect(p.getComponent(0).collapsed).toBe('top');
             outer.destroy();
-        });  
+        });
     });
     
     describe("ARIA attributes", function() {
@@ -884,6 +902,7 @@ function() {
                         var cb = function() {
                             // Let the stack unwind!
                             var setTimeout = jasmine._setTimeout;
+
                             setTimeout(done, 1);
                         };
                         

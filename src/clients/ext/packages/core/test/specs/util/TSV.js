@@ -30,11 +30,11 @@ topSuite("Ext.util.TSV", function() {
                     '3.141592653589793\t1\tfalse');
         });
 
-        it('should handle empty rows', function () {
+        it('should handle empty rows', function() {
             expect(TSV.encode([[]])).toBe('');
         });
 
-        it('should handle null cell', function () {
+        it('should handle null cell', function() {
             expect(TSV.encode([[null]])).toBe('');
         });
 
@@ -80,7 +80,7 @@ topSuite("Ext.util.TSV", function() {
                 undefined, null
             );
             
-            expect(result).toBe('3\tDeal with "High" priority items\t'+
+            expect(result).toBe('3\tDeal with "High" priority items\t' +
                                 '23 days\t10/31/2017 9:00');
         });
         
@@ -93,7 +93,7 @@ topSuite("Ext.util.TSV", function() {
                 [['3', 'Deal with "High" priority items', '23 days', '10/31/2017 9:00']]
             );
             
-            expect(result).toBe('3\tDeal with "High" priority items\t'+
+            expect(result).toBe('3\tDeal with "High" priority items\t' +
                                 '23 days\t10/31/2017 9:00');
         });
     });
@@ -128,7 +128,7 @@ topSuite("Ext.util.TSV", function() {
                 quote: null
             });
             
-            var result = TSV.decode('3\tDeal with "High" priority items\t'+
+            var result = TSV.decode('3\tDeal with "High" priority items\t' +
                                     '23 days\t10/31/2017 9:00\n');
             
             expect(result).toEqual([
@@ -137,7 +137,7 @@ topSuite("Ext.util.TSV", function() {
         });
 
         it("should should support non-quoted format via argument", function() {
-            var result = TSV.decode('3\tDeal with "High" priority items\t'+
+            var result = TSV.decode('3\tDeal with "High" priority items\t' +
                                     '23 days\t10/31/2017 9:00\n', undefined, null);
             
             expect(result).toEqual([
@@ -167,7 +167,7 @@ topSuite("Ext.util.TSV", function() {
             expect(TSV.decode(test2)).toEqual([
                 ['John', 'Doe', '42'],
                 ['', '', ''],
-                ['Jane', 'Henry', '31']                
+                ['Jane', 'Henry', '31']
             ]);
 
             // just one row of data with \r end variant

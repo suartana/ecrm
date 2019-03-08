@@ -269,12 +269,15 @@ Ext.define('Ext.mixin.FocusableContainer', {
 
         /**
          * @template
-         * An overrideable function which preprocesses all key events from within this FocusableContainer.
-         * The base implementation vetoes processing of key events from input fields by returning `undefined`.
-         * This may be overridden in subclasses with special requirements.
-         * @param {Ext.util.Event} e A keyboard event that is significant to the operation of a FocusableContainer.
-         * @returns {Ext.util.Event} The event if it is to be processed as a FocusableContainer navigation keystroke,
-         * or `undefined` if it is to be ignore by the FocusableContainer navigation machinery.
+         * An overrideable function which preprocesses all key events from within this
+         * FocusableContainer. The base implementation vetoes processing of key events from input
+         * fields by returning `undefined`. This may be overridden in subclasses with special
+         * requirements.
+         * @param {Ext.util.Event} e A keyboard event that is significant to the operation
+         * of a FocusableContainer.
+         * @returns {Ext.util.Event} The event if it is to be processed as a FocusableContainer
+         * navigation keystroke, or `undefined` if it is to be ignore by the FocusableContainer
+         * navigation machinery.
          */
         processFocusableContainerKeyEvent: function(e) {
             if (!Ext.fly(e.target).isInputField()) {
@@ -368,7 +371,7 @@ Ext.define('Ext.mixin.FocusableContainer', {
                 items, item, child, step, idx, i, len, allowDisabled;
         
             items = options.items || this.getFocusables();
-            step  = options.step != null ? options.step : 1;
+            step = options.step != null ? options.step : 1;
             child = options.child;
             
             // Some containers such as Menus need to support arrowing over disabled children
@@ -383,7 +386,7 @@ Ext.define('Ext.mixin.FocusableContainer', {
             step = step === true ? 1 : step === false ? -1 : step;
         
             len = items.length;
-            i   = step > 0 ? (idx < len ? idx + step : 0) : (idx > 0 ? idx + step : len - 1);
+            i = step > 0 ? (idx < len ? idx + step : 0) : (idx > 0 ? idx + step : len - 1);
         
             for (;; i += step) {
                 // We're looking for the first or last focusable child
@@ -433,7 +436,7 @@ Ext.define('Ext.mixin.FocusableContainer', {
                 }
             }
         
-            return null;
+            return null; // eslint-disable-line no-unreachable
         },
 
         onFocusEnter: function(e) {

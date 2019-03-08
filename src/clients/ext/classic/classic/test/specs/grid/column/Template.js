@@ -10,6 +10,7 @@ topSuite("Ext.grid.column.Template", ['Ext.grid.Panel'], function() {
     
     function getCellText(rowIdx, colIdx) {
         var cell = getCell(rowIdx, colIdx);
+
         return cell.querySelector(grid.getView().innerSelector).innerHTML;
     }
     
@@ -28,7 +29,7 @@ topSuite("Ext.grid.column.Template", ['Ext.grid.Panel'], function() {
                 tpl: 'Hello {field}',
                 text: 'Col',
                 dataIndex: 'field',
-                flex: 1    
+                flex: 1
             }],
             width: 400,
             height: 100,
@@ -48,7 +49,7 @@ topSuite("Ext.grid.column.Template", ['Ext.grid.Panel'], function() {
         });
     });
     
-    afterEach(function(){
+    afterEach(function() {
         Ext.destroy(grid, store);
         colRef = store = grid = null;
         Ext.undefine('spec.TestModel');

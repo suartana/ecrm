@@ -78,19 +78,20 @@ Ext.define("Ext.draw.sprite.Ellipse", {
         }
     },
 
-    updatePlainBBox: function (plain) {
+    updatePlainBBox: function(plain) {
         var attr = this.attr,
             cx = attr.cx,
             cy = attr.cy,
             rx = attr.rx,
             ry = attr.ry;
+
         plain.x = cx - rx;
         plain.y = cy - ry;
         plain.width = rx + rx;
         plain.height = ry + ry;
     },
 
-    updateTransformedBBox: function (transform) {
+    updateTransformedBBox: function(transform) {
         var attr = this.attr,
             cx = attr.cx,
             cy = attr.cy,
@@ -99,6 +100,7 @@ Ext.define("Ext.draw.sprite.Ellipse", {
             rxy = ry / rx,
             matrix = attr.matrix.clone(),
             xx, xy, yx, yy, dx, dy, w, h;
+
         matrix.append(1, 0, 0, rxy, 0, cy * (1 - rxy));
         xx = matrix.getXX();
         yx = matrix.getYX();
@@ -114,7 +116,7 @@ Ext.define("Ext.draw.sprite.Ellipse", {
         transform.height = h + h;
     },
 
-    updatePath: function (path, attr) {
+    updatePath: function(path, attr) {
         path.ellipse(attr.cx, attr.cy, attr.rx, attr.ry, attr.axisRotation, 0, Math.PI * 2, false);
     }
 });

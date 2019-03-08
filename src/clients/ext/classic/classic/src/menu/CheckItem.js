@@ -1,5 +1,6 @@
 /**
- * A menu item that contains a togglable checkbox by default, but that can also be a part of a radio group.
+ * A menu item that contains a togglable checkbox by default, but that can also be a part
+ * of a radio group.
  *
  *     @example
  *     Ext.create('Ext.menu.Menu', {
@@ -10,13 +11,13 @@
  *         items: [{
  *             xtype: 'menucheckitem',
  *             text: 'select all'
- *         },{
+ *         }, {
  *             xtype: 'menucheckitem',
  *             text: 'select specific'
- *         },{
+ *         }, {
  *             iconCls: 'add16',
  *             text: 'icon item'
- *         },{
+ *         }, {
  *             text: 'regular item'
  *         }]
  *     });
@@ -133,6 +134,7 @@ Ext.define('Ext.menu.CheckItem', {
 
         if (me.group) {
             Ext.menu.Manager.registerCheckable(me);
+
             if (me.initialConfig.hideOnClick !== false) {
                 me.hideOnClick = true;
             }
@@ -183,8 +185,8 @@ Ext.define('Ext.menu.CheckItem', {
     },
     
     /**
-     * Disables just the checkbox functionality of this menu Item. If this menu item has a submenu, that submenu
-     * will still be accessible
+     * Disables just the checkbox functionality of this menu Item. If this menu item has
+     * a submenu, that submenu will still be accessible
      */
     disableCheckChange: function() {
         var me = this,
@@ -193,10 +195,12 @@ Ext.define('Ext.menu.CheckItem', {
         if (checkEl) {
             checkEl.addCls(me.disabledCls);
         }
+
         // In some cases the checkbox will disappear until repainted, see: EXTJSIV-6412
         if (Ext.isIE8 && me.rendered) {
             me.el.repaint();
         }
+
         me.checkChangeDisabled = true;
     },
 
@@ -211,6 +215,7 @@ Ext.define('Ext.menu.CheckItem', {
         if (checkEl) {
             checkEl.removeCls(me.disabledCls);
         }
+
         me.checkChangeDisabled = false;
     },
     
@@ -221,10 +226,12 @@ Ext.define('Ext.menu.CheckItem', {
     onClick: function(e) {
         var me = this;
 
-        // If pointer type is touch, we should only toggle check status if there's no submenu or they tapped in the checkEl
-        // This is because there's no hover to invoke the submenu on touch devices, so a tap is needed to show it. That tap
-        // should not toggle unless it's on the checkbox.
-        if (!(me.disabled || me.checkChangeDisabled || me.checked && me.group || me.menu && "touch" === e.pointerType && !me.checkEl.contains(e.target))) {
+        // If pointer type is touch, we should only toggle check status if there's no submenu
+        // or they tapped in the checkEl. This is because there's no hover to invoke the submenu
+        // on touch devices, so a tap is needed to show it. That tap should not toggle
+        // unless it's on the checkbox.
+        if (!(me.disabled || me.checkChangeDisabled || me.checked && me.group ||
+            me.menu && "touch" === e.pointerType && !me.checkEl.contains(e.target))) {
             me.setChecked(!me.checked);
 
             // Clicked using SPACE or ENTER just un-checks.
@@ -233,6 +240,7 @@ Ext.define('Ext.menu.CheckItem', {
                 return false;
             }
         }
+
         return me.callParent([e]);
     },
 
@@ -271,12 +279,14 @@ Ext.define('Ext.menu.CheckItem', {
             ariaDom = me.ariaEl.dom,
             checkedConfigure = me.checkedConfigure;
 
-        if (me.checked !== checked && (suppressEvents || me.fireEvent('beforecheckchange', me, checked) !== false)) {
+        if (me.checked !== checked &&
+            (suppressEvents || me.fireEvent('beforecheckchange', me, checked) !== false)) {
             if (el) {
                 if (checked) {
                     el.addCls(checkedCls);
                     el.removeCls(uncheckedCls);
-                } else {
+                }
+                else {
                     el.addCls(uncheckedCls);
                     el.removeCls(checkedCls);
                 }

@@ -6,22 +6,22 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
         Ext.define('spec.SomeModel', {
             extend: 'Ext.data.Model',
             fields: [
-               {name: 'floater', type: 'float'},
-               {name: 'id'},
-               {name: 'totalProp', type: 'integer'},
-               {name: 'bool', type: 'boolean'},
-               {name: 'msg'}
+               { name: 'floater', type: 'float' },
+               { name: 'id' },
+               { name: 'totalProp', type: 'integer' },
+               { name: 'bool', type: 'boolean' },
+               { name: 'msg' }
             ]
         });
         
         Ext.define('spec.MapModel', {
             extend: 'Ext.data.Model',
             fields: [
-               {name: 'a', mapping: 1},
-               {name: 'b', mapping: 2},
-               {name: 'c', mapping: 3},
-               {name: 'd', mapping: 4},
-               {name: 'e', mapping: 0}
+               { name: 'a', mapping: 1 },
+               { name: 'b', mapping: 2 },
+               { name: 'c', mapping: 3 },
+               { name: 'd', mapping: 4 },
+               { name: 'e', mapping: 0 }
             ]
         });
 
@@ -36,7 +36,7 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
         records = reader.readRecords(data);
     });
     
-    afterEach(function(){
+    afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.SomeModel');
@@ -57,11 +57,13 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
         expect(recData.msg).toEqual(data[0][4]);
     });
     
-    it("should work with custom index mappings", function(){
+    it("should work with custom index mappings", function() {
         reader = new Ext.data.reader.Array({
             model: 'spec.MapModel'
         });
+        
         records = reader.readRecords(data);
+        
         var recData = records.getRecords()[0].getData();
         
         expect(recData.a).toBe(1);

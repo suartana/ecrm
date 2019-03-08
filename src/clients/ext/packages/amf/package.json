@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-amf",
     "SenchaExtName": "@sencha/ext-amf",
     "SenchaExtReactName": "@sencha/ext-react-amf",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "amf",
         "namespace": "Ext",
@@ -17,7 +17,7 @@
         "creator": "Sencha",
         "summary": "AMF Direct support",
         "detailedDescription": "Use AMF-based server (e.g. BlazeDS, Coldfusion) as data sources for grid. Also allows making RMI calls to the server using Direct.",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${framework.dir}/build/packages/${package.name}",

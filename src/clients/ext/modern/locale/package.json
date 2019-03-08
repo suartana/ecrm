@@ -4,7 +4,7 @@
     "ext-name": "@extjs/ext-modern-locale",
     "SenchaExtName": "@sencha/ext-modern-locale",
     "SenchaExtReactName": "@sencha/ext-react-modern-locale",
-    "version": "6.6.0.258",
+    "version": "6.7.0.210",
     "sencha": {
         "name": "locale",
         "namespace": "Ext",
@@ -17,7 +17,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Modern toolkit locale",
         "detailedDescription": "Ext JS Modern toolkit locale for localization to a local language",
-        "version": "6.6.0.258",
+        "version": "6.6.0",
         "compatVersion": "6.6.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

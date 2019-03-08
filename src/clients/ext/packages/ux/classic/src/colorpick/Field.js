@@ -10,7 +10,7 @@
  *          value: '#993300',  // initial selected color
  *
  *          listeners : {
- *              change: function (field, color) {
+ *              change: function(field, color) {
  *                  console.log('New color: ' + color);
  *              }
  *          }
@@ -85,7 +85,7 @@ Ext.define('Ext.ux.colorpick.Field', {
      * @param {String} previousColor The previous color value.
      */
     
-    initComponent: function () {
+    initComponent: function() {
         var me = this;
         
         me.callParent();
@@ -95,14 +95,14 @@ Ext.define('Ext.ux.colorpick.Field', {
     // NOTE: Since much of the logic of a picker class is overriding methods from the
     // base class, we don't bother to split out the small remainder as a controller.
 
-    afterRender: function () {
+    afterRender: function() {
         this.callParent();
 
         this.updateValue(this.value);
     },
 
     // override as required by parent pickerfield
-    createPicker: function () {
+    createPicker: function() {
         var me = this,
             popup = me.getPopup(),
             picker;
@@ -130,30 +130,30 @@ Ext.define('Ext.ux.colorpick.Field', {
     },
 
     // When the Ok button is clicked on color picker, preserve the previous value
-    onColorPickerOK: function (colorPicker) {
+    onColorPickerOK: function(colorPicker) {
         this.setColor(colorPicker.getColor());
 
         this.collapse();
     },
 
-    onColorPickerCancel: function () {
+    onColorPickerCancel: function() {
         this.collapse();
     },
 
-    onExpand: function () {
+    onExpand: function() {
         var color = this.getColor();
 
         this.colorPicker.setPreviousColor(color);
     },
     
-    onHexChange: function (field) {
+    onHexChange: function(field) {
         if (field.validate()) {
             this.setValue(field.getValue());
         }
     },
 
     // Expects value formatted as per "format" config
-    setValue: function (color) {
+    setValue: function(color) {
         var me = this;
         
         if (Ext.ux.colorpick.ColorUtils.isValid(color)) {
@@ -168,7 +168,7 @@ Ext.define('Ext.ux.colorpick.Field', {
     },
 
     // Sets this.format and color picker's setFormat()
-    updateFormat: function (format) {
+    updateFormat: function(format) {
         var cp = this.colorPicker;
 
         if (cp) {
@@ -176,7 +176,7 @@ Ext.define('Ext.ux.colorpick.Field', {
         }
     },
 
-    updateValue: function (color) {
+    updateValue: function(color) {
         var me = this,
             c;
 
@@ -200,7 +200,7 @@ Ext.define('Ext.ux.colorpick.Field', {
         }
     },
     
-    validator: function (val) {
+    validator: function(val) {
         if (!Ext.ux.colorpick.ColorUtils.isValid(val)) {
             return this.invalidText;
         }

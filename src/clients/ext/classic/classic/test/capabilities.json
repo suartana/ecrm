@@ -1,60 +1,74 @@
 [
     {
+        "platform": "Windows 10",
+        "browserName": "chrome",
+        "version": "latest",
+        "chunks": 10,
+        "remoteOptions": {
+            "queueSizeThreshold": 500
+        }
+    },
+    {
+        "platform": "Windows 10",
+        "browserName": "firefox",
+        "version": "latest",
+        "chunks": 10,
+        "remoteOptions": {
+            "queueSizeThreshold": 500
+        }
+    },
+    {
         "platform": "Windows 7",
         "browserName": "internet explorer",
         "version": "8",
         "prerun": {
-            "executable": "https://qa.sencha.com/js-timeout-fix.bat"
+            "executable": "http://aria-test.sencha.com/aria/js-fix-ie8.bat"
         },
         "enablePersistentHover": false,
-        "chunks": 10
+        "chunks": 10,
+        "pingTimeout": 60000,
+        "remoteOptions": {
+            "queueSizeThreshold": 400
+        }
     },
     {
         "platform": "Windows 7",
         "browserName": "internet explorer",
         "version": "11",
         "enablePersistentHover": false,
-        "chunks": 7
-    },
-    {
-        "platformName": "iOS",
-        "browserName": "Safari",
-        "platformVersion": "11.2",
-        "appiumVersion": "1.8.0",
-        "deviceName": "iPad Simulator",
-        "deviceOrientation": "landscape",
-        "displayName": "iOS 11.2@Safari",
-        "chunks": 10
+        "chunks": 10,
+        "remoteOptions": {
+            "queueSizeThreshold": 400
+        }
     },
     {
         "browserName": "MicrosoftEdge",
         "platform": "Windows 10",
         "version": "latest",
         "enablePersistentHover": false,
-        "chunks": 10
+        "chunks": 10,
+        "remoteOptions": {
+            "queueSizeThreshold": 500
+        }
     },
     {
         "platform": "OS X 10.11",
         "browserName": "safari",
-        "version": "9",
-        "chunks": 5
+        "version": "9.0",
+        "chunks": 10,
+        "pingTimeout": 60000,
+        "remoteOptions": {
+            "queueSizeThreshold": 500
+        }
     },
     {
-        "platform": "OS X 10.12",
+        "platform": "macOS 10.13",
         "browserName": "safari",
-        "version": "11",
-        "chunks": 7
-    },
-    {
-        "platform": "Windows 10",
-        "browserName": "firefox",
-        "version": "latest",
-        "chunks": 5
-    },
-    {
-        "platform": "Windows 10",
-        "browserName": "chrome",
-        "version": "latest",
-        "chunks": 5
+        "version": "11.1",
+        "pingTimeout": 60000,
+        "chunks": 10,
+        "remoteOptions": {
+            "queueSizeThreshold": 500
+        }
     }
 ]

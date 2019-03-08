@@ -55,6 +55,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
         loadSpy.andCallFake(function() {
             var cb = arguments[1],
                 scope = arguments[2];
+
             cb.call(scope, result, trans);
         });
     }
@@ -95,8 +96,19 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
         loadSpy = loadSpy2 = submitSpy = action = provider = window.spec = null;
     });
 
+    describe("alternate class name", function() {
+        it("should have Ext.form.Action.DirectLoad as the alternate class name", function() {
+            expect(Ext.form.action.DirectLoad.prototype.alternateClassName).toEqual("Ext.form.Action.DirectLoad");
+        });
+
+        it("should allow the use of Ext.form.Action.DirectLoad", function() {
+            expect(Ext.form.Action.DirectLoad).toBeDefined();
+        });
+    });
+
     it("should be registered in the action manager under the alias 'formaction.directload'", function() {
         var inst = Ext.ClassManager.instantiateByAlias('formaction.directload', {});
+
         expect(inst instanceof Ext.form.action.DirectLoad).toBeTruthy();
     });
 
@@ -159,7 +171,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
             });
             
             action.run();
-            expect(action.form.api.load.mostRecentCall.args[0]).toEqual({foo: 'bar'});
+            expect(action.form.api.load.mostRecentCall.args[0]).toEqual({ foo: 'bar' });
         });
 
         it("should pass the param values as separate arguments in the 'paramOrder' order if specified", function() {
@@ -179,6 +191,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
             action.run();
             
             var args = action.form.api.load.mostRecentCall.args;
+
             expect(args[0]).toEqual('foo');
             expect(args[1]).toEqual('bar');
         });
@@ -221,6 +234,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
             action.run();
             
             var args = action.form.api.load.mostRecentCall.args;
+
             expect(typeof args[args.length - 3]).toEqual('function');
             expect(args[args.length - 2]).toBe(action);
         });
@@ -277,21 +291,21 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
             expect(action.form.afterAction).toHaveBeenCalledWith(action, false);
         });
 
-        //causes
+        // causes
         it("should fail if the callback is passed an exception with type=Ext.direct.Manager.exceptions.SERVER", function() {
-            createActionWithCallbackArgs({}, {}, {type: Ext.direct.Manager.exceptions.SERVER});
+            createActionWithCallbackArgs({}, {}, { type: Ext.direct.Manager.exceptions.SERVER });
             action.run();
             expect(action.failureType).toEqual(Ext.form.action.Action.LOAD_FAILURE);
         });
 
         it("should fail if the result object does not have success=true", function() {
-            createActionWithCallbackArgs({}, {success: false, data: {}}, {});
+            createActionWithCallbackArgs({}, { success: false, data: {} }, {});
             action.run();
             expect(action.failureType).toEqual(Ext.form.action.Action.LOAD_FAILURE);
         });
 
         it("should fail if the result object does not have a data member", function() {
-            createActionWithCallbackArgs({}, {success: true}, {});
+            createActionWithCallbackArgs({}, { success: true }, {});
             action.run();
             expect(action.failureType).toEqual(Ext.form.action.Action.LOAD_FAILURE);
         });
@@ -299,7 +313,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
 
     describe("load success", function() {
         beforeEach(function() {
-            createActionWithCallbackArgs({}, {success: true, data: {foo: 'bar'}}, {});
+            createActionWithCallbackArgs({}, { success: true, data: { foo: 'bar' } }, {});
         });
 
         it("should call the BasicForm's clearInvalid method", function() {
@@ -311,7 +325,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
         it("should call the BasicForm's setValues method with the result data object", function() {
             spyOn(action.form, 'setValues');
             action.run();
-            expect(action.form.setValues).toHaveBeenCalledWith({foo: 'bar'});
+            expect(action.form.setValues).toHaveBeenCalledWith({ foo: 'bar' });
         });
 
         it("should invoke the BasicForm's afterAction method with a true success param", function() {

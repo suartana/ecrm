@@ -132,7 +132,7 @@ Ext.define('Ext.grid.CellEditor', {
         var me = this,
             location = me.$activeLocation,
             value = me.getValue(),
-            record, dataIndex, row, grid;
+            record, dataIndex, row, grid, sticky;
 
         me.callParent([remainVisible, cancelling]);
 
@@ -156,7 +156,13 @@ Ext.define('Ext.grid.CellEditor', {
 
             if (!remainVisible) {
                 row = location.row;
-                grid.stickItem(row, null);
+                sticky = !!row.$sticky;
+
+                if (sticky) {
+                    grid.stickItem(row, null);
+                    grid.ensureVisible(location.record,
+                        { column: location.columnIndex, focus: true });
+                }
 
                 me.$stickyVisibility = me.$activeLocation = me.$activeRow = me.$activeGrid = null;
                 me.editingPlugin.editing = false;

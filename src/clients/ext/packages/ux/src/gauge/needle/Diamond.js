@@ -3,8 +3,10 @@ Ext.define('Ext.ux.gauge.needle.Diamond', {
     alias: 'gauge.needle.diamond',
 
     config: {
-        path: function (ir, or) {
-            return or - ir > 10 ? 'M0,' + ir + ' L-4,' + (ir + 5) + ' L0,' + or + ' L4,' + (ir + 5) + ' Z' : '';
+        path: function(ir, or) {
+            return or - ir > 10
+                ? 'M0,' + ir + ' L-4,' + (ir + 5) + ' L0,' + or + ' L4,' + (ir + 5) + ' Z'
+                : '';
         }
     }
 });

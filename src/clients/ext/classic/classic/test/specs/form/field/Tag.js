@@ -1,5 +1,3 @@
-/* global Ext, expect, jasmine */
-
 topSuite("Ext.form.field.Tag",
     ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.data.ArrayStore',
      'Ext.app.ViewModel'],
@@ -38,9 +36,11 @@ function() {
 
     function clickTag(id, isClose) {
         var tag = getTag(id);
+
         if (isClose) {
             tag = Ext.fly(tag).down(tagField.tagItemCloseSelector, true);
         }
+
         jasmine.fireMouseEvent(tag, 'click');
     }
 
@@ -54,6 +54,7 @@ function() {
                 value: i
             });
         }
+
         return data;
     }
 
@@ -65,6 +66,7 @@ function() {
         if (Ext.isNumber(data)) {
             data = makeData(data);
         }
+
         return new Ext.data.Store({
             model: Model,
             data: data,
@@ -76,6 +78,7 @@ function() {
         if (theStore !== null) {
             store = theStore || makeStore();
         }
+
         tagField = new Ext.form.field.Tag(Ext.apply({
             store: store,
             renderTo: Ext.getBody(),
@@ -92,11 +95,13 @@ function() {
 
     function getRecordByTag(tag) {
         var internalId = parseInt(tag.getAttribute('data-recordId'), 10);
+
         return tagField.store.getByInternalId(internalId);
     }
 
     function expectValue(values) {
         var tags = tagField.getEl().query(tagField.tagItemSelector);
+
         expect(tagField.getValue()).toEqual(values);
         expect(tags.length).toBe(values.length);
         Ext.Array.forEach(values, function(value, i) {
@@ -112,6 +117,7 @@ function() {
         for (i = 0; i < len; ++i) {
             tag = tags[i];
             rec = getRecordByTag(tag);
+
             if (rec.get(tagField.valueField) === id) {
                 return tag;
             }
@@ -134,6 +140,7 @@ function() {
     function clickListItem(rec) {
         tagField.expand();
         var node = tagField.getPicker().getNode(rec);
+
         jasmine.fireMouseEvent(node, 'click');
     }
 
@@ -148,6 +155,7 @@ function() {
 
         it("should accept a store instance", function() {
             var s = makeStore();
+
             makeField(null, s);
             expect(tagField.getStore()).toBe(s);
         });
@@ -224,6 +232,7 @@ function() {
 
             it("should accept a single record", function() {
                 var s = makeStore();
+
                 makeField({
                     value: s.getAt(9)
                 }, s);
@@ -232,6 +241,7 @@ function() {
 
             it("should accept an array of records", function() {
                 var s = makeStore();
+
                 makeField({
                     value: [s.getAt(4), s.getAt(8), s.getAt(13)]
                 }, s);
@@ -253,6 +263,7 @@ function() {
                         value: [1, 2]
                     }
                 });
+
                 makeField({
                     viewModel: vm,
                     bind: '{value}'
@@ -295,6 +306,7 @@ function() {
 
             it("should accept a single record", function() {
                 var s = makeStore();
+
                 makeFieldWithSpy(null, s);
                 tagField.setValue(s.getAt(9));
                 expectValue([10]);
@@ -303,6 +315,7 @@ function() {
 
             it("should accept an array of records", function() {
                 var s = makeStore();
+
                 makeFieldWithSpy(null, s);
                 tagField.setValue([s.getAt(4), s.getAt(8), s.getAt(13)]);
                 expectValue([5, 9, 14]);
@@ -326,8 +339,8 @@ function() {
             });
 
 
-            it("should accept an array and use the last value if multiSelect: false", function () {
-                makeField({multiSelect: false});
+            it("should accept an array and use the last value if multiSelect: false", function() {
+                makeField({ multiSelect: false });
                 tagField.setValue([1, 2]);
 
                 // multiSelect: false should return just value, not an Array
@@ -513,11 +526,11 @@ function() {
                 it("should erase the inputEl when selecting a typed value", function() {
                     doTyping('Item1');
                     tagField.inputEl.focus();
-                    waitsFor(function(){
+                    waitsFor(function() {
                         return tagField.isExpanded;
                     });
 
-                    runs(function(){
+                    runs(function() {
                         jasmine.fireKeyEvent(tagField.inputEl, 'keydown', 13);
                         expect(tagField.inputEl.dom.value).toBe('');
                     });
@@ -526,11 +539,11 @@ function() {
                 it("should not erase the inputEl when selecting a typed value that doesn't match", function() {
                     doTyping('Foo');
                     tagField.inputEl.focus();
-                    waitsFor(function(){
+                    waitsFor(function() {
                         return !tagField.isExpanded;
                     });
 
-                    runs(function(){
+                    runs(function() {
                         jasmine.fireKeyEvent(tagField.inputEl, 'keydown', 13);
                         expect(tagField.inputEl.dom.value).toBe('Foo');
                     });
@@ -546,20 +559,20 @@ function() {
             });
         });
 
-        describe("emptyText", function () {
-            it("should display empty text upon rendering with no value", function () {
+        describe("emptyText", function() {
+            it("should display empty text upon rendering with no value", function() {
                 makeField();
                 expect(tagField.inputEl).toHaveCls(tagField.emptyCls);
             });
 
-            it("should not display empty text with a value when multiSelect: false", function () {
-               makeField({multiSelect: false});
+            it("should not display empty text with a value when multiSelect: false", function() {
+               makeField({ multiSelect: false });
                tagField.setValue(1);
                expect(tagField.inputEl).not.toHaveCls(tagField.emptyCls);
             });
 
-            it("should not display empty text with a value when multiSelect: true", function () {
-                makeField({multiSelect: false});
+            it("should not display empty text with a value when multiSelect: true", function() {
+                makeField({ multiSelect: false });
                 tagField.setValue([1, 2]);
                 expect(tagField.inputEl).not.toHaveCls(tagField.emptyCls);
             });
@@ -580,6 +593,7 @@ function() {
                 function expectContent(id, content) {
                     var tag = getTag(id),
                         selector = '.' + tagField.tagItemTextCls;
+
                     expect(Ext.fly(tag).down(selector, true)).hasHTML(content);
                 }
 
@@ -635,6 +649,7 @@ function() {
             describe("tag tip", function() {
                 function expectTip(id, content) {
                     var tip = getTag(id).getAttribute('data-qtip') || '';
+
                     expect(tip).toBe(content);
                 }
 
@@ -699,6 +714,7 @@ function() {
 
                 it("should not remove the tag when backspace is pressed and there is text in the field, cursor at the end", function() {
                     var dom = tagField.inputEl.dom;
+
                     dom.value = 'asdf';
                     // Forces the cursor to the end
                     tagField.focus([4, 4]);
@@ -709,6 +725,7 @@ function() {
 
                 it("should not remove the tag when backspace is pressed and there is text in the field, cursor at the beginning", function() {
                     var dom = tagField.inputEl.dom;
+
                     dom.value = 'asdf';
                     tagField.focus();
                     fireInputKey(E.BACKSPACE);
@@ -723,6 +740,7 @@ function() {
 
                 it("should not remove the tag when delete is pressed and there is text in the field", function() {
                     var dom = tagField.inputEl.dom;
+
                     dom.value = 'asdf';
                     // Forces the cursor to the end
                     tagField.focus([4, 4]);
@@ -763,6 +781,7 @@ function() {
                     for (var i = 0; i <= 20; ++i) {
                         fireInputKey(E.LEFT);
                     }
+
                     expectSelected(6);
                 });
 
@@ -975,8 +994,8 @@ function() {
                 });
             });
 
-            describe('clicking the close icon', function () {
-                it('should remove an item', function () {
+            describe('clicking the close icon', function() {
+                it('should remove an item', function() {
                     focusAndWait(tagField);
 
                     runs(function() {
@@ -989,7 +1008,7 @@ function() {
                     });
                 });
 
-                it('should be able to remove an item when used as an editor', function () {
+                it('should be able to remove an item when used as an editor', function() {
                     // See EXTJS-17686.
                     var grid, tag;
 
@@ -1115,6 +1134,7 @@ function() {
                     stacked: true
                 });
                 var height = tagField.getHeight();
+
                 tagField.addValue(2);
                 expect(tagField.getHeight()).toBeGreaterThan(height);
 
@@ -1138,6 +1158,7 @@ function() {
                 });
 
                 var height = tagField.getHeight();
+
                 tagField.removeValue(1);
                 expect(tagField.getHeight()).toBeLessThan(height);
 
@@ -1162,6 +1183,7 @@ function() {
                     stacked: false
                 });
                 var height = tagField.getHeight();
+
                 tagField.addValue([2, 3]);
                 expect(tagField.getHeight()).toBe(height);
             });
@@ -1180,6 +1202,7 @@ function() {
                 for (i = 0; i < toWrap; ++i) {
                     tagField.addValue(i + 2);
                 }
+
                 expect(tagField.getHeight()).toBeGreaterThan(height);
 
 
@@ -1313,11 +1336,12 @@ function() {
                 tagField.inputEl.dom.value = '200';
 
                 // Programmatic blur fails on IEs. Focus then remove an input field
-                Ext.getBody().createChild({tag: 'input', type: 'text'}).focus().remove();
+                Ext.getBody().createChild({ tag: 'input', type: 'text' }).focus().remove();
             });
             jasmine.waitAWhile();
             runs(function() {
                 var v = tagField.getValue();
+
                 // The new value should have been added to the value list.
                 expect(v.length).toBe(4);
                 expect(v[3]).toBe('200');
@@ -1344,7 +1368,7 @@ function() {
     });
 
     describe("allowBlank: false", function() {
-        beforeEach(function () {
+        beforeEach(function() {
             makeField({
                 allowBlank: false
             });
@@ -1356,7 +1380,7 @@ function() {
             expect(tagField.isValid()).toBe(true);
         });
 
-        it('should not show in the errors list', function () {
+        it('should not show in the errors list', function() {
             clickListItem(0);
             expect(tagField.getErrors().length).toBe(0);
         });
@@ -1450,6 +1474,7 @@ function() {
                 layout: 'hbox',
                 items: tagField
             });
+
             tagField.setValue([1, 4, 7, 9]);
             p.expand(false);
             expect(p.getHeight()).toBe(tagField.getHeight());
@@ -1470,9 +1495,11 @@ function() {
 
             tagField.expand();
             var beforeTop = picker.getBox().top;
+
             expect(beforeTop).toBe(tagField.triggerWrap.getBox().bottom);
             clickListItem(store.getAt(0));
             var afterTop = picker.getBox().top;
+
             expect(afterTop).toBe(tagField.triggerWrap.getBox().bottom);
             expect(afterTop).toBeGreaterThan(beforeTop);
         });
@@ -1490,9 +1517,11 @@ function() {
 
             tagField.expand();
             var beforeTop = picker.getBox().top;
+
             expect(beforeTop).toBe(tagField.triggerWrap.getBox().bottom);
             tagField.setValue([1]);
             var afterTop = picker.getBox().top;
+
             expect(afterTop).toBe(tagField.triggerWrap.getBox().bottom);
             expect(afterTop).toBeLessThan(beforeTop);
         });
@@ -1542,9 +1571,9 @@ function() {
         });
     });
 
-    describe('grow', function () {
-        describe('growMax', function () {
-            it('should work', function () {
+    describe('grow', function() {
+        describe('growMax', function() {
+            it('should work', function() {
                 var i;
 
                 makeField({
@@ -1574,6 +1603,7 @@ function() {
 
         it("should not grow when set to false", function() {
             var i;
+
             makeField({
                 grow: false,
                 store: [
@@ -1608,6 +1638,7 @@ function() {
                 }
             });
             var proxy = tagField.getStore().getProxy();
+
             tagField.destroy();
             expect(proxy.destroyed).toBe(false);
         });

@@ -1,6 +1,6 @@
-describe('Ext.route.Handler', function () {
-    describe('fromRouteConfig', function () {
-        it('should create a handler instance', function () {
+topSuite('Ext.route.Handler', function() {
+    describe('fromRouteConfig', function() {
+        it('should create a handler instance', function() {
             var scope = {},
                 config = {
                     action: 'onAction',

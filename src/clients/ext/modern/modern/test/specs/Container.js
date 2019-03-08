@@ -3120,4 +3120,48 @@ function() {
            expect(ct.getActiveItem()).toBe(items[items.length - 1]);
         });
     });
+
+    describe('masked', function () {
+        var ct;
+
+        afterEach(function () {
+            ct.destroy();
+        });
+
+        it("should use an Ext.LoadMask when a string is provided", function () {
+            ct = new Ext.Container({
+                renderTo: Ext.getBody(),
+                masked: 'Foo'
+            });
+
+            var mask = ct.getMasked();
+
+            expect(mask instanceof Ext.LoadMask).toBe(true);
+            expect(mask.getMessage()).toBe('Foo');
+            expect(mask.isHidden()).toBe(false);
+        });
+
+        it("should use an Ext.Mask when true is provided", function () {
+            ct = new Ext.Container({
+                renderTo: Ext.getBody(),
+                masked: true
+            });
+
+            var mask = ct.getMasked();
+
+            expect(mask.$className).toBe('Ext.Mask');
+            expect(mask.isHidden()).toBe(false);
+        });
+
+        it("should produce a hidden mask when false is provided", function () {
+            ct = new Ext.Container({
+                renderTo: Ext.getBody(),
+                masked: false
+            });
+
+            var mask = ct.getMasked();
+
+            expect(mask.isHidden()).toBe(true);
+        });
+    });
 });

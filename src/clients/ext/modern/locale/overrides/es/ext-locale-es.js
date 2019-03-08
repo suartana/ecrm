@@ -4,8 +4,11 @@
 Ext.onReady(function() {
 
     if (Ext.Date) {
-        Ext.Date.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        
+        Ext.Date.monthNames = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+            "Octubre", "Noviembre", "Diciembre"
+        ];
+
         Ext.Date.defaultFormat = 'd/m/Y';
         Ext.Date.defaultTimeFormat = 'h:i a';
 
@@ -29,14 +32,25 @@ Ext.onReady(function() {
         };
 
         Ext.Date.getMonthNumber = function(name) {
-            return Ext.Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+            return Ext.Date.monthNumbers[
+            name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
         };
 
-        Ext.Date.dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        Ext.Date.dayNames = [
+            "Domingo", "Lunes", "Martes", "Miércoles", "Jueves",
+            "Viernes", "Sábado"
+        ];
 
         Ext.Date.getShortDayName = function(day) {
-            if (day == 3) return "Mié";
-            if (day == 6) return "Sáb";
+
+            if (day === 3) {
+                return "Mié";
+            }
+
+            if (day === 6) {
+                return "Sáb";
+            }
+
             return Ext.Date.dayNames[day].substring(0, 3);
         };
 
@@ -45,11 +59,11 @@ Ext.onReady(function() {
 
         // This will match am or a.m.
         Ext.Date.parseCodes.a = Ext.Date.parseCodes.A = {
-            g:1,
-            c:"if (/(a\\.?m\\.?)/i.test(results[{0}])) {\n"
-                + "if (!h || h == 12) { h = 0; }\n"
-                + "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
-            s:"(A\\.?M\\.?|P\\.?M\\.?|a\\.?m\\.?|p\\.?m\\.?)",
+            g: 1,
+            c: "if (/(a\\.?m\\.?)/i.test(results[{0}])) {\n" +
+                "if (!h || h == 12) { h = 0; }\n" +
+                "} else { if (!h || h < 12) { h = (h || 0) + 12; }}",
+            s: "(A\\.?M\\.?|P\\.?M\\.?|a\\.?m\\.?|p\\.?m\\.?)",
             calcAtEnd: true
         };
 
@@ -150,7 +164,7 @@ Ext.define('Ext.locale.es.panel.Date', {
 Ext.define('Ext.locale.es.panel.Collapser', {
     override: 'Ext.panel.Collapser',
 
-    config:{
+    config: {
         collapseToolText: "Contraer panel",
         expandToolText: "Ampliar el panel"
     }
@@ -197,10 +211,10 @@ Ext.define('Ext.locale.es.Dialog', {
     }
 });
 
-Ext.define("Ext.locale.es.field.FileButton", { 
-    override: "Ext.field.FileButton", 
+Ext.define("Ext.locale.es.field.FileButton", {
+    override: "Ext.field.FileButton",
 
-    config:{
+    config: {
         text: 'Vistazo...'
     }
 });
@@ -208,7 +222,7 @@ Ext.define("Ext.locale.es.field.FileButton", {
 Ext.define('Ext.locale.es.dataview.List', {
     override: 'Ext.dataview.List',
 
-    config:{
+    config: {
         loadingText: 'Cargando...'
     }
 });
@@ -224,7 +238,7 @@ Ext.define('Ext.locale.es.dataview.EmptyText', {
 Ext.define('Ext.locale.es.dataview.Abstract', {
     override: 'Ext.dataview.Abstract',
 
-    config:{
+    config: {
         loadingText: 'Cargando...'
     }
 });
@@ -232,9 +246,9 @@ Ext.define('Ext.locale.es.dataview.Abstract', {
 Ext.define("Ext.locale.es.LoadMask", {
     override: "Ext.LoadMask",
 
-    config:{
+    config: {
         message: 'Cargando...'
-    } 
+    }
 });
 
 Ext.define('Ext.locale.es.dataview.plugin.ListPaging', {
@@ -249,7 +263,7 @@ Ext.define('Ext.locale.es.dataview.plugin.ListPaging', {
 Ext.define("Ext.locale.es.dataview.DataView", {
     override: "Ext.dataview.DataView",
 
-    config:{
+    config: {
         emptyText: ""
     }
 });
@@ -264,7 +278,7 @@ Ext.define('Ext.locale.es.field.Date', {
 Ext.define("Ext.locale.es.grid.menu.SortAsc", {
     override: "Ext.grid.menu.SortAsc",
 
-    config:{
+    config: {
         text: "Orden ascendente"
     }
 });
@@ -272,7 +286,7 @@ Ext.define("Ext.locale.es.grid.menu.SortAsc", {
 Ext.define("Ext.locale.es.grid.menu.SortDesc", {
     override: "Ext.grid.menu.SortDesc",
 
-    config:{
+    config: {
         text: "Orden descendiente"
     }
 });
@@ -280,7 +294,7 @@ Ext.define("Ext.locale.es.grid.menu.SortDesc", {
 Ext.define("Ext.locale.es.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
-    config:{
+    config: {
         text: "Agrupar por este campo"
     }
 });
@@ -288,7 +302,7 @@ Ext.define("Ext.locale.es.grid.menu.GroupByThis", {
 Ext.define("Ext.locale.es.grid.menu.ShowInGroups", {
     override: "Ext.grid.menu.ShowInGroups",
 
-    config:{
+    config: {
         text: "Mostrar en grupos"
     }
 });
@@ -296,15 +310,15 @@ Ext.define("Ext.locale.es.grid.menu.ShowInGroups", {
 Ext.define("Ext.locale.es.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
-    config:{
+    config: {
         text: "Columnas"
     }
 });
 
-Ext.define('Ext.locale.es.data.validator.Presence',{
+Ext.define('Ext.locale.es.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
-    config:{
+    config: {
         message: 'Debe estar presente'
     }
 });
@@ -312,7 +326,7 @@ Ext.define('Ext.locale.es.data.validator.Presence',{
 Ext.define('Ext.locale.es.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
-    config:{
+    config: {
         message: 'Está en el formato incorrecto'
     }
 });
@@ -320,7 +334,7 @@ Ext.define('Ext.locale.es.data.validator.Format', {
 Ext.define('Ext.locale.es.data.validator.Email', {
     override: 'Ext.data.validator.Email',
 
-    config:{
+    config: {
         message: 'No es una dirección de correo electrónico válida'
     }
 });
@@ -328,7 +342,7 @@ Ext.define('Ext.locale.es.data.validator.Email', {
 Ext.define('Ext.locale.es.data.validator.Phone', {
     override: 'Ext.data.validator.Phone',
 
-    config:{
+    config: {
         message: 'No es un número de teléfono válido'
     }
 });
@@ -336,7 +350,7 @@ Ext.define('Ext.locale.es.data.validator.Phone', {
 Ext.define('Ext.locale.es.data.validator.Number', {
     override: 'Ext.data.validator.Number',
 
-    config:{
+    config: {
         message: 'No es un número válido'
     }
 });
@@ -344,14 +358,14 @@ Ext.define('Ext.locale.es.data.validator.Number', {
 Ext.define('Ext.locale.es.data.validator.Url', {
     override: 'Ext.data.validator.Url',
 
-    config:{
+    config: {
         message: 'No es una URL válida'
     }
 });
 
 Ext.define('Ext.locale.es.data.validator.Range', {
     override: 'Ext.data.validator.Range',
- 
+
     config: {
         nanMessage: 'Debe ser numérico',
         minOnlyMessage: 'Debe ser al menos {0}',
@@ -373,7 +387,7 @@ Ext.define('Ext.locale.es.data.validator.Bound', {
 
 Ext.define('Ext.locale.es.data.validator.CIDRv4', {
     override: 'Ext.data.validator.CIDRv4',
- 
+
     config: {
         message: 'No es un bloque CIDR válido'
     }
@@ -381,7 +395,7 @@ Ext.define('Ext.locale.es.data.validator.CIDRv4', {
 
 Ext.define('Ext.locale.es.data.validator.CIDRv6', {
     override: 'Ext.data.validator.CIDRv6',
- 
+
     config: {
         message: 'No es un bloque CIDR válido'
     }
@@ -389,7 +403,7 @@ Ext.define('Ext.locale.es.data.validator.CIDRv6', {
 
 Ext.define('Ext.locale.es.data.validator.Currency', {
     override: 'Ext.data.validator.Currency',
- 
+
     config: {
         message: 'No es una cantidad de moneda válida'
     }
@@ -398,7 +412,7 @@ Ext.define('Ext.locale.es.data.validator.Currency', {
 
 Ext.define('Ext.locale.es.data.validator.DateTime', {
     override: 'Ext.data.validator.DateTime',
- 
+
     config: {
         message: 'No es una fecha y hora válidas'
     }
@@ -406,7 +420,7 @@ Ext.define('Ext.locale.es.data.validator.DateTime', {
 
 Ext.define('Ext.locale.es.data.validator.Exclusion', {
     override: 'Ext.data.validator.Exclusion',
- 
+
     config: {
         message: 'Es un valor que ha sido excluido'
     }
@@ -414,7 +428,7 @@ Ext.define('Ext.locale.es.data.validator.Exclusion', {
 
 Ext.define('Ext.locale.es.data.validator.IPAddress', {
     override: 'Ext.data.validator.IPAddress',
- 
+
     config: {
         message: 'No es una dirección IP válida'
     }
@@ -422,7 +436,7 @@ Ext.define('Ext.locale.es.data.validator.IPAddress', {
 
 Ext.define('Ext.locale.es.data.validator.Inclusion', {
     override: 'Ext.data.validator.Inclusion',
- 
+
     config: {
         message: 'No está en la lista de valores aceptables'
     }
@@ -430,7 +444,7 @@ Ext.define('Ext.locale.es.data.validator.Inclusion', {
 
 Ext.define('Ext.locale.es.data.validator.Time', {
     override: 'Ext.data.validator.Time',
- 
+
     config: {
         message: 'No es un momento válido'
     }
@@ -438,7 +452,7 @@ Ext.define('Ext.locale.es.data.validator.Time', {
 
 Ext.define('Ext.locale.es.data.validator.Date', {
     override: 'Ext.data.validator.Date',
- 
+
     config: {
         message: "No es una fecha válida"
     }
@@ -447,15 +461,54 @@ Ext.define('Ext.locale.es.data.validator.Date', {
 Ext.define('Ext.locale.es.data.validator.Length', {
     override: 'Ext.data.validator.Length',
 
-    config:{
+    config: {
         minOnlyMessage: 'La longitud debe ser al menos {0}',
         maxOnlyMessage: 'La longitud no debe ser mayor que {0}',
         bothMessage: 'La longitud no debe estar entre {0} y {1}'
     }
 });
 
+Ext.define('Ext.locale.es.ux.colorpick.Selector', {
+    override: 'Ext.ux.colorpick.Selector',
+
+    okButtonText: 'OK',
+    cancelButtonText: 'Cancelar'
+});
+
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.es.Component", {	
+Ext.define("Ext.locale.es.Component", {
     override: "Ext.Component"
 });
 
+Ext.define("Ext.locale.es.grid.filters.menu.Base", {
+    override: "Ext.grid.filters.menu.Base",
+
+    config: {
+        text: "filtrar"
+    }
+});
+
+Ext.define("Ext.locale.es.grid.LockedGrid", {
+    override: "Ext.grid.LockedGrid",
+
+    config: {
+        columnMenu: {
+            items: {
+                region: {
+                    text: 'Región'
+                }
+            }
+        },
+        regions: {
+            left: {
+                menuLabel: 'Bloqueado (Izquierda)'
+            },
+            center: {
+                menuLabel: 'Desbloqueado'
+            },
+            right: {
+                menuLabel: 'Bloqueado (Derecha)'
+            }
+        }
+    }
+});

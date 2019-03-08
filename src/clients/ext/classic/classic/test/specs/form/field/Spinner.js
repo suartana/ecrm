@@ -19,6 +19,7 @@ topSuite("Ext.form.field.Spinner", function() {
         if (component) {
             component.destroy();
         }
+
         component = makeComponent = null;
     });
 
@@ -307,8 +308,10 @@ topSuite("Ext.form.field.Spinner", function() {
                 waitsFor(function() {
                     if (spinUpCount === spinUpsToDo) {
                         jasmine.fireKeyEvent(component.inputEl, 'keyup', Ext.event.Event.UP);
+
                         return true;
                     }
+
                     jasmine.fireKeyEvent(component.inputEl, 'keydown', Ext.event.Event.UP);
                 }, 'Spinner to fire all events', 5000);
 

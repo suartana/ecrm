@@ -1,4 +1,4 @@
-describe('Ext.Button_layout', function () {
+topSuite('Ext.Button_layout', [false, 'Ext.Button'], function () {
     var textHtml = '<span style="display:inline-block;width:50px;background:green;">&nbsp;</span>',
         iconCls = 'x-fa fa-star',
         width = null,

@@ -1,5 +1,3 @@
-/* global describe, expect, jasmine, Ext, MockAjaxManager, spyOn */
-
 topSuite("Ext.app.ViewModel", [
     'Ext.data.Store',
     'Ext.data.validator.*',
@@ -8,24 +6,28 @@ topSuite("Ext.app.ViewModel", [
 ], function() {
     var viewModel, scheduler, session, spy;
 
-    function bindDeepNotify (key, fn, scope, vm) {
+    function bindDeepNotify(key, fn, scope, vm) {
         vm = vm || viewModel;
 
         var bind = vm.bind(key, fn || spy, scope);
+        
         bind.deep = true;
         vm.notify();
+        
         return bind;
     }
 
-    function bindNotify (key, fn, scope, vm) {
+    function bindNotify(key, fn, scope, vm) {
         vm = vm || viewModel;
 
         var bind = vm.bind(key, fn || spy, scope);
+
         vm.notify();
+        
         return bind;
     }
 
-    function setNotify (key, value, vm) {
+    function setNotify(key, value, vm) {
         vm = vm || viewModel;
 
         vm.set(key, value);
@@ -42,29 +44,33 @@ topSuite("Ext.app.ViewModel", [
         viewModel.notify();
     }
 
-    function reset () {
+    function reset() {
         var spies = Ext.isArray(arguments[0]) ? arguments[0] : arguments,
             s;
 
         for (var i = 0, len = spies.length; i < len; ++i) {
             s = spies[i];
+            
             if (s) {
                 s.reset();
             }
         }
     }
 
-    function expectArgs (newVal, oldVal) {
+    function expectArgs(newVal, oldVal) {
         if (arguments.length === 1) {
             expectArgsForCall(spy.mostRecentCall, newVal);
-        } else {
+        }
+        else {
             expectArgsForCall(spy.mostRecentCall, newVal, oldVal);
         }
     }
 
     function expectArgsForCall(theCall, newVal, oldVal) {
         var args = theCall.args;
+        
         expect(args[0]).toBe(newVal);
+        
         if (arguments.length > 2) {
             expect(args[1]).toBe(oldVal);
         }
@@ -74,6 +80,7 @@ topSuite("Ext.app.ViewModel", [
         data = Ext.apply({
             id: id
         }, data);
+        
         return new Type(data, session);
     }
 
@@ -95,6 +102,7 @@ topSuite("Ext.app.ViewModel", [
             id: 'rootVM',
             session: session
         }, cfg));
+        
         scheduler = viewModel.getScheduler();
     }
 
@@ -112,6 +120,7 @@ topSuite("Ext.app.ViewModel", [
 
         Ext.data.Model.schema.setNamespace('spec');
         MockAjaxManager.addMethods();
+        
         spy = jasmine.createSpy();
     });
 
@@ -148,6 +157,7 @@ topSuite("Ext.app.ViewModel", [
 
             it("should leave a date value", function() {
                 var v = new Date();
+
                 expect(V.escape(v)).toBe(v);
             });
 
@@ -169,7 +179,8 @@ topSuite("Ext.app.ViewModel", [
                     f: {
                         g: '{bar}'
                     }
-                }, ret;
+                },
+                ret;
 
                 ret = V.escape(o);
                 expect(ret).not.toBe(o);
@@ -234,6 +245,7 @@ topSuite("Ext.app.ViewModel", [
              it("should be true for template bindings", function() {
                  createViewModel();
                  var b = viewModel.bind('Hello {foo}', Ext.emptyFn);
+
                  expect(b.isReadOnly()).toBe(true);
              });
 
@@ -243,6 +255,7 @@ topSuite("Ext.app.ViewModel", [
                      a: '{foo}',
                      b: '{bar}'
                  }, Ext.emptyFn);
+
                  expect(b.isReadOnly()).toBe(true);
              });
          });
@@ -251,6 +264,7 @@ topSuite("Ext.app.ViewModel", [
              it("should not be readOnly by default", function() {
                  createViewModel();
                  var b = viewModel.bind('{foo}', Ext.emptyFn);
+
                  expect(b.isReadOnly()).toBe(false);
              });
 
@@ -259,6 +273,7 @@ topSuite("Ext.app.ViewModel", [
                  var b = viewModel.bind('{foo}', Ext.emptyFn, null, {
                      single: true
                  });
+
                  expect(b.isReadOnly()).toBe(false);
              });
 
@@ -267,6 +282,7 @@ topSuite("Ext.app.ViewModel", [
                  var b = viewModel.bind('{foo}', Ext.emptyFn, null, {
                      twoWay: false
                  });
+
                  expect(b.isReadOnly()).toBe(true);
              });
          });
@@ -281,6 +297,7 @@ topSuite("Ext.app.ViewModel", [
                      }
                  });
                  var b = viewModel.bind('{foo}', Ext.emptyFn);
+
                  expect(b.isReadOnly()).toBe(true);
              });
 
@@ -300,6 +317,7 @@ topSuite("Ext.app.ViewModel", [
                  var b = viewModel.bind('{foo}', Ext.emptyFn, null, {
                      twoWay: false
                  });
+
                  expect(b.isReadOnly()).toBe(true);
              });
 
@@ -317,6 +335,7 @@ topSuite("Ext.app.ViewModel", [
                      }
                  });
                  var b = viewModel.bind('{foo}', Ext.emptyFn);
+
                  expect(b.isReadOnly()).toBe(false);
              });
          });
@@ -355,7 +374,9 @@ topSuite("Ext.app.ViewModel", [
                 var Cls = Ext.define(null, {
                     foo: 1
                 });
+
                 var o = new Cls();
+
                 viewModel.set('obj', o);
                 expect(viewModel.getData().obj).toBe(o);
             });
@@ -381,7 +402,7 @@ topSuite("Ext.app.ViewModel", [
             it("should be able to retrieve a value at the root", function() {
                 viewModel.set('foo', 1);
                 expect(viewModel.get('foo')).toBe(1);
-            }); 
+            });
 
             it("should descend into a path", function() {
                 viewModel.set({
@@ -392,7 +413,7 @@ topSuite("Ext.app.ViewModel", [
                     }
                 });
                 expect(viewModel.get('foo.bar.baz')).toBe(100);
-            }); 
+            });
 
             it("should return null if the value has not presented", function() {
                 expect(viewModel.get('something')).toBeNull();
@@ -410,7 +431,8 @@ topSuite("Ext.app.ViewModel", [
                 if (bindFirst) {
                     bindFn();
                     setFn();
-                } else {
+                }
+                else {
                     setFn();
                     bindFn();
                 }
@@ -447,6 +469,7 @@ topSuite("Ext.app.ViewModel", [
                     
                     it("should set an array", function() {
                         var arr = [18, 22, 13];
+
                         run(function() {
                             bindNotify('{scores}', spy);
                         }, function() {
@@ -457,6 +480,7 @@ topSuite("Ext.app.ViewModel", [
                     
                     it("should set a date", function() {
                         var d = new Date(1980, 0, 1);
+
                         run(function() {
                             bindNotify('{dob}', spy);
                         }, function() {
@@ -467,6 +491,7 @@ topSuite("Ext.app.ViewModel", [
                     
                     it("should set an object instance", function() {
                         var map = new Ext.util.HashMap();
+
                         run(function() {
                             bindNotify('{myMap}', spy);
                         }, function() {
@@ -487,10 +512,12 @@ topSuite("Ext.app.ViewModel", [
                             setNotify('age', 3);
                             setNotify('age', 5);
                         });
+                        
                         if (bindFirst) {
                             expectArgsForCall(spy.calls[0], 3, undefined);
                             expectArgsForCall(spy.calls[1], 5, 3);
-                        } else {
+                        }
+                        else {
                             expectArgs(5, undefined);
                         }
                     });
@@ -505,10 +532,13 @@ topSuite("Ext.app.ViewModel", [
                             setNotify('age', 3);
                             setNotify('age', 5);
                         });
+                        
                         expect(spy.callCount).toBe(1);
+                        
                         if (bindFirst) {
                             expectArgs(3, undefined);
-                        } else {
+                        }
+                        else {
                             expectArgs(5, undefined);
                         }
                     });
@@ -527,9 +557,11 @@ topSuite("Ext.app.ViewModel", [
                             });
                             setNotify('foo.bar', 2);
                         });
+                        
                         if (bindFirst) {
                             expect(spy.callCount).toBe(2);
-                        } else {
+                        }
+                        else {
                             expect(spy.mostRecentCall.args[0]).toEqual({
                                 bar: 2
                             });
@@ -546,6 +578,7 @@ topSuite("Ext.app.ViewModel", [
                                 name: 'Bar'
                             });
                         });
+                        
                         expectArgs('Bar', undefined);
                     });
 
@@ -557,6 +590,7 @@ topSuite("Ext.app.ViewModel", [
                                 name: 'Foo'
                             });
                         });
+                        
                         expectArgs('Foo', undefined);
                     });
 
@@ -578,11 +612,13 @@ topSuite("Ext.app.ViewModel", [
                                 }
                             });
                         });
+                        
                         expectArgs('val', undefined);
                     });
 
                     it("should be able to set mixes of values/objects", function() {
                         var city = jasmine.createSpy();
+                        
                         run(function() {
                             viewModel.bind('{user.name}', spy);
                             viewModel.bind('{user.address.city}', city);
@@ -595,6 +631,7 @@ topSuite("Ext.app.ViewModel", [
                                 }
                             });
                         });
+                        
                         expectArgs('Foo', undefined);
                         expectArgsForCall(city.mostRecentCall, 'Paris');
                     });
@@ -608,10 +645,12 @@ topSuite("Ext.app.ViewModel", [
                             setNotify('name', 'Foo');
                             setNotify('name', 'Bar');
                         });
+                        
                         if (bindFirst) {
-                            expectArgsForCall(spy.calls[0], 'Foo', undefined);   
-                            expectArgsForCall(spy.calls[1], 'Bar', 'Foo');   
-                        } else {
+                            expectArgsForCall(spy.calls[0], 'Foo', undefined);
+                            expectArgsForCall(spy.calls[1], 'Bar', 'Foo');
+                        }
+                        else {
                             expectArgs('Bar', undefined);
                         }
                     });
@@ -622,18 +661,21 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('name', 'X');
                         });
+                        
                         expect(spy.mostRecentCall.object).toBe(viewModel);
                     });
             
                     it("should use the passed scope", function() {
                         var o = {};
+                        
                         run(function() {
                             bindNotify('{name}', spy, o);
                         }, function() {
                             setNotify('name', 'X');
                         });
+                        
                         expect(spy.mostRecentCall.object).toBe(o);
-                    });    
+                    });
                 });
 
                 describe("timing of callbacks", function() {
@@ -643,45 +685,54 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('name', 'Foo');
                         });
+                        
                         spy.reset();
                         setNotify('name', 'Foo');
+                        
                         expect(spy).not.toHaveBeenCalled();
                     });
                     
                     it("should not trigger any parent nodes if the leaf value doesn't change", function() {
                         var inner = jasmine.createSpy();
+                        
                         run(function() {
                             viewModel.bind('{foo}', spy);
                             viewModel.bind('{foo.bar}', inner);
                         }, function() {
                             viewModel.set('foo.bar.baz.x', 'Foo');
                         });
+                        
                         notify();
                         reset(spy, inner);
                         setNotify('foo.bar.baz.x', 'Foo');
+                        
                         expect(spy).not.toHaveBeenCalled();
                         expect(inner).not.toHaveBeenCalled();
                     });
                     
                     it("should be able to bind twice to the same stub", function() {
                         var other = jasmine.createSpy();
+                        
                         run(function() {
                             bindNotify('{name}', spy);
                             bindNotify('{name}', other);
                         }, function() {
                             setNotify('name', 'A');
                         });
+                        
                         expectArgsForCall(spy.mostRecentCall, 'A', undefined);
                         expectArgsForCall(other.mostRecentCall, 'A', undefined);
                     });
                     
                     it("should trigger a new binding when there is a set pending", function() {
                         var other = jasmine.createSpy();
+                        
                         run(function() {
                             bindNotify('{name}', spy);
                         }, function() {
                             viewModel.set('name', 'A');
                         });
+                        
                         bindNotify('{name}', other);
                         expect(other).toHaveBeenCalled();
                     });
@@ -696,6 +747,7 @@ topSuite("Ext.app.ViewModel", [
                             viewModel.set('name', 'D');
                             notify();
                         });
+                        
                         expect(spy.callCount).toBe(1);
                         expectArgs('D', undefined);
                     });
@@ -706,11 +758,13 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('name', 'A');
                         });
+                        
                         viewModel.set('name', 'B');
                         viewModel.set('name', 'C');
                         viewModel.set('name', 'D');
                         viewModel.set('name', 'E');
                         notify();
+                        
                         expectArgs('E', 'A');
                     });
 
@@ -726,7 +780,8 @@ topSuite("Ext.app.ViewModel", [
                             setNotify('name', 'Foo');
                             expectArgs('Foo', undefined);
                         });
-                    } else {
+                    }
+                    else {
                         it("should trigger the binding initially if a value exists", function() {
                             viewModel.set('name', 'Foo');
                             bindNotify('{name}', spy);
@@ -743,6 +798,7 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('user.address.city', 'Sydney');
                         });
+                        
                         expectArgs('Sydney', undefined);
                     });
                     
@@ -756,6 +812,7 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('user.address.city', 'Berlin');
                         });
+                        
                         expectArgsForCall(city.mostRecentCall, 'Berlin', undefined);
                         expect(address.mostRecentCall.args[0]).toEqual({
                             city: 'Berlin'
@@ -774,6 +831,7 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('user.address.city', 'Jakarta');
                         });
+                        
                         expect(city).toHaveBeenCalled();
                         expect(address).toHaveBeenCalled();
                         expect(user).toHaveBeenCalled();
@@ -789,6 +847,7 @@ topSuite("Ext.app.ViewModel", [
                         }, function() {
                             setNotify('user.address.city', 'London');
                         });
+                        
                         expect(city).toHaveBeenCalled();
                         expect(user).toHaveBeenCalled();
                     });
@@ -803,6 +862,7 @@ topSuite("Ext.app.ViewModel", [
                             viewModel.set('user.address.country', 'Russia');
                             notify();
                         });
+                        
                         expect(spy.callCount).toBe(1);
                     });
                     
@@ -816,6 +876,7 @@ topSuite("Ext.app.ViewModel", [
                             viewModel.set('user.postalAddress.city', 'Baltimore');
                             notify();
                         });
+                        
                         expect(spy.callCount).toBe(1);
                     });
 
@@ -865,7 +926,8 @@ topSuite("Ext.app.ViewModel", [
                                     }
                                 });
                                 notify();
-                            });                        
+                            });
+                            
                             spy.reset();
                             setNotify('foo', null);
                             expectArgs(null, 1);
@@ -879,8 +941,10 @@ topSuite("Ext.app.ViewModel", [
                                 viewModel.set(getHierarchy(456));
                                 viewModel.set(getHierarchy(789));
                             });
+                            
                             notify();
                             expect(spy.callCount).toBe(1);
+                            
                             expectArgs(789);
                         });
 
@@ -890,11 +954,14 @@ topSuite("Ext.app.ViewModel", [
                             }, function() {
                                 viewModel.set(getHierarchy(123));
                             });
+                            
                             notify();
                             expectArgs(123);
+                            
                             viewModel.set(getHierarchy(456));
                             notify();
                             expectArgs(456);
+                            
                             viewModel.set(getHierarchy(789));
                             notify();
                             expectArgs(789);
@@ -910,11 +977,14 @@ topSuite("Ext.app.ViewModel", [
                                     foo: null
                                 });
                             });
+                            
                             notify();
+                            
                             if (bindFirst) {
                                 expect(spy.callCount).toBe(1);
                                 expectArgs(null, undefined);
-                            } else {
+                            }
+                            else {
                                 expect(spy).not.toHaveBeenCalled();
                             }
                         });
@@ -939,13 +1009,13 @@ topSuite("Ext.app.ViewModel", [
 
                         it("should be able to expand a primitive into a hierarchy", function() {
                             var xxx = jasmine.createSpy(),
-                                baz = jasmine.createSpy(), 
+                                baz = jasmine.createSpy(),
                                 bar = jasmine.createSpy();
                     
                             run(function() {
-                                viewModel.bind('{foo.bar.baz.xxx}', xxx, null, {deep: true});
-                                viewModel.bind('{foo.bar.baz}', baz, null, {deep: true});
-                                viewModel.bind('{foo.bar}', bar, null, {deep: true});
+                                viewModel.bind('{foo.bar.baz.xxx}', xxx, null, { deep: true });
+                                viewModel.bind('{foo.bar.baz}', baz, null, { deep: true });
+                                viewModel.bind('{foo.bar}', bar, null, { deep: true });
                             }, function() {
                                 viewModel.set('foo', 1);
                             });
@@ -1052,6 +1122,7 @@ topSuite("Ext.app.ViewModel", [
                 });
             });
         }
+
         createSuite(false);
         createSuite(true);
 
@@ -1059,6 +1130,7 @@ topSuite("Ext.app.ViewModel", [
             describe("dates", function() {
                 it("should change when setting an initial date", function() {
                     var d = new Date(2010, 0, 1);
+
                     bindNotify('{val}', spy);
                     setNotify('val', d);
                     expectArgs(d, undefined);
@@ -1092,10 +1164,10 @@ topSuite("Ext.app.ViewModel", [
             it("should fire children before parents", function() {
                 var values = [];
 
-                viewModel.bind('{address}', function (v) {
+                viewModel.bind('{address}', function(v) {
                     values.push('address: ' + Ext.encode(v));
                 }).deep = true;
-                viewModel.bind('{address.city}', function (v) {
+                viewModel.bind('{address.city}', function(v) {
                     values.push('address.city: ' + v);
                 });
 
@@ -1112,10 +1184,12 @@ topSuite("Ext.app.ViewModel", [
 
             it("should fire a single binding at the depth of it's stub", function() {
                 setNotify('foo.bar.baz.x', 1);
+
                 var values = [],
                     adder = function(arg1) {
-                        values.push(arg1);    
+                        values.push(arg1);
                     };
+
                 viewModel.bind('{foo.bar.baz.x}', adder);
                 viewModel.bind('{foo.bar.y}', adder);
                 viewModel.set('foo.bar.y', 3);
@@ -1207,11 +1281,14 @@ topSuite("Ext.app.ViewModel", [
                 };
 
                 var map = {};
+
                 var items = [];
+
                 var entryLog = [];
+
                 var valueLog = [];
 
-                function buildMap (value, parent, path) {
+                function buildMap(value, parent, path) {
                     var entry = {
                             id: items.length + 1,
                             path: path,
@@ -1220,8 +1297,9 @@ topSuite("Ext.app.ViewModel", [
                         };
 
                     items.push(map[path] = entry);
+
                     if (path) {
-                        viewModel.bind('{' + path + '}', function (v) {
+                        viewModel.bind('{' + path + '}', function(v) {
                             entryLog.push(entry);
                             valueLog.push(v);
 
@@ -1236,7 +1314,7 @@ topSuite("Ext.app.ViewModel", [
                     if (value && value.constructor === Object) {
                         var subPath = path ? path + '.' : '';
 
-                        Ext.Object.each(value, function (name, v) {
+                        Ext.Object.each(value, function(name, v) {
                             buildMap(v, entry, subPath + name);
                         });
                     }
@@ -1248,6 +1326,7 @@ topSuite("Ext.app.ViewModel", [
                     prefix, i;
 
                 notify();
+
                 for (i = 0; i < valueLog.length; ++i) {
                     prefix = entryLog[i].path + '=';
                     expect(prefix + valueLog[i]).toEqual(prefix + 'null');
@@ -1267,19 +1346,21 @@ topSuite("Ext.app.ViewModel", [
         });
     });
 
-    describe("parsing formulas", function () {
+    describe("parsing formulas", function() {
         var vm;
 
-        function getFormula (name) {
+        function getFormula(name) {
             var stub = vm.getStub(name);
+
             return stub.formula;
         }
 
-        function getExpressions (name) {
+        function getExpressions(name) {
             var formula = getFormula(name),
                 expressions = Ext.apply({}, formula.get.$expressions);
 
             delete expressions.$literal;
+
             return Ext.Object.getKeys(expressions);
         }
 
@@ -1287,71 +1368,75 @@ topSuite("Ext.app.ViewModel", [
             createViewModel();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             vm.destroy();
             vm = null;
         });
 
-        describe("simple formulas", function () {
-            it("should recognize property access", function () {
+        describe("simple formulas", function() {
+            it("should recognize property access", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
-                        foo: function (get) {
+                        foo: function(get) {
                             return get('x.y') + get('z');
                         }
                     }
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x.y', 'z']);
             });
 
-            it("should ignore method calls", function () {
+            it("should ignore method calls", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
-                        foo: function (get) {
+                        foo: function(get) {
                             return get('x.y').substring(1) + get('z').toLowerCase();
                         }
                     }
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x.y', 'z']);
             });
 
-            it("should recognize data as method parameters", function () {
+            it("should recognize data as method parameters", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
-                        foo: function (get) {
-                            return this.foo(get('x')+get('y.z'));
+                        foo: function(get) {
+                            return this.foo(get('x') + get('y.z'));
                         }
                     }
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x', 'y.z']);
             });
 
-            it("should ignore data used in suffix expression", function () {
+            it("should ignore data used in suffix expression", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
-                        foo: function (get) {
+                        foo: function(get) {
                             return this.get.foo(get('x') + get('y.z'));
                         }
                     }
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x', 'y.z']);
             });
         });
 
-        describe("formula config objects", function () {
-            it("should recognize property access", function () {
+        describe("formula config objects", function() {
+            it("should recognize property access", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
                         foo: {
-                            get: function (get) {
+                            get: function(get) {
                                 return get('x.y') + get('z');
                             }
                         }
@@ -1359,14 +1444,15 @@ topSuite("Ext.app.ViewModel", [
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x.y', 'z']);
             });
 
-            it("should ignore method calls", function () {
+            it("should ignore method calls", function() {
                 vm = new Ext.app.ViewModel({
                     formulas: {
                         foo: {
-                            get: function (get) {
+                            get: function(get) {
                                 return get('x.y').substring(1) + get('z').toLowerCase();
                             }
                         }
@@ -1374,10 +1460,11 @@ topSuite("Ext.app.ViewModel", [
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual(['x.y', 'z']);
             });
 
-            it("should allow for bind options", function () {
+            it("should allow for bind options", function() {
                 vm = new Ext.app.ViewModel({
                     data: {
                         x: 'XYZ'
@@ -1388,7 +1475,7 @@ topSuite("Ext.app.ViewModel", [
                                 bindTo: '{x}',
                                 single: true
                             },
-                            get: function (data) {
+                            get: function(data) {
                                 return data;
                             }
                         }
@@ -1396,6 +1483,7 @@ topSuite("Ext.app.ViewModel", [
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual([]);
 
                 scheduler = vm.getScheduler();
@@ -1403,6 +1491,7 @@ topSuite("Ext.app.ViewModel", [
                 expect(scheduler.passes).toBe(1);
 
                 var data = vm.getData();
+
                 expect(data.foo).toBe('XYZ');
 
                 vm.set('x', 'ABC');
@@ -1412,7 +1501,7 @@ topSuite("Ext.app.ViewModel", [
                 expect(data.foo).toBe('XYZ');
             });
 
-            it("should promote single:true to bind options", function () {
+            it("should promote single:true to bind options", function() {
                 vm = new Ext.app.ViewModel({
                     data: {
                         x: 'XYZ'
@@ -1421,7 +1510,7 @@ topSuite("Ext.app.ViewModel", [
                         foo: {
                             bind: '{x}',
                             single: true,
-                            get: function (data) {
+                            get: function(data) {
                                 return data;
                             }
                         }
@@ -1429,6 +1518,7 @@ topSuite("Ext.app.ViewModel", [
                 });
 
                 var expressions = getExpressions('foo');
+
                 expect(expressions).toEqual([]);
 
                 scheduler = vm.getScheduler();
@@ -1436,6 +1526,7 @@ topSuite("Ext.app.ViewModel", [
                 expect(scheduler.passes).toBe(1);
 
                 var data = vm.getData();
+
                 expect(data.foo).toBe('XYZ');
 
                 vm.set('x', 'ABC');
@@ -1750,6 +1841,7 @@ topSuite("Ext.app.ViewModel", [
                             viewModel.setFormulas({
                                 getIt: function(get) {
                                     ++calls;
+
                                     return get('order').isModified('orderNo');
                                 }
                             });
@@ -1778,6 +1870,7 @@ topSuite("Ext.app.ViewModel", [
                                     },
                                     get: function(order) {
                                         ++calls;
+
                                         return order.isModified('orderNo');
                                     }
                                 }
@@ -1832,6 +1925,7 @@ topSuite("Ext.app.ViewModel", [
                         var post = new spec.Post({
                             id: 1
                         });
+
                         bindNotify('{post.user}', spy);
                         setNotify('post', post);
                         expect(spy).not.toHaveBeenCalled();
@@ -1928,7 +2022,8 @@ topSuite("Ext.app.ViewModel", [
                         makeUser(1);
                         bindNotify('{user}', spy);
                         setNotify('user', user);
-                        var other = new User({id: 2});
+                        var other = new User({ id: 2 });
+
                         setNotify('user', other);
                         expectArgs(other, user);
                     });
@@ -1943,6 +2038,7 @@ topSuite("Ext.app.ViewModel", [
                             id: 2,
                             name: 'Bar'
                         });
+
                         setNotify('user', other);
                         expectArgs('Bar', 'Foo');
                     });
@@ -1957,6 +2053,7 @@ topSuite("Ext.app.ViewModel", [
                             id: 2,
                             name: 'Foo'
                         });
+
                         spy.reset();
                         setNotify('user', other);
                         expect(spy).not.toHaveBeenCalled();
@@ -2050,6 +2147,7 @@ topSuite("Ext.app.ViewModel", [
                             name: 'Foo'
                         });
                         var binding = viewModel.bind('{user.name}', spy);
+
                         setNotify('user', user);
                         spy.reset();
                         binding.setValue('Bar');
@@ -2059,6 +2157,7 @@ topSuite("Ext.app.ViewModel", [
 
                     it("should fail to set values on readonly bindings", function() {
                         var binding = viewModel.bind('Hello {user.name}', spy);
+
                         expect(function() {
                             binding.setValue('Bar');
                         }).toThrow();
@@ -2092,7 +2191,9 @@ topSuite("Ext.app.ViewModel", [
                             var comment = makeRecord(Comment, 101, {
                                 userId: 1
                             });
+
                             var binding = viewModel.bind('{comment.user}', spy);
+
                             setNotify('comment', comment);
                             spy.reset();
                             binding.setValue(3);
@@ -2106,8 +2207,10 @@ topSuite("Ext.app.ViewModel", [
                             var comment = makeRecord(Comment, 101, {
                                 userId: 1
                             });
+
                             makeUser(3);
                             var binding = viewModel.bind('{comment.user}', spy);
+
                             setNotify('comment', comment);
                             spy.reset();
                             binding.setValue(user);
@@ -2122,9 +2225,11 @@ topSuite("Ext.app.ViewModel", [
                             var comment = makeRecord(Comment, 101, {
                                 userId: 1
                             });
+
                             makeUser(3);
                             comment.setUser(user);
                             var binding = viewModel.bind('{comment.user.name}', spy);
+
                             setNotify('comment', comment);
                             spy.reset();
                             binding.setValue('aNewName');
@@ -2135,6 +2240,7 @@ topSuite("Ext.app.ViewModel", [
                             spy.reset();
 
                             var address = makeRecord(Address, 201);
+
                             user.setAddress(address);
                             binding = viewModel.bind('{comment.user.address.street}', spy);
                             spy.reset();
@@ -2147,10 +2253,12 @@ topSuite("Ext.app.ViewModel", [
                             var comment = makeRecord(Comment, 101, {
                                 userId: 1
                             });
+
                             makeUser(1);
                             comment.setUser(user);
 
                             var binding = viewModel.bind('{comment.user}', spy);
+
                             setNotify('comment', comment);
                             spy.reset();
                             setNotify('comment', null);
@@ -2278,6 +2386,7 @@ topSuite("Ext.app.ViewModel", [
                         if (prop) {
                             prop = '.' + prop;
                         }
+
                         bindNotify('{store' + prop + '}', spy);
                         setNotify('store', store);
                     }
@@ -2299,6 +2408,7 @@ topSuite("Ext.app.ViewModel", [
                             viewModel.setFormulas({
                                 getIt: function(get) {
                                     ++calls;
+
                                     return findName(get('store'), 'Foo');
                                 }
                             });
@@ -2327,6 +2437,7 @@ topSuite("Ext.app.ViewModel", [
                                     },
                                     get: function(store) {
                                         ++calls;
+
                                         return findName(store, 'Foo');
                                     }
                                 }
@@ -2489,6 +2600,7 @@ topSuite("Ext.app.ViewModel", [
 
                             it("should react to an add", function() {
                                 var r = store.insert(0, {})[0];
+
                                 notify();
                                 expectArgs(r, bar);
                             });
@@ -2614,6 +2726,7 @@ topSuite("Ext.app.ViewModel", [
 
                             it("should react to an add", function() {
                                 var r = store.add({})[0];
+
                                 notify();
                                 expectArgs(r, foo);
                             });
@@ -2766,6 +2879,7 @@ topSuite("Ext.app.ViewModel", [
                     it("should create/load the store if it's never been loaded", function() {
                         // We don't have a reference to the store, so spy on everything here
                         var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough();
+
                         bindNotify('{user.comments}', Ext.emptyFn);
                         setNotify('user', user);
                         expect(loadSpy).toHaveBeenCalled();
@@ -2774,6 +2888,7 @@ topSuite("Ext.app.ViewModel", [
 
                     it("should not load if the store is loading", function() {
                         var comments = user.comments();
+
                         comments.load();
                         spyOn(comments, 'load');
                         bindNotify('{user.comments}', Ext.emptyFn);
@@ -2784,6 +2899,7 @@ topSuite("Ext.app.ViewModel", [
 
                     it("should not load if the store has been loaded", function() {
                         var comments = user.comments();
+
                         comments.load();
                         complete([]);
                         spyOn(comments, 'load');
@@ -2795,6 +2911,7 @@ topSuite("Ext.app.ViewModel", [
                     it("should not load if the record is a phantom", function() {
                         // We don't have a reference to the store, so spy on everything here
                         var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough();
+
                         user = new User({}, session);
                         bindNotify('{user.comments}', Ext.emptyFn);
                         setNotify('user', user);
@@ -2805,6 +2922,7 @@ topSuite("Ext.app.ViewModel", [
                         var store = new Ext.data.Store({
                             model: 'spec.User'
                         });
+
                         store.loadRawData([{
                             id: 100,
                             comments: [{
@@ -2821,6 +2939,7 @@ topSuite("Ext.app.ViewModel", [
                         user = store.first();
 
                         var comments = user.comments();
+
                         spyOn(comments, 'load');
                         bindNotify('{user.comments}', Ext.emptyFn);
                         setNotify('user', user);
@@ -2837,6 +2956,7 @@ topSuite("Ext.app.ViewModel", [
                             });
 
                             var comments = user.comments();
+
                             // Store will be created because we know the userId FK.
                             // However we know we don't have the full data set, so
                             // need to load it from the server
@@ -2853,6 +2973,7 @@ topSuite("Ext.app.ViewModel", [
             describe("associations", function() {
                 describe("many to one", function() {
                     var user, post, posts, User, Post;
+
                     beforeEach(function() {
                         User = Ext.define('spec.User', {
                             extend: 'Ext.data.Model',
@@ -2906,6 +3027,7 @@ topSuite("Ext.app.ViewModel", [
 
                         it("should not make a request there is no FK value", function() {
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             makePost(1);
                             bindNotify('{post.user}', spy);
                             setNotify('post', post);
@@ -2995,7 +3117,8 @@ topSuite("Ext.app.ViewModel", [
                                 expect(user.isLoading()).toBe(true);
                                 expect(user).toBe(session.getRecord('User', 17));
                             });
-                        } else {
+                        }
+                        else {
                             it("should fire if the record instance is different", function() {
                                 makePost(1, {
                                     userId: 17
@@ -3087,6 +3210,7 @@ topSuite("Ext.app.ViewModel", [
                             makeUser(1);
                             bindNotify('{user.posts}', spy);
                             var proxySpy = spyOn(Post.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).toHaveBeenCalled();
                         });
@@ -3097,6 +3221,7 @@ topSuite("Ext.app.ViewModel", [
                             user.posts().load();
                             complete([]);
                             var proxySpy = spyOn(Post.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3105,6 +3230,7 @@ topSuite("Ext.app.ViewModel", [
                             makeUser();
                             bindNotify('{user.posts}', spy);
                             var proxySpy = spyOn(Post.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3114,6 +3240,7 @@ topSuite("Ext.app.ViewModel", [
                             bindNotify('{user.posts}', spy);
                             user.posts().load();
                             var proxySpy = spyOn(Post.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3121,9 +3248,10 @@ topSuite("Ext.app.ViewModel", [
                         it("should not trigger a load if the store has data in it already", function() {
                             makeUser(1);
                             user.posts().load();
-                            complete([{id: 2000}]);
+                            complete([{ id: 2000 }]);
                             bindNotify('{user.posts}', spy);
                             var proxySpy = spyOn(Post.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3162,16 +3290,17 @@ topSuite("Ext.app.ViewModel", [
                                 var post1 = session.getRecord('Post', 1),
                                     post3 = session.getRecord('Post', 3);
 
-                                complete({id: 1, userId: 1});
-                                complete({id: 3, userId: 1});
+                                complete({ id: 1, userId: 1 });
+                                complete({ id: 3, userId: 1 });
 
                                 makeUser(1);
                                 bindNotify('{user.posts}', spy);
                                 user.posts().load();
-                                complete([{id: 1, userId: 1}, {id: 2, userId: 1}, {id: 3, userId: 1}]);
+                                complete([{ id: 1, userId: 1 }, { id: 2, userId: 1 }, { id: 3, userId: 1 }]);
                                 setNotify('user', user);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(0)).toBe(post1);
                                 expect(store.getAt(2)).toBe(post3);
                             });
@@ -3180,16 +3309,17 @@ topSuite("Ext.app.ViewModel", [
                                 var post1 = session.getRecord('Post', 1),
                                     post3 = session.getRecord('Post', 3);
 
-                                complete({id: 1, userId: 1});
-                                complete({id: 3, userId: 1});
+                                complete({ id: 1, userId: 1 });
+                                complete({ id: 3, userId: 1 });
 
                                 makeUser(1);
                                 bindNotify('{user.posts}', spy);
                                 user.posts().load();
-                                complete([{id: 1, userId: 1}, {id: 2, userId: 1}, {id: 3, userId: 1}]);
+                                complete([{ id: 1, userId: 1 }, { id: 2, userId: 1 }, { id: 3, userId: 1 }]);
                                 setNotify('user', user);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(1)).toBe(session.getRecord('Post', 2));
                             });
                         }
@@ -3197,6 +3327,7 @@ topSuite("Ext.app.ViewModel", [
                         it("should not throw when dropping the owner that causes the store to destroy", function() {
                             makeUser(1);
                             var posts = user.posts();
+
                             bindNotify('{user.posts}', spy);
                             setNotify('user', user);
                             expect(function() {
@@ -3259,6 +3390,7 @@ topSuite("Ext.app.ViewModel", [
 
                         it("should not make a request there is no FK value", function() {
                             var proxySpy = spyOn(Passport.getProxy(), 'read');
+
                             makeUser(1);
                             bindNotify('{user.passport}', spy);
                             setNotify('user', user);
@@ -3348,7 +3480,8 @@ topSuite("Ext.app.ViewModel", [
                                 expect(passport.isLoading()).toBe(true);
                                 expect(passport).toBe(session.getRecord('Passport', 17));
                             });
-                        } else {
+                        }
+                        else {
                             it("should fire if the record instance is different", function() {
                                 makeUser(1, {
                                     passportId: 17
@@ -3511,6 +3644,7 @@ topSuite("Ext.app.ViewModel", [
                             makeUser(1);
                             bindNotify('{user.groups}', spy);
                             var proxySpy = spyOn(Group.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).toHaveBeenCalled();
                         });
@@ -3519,6 +3653,7 @@ topSuite("Ext.app.ViewModel", [
                             makeUser();
                             bindNotify('{user.groups}', spy);
                             var proxySpy = spyOn(Group.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3529,6 +3664,7 @@ topSuite("Ext.app.ViewModel", [
                             user.groups().load();
                             complete([]);
                             var proxySpy = spyOn(Group.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3538,6 +3674,7 @@ topSuite("Ext.app.ViewModel", [
                             bindNotify('{user.groups}', spy);
                             user.groups().load();
                             var proxySpy = spyOn(Group.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3545,9 +3682,10 @@ topSuite("Ext.app.ViewModel", [
                         it("should not trigger a load if the store has data in it already", function() {
                             makeUser(1);
                             user.groups().load();
-                            complete([{id: 3000}]);
+                            complete([{ id: 3000 }]);
                             bindNotify('{user.groups}', spy);
                             var proxySpy = spyOn(Group.getProxy(), 'read');
+
                             setNotify('user', user);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3589,10 +3727,11 @@ topSuite("Ext.app.ViewModel", [
                                 makeUser(1);
                                 bindNotify('{user.groups}', spy);
                                 user.groups().load();
-                                complete([{id: 1}, {id: 2}, {id: 3}]);
+                                complete([{ id: 1 }, { id: 2 }, { id: 3 }]);
                                 setNotify('user', user);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(0)).toBe(group1);
                                 expect(store.getAt(2)).toBe(group3);
                             });
@@ -3604,10 +3743,11 @@ topSuite("Ext.app.ViewModel", [
                                 makeUser(1);
                                 bindNotify('{user.groups}', spy);
                                 user.groups().load();
-                                complete([{id: 1}, {id: 2}, {id: 3}]);
+                                complete([{ id: 1 }, { id: 2 }, { id: 3 }]);
                                 setNotify('user', user);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(1)).toBe(session.getRecord('Group', 2));
                             });
                         }
@@ -3618,6 +3758,7 @@ topSuite("Ext.app.ViewModel", [
                             makeGroup(1);
                             bindNotify('{group.users}', spy);
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             setNotify('group', group);
                             expect(proxySpy).toHaveBeenCalled();
                         });
@@ -3626,6 +3767,7 @@ topSuite("Ext.app.ViewModel", [
                             makeGroup();
                             bindNotify('{group.users}', spy);
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             setNotify('group', group);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3636,6 +3778,7 @@ topSuite("Ext.app.ViewModel", [
                             group.users().load();
                             complete([]);
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             setNotify('group', group);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3645,6 +3788,7 @@ topSuite("Ext.app.ViewModel", [
                             bindNotify('{group.users}', spy);
                             group.users().load();
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             setNotify('group', group);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3652,9 +3796,10 @@ topSuite("Ext.app.ViewModel", [
                         it("should not trigger a load if the store has data in it already", function() {
                             makeGroup(1);
                             group.users().load();
-                            complete([{id: 1234}]);
+                            complete([{ id: 1234 }]);
                             bindNotify('{group.users}', spy);
                             var proxySpy = spyOn(User.getProxy(), 'read');
+
                             setNotify('group', group);
                             expect(proxySpy).not.toHaveBeenCalled();
                         });
@@ -3696,10 +3841,11 @@ topSuite("Ext.app.ViewModel", [
                                 makeGroup(1);
                                 bindNotify('{group.users}', spy);
                                 group.users().load();
-                                complete([{id: 1}, {id: 2}, {id: 3}]);
+                                complete([{ id: 1 }, { id: 2 }, { id: 3 }]);
                                 setNotify('group', group);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(0)).toBe(user1);
                                 expect(store.getAt(2)).toBe(user3);
                             });
@@ -3711,10 +3857,11 @@ topSuite("Ext.app.ViewModel", [
                                 makeGroup(1);
                                 bindNotify('{group.users}', spy);
                                 group.users().load();
-                                complete([{id: 1}, {id: 2}, {id: 3}]);
+                                complete([{ id: 1 }, { id: 2 }, { id: 3 }]);
                                 setNotify('group', group);
                                 expect(spy).toHaveBeenCalled();
                                 var store = spy.mostRecentCall.args[0];
+
                                 expect(store.getAt(1)).toBe(session.getRecord('User', 2));
                             });
                         }
@@ -3723,10 +3870,11 @@ topSuite("Ext.app.ViewModel", [
             });
         });
     }
+
     createRecordSuite(false);
     createRecordSuite(true);
 
-    describe("nesting viewmodels", function () {
+    describe("nesting viewmodels", function() {
         describe("values", function() {
             function createValueSuite(key) {
                 var rootKey = key.split('.')[0],
@@ -3737,6 +3885,7 @@ topSuite("Ext.app.ViewModel", [
                     cfg = Ext.apply({
                         parent: parent
                     }, cfg);
+
                     return new Ext.app.ViewModel(cfg);
                 }
 
@@ -3757,7 +3906,8 @@ topSuite("Ext.app.ViewModel", [
 
                         if (v === null) {
                             vms.push(createChild(parent));
-                        } else {
+                        }
+                        else {
                             vms.push(createWithData(makeData(v), parent));
                         }
                     });
@@ -3778,7 +3928,8 @@ topSuite("Ext.app.ViewModel", [
                     Ext.Array.forEach(key.split('.'), function(part, idx) {
                         if (idx === last) {
                             current[part] = v;
-                        } else {
+                        }
+                        else {
                             current = current[part] = {};
                         }
                     });
@@ -3869,7 +4020,7 @@ topSuite("Ext.app.ViewModel", [
                         });
 
                         describe("multiple layers", function() {
-                            it("should inherit the value from the nearest parent", function(){
+                            it("should inherit the value from the nearest parent", function() {
                                 makeVms([1, null, 2, null, 3, null]);
                                 expectValues([1, 1, 2, 2, 3, 3]);
                             });
@@ -3894,6 +4045,7 @@ topSuite("Ext.app.ViewModel", [
                         function expectParentSpy(value, callCount) {
                             if (parentBind) {
                                 expect(parentSpy.callCount).toBe(callCount);
+
                                 if (parentSpy.callCount > 0) {
                                     expect(parentSpy.mostRecentCall.args[0]).toBe(value);
                                 }
@@ -3903,6 +4055,7 @@ topSuite("Ext.app.ViewModel", [
                         function expectChildSpy(value, callCount) {
                             if (childBind) {
                                 expect(childSpy.callCount).toBe(callCount);
+
                                 if (childSpy.callCount > 0) {
                                     expect(childSpy.mostRecentCall.args[0]).toBe(value);
                                 }
@@ -4239,6 +4392,7 @@ topSuite("Ext.app.ViewModel", [
                                         if (withBind) {
                                             Ext.Array.forEach(vms, function(vm) {
                                                 var s = jasmine.createSpy();
+
                                                 bindNotify(bindKey, s, null, vm);
                                                 spies.push(s);
                                             });
@@ -4249,12 +4403,15 @@ topSuite("Ext.app.ViewModel", [
                                         if (withBind) {
                                             Ext.Array.forEach(spies, function(s, idx) {
                                                 var v = values[idx];
+
                                                 if (v === null) {
                                                     expect(s.callCount).toBe(0);
-                                                } else {
+                                                }
+                                                else {
                                                     expect(s.callCount).toBe(1);
                                                     expect(s.mostRecentCall.args[0]).toBe(v);
                                                 }
+
                                                 s.reset();
                                             });
                                         }
@@ -4343,9 +4500,11 @@ topSuite("Ext.app.ViewModel", [
                                     function createSuite(withChildStub) {
                                         beforeEach(function() {
                                             createParentBind();
+
                                             if (withChildStub) {
                                                 createChildBind();
                                             }
+
                                             setParentValue(1);
                                         });
 
@@ -4381,9 +4540,11 @@ topSuite("Ext.app.ViewModel", [
                                     function createSuite(withParentStub) {
                                         beforeEach(function() {
                                             createChildBind();
+
                                             if (withParentStub) {
                                                 createParentBind();
                                             }
+
                                             setChildValue(1);
                                         });
 
@@ -4437,9 +4598,11 @@ topSuite("Ext.app.ViewModel", [
                                     function createSuite(withChildStub) {
                                         beforeEach(function() {
                                             createParentBind();
+
                                             if (withChildStub) {
                                                 createChildBind();
                                             }
+
                                             setParentValue(1);
                                         });
 
@@ -4522,9 +4685,11 @@ topSuite("Ext.app.ViewModel", [
                                     function createSuite(withParentStub) {
                                         beforeEach(function() {
                                             createChildBind();
+
                                             if (withParentStub) {
                                                 createParentBind();
                                             }
+
                                             setChildValue(2);
                                             
                                         });
@@ -4648,11 +4813,13 @@ topSuite("Ext.app.ViewModel", [
                                         if (!b) {
                                             bindings[index] = b = bindNotify(bindKey, theSpy || spy, null, vm);
                                         }
+
                                         return b;
                                     }
 
                                     function setValue(value, vm) {
                                         var bind = getBind(vm);
+
                                         setBindNotify(bind, value, vm);
                                     }
 
@@ -4660,6 +4827,7 @@ topSuite("Ext.app.ViewModel", [
                                         if (withBind) {
                                             Ext.Array.forEach(vms, function(vm) {
                                                 var s = jasmine.createSpy();
+
                                                 getBind(vm, s);
                                                 spies.push(s);
                                             });
@@ -4670,12 +4838,15 @@ topSuite("Ext.app.ViewModel", [
                                         if (withBind) {
                                             Ext.Array.forEach(spies, function(s, idx) {
                                                 var v = values[idx];
+
                                                 if (v === null) {
                                                     expect(s.callCount).toBe(0);
-                                                } else {
+                                                }
+                                                else {
                                                     expect(s.callCount).toBe(1);
                                                     expect(s.mostRecentCall.args[0]).toBe(v);
                                                 }
+
                                                 s.reset();
                                             });
                                         }
@@ -4760,19 +4931,23 @@ topSuite("Ext.app.ViewModel", [
                                     spies[index] = s;
                                     bindings[index] = b = bindNotify(bindKey, s, null, vm);
                                 }
+
                                 return b;
                             }
 
                             function expectSpies(values) {
                                 Ext.Array.forEach(values, function(v, idx) {
                                     var s = spies[idx];
+
                                     if (s) {
                                         if (v === null) {
                                             expect(s.callCount).toBe(0);
-                                        } else {
+                                        }
+                                        else {
                                             expect(s.callCount).toBe(1);
                                             expect(s.mostRecentCall.args[0]).toBe(v);
                                         }
+
                                         s.reset();
                                     }
                                 });
@@ -4791,13 +4966,15 @@ topSuite("Ext.app.ViewModel", [
                                 function createSuite(withTopStub, withChildStub) {
                                     beforeEach(function() {
                                         makeVms([null, null, 1, null, 2]);
+
                                         if (withTopStub) {
-                                            getBind(vms[0]);   
+                                            getBind(vms[0]);
                                         }
 
                                         if (withChildStub) {
                                             getBind(vms[1]);
                                         }
+
                                         getBind(vms[2]);
                                         getBind(vms[3]);
                                         getBind(vms[4]);
@@ -4867,13 +5044,15 @@ topSuite("Ext.app.ViewModel", [
                                 function createSuite(withMiddleStub, withMiddleChildStub) {
                                     beforeEach(function() {
                                         makeVms([1, null, null, null, 2]);
+
                                         if (withMiddleStub) {
-                                            getBind(vms[2]);   
+                                            getBind(vms[2]);
                                         }
 
                                         if (withMiddleChildStub) {
                                             getBind(vms[3]);
                                         }
+
                                         getBind(vms[0]);
                                         getBind(vms[1]);
                                         getBind(vms[4]);
@@ -4943,9 +5122,11 @@ topSuite("Ext.app.ViewModel", [
                                 function createSuite(withBottomStub) {
                                     beforeEach(function() {
                                         makeVms([1, null, 2, null, null]);
+
                                         if (withBottomStub) {
-                                            getBind(vms[4]);   
+                                            getBind(vms[4]);
                                         }
+
                                         getBind(vms[0]);
                                         getBind(vms[1]);
                                         getBind(vms[2]);
@@ -4988,6 +5169,7 @@ topSuite("Ext.app.ViewModel", [
 
                             function clear(vm) {
                                 var o = {};
+
                                 o[rootKey] = undefined;
                                 vm.setData(o);
                                 vm.notify();
@@ -5007,22 +5189,27 @@ topSuite("Ext.app.ViewModel", [
                                     spies[index] = s;
                                     bindings[index] = b = bindNotify(bindKey, s, null, vm);
                                 }
+
                                 return b;
                             }
 
                             function expectSpies(values) {
                                 Ext.Array.forEach(values, function(v, idx) {
                                     var s = spies[idx];
+
                                     if (s) {
                                         if (v === null) {
                                             expect(s.callCount).toBe(0);
-                                        } else {
+                                        }
+                                        else {
                                             if (Ext.isObject(v)) {
                                                 v = v.v;
                                             }
+
                                             expect(s.callCount).toBe(1);
                                             expect(s.mostRecentCall.args[0]).toBe(v);
                                         }
+
                                         s.reset();
                                     }
                                 });
@@ -5041,8 +5228,9 @@ topSuite("Ext.app.ViewModel", [
                                 function createSuite(withChildStub) {
                                     beforeEach(function() {
                                         makeVms([1, null, 2, null, 3]);
+
                                         if (withChildStub) {
-                                            getBind(vms[1]);   
+                                            getBind(vms[1]);
                                         }
 
                                         getBind(vms[0]);
@@ -5059,7 +5247,7 @@ topSuite("Ext.app.ViewModel", [
                                     });
 
                                     it("should trigger bindings for affected values", function() {
-                                        expectSpies([{v: null}, {v: null}, null, null, null]);
+                                        expectSpies([{ v: null }, { v: null }, null, null, null]);
                                     });
 
                                     it("should not climb when setting a value on the middle vm", function() {
@@ -5102,6 +5290,7 @@ topSuite("Ext.app.ViewModel", [
                                 function createSuite(withChildStub) {
                                     beforeEach(function() {
                                         makeVms([1, null, 2, null, 3]);
+
                                         if (withChildStub) {
                                             getBind(vms[3]);
                                         }
@@ -5238,11 +5427,11 @@ topSuite("Ext.app.ViewModel", [
                 grandSubViewModel = subViewModel = User = rec = null;
             });
 
-            it('should inherit data from parent view models', function () {
+            it('should inherit data from parent view models', function() {
                 var fooBar = 0,
                     calls = 0;
 
-                subViewModel.bind('{foo.bar}', function (value) {
+                subViewModel.bind('{foo.bar}', function(value) {
                     fooBar = value;
                     ++calls;
                 });
@@ -5254,11 +5443,11 @@ topSuite("Ext.app.ViewModel", [
                 expect(fooBar).toBe(42);
             });
 
-            it('should inherit data from grandparent view models', function () {
+            it('should inherit data from grandparent view models', function() {
                 var fooBar = 0,
                     calls = 0;
 
-                grandSubViewModel.bind('{foo.bar}', function (value) {
+                grandSubViewModel.bind('{foo.bar}', function(value) {
                     fooBar = value;
                     ++calls;
                 });
@@ -5270,7 +5459,7 @@ topSuite("Ext.app.ViewModel", [
                 expect(fooBar).toBe(42);
             });
 
-            it('should maintain indirection with multiple view models', function () {
+            it('should maintain indirection with multiple view models', function() {
                 var fooBar = 0,
                     subFooBar = 0,
                     grandSubFooBar = 0,
@@ -5278,15 +5467,15 @@ topSuite("Ext.app.ViewModel", [
                     subCalls = 0,
                     grandSubCalls = 0;
 
-                viewModel.bind('{foo.bar}', function (value) {
+                viewModel.bind('{foo.bar}', function(value) {
                     fooBar = value;
                     ++calls;
                 });
-                subViewModel.bind('{foo.bar}', function (value) {
+                subViewModel.bind('{foo.bar}', function(value) {
                     subFooBar = value;
                     ++subCalls;
                 });
-                grandSubViewModel.bind('{foo.bar}', function (value) {
+                grandSubViewModel.bind('{foo.bar}', function(value) {
                     grandSubFooBar = value;
                     ++grandSubCalls;
                 });
@@ -5334,7 +5523,7 @@ topSuite("Ext.app.ViewModel", [
                 expect(grandSubFooBar).toBe(42);
             });
 
-            it('should modify parent VM instances', function () {
+            it('should modify parent VM instances', function() {
                 var fooBar = 0,
                     subFooBar = 0,
                     grandSubFooBar = 0,
@@ -5342,15 +5531,15 @@ topSuite("Ext.app.ViewModel", [
                     subCalls = 0,
                     grandSubCalls = 0;
 
-                viewModel.bind('{foo.bar}', function (value) {
+                viewModel.bind('{foo.bar}', function(value) {
                     fooBar = value;
                     ++calls;
                 });
-                subViewModel.bind('{foo.bar}', function (value) {
+                subViewModel.bind('{foo.bar}', function(value) {
                     subFooBar = value;
                     ++subCalls;
                 });
-                grandSubViewModel.bind('{foo.bar}', function (value) {
+                grandSubViewModel.bind('{foo.bar}', function(value) {
                     grandSubFooBar = value;
                     ++grandSubCalls;
                 });
@@ -5405,7 +5594,7 @@ topSuite("Ext.app.ViewModel", [
                 });
             });
 
-            describe('with formulas', function () {
+            describe('with formulas', function() {
                 var foo = 0,
                     bar = 0,
                     baz = 0,
@@ -5414,7 +5603,7 @@ topSuite("Ext.app.ViewModel", [
                     bazCalls = 0,
                     fooBinding;
 
-                beforeEach(function () {
+                beforeEach(function() {
                     grandSubViewModel.set({
                         abc: {
                             v: 'ABC'
@@ -5436,14 +5625,14 @@ topSuite("Ext.app.ViewModel", [
 
                     viewModel.setFormulas({
                         // simple function form
-                        foo: function (get) {
+                        foo: function(get) {
                             return get('abc.v') + get('xyz');
                         },
                         fullName: {
-                            get: function (get) {
+                            get: function(get) {
                                 return get('firstName') + ' ' + get('lastName');
                             },
-                            set: function (name) {
+                            set: function(name) {
                                 var a = name.split(' ');
 
                                 this.set({
@@ -5457,13 +5646,13 @@ topSuite("Ext.app.ViewModel", [
                     subViewModel.setFormulas({
                         // object w/get (no bind)
                         bar: {
-                            get: function (get) {
+                            get: function(get) {
                                 return get('abc.v') + get('xyz');
                             }
                         },
                         // object w/get and bind
                         explicit: {
-                            get: function (data) {
+                            get: function(data) {
                                 return '(' + data.foo.v + '/' + data.foo.x + ')';
                             },
                             bind: {
@@ -5476,43 +5665,43 @@ topSuite("Ext.app.ViewModel", [
                     });
 
                     grandSubViewModel.setFormulas({
-                        baz: function (get) {
+                        baz: function(get) {
                             return get('abc.v') + get('xyz');
                         },
-                        welcome: function (get) {
+                        welcome: function(get) {
                             return 'Hello ' + get('fullName') + '!';
                         }
                     });
 
-                    fooBinding = viewModel.bind('{foo}', function (value) {
+                    fooBinding = viewModel.bind('{foo}', function(value) {
                         foo = value;
                         ++fooCalls;
                     });
-                    subViewModel.bind('{bar} - {foo}', function (value) {
+                    subViewModel.bind('{bar} - {foo}', function(value) {
                         bar = value;
                         ++barCalls;
                     });
-                    grandSubViewModel.bind('{baz} - {bar} - {foo} - {explicit}', function (value) {
+                    grandSubViewModel.bind('{baz} - {bar} - {foo} - {explicit}', function(value) {
                         baz = value;
                         ++bazCalls;
                     });
                     notify();
                 });
 
-                it('should bind formulas to values in ancestor viewmodels', function () {
+                it('should bind formulas to values in ancestor viewmodels', function() {
                     expect(scheduler.passes).toBe(1);
                     expect(foo).toBe('abcxyz');
                     expect(bar).toBe('abcXYZ - abcxyz');
                     expect(baz).toBe('ABCXYZ - abcXYZ - abcxyz - (abc/XYZ)');
                 });
 
-                it('should not allow setting the value of a formula', function () {
-                    expect(function () {
+                it('should not allow setting the value of a formula', function() {
+                    expect(function() {
                         fooBinding.setValue(10);
                     }).toThrow();
                 });
 
-                it('should update when values change in ancestor viewmodels', function () {
+                it('should update when values change in ancestor viewmodels', function() {
                     viewModel.set('abc.v', '~abc~');
                     viewModel.set('xyz', '~xyz~');
 
@@ -5524,18 +5713,19 @@ topSuite("Ext.app.ViewModel", [
                     expect(baz).toBe('ABCXYZ - ~abc~XYZ - ~abc~~xyz~ - (~abc~/XYZ)');
                 });
 
-                it('should react to formula dependencies in base view models', function () {
+                it('should react to formula dependencies in base view models', function() {
                     var fullName, lastNameFirstName, welcome;
 
                     expect(scheduler.passes).toBe(1);
 
-                    viewModel.bind('{lastName}, {firstName}', function (s) {
+                    viewModel.bind('{lastName}, {firstName}', function(s) {
                         lastNameFirstName = s;
                     });
-                    var fullNameBinding = viewModel.bind('{fullName}', function (s) {
+                    var fullNameBinding = viewModel.bind('{fullName}', function(s) {
                         fullName = s;
                     });
-                    grandSubViewModel.bind('{welcome}', function (s) {
+
+                    grandSubViewModel.bind('{welcome}', function(s) {
                         welcome = s;
                     });
 
@@ -5554,9 +5744,9 @@ topSuite("Ext.app.ViewModel", [
                     expect(welcome).toBe('Hello Evan Trimboli!');
                 });
 
-                it('should work with fields on records', function () {
+                it('should work with fields on records', function() {
                     subViewModel.setFormulas({
-                        fromRecord: function (get) {
+                        fromRecord: function(get) {
                             return get('rec.fld');
                         }
                     });
@@ -5572,7 +5762,7 @@ topSuite("Ext.app.ViewModel", [
                     var value,
                         calls = 0;
 
-                    grandSubViewModel.bind('The answer is {fromRecord}', function (v) {
+                    grandSubViewModel.bind('The answer is {fromRecord}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5583,9 +5773,9 @@ topSuite("Ext.app.ViewModel", [
                     expect(value).toBe('The answer is 42');
                 });
 
-                it('should track field changes based on record fields', function () {
+                it('should track field changes based on record fields', function() {
                     subViewModel.setFormulas({
-                        fromRecord: function (get) {
+                        fromRecord: function(get) {
                             return get('rec.name');
                         }
                     });
@@ -5598,7 +5788,7 @@ topSuite("Ext.app.ViewModel", [
                     var value,
                         calls = 0;
 
-                    grandSubViewModel.bind('Greetings {fromRecord}!', function (v) {
+                    grandSubViewModel.bind('Greetings {fromRecord}!', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5622,8 +5812,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should call the setter in the parent viewmodel when setting the value on a binding bound to a formula in a parent viewmodel", function() {
                     var spy = jasmine.createSpy();
+
                     viewModel.bind('{firstName} {lastName}', spy);
                     var nameBind = grandSubViewModel.bind('{fullName}', Ext.emptyFn);
+
                     notify();
                     nameBind.setValue('Foo Bar');
                     notify();
@@ -5633,6 +5825,7 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should call the setter in the parent viewmodel when setting the value on a stub bound to a formula in a parent viewmodel", function() {
                     var spy = jasmine.createSpy();
+
                     viewModel.bind('{firstName} {lastName}', spy);
                     grandSubViewModel.bind('{fullName}', Ext.emptyFn);
                     grandSubViewModel.set('fullName', 'Foo Bar');
@@ -5642,9 +5835,9 @@ topSuite("Ext.app.ViewModel", [
                 });
             }); // with formulas
         });
-    }); 
+    });
 
-    describe("validation binding", function () {
+    describe("validation binding", function() {
         var User;
 
         function completeRequest(data) {
@@ -5673,17 +5866,17 @@ topSuite("Ext.app.ViewModel", [
                 ],
 
                 validators: {
-                    last:        'presence',
+                    last: 'presence',
                     description: { type: 'length', min: 10, max: 200 },
-                    color:       { type: 'inclusion', list: [ 'red', 'white', 'blue' ] },
-                    first:       { type: 'exclusion', list: [ 'Ed' ] },
+                    color: { type: 'inclusion', list: [ 'red', 'white', 'blue' ] },
+                    first: { type: 'exclusion', list: [ 'Ed' ] },
                     formatField: { type: 'format', matcher: /123/ },
-                    email:       'email',
-                    phone:       { type: 'presence', message: 'Phone number required' },
-                    initial:     { type: 'length', min: 1 }
+                    email: 'email',
+                    phone: { type: 'presence', message: 'Phone number required' },
+                    initial: { type: 'length', min: 1 }
                 },
 
-                doValidate: function () {
+                doValidate: function() {
                     //
                 }
             });
@@ -5694,7 +5887,7 @@ topSuite("Ext.app.ViewModel", [
             });
         });
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.undefine('spec.User');
         });
 
@@ -5714,15 +5907,16 @@ topSuite("Ext.app.ViewModel", [
 
             describe("for invalid fields", function() {
                 var V = Ext.data.validator;
+
                 function getMessage(T) {
                     return T.prototype.config.message;
                 }
 
-                it('should report description too short', function () {
+                it('should report description too short', function() {
                     var calls = 0,
                         value;
 
-                    viewModel.bind('{theUser.validation.description}', function (v) {
+                    viewModel.bind('{theUser.validation.description}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5735,6 +5929,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('description', '1234567890'); // long enough
 
                     notify();
@@ -5744,11 +5939,12 @@ topSuite("Ext.app.ViewModel", [
                     expect(value).toBe(true);
                 });
 
-                it('should report missing last name', function () {
+                it('should report missing last name', function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.last}', function (v) {
+                    viewModel.bind('{theUser.validation.last}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5761,6 +5957,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('last', 'Spencer'); // present
 
                     notify();
@@ -5772,9 +5969,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should have the correct bad format message", function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.formatField}', function (v) {
+                    viewModel.bind('{theUser.validation.formatField}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5787,6 +5985,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('formatField', '123'); // matches /123/
 
                     notify();
@@ -5798,9 +5997,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should have the correct non-inclusion message", function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.color}', function (v) {
+                    viewModel.bind('{theUser.validation.color}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5813,6 +6013,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('color', 'red'); // in the color list
 
                     notify();
@@ -5824,9 +6025,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should have the correct non-exclusion message", function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.first}', function (v) {
+                    viewModel.bind('{theUser.validation.first}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5839,6 +6041,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('first', 'Edward'); // not excluded
 
                     notify();
@@ -5850,9 +6053,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should have the correct bad email format message", function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.email}', function (v) {
+                    viewModel.bind('{theUser.validation.email}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5865,6 +6069,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('email', 'ed@sencha.com'); // a valid email
 
                     notify();
@@ -5876,9 +6081,10 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should allow user-defined error messages", function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.phone}', function (v) {
+                    viewModel.bind('{theUser.validation.phone}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5891,6 +6097,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('phone', '555-1212'); // present
 
                     notify();
@@ -5901,12 +6108,13 @@ topSuite("Ext.app.ViewModel", [
                 });
             }); // for invalid fields
 
-            describe('for valid fields', function () {
-                it('should report initial as valid', function () {
+            describe('for valid fields', function() {
+                it('should report initial as valid', function() {
                     var value;
+
                     var calls = 0;
 
-                    viewModel.bind('{theUser.validation.initial}', function (v) {
+                    viewModel.bind('{theUser.validation.initial}', function(v) {
                         value = v;
                         ++calls;
                     });
@@ -5919,6 +6127,7 @@ topSuite("Ext.app.ViewModel", [
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
+
                     rec.set('initial', ''); // too short now
 
                     notify();
@@ -5933,6 +6142,7 @@ topSuite("Ext.app.ViewModel", [
     
     describe("multi binding", function() {
         var spy;
+
         beforeEach(function() {
             createViewModel();
             spy = jasmine.createSpy();
@@ -5953,7 +6163,7 @@ topSuite("Ext.app.ViewModel", [
                 
                 it("should be able to bind to numeric values", function() {
                     viewModel.bind({
-                        aProp: 1    
+                        aProp: 1
                     }, spy);
                     notify();
                     expect(spy).toHaveBeenCalled();
@@ -5964,7 +6174,7 @@ topSuite("Ext.app.ViewModel", [
 
                 it("should be able to bind to boolean values", function() {
                     viewModel.bind({
-                        aProp: true 
+                        aProp: true
                     }, spy);
                     notify();
                     expect(spy).toHaveBeenCalled();
@@ -5975,7 +6185,7 @@ topSuite("Ext.app.ViewModel", [
                 
                 it("should allow null values", function() {
                     viewModel.bind({
-                        aProp: null 
+                        aProp: null
                     }, spy);
                     notify();
                     expect(spy).toHaveBeenCalled();
@@ -6137,16 +6347,16 @@ topSuite("Ext.app.ViewModel", [
             
             it("should resolve objects inside arrays", function() {
                 viewModel.bind([
-                    {bind1: '{aBind1}'},
-                    [{bind2: '{aBind2}'}],
-                    [[{bind3: '{aBind3}'}]]
+                    { bind1: '{aBind1}' },
+                    [{ bind2: '{aBind2}' }],
+                    [[{ bind3: '{aBind3}' }]]
                 ], spy);
                 notify();
                 expect(spy).toHaveBeenCalled();
                 expect(spy.mostRecentCall.args[0]).toEqual([
-                    {bind1: 'val1'},
-                    [{bind2: 'val2'}],
-                    [[{bind3: 'val3'}]]
+                    { bind1: 'val1' },
+                    [{ bind2: 'val2' }],
+                    [[{ bind3: 'val3' }]]
                 ]);
             });
         });
@@ -6222,6 +6432,7 @@ topSuite("Ext.app.ViewModel", [
                 notify();
                 expect(spy).toHaveBeenCalled();
                 var result = spy.mostRecentCall.args[0];
+
                 expect(result.theUser.$className).toBe('spec.User');
                 expect(result.theUser.getId()).toBe(1);
             });
@@ -6284,6 +6495,7 @@ topSuite("Ext.app.ViewModel", [
                 notify();
                 expect(spy.callCount).toBe(1);
                 var result = spy.mostRecentCall.args[0];
+
                 expect(result.user.$className).toBe('spec.User');
                 expect(result.user.getId()).toBe(1);
                 expect(result.posts.isStore).toBe(true);
@@ -6300,7 +6512,7 @@ topSuite("Ext.app.ViewModel", [
         });
 
         describe("trackStatics", function() {
-            var options = {trackStatics: true};
+            var options = { trackStatics: true };
 
             describe("root level", function() {
                 it("should prune static string values", function() {
@@ -6308,6 +6520,7 @@ topSuite("Ext.app.ViewModel", [
                         a: 'foo',
                         b: 'bar'
                     }, spy, null, options);
+
                     notify();
                     expect(binding.pruneStaticKeys()).toEqual({});
                 });
@@ -6317,6 +6530,7 @@ topSuite("Ext.app.ViewModel", [
                         a: 1,
                         b: Math.PI
                     }, spy, null, options);
+
                     notify();
                     expect(binding.pruneStaticKeys()).toEqual({});
                 });
@@ -6326,8 +6540,9 @@ topSuite("Ext.app.ViewModel", [
                         a: true,
                         b: false
                     }, spy, null, options);
+
                     notify();
-                    expect(binding.pruneStaticKeys()).toEqual({}); 
+                    expect(binding.pruneStaticKeys()).toEqual({});
                 });
 
                 it("should prune static arrays", function() {
@@ -6335,8 +6550,9 @@ topSuite("Ext.app.ViewModel", [
                         a: [1, 2, 3],
                         b: ['a', 'b', 'c']
                     }, spy, null, options);
+
                     notify();
-                    expect(binding.pruneStaticKeys()).toEqual({}); 
+                    expect(binding.pruneStaticKeys()).toEqual({});
                 });
 
                 it("should prune static objects", function() {
@@ -6350,18 +6566,20 @@ topSuite("Ext.app.ViewModel", [
                             s: 'b'
                         }
                     }, spy, null, options);
+
                     notify();
-                    expect(binding.pruneStaticKeys()).toEqual({}); 
+                    expect(binding.pruneStaticKeys()).toEqual({});
                 });
 
                 it("should not prune a dynamic value", function() {
                     var binding = viewModel.bind({
                         a: '{value}'
                     }, spy, null, options);
+
                     setNotify('value', 'foo');
                     expect(binding.pruneStaticKeys()).toEqual({
                         a: 'foo'
-                    });   
+                    });
                 });
             });
 
@@ -6385,8 +6603,9 @@ topSuite("Ext.app.ViewModel", [
                             d: [100, 200, 300, 400]
                         }
                     }, spy, null, options);
+
                     notify();
-                    expect(binding.pruneStaticKeys()).toEqual({}); 
+                    expect(binding.pruneStaticKeys()).toEqual({});
                 });
 
                 it("should not prune an array of objects where the objects are dynamic", function() {
@@ -6402,6 +6621,7 @@ topSuite("Ext.app.ViewModel", [
                             value: '{value}'
                         }]
                     }, spy, null, options);
+
                     setNotify('value', 1);
                     expect(binding.pruneStaticKeys()).toEqual({
                         root: [{
@@ -6414,7 +6634,7 @@ topSuite("Ext.app.ViewModel", [
                             property: 'baz',
                             value: 1
                         }]
-                    }); 
+                    });
                 });
 
                 it("should not prune nested objects where the children are dynamic", function() {
@@ -6434,6 +6654,7 @@ topSuite("Ext.app.ViewModel", [
                             }
                         }
                     }, spy, null, options);
+
                     setNotify('value', 1);
                     expect(binding.pruneStaticKeys()).toEqual({
                         root: {
@@ -6496,6 +6717,7 @@ topSuite("Ext.app.ViewModel", [
         it("should be readOnly", function() {
             createViewModel();
             var b = bindNotify('{!val}', spy);
+
             expect(b.isReadOnly()).toBe(true);
         });
     });
@@ -6689,7 +6911,7 @@ topSuite("Ext.app.ViewModel", [
                 }
             });
 
-            expect(childViewModel.get('nav').getStoreId()).not.toEqual(viewModel.get('nav').getStoreId());            
+            expect(childViewModel.get('nav').getStoreId()).not.toEqual(viewModel.get('nav').getStoreId());
         });
 
         it("should not inherit parent Store checking Store Reference", function() {
@@ -6712,7 +6934,7 @@ topSuite("Ext.app.ViewModel", [
             });
 
             expect(childViewModel.get('nav')).not.toEqual(viewModel.get('nav'));
-            expect(childViewModel.get('nav') === viewModel.get('nav')).toBe(false);          
+            expect(childViewModel.get('nav') === viewModel.get('nav')).toBe(false);
         });
     });
 
@@ -6759,7 +6981,7 @@ topSuite("Ext.app.ViewModel", [
         });
 
         it("should not destroy parent Store", function() {
-            //After destoying childViewModel parentVieModel store should not be destroyed
+            // After destoying childViewModel parentVieModel store should not be destroyed
             parentViewModel = Ext.create(parentVm);
             childViewModel = new Ext.app.ViewModel({
                 parent: parentViewModel,
@@ -6778,10 +7000,11 @@ topSuite("Ext.app.ViewModel", [
 
             expect(parentViewModel.get('emps')).not.toBeNull();
         });
-});
+    });
 
     describe("stores", function() {
         var User;
+
         beforeEach(function() {
             createViewModel();
             User = Ext.define('spec.User', {
@@ -6806,6 +7029,7 @@ topSuite("Ext.app.ViewModel", [
             });
             notify();
             var users = viewModel.getStore('users');
+
             expect(users.isStore).toBe(true);
             expect(users.getModel()).toBe(User);
         });
@@ -6838,11 +7062,13 @@ topSuite("Ext.app.ViewModel", [
             var s = new Ext.data.Store({
                 model: 'spec.User'
             });
+
             viewModel.setStores({
                 users: s
             });
             notify();
             var users = viewModel.getStore('users');
+
             expect(users).toBe(s);
         });
         
@@ -6854,6 +7080,7 @@ topSuite("Ext.app.ViewModel", [
             });
             notify();
             var users = viewModel.getStore('users');
+
             expect(users.getSession()).toBeNull();
         });
         
@@ -6868,6 +7095,7 @@ topSuite("Ext.app.ViewModel", [
             });
             notify();
             var users = viewModel.getStore('users');
+
             expect(users.getSession()).toBe(session);
         });
 
@@ -6879,6 +7107,7 @@ topSuite("Ext.app.ViewModel", [
                     }
                 });
                 var store = viewModel.getStore('users');
+
                 expect(store.isStore).toBe(true);
                 expect(store.getModel()).toBe(User);
             });
@@ -6887,6 +7116,7 @@ topSuite("Ext.app.ViewModel", [
                 var store = new Ext.data.Store({
                     model: 'spec.User'
                 });
+
                 viewModel.setStores({
                     users: store
                 });
@@ -6904,6 +7134,7 @@ topSuite("Ext.app.ViewModel", [
                     });
                     notify();
                     var users = viewModel.getStore('users');
+
                     expect(users.getAutoDestroy()).toBeUndefined();
                 });
 
@@ -6948,11 +7179,13 @@ topSuite("Ext.app.ViewModel", [
                     var s = new Ext.data.Store({
                         model: 'spec.User'
                     });
+
                     viewModel.setStores({
                         users: s
                     });
                     notify();
                     var users = viewModel.getStore('users');
+
                     expect(users.getAutoDestroy()).toBeUndefined();
                 });
 
@@ -6960,6 +7193,7 @@ topSuite("Ext.app.ViewModel", [
                     var s = new Ext.data.Store({
                         model: 'spec.User'
                     });
+
                     viewModel.setStores({
                         users: s
                     });
@@ -6976,6 +7210,7 @@ topSuite("Ext.app.ViewModel", [
                         model: 'spec.User',
                         autoDestroy: true
                     });
+
                     viewModel.setStores({
                         users: s
                     });
@@ -7014,6 +7249,7 @@ topSuite("Ext.app.ViewModel", [
                     expect(viewModel.getStore('users')).toBeNull();
                     setNotify('theUrl', '/foo');
                     var store = viewModel.getStore('users');
+
                     expect(store.isStore).toBe(true);
                     expect(store.getProxy().getUrl()).toBe('/foo');
                 });
@@ -7037,6 +7273,7 @@ topSuite("Ext.app.ViewModel", [
                     expect(viewModel.getStore('users')).toBeNull();
                     setNotify('theId', 12);
                     var store = viewModel.getStore('users');
+
                     expect(store.isStore).toBe(true);
                     expect(store.getProxy().getUrl()).toBe('/foo');
                     expect(store.getProxy().getExtraParams().id).toBe(12);
@@ -7103,6 +7340,7 @@ topSuite("Ext.app.ViewModel", [
                     });
                     notify();
                     var store = viewModel.getStore('users');
+
                     expect(store.getRemoteFilter()).toBe(true);
                     setNotify('remote', false);
                     expect(store.getRemoteFilter()).toBe(false);
@@ -7278,6 +7516,7 @@ topSuite("Ext.app.ViewModel", [
                         });
                         notify();
                         var store = viewModel.getStore('users');
+
                         spyOn(store, 'flushLoad');
                         setNotify('prop', 'b');
 
@@ -7382,6 +7621,7 @@ topSuite("Ext.app.ViewModel", [
                     setNotify('foo', 1);
 
                     var child = viewModel.getStore('child');
+
                     expect(child.getFilters().getAt(0).getValue()).toBe(1);
                     setNotify('foo', 2);
                     expect(child.getFilters().getAt(0).getValue()).toBe(2);
@@ -7397,6 +7637,7 @@ topSuite("Ext.app.ViewModel", [
 
             it("should resolve listener scope to the view controller", function() {
                 var ctrl = new TestController();
+
                 var c = new Ext.Component({
                     controller: ctrl,
                     viewModel: viewModel
@@ -7449,6 +7690,7 @@ topSuite("Ext.app.ViewModel", [
 
             it("should be able to resolve up the hierarchy", function() {
                 var ctrl = new TestController();
+
                 var ct = new Ext.container.Container({
                     controller: ctrl,
                     items: {
@@ -7463,6 +7705,7 @@ topSuite("Ext.app.ViewModel", [
                         }
                     }
                 });
+
                 viewModel.setView(ct.down('#c'));
 
                 viewModel.setStores({
@@ -7529,6 +7772,7 @@ topSuite("Ext.app.ViewModel", [
 
                 viewModel.set('foo', store);
                 var b = bindNotify('{foo}', spy);
+
                 spy.reset();
                 b.destroy();
                 viewModel.collectTimeout = 0;
@@ -7591,6 +7835,7 @@ topSuite("Ext.app.ViewModel", [
                 bindNotify('{theUser}', spy);
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7607,6 +7852,7 @@ topSuite("Ext.app.ViewModel", [
                 bindNotify('{theUser}', spy);
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7623,6 +7869,7 @@ topSuite("Ext.app.ViewModel", [
                 bindNotify('{theUser}', spy);
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7631,6 +7878,7 @@ topSuite("Ext.app.ViewModel", [
                 var rec = new spec.User({
                     id: 18
                 });
+
                 createWithConfig({
                     links: {
                         theUser: rec
@@ -7639,6 +7887,7 @@ topSuite("Ext.app.ViewModel", [
                 bindNotify('{theUser}', spy);
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
                 expect(arg).not.toBe(rec);
@@ -7697,6 +7946,7 @@ topSuite("Ext.app.ViewModel", [
                             });
                             bindNotify('{theUser}', spy);
                             var user = spy.mostRecentCall.args[0];
+
                             expect(user.session).toBe(session);
                         });
                     });
@@ -7717,6 +7967,7 @@ topSuite("Ext.app.ViewModel", [
                         });
                         bindNotify('{theUser}', spy);
                         var user = spy.mostRecentCall.args[0];
+
                         expect(user.phantom).toBe(true);
                         expect(user.get('name')).toBe('Foo');
                         expect(user.get('group')).toBe('Bar');
@@ -7754,6 +8005,7 @@ topSuite("Ext.app.ViewModel", [
                             });
                             bindNotify('{theUser}', spy);
                             var user = spy.mostRecentCall.args[0];
+
                             expect(user.session).toBe(session);
                         });
                     });
@@ -7811,6 +8063,7 @@ topSuite("Ext.app.ViewModel", [
             describe("with sessions", function() {
                 it("should use an existing record in the session and not query the server", function() {
                     var proxySpy = spyOn(User.getProxy(), 'read');
+
                     makeSession();
                     makeUser(22);
                     createViewModel(true, {
@@ -7836,6 +8089,7 @@ topSuite("Ext.app.ViewModel", [
                         }
                     });
                     var user = session.getRecord('User', 89);
+
                     expect(user.isLoading()).toBe(true);
                 });
             });
@@ -7851,6 +8105,7 @@ topSuite("Ext.app.ViewModel", [
                 });
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7864,6 +8119,7 @@ topSuite("Ext.app.ViewModel", [
                 });
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7877,6 +8133,7 @@ topSuite("Ext.app.ViewModel", [
                 });
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
             });
@@ -7886,10 +8143,12 @@ topSuite("Ext.app.ViewModel", [
                 var rec = new spec.User({
                     id: 18
                 });
+
                 bindNotify('{theUser}', spy);
                 viewModel.linkTo('theUser', rec);
                 completeNotify({});
                 var arg = spy.mostRecentCall.args[0];
+
                 expect(arg.$className).toBe('spec.User');
                 expect(arg.getId()).toBe(18);
                 expect(arg).not.toBe(rec);
@@ -7949,6 +8208,7 @@ topSuite("Ext.app.ViewModel", [
                             });
                             notify();
                             var user = spy.mostRecentCall.args[0];
+
                             expect(user.session).toBe(session);
                         });
                     });
@@ -7967,6 +8227,7 @@ topSuite("Ext.app.ViewModel", [
                         });
                         notify();
                         var user = spy.mostRecentCall.args[0];
+
                         expect(user.phantom).toBe(true);
                         expect(user.get('name')).toBe('Foo');
                         expect(user.get('group')).toBe('Bar');
@@ -7992,13 +8253,14 @@ topSuite("Ext.app.ViewModel", [
                             bindNotify('{theUser}', spy);
                             viewModel.linkTo('theUser', {
                                 type: 'spec.User',
-                                create: { 
+                                create: {
                                     name: 'Foo',
                                     group: 'Bar'
                                 }
                             });
                             notify();
                             var user = spy.mostRecentCall.args[0];
+
                             expect(user.session).toBe(session);
                         });
                     });
@@ -8046,6 +8308,7 @@ topSuite("Ext.app.ViewModel", [
                 it("should use an existing record in the session and not query the server", function() {
                     createViewModel(true);
                     var proxySpy = spyOn(User.getProxy(), 'read');
+
                     makeUser(22);
                     bindNotify('{theUser}', spy);
                     viewModel.linkTo('theUser', {
@@ -8066,6 +8329,7 @@ topSuite("Ext.app.ViewModel", [
                         id: 89
                     });
                     var user = session.getRecord('User', 89);
+
                     expect(user.isLoading()).toBe(true);
                 });
             });
@@ -8074,8 +8338,8 @@ topSuite("Ext.app.ViewModel", [
                 it("should create new model instances in the child view model when linking after binding", function() {
                     createViewModel();
 
-                    var child1 = new Ext.app.ViewModel({parent: viewModel}),
-                        child2 = new Ext.app.ViewModel({parent: viewModel});
+                    var child1 = new Ext.app.ViewModel({ parent: viewModel }),
+                        child2 = new Ext.app.ViewModel({ parent: viewModel });
 
                     child1.bind('{theUser}', spy);
                     child2.bind('{theUser}', spy);
@@ -8107,7 +8371,7 @@ topSuite("Ext.app.ViewModel", [
                 });
             });
         });
-    }); 
+    });
     
     describe("formulas", function() {
         beforeEach(function() {
@@ -8473,10 +8737,12 @@ topSuite("Ext.app.ViewModel", [
             while (parts.length) {
                 key = parts.shift();
                 stub = stub.children && stub.children[key];
+
                 if (!stub) {
                     return null;
                 }
             }
+
             return stub;
         }
 
@@ -8492,12 +8758,14 @@ topSuite("Ext.app.ViewModel", [
 
         it("should not collect a stub with a binding", function() {
             var binding = bindNotify('{foo}', Ext.emptyFn);
+
             forceCollect();
             expect(peekStub('foo')).not.toBeNull();
         });
 
         it("should collect a stub when the only binding is destroyed", function() {
             var binding = bindNotify('{foo}', Ext.emptyFn);
+
             binding.destroy();
             forceCollect();
             expect(peekStub('foo')).toBeNull();
@@ -8538,6 +8806,7 @@ topSuite("Ext.app.ViewModel", [
 
         it("should not collect parent stubs if there are any bindings below it", function() {
             var binding = bindNotify('{foo.bar.baz.x}', Ext.emptyFn);
+
             forceCollect();
             expect(peekStub('foo')).not.toBeNull();
             expect(peekStub('foo.bar')).not.toBeNull();
@@ -8547,6 +8816,7 @@ topSuite("Ext.app.ViewModel", [
 
         it("should collect parent stubs when all child bindings are destroyed", function() {
             var binding = bindNotify('{foo.bar.baz.x}', Ext.emptyFn);
+
             binding.destroy();
             forceCollect();
             expect(peekStub('foo')).toBeNull();
@@ -8572,7 +8842,9 @@ topSuite("Ext.app.ViewModel", [
             var child = new Ext.app.ViewModel({
                 parent: viewModel
             });
+
             var binding = child.bind('{foo}', Ext.emptyFn);
+
             binding.destroy();
             forceCollect(child);
             expect(peekStub('foo', child)).not.toBeNull();
@@ -8582,6 +8854,7 @@ topSuite("Ext.app.ViewModel", [
         it("should auto collect on destroy", function() {
             viewModel.collectTimeout = 0;
             var binding = bindNotify('{foo}', Ext.emptyFn);
+
             binding.destroy();
             expect(peekStub('foo')).toBeNull();
         });
@@ -8605,12 +8878,14 @@ topSuite("Ext.app.ViewModel", [
 
             it("should destroy expression bindings", function() {
                 var binding = viewModel.bind('{foo}', Ext.emptyFn);
+
                 viewModel.destroy();
                 expect(binding.destroyed).toBe(true);
             });
 
             it("should destroy template bindings", function() {
                 var binding = viewModel.bind('Hello {foo}', Ext.emptyFn);
+
                 viewModel.destroy();
                 expect(binding.destroyed).toBe(true);
             });
@@ -8621,31 +8896,32 @@ topSuite("Ext.app.ViewModel", [
                     b: '{bar}',
                     c: '{baz}'
                 }, Ext.emptyFn);
+
                 viewModel.destroy();
                 expect(binding.destroyed).toBe(true);
             });
         });
     });
 
-    describe('idle event', function () {
+    describe('idle event', function() {
         var listener;
 
         beforeEach(function() {
             createViewModel();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             listener = Ext.destroy(listener);
         });
 
-        it('should fire global idle after bind notification', function () {
+        it('should fire global idle after bind notification', function() {
             var calls = [],
                 done;
 
             listener = Ext.on({
                 destroyable: true,
 
-                idle: function () {
+                idle: function() {
                     var timer = Ext.Timer.firing;
 
                     if (timer && timer.fn.$skipTimerCheck) {
@@ -8656,7 +8932,7 @@ topSuite("Ext.app.ViewModel", [
                         var s = timer.creator;
 
                         if (timer.runner) {
-                            Ext.each(timer.runner.fired, function (task) {
+                            Ext.each(timer.runner.fired, function(task) {
                                 s += '\n-----------------------';
                                 s += 'Task:';
                                 s += task.creator;
@@ -8671,7 +8947,7 @@ topSuite("Ext.app.ViewModel", [
                 }
             });
 
-            viewModel.bind('{foo}', function (v) {
+            viewModel.bind('{foo}', function(v) {
                 calls.push({ foo: v });
                 done = true;
             });
@@ -8679,17 +8955,18 @@ topSuite("Ext.app.ViewModel", [
             viewModel.set('foo', 42);
 
             var timer = Ext.Timer.get(viewModel.getScheduler().timer);
+
             if (timer) {
                 timer.ours = true;
             }
 
             expect(calls).toEqual([]);
 
-            waitFor(function () {
+            waitFor(function() {
                 return done;
             });
 
-            runs(function () {
+            runs(function() {
                 expect(calls).toEqual([
                     { foo: 42 },
                     'idle'

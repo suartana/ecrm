@@ -787,8 +787,7 @@ function() {
                     });
                 });
                 
-                TODO('Modern dialogs are not yet focusable by default').
-                describe("from dialog", function() {
+                xdescribe("from dialog", function() {
                     it("should tab to the first tool", function() {
                         pressTab(dialog, true);
 

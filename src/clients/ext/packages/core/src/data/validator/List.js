@@ -27,6 +27,7 @@ Ext.define('Ext.data.validator.List', {
             result;
             
         result = (inclusion && contains) || (exclusion && !contains);
+        
         return result || this.getMessage();
     }
 });

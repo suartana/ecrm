@@ -1053,25 +1053,42 @@ function() {
             });
         });
 
-        it('should not deselect the row when navigating cell-to-cell in a row', function() {
-            makeGrid(null, null, {
-                deselectable: true,
-                cells: false
+        describe('deselectable: true', function() {
+            it('should deselect the current row when SPACE pressed', function() {
+                makeGrid(null, null, {
+                    deselectable: true,
+                    cells: false
+                });
+
+                var c2 = findCell(2, 2);
+
+                Ext.testHelper.tap(c2);
+                expect(isRowSelected(2));
+
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.SPACE);
+                expect(!isRowSelected(2));
             });
 
-            var c2 = findCell(2, 2);
+            it('should not deselect the row when navigating cell-to-cell in a row', function () {
+                makeGrid(null, null, {
+                    deselectable: true,
+                    cells: false
+                });
 
-            Ext.testHelper.tap(c2);
-            expect(isRowSelected(2));
+                var c2 = findCell(2, 2);
 
-            jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
-            expect(isRowSelected(2));
+                Ext.testHelper.tap(c2);
+                expect(isRowSelected(2));
 
-            jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
-            expect(isRowSelected(2));
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                expect(isRowSelected(2));
 
-            jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
-            expect(isRowSelected(2));
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                expect(isRowSelected(2));
+
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                expect(isRowSelected(2));
+            });
         });
 
         describe("checkboxSelect", function () {

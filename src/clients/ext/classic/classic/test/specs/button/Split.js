@@ -18,6 +18,16 @@ topSuite("Ext.button.Split", function() {
         button = null;
     });
     
+    describe("alternate class name", function() {
+        it("should have Ext.SplitButton as the alternate class name", function() {
+            expect(Ext.button.Split.prototype.alternateClassName).toEqual("Ext.SplitButton");
+        });
+
+        it("should allow the use of Ext.SplitButton", function() {
+            expect(Ext.SplitButton).toBeDefined();
+        });
+    });
+
     describe("arrowEl", function() {
         it("should render arrowEl", function() {
             makeButton();

@@ -35,8 +35,9 @@
  * All user-developed visual widgets that are required to participate in automated
  * life cycle and size management should subclass Component.
  *
- * See the Creating new UI controls chapter in [Component Guide](../guides/core_concepts/components.html)
- * for details on how and to either extend or augment Ext JS base classes to create custom Components.
+ * See the Creating new UI controls chapter in
+ * [Component Guide](../guides/core_concepts/components.html) for details on how and to either
+ * extend or augment Ext JS base classes to create custom Components.
  *
  * ## The Ext.Component class by itself
  *
@@ -130,9 +131,9 @@ Ext.define('Ext.Component', {
 
         VERTICAL_DIRECTION_Re: /^(?:top|bottom)$/,
 
-        // RegExp whih specifies characters in an xtype which must be translated to '-' when generating auto IDs.
-        // This includes dot, comma and whitespace
-        INVALID_ID_CHARS_Re: /[\.,\s]/g,
+        // RegExp whih specifies characters in an xtype which must be translated to '-'
+        // when generating auto IDs. This includes dot, comma and whitespace
+        INVALID_ID_CHARS_Re: /[.,\s]/g,
 
         /**
          * @property {String} ariaHighContrastModeCls CSS class to be applied
@@ -175,11 +176,13 @@ Ext.define('Ext.Component', {
         /**
          * Find the Widget or Component to which the given Element belongs.
          *
-         * @param {Ext.dom.Element/HTMLElement} el The element from which to start to find an owning Component.
-         * @param {Ext.dom.Element/HTMLElement} [limit] The element at which to stop upward searching for an
-         * owning Component, or the number of Components to traverse before giving up.
-         * Defaults to the document's HTML element.
-         * @param {String} [selector] An optional {@link Ext.ComponentQuery} selector to filter the target.
+         * @param {Ext.dom.Element/HTMLElement} el The element from which to start to find an owning
+         * Component.
+         * @param {Ext.dom.Element/HTMLElement} [limit] The element at which to stop upward
+         * searching for an owning Component, or the number of Components to traverse
+         * before giving up. Defaults to the document's HTML element.
+         * @param {String} [selector] An optional {@link Ext.ComponentQuery} selector to filter
+         * the target.
          * @return {Ext.Component/null} Component, or null
          *
          * @deprecated 6.5.0 Use {@link Ext.Component#method!from} instead.
@@ -194,7 +197,7 @@ Ext.define('Ext.Component', {
          * {@link Ext.Component#suspendLayouts suspendLayouts} was in effect.
          * @static
          */
-        flushLayouts: function () {
+        flushLayouts: function() {
             var me = this,
                 context = me.pendingLayouts;
 
@@ -203,21 +206,22 @@ Ext.define('Ext.Component', {
                 me.runningLayoutContext = context;
 
                 Ext.override(context, {
-                    runComplete: function () {
+                    runComplete: function() {
+                        var Scroller = Ext.scroll.Scroller,
+                            GlobalEvents = Ext.GlobalEvents,
+                            result;
+
                         // we need to release the layout queue before running any of the
                         // finishedLayout calls because they call afterComponentLayout
                         // which can re-enter by calling updateLayout/doComponentLayout.
                         me.runningLayoutContext = null;
-
-                        var Scroller = Ext.scroll.Scroller,
-                            GlobalEvents = Ext.GlobalEvents,
-                            result;
 
                         if (Scroller.viewport) {
                             Scroller.viewport.restoreState();
                         }
 
                         result = this.callParent(); // not "me" here!
+                        
                         if (GlobalEvents.hasListeners.afterlayout) {
                             GlobalEvents.fireEvent('afterlayout');
                         }
@@ -235,15 +239,16 @@ Ext.define('Ext.Component', {
          *
          * {@link Ext#suspendLayouts} is alias of {@link Ext.Component#suspendLayouts}.
          *
-         * @param {Boolean} [flush=false] `true` to perform all the pending layouts. This can also be
-         * achieved by calling {@link Ext.Component#flushLayouts flushLayouts} directly.
+         * @param {Boolean} [flush=false] `true` to perform all the pending layouts. This can also
+         * be achieved by calling {@link Ext.Component#flushLayouts flushLayouts} directly.
          * @static
          */
-        resumeLayouts: function (flush) {
+        resumeLayouts: function(flush) {
             if (this.layoutSuspendCount && ! --this.layoutSuspendCount) {
                 if (flush) {
                     this.flushLayouts();
                 }
+                
                 if (Ext.GlobalEvents.hasListeners.resumelayouts) {
                     Ext.GlobalEvents.fireEvent('resumelayouts');
                 }
@@ -266,7 +271,7 @@ Ext.define('Ext.Component', {
          *
          * @static
          */
-        suspendLayouts: function () {
+        suspendLayouts: function() {
             ++this.layoutSuspendCount;
         },
 
@@ -277,14 +282,15 @@ Ext.define('Ext.Component', {
          * @param {Boolean} [defer=false] `true` to just queue the layout if this component.
          * @static
          */
-        updateLayout: function (comp, defer) {
+        updateLayout: function(comp, defer) {
             var me = this,
                 running = me.runningLayoutContext,
                 pending;
 
             if (running) {
                 running.queueInvalidate(comp);
-            } else {
+            }
+            else {
                 pending = me.pendingLayouts || (me.pendingLayouts = new Ext.layout.Context());
                 pending.queueInvalidate(comp);
 
@@ -493,8 +499,8 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String} alignTarget
-     * A Component or Element by which to position this component according to the {@link #defaultAlign}.
-     * Defaults to the owning Container.
+     * A Component or Element by which to position this component according to the
+     * {@link #defaultAlign}. Defaults to the owning Container.
      *
      * *Only applicable if this component is {@link #cfg-floating}*
      *
@@ -509,15 +515,15 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String/Object} autoEl
-     * A tag name or {@link Ext.dom.Helper DomHelper} spec used to create the {@link #getEl Element} which will
-     * encapsulate this Component.
+     * A tag name or {@link Ext.dom.Helper DomHelper} spec used to create the {@link #getEl Element}
+     * which will encapsulate this Component.
      *
      * You do not normally need to specify this. For the base classes {@link Ext.Component} and
-     * {@link Ext.container.Container}, this defaults to **'div'**. The more complex Sencha classes use a more
-     * complex DOM structure specified by their own {@link #cfg-renderTpl}s.
+     * {@link Ext.container.Container}, this defaults to **'div'**. The more complex Sencha classes
+     * use a more complex DOM structure specified by their own {@link #cfg-renderTpl}s.
      *
-     * This is intended to allow the developer to create application-specific utility Components encapsulated by
-     * different DOM elements. Example usage:
+     * This is intended to allow the developer to create application-specific utility Components
+     * encapsulated by different DOM elements. Example usage:
      *
      *     {
      *         xtype: 'component',
@@ -547,21 +553,23 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean/String/HTMLElement/Ext.dom.Element} autoRender
-     * This config is intended mainly for non-{@link #cfg-floating} Components which may or may not be shown. Instead of using
-     * {@link #renderTo} in the configuration, and rendering upon construction, this allows a Component to render itself
-     * upon first _{@link Ext.Component#method-show show}_. If {@link #cfg-floating} is `true`, the value of this config is omitted as if it is `true`.
+     * This config is intended mainly for non-{@link #cfg-floating} Components which may or may not
+     * be shown. Instead of using {@link #renderTo} in the configuration, and rendering upon
+     * construction, this allows a Component to render itself upon first
+     * _{@link Ext.Component#method-show show}_. If {@link #cfg-floating} is `true`, the value
+     * of this config is omitted as if it is `true`.
      *
      * Specify as `true` to have this Component render to the document body upon first show.
      *
-     * Specify as an element, or the ID of an element to have this Component render to a specific element upon first
-     * show.
+     * Specify as an element, or the ID of an element to have this Component render to a specific
+     * element upon first show.
      */
     autoRender: false,
 
     /**
      * @cfg {Boolean} [autoScroll=false]
-     * `true` to use overflow:'auto' on the components layout element and show scroll bars automatically when necessary,
-     * `false` to clip any overflowing content.
+     * `true` to use overflow:'auto' on the components layout element and show scroll bars
+     * automatically when necessary, `false` to clip any overflowing content.
      *
      * This should not be combined with {@link #overflowX} or  {@link #overflowY}.
      * @deprecated 5.1.0 Use {@link #scrollable} instead
@@ -569,8 +577,8 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean} autoShow
-     * `true` to automatically show the component upon creation. This config option may only be used for
-     * {@link #cfg-floating} components or components that use {@link #autoRender}.
+     * `true` to automatically show the component upon creation. This config option may only be used
+     * for {@link #cfg-floating} components or components that use {@link #autoRender}.
      *
      * @since 2.3.0
      */
@@ -578,20 +586,22 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String} baseCls
-     * The base CSS class to apply to this component's element. This will also be prepended to elements within this
-     * component like Panel's body will get a class `x-panel-body`. This means that if you create a subclass of Panel, and
-     * you want it to get all the Panels styling for the element and the body, you leave the `baseCls` `x-panel` and use
+     * The base CSS class to apply to this component's element. This will also be prepended
+     * to elements within this component like Panel's body will get a class `x-panel-body`.
+     * This means that if you create a subclass of Panel, and you want it to get all the Panels
+     * styling for the element and the body, you leave the `baseCls` `x-panel` and use
      * `componentCls` to add specific styling for this component.
      */
     baseCls: Ext.baseCSSPrefix + 'component',
 
     /**
      * @cfg {Number/String/Boolean} border
-     * Specifies the border size for this component. The border can be a single numeric value to apply to all sides or it can
-     * be a CSS style specification for each style, for example: '10 5 3 10' (top, right, bottom, left).
+     * Specifies the border size for this component. The border can be a single numeric value
+     * to apply to all sides or it can be a CSS style specification for each style,
+     * for example: '10 5 3 10' (top, right, bottom, left).
      *
-     * For components that have no border by default, setting this won't make the border appear by itself.
-     * You also need to specify border color and style:
+     * For components that have no border by default, setting this won't make the border appear
+     * by itself. You also need to specify border color and style:
      *
      *     border: 5,
      *     style: {
@@ -606,6 +616,7 @@ Ext.define('Ext.Component', {
      * @cfg childEls
      * @inheritdoc Ext.util.ElementContainer#cfg-childEls
      */
+    /* eslint-disable key-spacing */
     childEls: {
         frameTable: { frame: true },
         frameTL:    { frame: 'tl' },
@@ -618,12 +629,14 @@ Ext.define('Ext.Component', {
         frameBC:    { frame: 'bc' },
         frameBR:    { frame: 'br' }
     },
+    /* eslint-enable key-spacing */
 
     /**
      * @cfg {String/String[]} [cls='']
      * An optional extra CSS class that will be added to this component's Element.
-     * The value can be a string, a list of strings separated by spaces, or an array of strings. This can be useful
-     * for adding customized styles to the component or any of its children using standard CSS rules.
+     * The value can be a string, a list of strings separated by spaces, or an array of strings.
+     * This can be useful for adding customized styles to the component or any of its children
+     * using standard CSS rules.
      *
      * @since 1.1.0
      */
@@ -632,74 +645,82 @@ Ext.define('Ext.Component', {
      * @cfg {Number} [columnWidth]
      * Defines the column width inside {@link Ext.layout.container.Column column layout}.
      *
-     * The columnWidth property is always evaluated as a percentage and must be a decimal value greater than 0 and
-     * less than 1 (e.g., .25).  See the description at the top of {@link Ext.layout.container.Column column layout} for
-     * additional usage details when combining width and columnWidth configs within the layout.
+     * The columnWidth property is always evaluated as a percentage and must be a decimal value
+     * greater than 0 and less than 1 (e.g., .25). See the description at the top of
+     * {@link Ext.layout.container.Column column layout} for additional usage details when combining
+     * width and columnWidth configs within the layout.
      */
 
     /**
      * @cfg {String} componentCls
-     * CSS Class to be added to a components root level element to give distinction to it via styling.
+     * CSS Class to be added to a components root level element to give distinction to it
+     * via styling.
      */
 
     // @cmd-auto-dependency { aliasPrefix : "layout." }
     /**
      * @cfg {String/Object} componentLayout
-     * The sizing and positioning of a Component's internal Elements is the responsibility of the Component's layout
-     * manager which sizes a Component's internal structure in response to the Component being sized.
+     * The sizing and positioning of a Component's internal Elements is the responsibility
+     * of the Component's layout manager which sizes a Component's internal structure in response
+     * to the Component being sized.
      *
-     * Generally, developers will not use this configuration as all provided Components which need their internal
-     * elements sizing (Such as {@link Ext.form.field.Base input fields}) come with their own componentLayout managers.
+     * Generally, developers will not use this configuration as all provided Components which need
+     * their internal elements sizing (Such as {@link Ext.form.field.Base input fields}) come with
+     * their own componentLayout managers.
      *
-     * The {@link Ext.layout.container.Auto default layout manager} will be used on instances of the base Ext.Component
-     * class which simply sizes the Component's encapsulating element to the height and width specified in the
-     * {@link #setSize} method.
+     * The {@link Ext.layout.container.Auto default layout manager} will be used on instances of the
+     * base Ext.Component class which simply sizes the Component's encapsulating element to the
+     * height and width specified in the {@link #setSize} method.
      *
      */
     componentLayout: 'autocomponent',
 
     /**
      * @cfg {Object/String} constraintInsets
-     * An object or a string (in TRBL order) specifying insets from the configured {@link #constrainTo constrain region}
-     * within which this component must be constrained when positioning or sizing.
-     * example:
+     * An object or a string (in TRBL order) specifying insets from the configured
+     * {@link #constrainTo constrain region} within which this component must be constrained
+     * when positioning or sizing. Example:
      *
      *     constraintInsets: '10 10 10 10' // Constrain with 10px insets from parent
      */
 
     /**
      * @cfg {Ext.util.Region/Ext.dom.Element} constrainTo
-     * A {@link Ext.util.Region Region} (or an element from which a Region measurement will be read) which is used
-     * to constrain the component. Only applies when the component is floating.
+     * A {@link Ext.util.Region Region} (or an element from which a Region measurement will be read)
+     * which is used to constrain the component. Only applies when the component is floating.
      */
 
     /**
      * @cfg {String} contentEl
-     * Specify an existing HTML element, or the `id` of an existing HTML element to use as the content for this component.
+     * Specify an existing HTML element, or the `id` of an existing HTML element to use as the
+     * content for this component.
      *
-     * This config option is used to take an existing HTML element and place it in the layout element of a new component
-     * (it simply moves the specified DOM element _after the Component is rendered_ to use as the content.
+     * This config option is used to take an existing HTML element and place it in the layout
+     * element of a new component (it simply moves the specified DOM element _after the Component
+     * is rendered_ to use as the content.
      *
      * **Notes:**
      *
-     * The specified HTML element is appended to the layout element of the component _after any configured
-     * {@link #html HTML} has been inserted_, and so the document will not contain this element at the time
-     * the {@link #event-render} event is fired.
+     * The specified HTML element is appended to the layout element of the component _after any
+     * configured {@link #html HTML} has been inserted_, and so the document will not contain
+     * this element at the time the {@link #event-render} event is fired.
      *
-     * The specified HTML element used will not participate in any **`{@link Ext.container.Container#layout layout}`**
-     * scheme that the Component may use. It is just HTML. Layouts operate on child
+     * The specified HTML element used will not participate in any
+     * **`{@link Ext.container.Container#layout layout}`** scheme that the Component may use.
+     * It is just HTML. Layouts operate on child
      * **`{@link Ext.container.Container#cfg-items items}`**.
      *
-     * Add either the `x-hidden` or the `x-hidden-display` CSS class to prevent a brief flicker of the content before it
-     * is rendered to the panel.
+     * Add either the `x-hidden` or the `x-hidden-display` CSS class to prevent a brief flicker
+     * of the content before it is rendered to the panel.
      *
      * @since 3.4.0
      */
 
     /**
      * @cfg {String} defaultAlign
-     * The default {@link Ext.util.Positionable#getAlignToXY Ext.dom.Element#getAlignToXY} anchor position value for this component
-     * relative to its {@link #alignTarget} (which defaults to its owning Container).
+     * The default {@link Ext.util.Positionable#getAlignToXY Ext.dom.Element#getAlignToXY} anchor
+     * position value for this component relative to its {@link #alignTarget}
+     * (which defaults to its owning Container).
      *
      * _Only applicable if this component is {@link #cfg-floating}_
      *
@@ -717,7 +738,7 @@ Ext.define('Ext.Component', {
     // http://www.w3.org/TR/html5/disabled-elements.html
     disabledRe: /^(?:button|input|select|textarea|optgroup|option|fieldset)$/i,
 
-    nonMaskableRe: (function () {
+    nonMaskableRe: (function() {
         var re = ['input', 'select', 'textarea', 'optgroup', 'option', 'table'];
 
         // All IE browsers 9 and below except for IE 9 standards.
@@ -752,14 +773,14 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean/Object} draggable
-     * Specify as true to make a {@link #cfg-floating} Component draggable using the Component's encapsulating element as
-     * the drag handle.
+     * Specify as true to make a {@link #cfg-floating} Component draggable using the Component's
+     * encapsulating element as the drag handle.
      *
-     * This may also be specified as a config object for the {@link Ext.util.ComponentDragger ComponentDragger} which is
-     * instantiated to perform dragging.
+     * This may also be specified as a config object for the
+     * {@link Ext.util.ComponentDragger ComponentDragger} which is instantiated to perform dragging.
      *
-     * For example to create a Component which may only be dragged around using a certain internal element as the drag
-     * handle, use the delegate option:
+     * For example to create a Component which may only be dragged around using a certain internal
+     * element as the drag handle, use the delegate option:
      *
      *     new Ext.Component({
      *         constrain: true,
@@ -778,10 +799,11 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Number} flex
-     * Flex may be applied to **child items** of a box layout ({@link Ext.layout.container.VBox vbox} or
-     * {@link Ext.layout.container.HBox hbox}). Each child item with a flex property will
-     * fill space (horizontally in `hbox`, vertically in `vbox`) according to that item's
-     * **relative** flex value compared to the sum of all items with a flex value specified.
+     * Flex may be applied to **child items** of a box layout
+     * ({@link Ext.layout.container.VBox vbox} or {@link Ext.layout.container.HBox hbox}).
+     * Each child item with a flex property will fill space (horizontally in `hbox`, vertically
+     * in `vbox`) according to that item's **relative** flex value compared to the sum of all items
+     * with a flex value specified.
      *
      * Any child items that have either a `flex` of `0` or `undefined`
      * will not be 'flexed' (the initial size will not be changed).
@@ -789,36 +811,40 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean} floating
-     * Specify as true to float the Component outside of the document flow using CSS absolute positioning.
+     * Specify as true to float the Component outside of the document flow using CSS absolute
+     * positioning.
      *
-     * Components such as {@link Ext.window.Window Window}s and {@link Ext.menu.Menu Menu}s are floating by default.
+     * Components such as {@link Ext.window.Window Window}s and {@link Ext.menu.Menu Menu}s are
+     * floating by default.
      *
-     * Floating Components that are programmatically {@link Ext.Component#method-render rendered} will register
-     * themselves with the global {@link Ext.WindowManager ZIndexManager}
+     * Floating Components that are programmatically {@link Ext.Component#method-render rendered}
+     * will register themselves with the global {@link Ext.WindowManager ZIndexManager}
      *
      * ### Floating Components as child items of a Container
      *
-     * A floating Component may be used as a child item of a Container. This just allows the floating Component to seek
-     * a ZIndexManager by examining the ownerCt chain.
+     * A floating Component may be used as a child item of a Container. This just allows
+     * the floating Component to seek a ZIndexManager by examining the ownerCt chain.
      *
-     * When configured as floating, Components acquire, at render time, a {@link Ext.ZIndexManager ZIndexManager} which
-     * manages a stack of related floating Components. The ZIndexManager sorts its stack according to
-     * an incrementing access counter and the {@link Ext.util.Floating#alwaysOnTop alwaysOnTop} config when the Component's {@link #toFront} method is called.
+     * When configured as floating, Components acquire, at render time, a
+     * {@link Ext.ZIndexManager ZIndexManager} which manages a stack of related floating Components.
+     * The ZIndexManager sorts its stack according to an incrementing access counter and the
+     * {@link Ext.util.Floating#alwaysOnTop alwaysOnTop} config when the Component's
+     * {@link #toFront} method is called.
      *
-     * The ZIndexManager is found by traversing up the {@link #ownerCt} chain to find an ancestor which itself is
-     * floating. This is so that descendant floating Components of floating _Containers_ (Such as a ComboBox dropdown
-     * within a Window) can have its zIndex managed relative to any siblings, but always **above** that floating
-     * ancestor Container.
+     * The ZIndexManager is found by traversing up the {@link #ownerCt} chain to find an ancestor
+     * which itself is floating. This is so that descendant floating Components of floating
+     * _Containers_ (Such as a ComboBox dropdown within a Window) can have its zIndex managed
+     * relative to any siblings, but always **above** that floating ancestor Container.
      *
-     * If no floating ancestor is found, a floating Component registers itself with the default {@link Ext.WindowManager
-     * ZIndexManager}.
+     * If no floating ancestor is found, a floating Component registers itself with the default
+     * {@link Ext.WindowManager ZIndexManager}.
      *
-     * Floating components _do not participate in the Container's layout_. Because of this, they are not rendered until
-     * you explicitly {@link #method-show} them.
+     * Floating components _do not participate in the Container's layout_. Because of this,
+     * they are not rendered until you explicitly {@link #method-show} them.
      *
-     * After rendering, the ownerCt reference is deleted, and the {@link #floatParent} property is set to the found
-     * floating ancestor Container. If no floating ancestor Container was found the {@link #floatParent} property will
-     * not be set.
+     * After rendering, the ownerCt reference is deleted, and the {@link #floatParent} property
+     * is set to the found floating ancestor Container. If no floating ancestor Container was found
+     * the {@link #floatParent} property will not be set.
      */
     floating: false,
 
@@ -831,13 +857,15 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean} frame
-     * Specify as `true` to have the Component inject framing elements within the Component at render time to provide a
-     * graphical rounded frame around the Component content.
+     * Specify as `true` to have the Component inject framing elements within the Component
+     * at render time to provide a graphical rounded frame around the Component content.
      *
-     * This is only necessary when running on outdated, or non standard-compliant browsers such as Microsoft's Internet
-     * Explorer prior to version 9 which do not support rounded corners natively.
+     * This is only necessary when running on outdated, or non standard-compliant browsers
+     * such as Microsoft's Internet Explorer prior to version 9 which do not support rounded corners
+     * natively.
      *
-     * The extra space taken up by this framing is available from the read only property {@link #frameSize}.
+     * The extra space taken up by this framing is available from the read only property
+     * {@link #frameSize}.
      */
 
     /**
@@ -855,13 +883,15 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String} hideMode
-     * A String which specifies how this Component's encapsulating DOM element will be hidden. Values may be:
+     * A String which specifies how this Component's encapsulating DOM element will be hidden.
+     * Values may be:
      *
      *   - `'display'` : The Component will be hidden using the `display: none` style.
      *   - `'visibility'` : The Component will be hidden using the `visibility: hidden` style.
-     *   - `'offsets'` : The Component will be hidden by absolutely positioning it out of the visible area of the document.
-     *     This is useful when a hidden Component must maintain measurable dimensions. Hiding using `display` results in a
-     *     Component having zero dimensions.
+     *   - `'offsets'` : The Component will be hidden by absolutely positioning it out of the
+     *     visible area of the document.
+     *     This is useful when a hidden Component must maintain measurable dimensions. Hiding using
+     *     `display` results in a Component having zero dimensions.
      *
      * @since 1.1.0
      */
@@ -869,10 +899,10 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String/Object} [html='']
-     * An HTML fragment, or a {@link Ext.dom.Helper DomHelper} specification to use as the layout element content.
-     * The HTML content is added after the component is rendered, so the document will not contain this HTML at the time
-     * the {@link #event-render} event is fired. This content is inserted into the body _before_ any configured {@link #contentEl}
-     * is appended.
+     * An HTML fragment, or a {@link Ext.dom.Helper DomHelper} specification to use as the layout
+     * element content. The HTML content is added after the component is rendered, so the document
+     * will not contain this HTML at the time the {@link #event-render} event is fired. This content
+     * is inserted into the body _before_ any configured {@link #contentEl} is appended.
      *
      * @since 3.4.0
      */
@@ -885,8 +915,9 @@ Ext.define('Ext.Component', {
      * all existing components. Components created with an `id` may be accessed globally
      * using {@link Ext#getCmp Ext.getCmp}.
      *
-     * Instead of using assigned ids, consider a {@link #reference} config and a {@link #cfg-controller ViewController}
-     * to respond to events and perform processing upon this Component.
+     * Instead of using assigned ids, consider a {@link #reference} config and
+     * a {@link #cfg-controller ViewController} to respond to events and perform processing
+     * upon this Component.
      *
      * Alternatively, {@link #itemId} and {@link Ext.ComponentQuery ComponentQuery} can be
      * used to perform selector-based searching for Components analogous to DOM querying.
@@ -912,12 +943,13 @@ Ext.define('Ext.Component', {
      * The **unique** id of this component instance within its container. See also the
      * {@link #reference} config.
      *
-     * An `itemId` can be used as an alternative way to get a reference to a component when no object reference is
-     * available. Instead of using an `{@link #id}` with {@link Ext#getCmp getCmp}, use
-     * `itemId` with {@link Ext.container.Container#getComponent getComponent} which will
-     * retrieve `itemId`'s or {@link #id}'s. Since `itemId`'s are an index to the container's
-     * internal collection, the `itemId` is scoped locally to the container -- avoiding
-     * potential conflicts with {@link Ext.ComponentManager}, which requires a **unique** {@link #id} value.
+     * An `itemId` can be used as an alternative way to get a reference to a component
+     * when no object reference is available. Instead of using an `{@link #id}` with
+     * {@link Ext#getCmp getCmp}, use `itemId` with
+     * {@link Ext.container.Container#getComponent getComponent} which will retrieve `itemId`'s
+     * or {@link #id}'s. Since `itemId`'s are an index to the container's internal collection,
+     * the `itemId` is scoped locally to the container -- avoiding potential conflicts with
+     * {@link Ext.ComponentManager}, which requires a **unique** {@link #id} value.
      *
      *     var c = new Ext.panel.Panel({ //
      *         height: 300,
@@ -939,8 +971,8 @@ Ext.define('Ext.Component', {
      *     p2 = p1.ownerCt.getComponent('p2'); // reference via a sibling
      *     console.log(p2);
      *
-     * Also see {@link #id}, `{@link Ext.container.Container#query}`, `{@link Ext.container.Container#down}` and
-     * `{@link Ext.container.Container#child}`.
+     * Also see {@link #id}, `{@link Ext.container.Container#query}`,
+     * `{@link Ext.container.Container#down}` and `{@link Ext.container.Container#child}`.
      *
      * **Note**: Valid identifiers start with a letter or underscore and are followed by
      * (optional) additional letters, underscores, digits or hyphens.
@@ -966,20 +998,24 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Number/String} margin
-     * Specifies the margin for this component. The margin can be a single numeric value to apply to all sides or it can
-     * be a CSS style specification for each style, for example: '10 5 3 10' (top, right, bottom, left).
+     * Specifies the margin for this component. The margin can be a single numeric value to apply
+     * to all sides or it can be a CSS style specification for each style,
+     * for example: '10 5 3 10' (top, right, bottom, left).
      */
 
     /**
      * @cfg {String} maskElement
-     * Related to the {@link #cfg-childEls} configuration which specifies named properties which correspond to component sub-elements.
+     * Related to the {@link #cfg-childEls} configuration which specifies named properties
+     * which correspond to component sub-elements.
      *
      * The name of the element property in this component to mask when masked by a LoadMask.
      *
-     * Defaults to `null` to indicate that Components cannot by default contain a LoadMask, and that any LoadMask should be rendered into the document body.
+     * Defaults to `null` to indicate that Components cannot by default contain a LoadMask,
+     * and that any LoadMask should be rendered into the document body.
      *
-     * For example, Panels use `"el"` to indicate that the whole panel should be masked. This could be configured to be
-     * `"body"` so that only the body is masked and toolbars and the header are still mouse-accessible.
+     * For example, Panels use `"el"` to indicate that the whole panel should be masked.
+     * This could be configured to be `"body"` so that only the body is masked and toolbars
+     * and the header are still mouse-accessible.
      */
     maskElement: null,
     
@@ -989,9 +1025,10 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String} [overCls='']
-     * An optional extra CSS class that will be added to this component's Element when the mouse moves over the Element,
-     * and removed when the mouse moves out. This can be useful for adding customized 'active' or 'hover' styles to the
-     * component or any of its children using standard CSS rules.
+     * An optional extra CSS class that will be added to this component's Element when the mouse
+     * moves over the Element, and removed when the mouse moves out. This can be useful for adding
+     * customized 'active' or 'hover' styles to the component or any of its children using standard
+     * CSS rules.
      *
      * @since 2.3.0
      */
@@ -1020,8 +1057,9 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Number/String} padding
-     * Specifies the padding for this component. The padding can be a single numeric value to apply to all sides or it
-     * can be a CSS style specification for each style, for example: '10 5 3 10' (top, right, bottom, left).
+     * Specifies the padding for this component. The padding can be a single numeric value to apply
+     * to all sides or it can be a CSS style specification for each style,
+     * for example: '10 5 3 10' (top, right, bottom, left).
      */
 
     /**
@@ -1086,7 +1124,8 @@ Ext.define('Ext.Component', {
     /**
      * @cfg {Object} renderData
      *
-     * The data used by {@link #renderTpl} in addition to the following property values of the component:
+     * The data used by {@link #renderTpl} in addition to the following property values
+     * of the component:
      *
      * - id
      * - ui
@@ -1103,8 +1142,9 @@ Ext.define('Ext.Component', {
      * An object containing properties specifying CSS selectors which identify child elements
      * created by the render process.
      *
-     * After the Component's internal structure is rendered according to the {@link #renderTpl}, this object is iterated through,
-     * and the found Elements are added as properties to the Component using the `renderSelector` property name.
+     * After the Component's internal structure is rendered according to the {@link #renderTpl},
+     * this object is iterated through, and the found Elements are added as properties
+     * to the Component using the `renderSelector` property name.
      *
      * For example, a Component which renders a title and description into its element:
      *
@@ -1173,12 +1213,14 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String/HTMLElement/Ext.dom.Element} renderTo
-     * Specify the `id` of the element, a DOM element or an existing Element that this component will be rendered into.
+     * Specify the `id` of the element, a DOM element or an existing Element that this component
+     * will be rendered into.
      *
      * **Notes:**
      *
-     * Do *not* use this option if the Component is to be a child item of a {@link Ext.container.Container Container}.
-     * It is the responsibility of the {@link Ext.container.Container Container}'s
+     * Do *not* use this option if the Component is to be a child item of a
+     * {@link Ext.container.Container Container}. It is the responsibility of the
+     * {@link Ext.container.Container Container}'s
      * {@link Ext.container.Container#layout layout manager} to render and manage its child items.
      *
      * When using this config, a call to `render()` is not required.
@@ -1190,35 +1232,38 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Ext.XTemplate/String/String[]} renderTpl
-     * An {@link Ext.XTemplate XTemplate} used to create the internal structure inside this Component's encapsulating
-     * {@link #getEl Element}.
+     * An {@link Ext.XTemplate XTemplate} used to create the internal structure inside
+     * this Component's encapsulating {@link #getEl Element}.
      *
      * You do not normally need to specify this. For the base classes {@link Ext.Component} and
-     * {@link Ext.container.Container}, this defaults to **`null`** which means that they will be initially rendered
-     * with no internal structure; they render their {@link #getEl Element} empty. The more specialized
-     * classes with complex DOM structures provide their own template definitions.
+     * {@link Ext.container.Container}, this defaults to **`null`** which means that they will be
+     * initially rendered with no internal structure; they render their {@link #getEl Element}
+     * empty. The more specialized classes with complex DOM structures provide their own template
+     * definitions.
      *
-     * This is intended to allow the developer to create application-specific utility Components with customized
-     * internal structure.
+     * This is intended to allow the developer to create application-specific utility Components
+     * with customized internal structure.
      *
-     * Upon rendering, any created child elements may be automatically imported into object properties using the
-     * {@link #renderSelectors} and {@link #cfg-childEls} options.
+     * Upon rendering, any created child elements may be automatically imported into object
+     * properties using the {@link #renderSelectors} and {@link #cfg-childEls} options.
      * @protected
      */
     renderTpl: '{%this.renderContent(out,values)%}',
 
     /**
      * @cfg {Boolean/Object} resizable
-     * Specify as `true` to apply a {@link Ext.resizer.Resizer Resizer} to this Component after rendering.
+     * Specify as `true` to apply a {@link Ext.resizer.Resizer Resizer} to this Component
+     * after rendering.
      *
-     * May also be specified as a config object to be passed to the constructor of {@link Ext.resizer.Resizer Resizer}
-     * to override any defaults. By default the Component passes its minimum and maximum size, and uses
-     * `{@link Ext.resizer.Resizer#dynamic}: false`
+     * May also be specified as a config object to be passed to the constructor of
+     * {@link Ext.resizer.Resizer Resizer} to override any defaults. By default the Component
+     * passes its minimum and maximum size, and uses `{@link Ext.resizer.Resizer#dynamic}: false`
      */
 
     /**
      * @cfg {String} resizeHandles
-     * A valid {@link Ext.resizer.Resizer} handles config string. Only applies when resizable = true.
+     * A valid {@link Ext.resizer.Resizer} handles config string. Only applies when
+     * resizable = true.
      */
     resizeHandles: 'all',
 
@@ -1264,8 +1309,8 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {String/Object} style
-     * A custom style specification to be applied to this component's Element. Should be a valid argument to
-     * {@link Ext.dom.Element#applyStyles}.
+     * A custom style specification to be applied to this component's Element.
+     * Should be a valid argument to {@link Ext.dom.Element#applyStyles}.
      *
      *     new Ext.panel.Panel({
      *         title: 'Some Title',
@@ -1294,15 +1339,16 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Boolean} toFrontOnShow
-     * True to automatically call {@link #toFront} when the {@link #method-show} method is called on an already visible,
-     * floating component.
+     * True to automatically call {@link #toFront} when the {@link #method-show} method is called
+     * on an already visible, floating component.
      */
     toFrontOnShow: true,
 
     /**
      * @cfg {Ext.XTemplate/Ext.Template/String/String[]} tpl
-     * An {@link Ext.Template}, {@link Ext.XTemplate} or an array of strings to form an Ext.XTemplate. Used in
-     * conjunction with the `{@link #data}` and `{@link #tplWriteMode}` configurations.
+     * An {@link Ext.Template}, {@link Ext.XTemplate} or an array of strings to form
+     * an Ext.XTemplate. Used in conjunction with the `{@link #data}` and `{@link #tplWriteMode}`
+     * configurations.
      *
      * @since 3.4.0
      */
@@ -1357,11 +1403,13 @@ Ext.define('Ext.Component', {
 
     /**
      * @cfg {Number} weight
-     * A value to control how Components are laid out in a {@link Ext.layout.container.Border Border} layout or as docked items.
+     * A value to control how Components are laid out in a
+     * {@link Ext.layout.container.Border Border} layout or as docked items.
      *
-     * In a Border layout, this can control how the regions (not the center) region lay out if the west or east take full height
-     * or if the north or south region take full width. Also look at the {@link Ext.layout.container.Border#regionWeights} on the Border layout. An example to show how you can
-     * take control of this is:
+     * In a Border layout, this can control how the regions (not the center) region lay out
+     * if the west or east take full height or if the north or south region take full width.
+     * Also look at the {@link Ext.layout.container.Border#regionWeights} on the Border layout.
+     * An example to show how you can take control of this is:
      *
      *     Ext.create('Ext.container.Viewport', {
      *         layout      : 'border',
@@ -1396,8 +1444,8 @@ Ext.define('Ext.Component', {
      *         ]
      *     });
      *
-     * If docked items, the weight will order how the items are laid out. Here is an example to put a {@link Ext.toolbar.Toolbar} above
-     * a {@link Ext.panel.Panel}'s header:
+     * If docked items, the weight will order how the items are laid out. Here is an example
+     * to put a {@link Ext.toolbar.Toolbar} above a {@link Ext.panel.Panel}'s header:
      *
      *     Ext.create('Ext.panel.Panel', {
      *         renderTo    : document.body,
@@ -1580,16 +1628,18 @@ Ext.define('Ext.Component', {
 
     /**
      * @property {Ext.Container} floatParent
-     * **Only present for {@link #cfg-floating} Components which were inserted as child items of Containers.**
+     * **Only present for {@link #cfg-floating} Components which were inserted as child items
+     * of Containers.**
      *
-     * There are other similar relationships such as the {@link Ext.button.Button button} which activates a {@link Ext.button.Button#cfg-menu menu}, or the
-     * {@link Ext.menu.Item menu item} which activated a {@link Ext.menu.Item#cfg-menu submenu}, or the
-     * {@link Ext.grid.column.Column column header} which activated the column menu.
+     * There are other similar relationships such as the {@link Ext.button.Button button} which
+     * activates a {@link Ext.button.Button#cfg-menu menu}, or the
+     * {@link Ext.menu.Item menu item} which activated a {@link Ext.menu.Item#cfg-menu submenu},
+     * or the {@link Ext.grid.column.Column column header} which activated the column menu.
      *
      * These differences are abstracted away by the {@link #up} method.
      *
-     * Floating Components that are programmatically {@link Ext.Component#method-render rendered} will not have a `floatParent`
-     * property.
+     * Floating Components that are programmatically {@link Ext.Component#method-render rendered}
+     * will not have a `floatParent` property.
      *
      * See {@link #cfg-floating} and {@link #zIndexManager}
      * @readonly
@@ -1609,8 +1659,10 @@ Ext.define('Ext.Component', {
      * @property {Number} [frameSize.right=0] The width of the right framing element in pixels.
      * @property {Number} [frameSize.bottom=0] The width of the bottom framing element in pixels.
      * @property {Number} [frameSize.left=0] The width of the left framing element in pixels.
-     * @property {Number} [frameSize.width=0] The total width of the left and right framing elements in pixels.
-     * @property {Number} [frameSize.height=0] The total height of the top and right bottom elements in pixels.
+     * @property {Number} [frameSize.width=0] The total width of the left and right framing elements
+     * in pixels.
+     * @property {Number} [frameSize.height=0] The total height of the top and right bottom elements
+     * in pixels.
      */
     frameSize: null,
 
@@ -1696,9 +1748,10 @@ Ext.define('Ext.Component', {
 
     /**
      * @property {Boolean} maskOnDisable
-     * This is an internal flag that you use when creating custom components. By default this is set to `true` which means
-     * that every component gets a mask when it's disabled. Components like FieldContainer, FieldSet, Field, Button, Tab
-     * override this property to `false` since they want to implement custom disable logic.
+     * This is an internal flag that you use when creating custom components. By default this is set
+     * to `true` which means that every component gets a mask when it's disabled. Components like
+     * FieldContainer, FieldSet, Field, Button, Tab override this property to `false`
+     * since they want to implement custom disable logic.
      */
     maskOnDisable: true,
 
@@ -1707,9 +1760,11 @@ Ext.define('Ext.Component', {
      * This Component's owner {@link Ext.container.Container Container} (is set automatically
      * when this Component is added to a Container).
      *
-     * *Important.* This is not a universal upwards navigation pointer. It indicates the Container which owns and manages
-     * this Component if any. There are other similar relationships such as the {@link Ext.button.Button button} which activates a {@link Ext.button.Button#cfg-menu menu}, or the
-     * {@link Ext.menu.Item menu item} which activated a {@link Ext.menu.Item#cfg-menu submenu}, or the
+     * *Important.* This is not a universal upwards navigation pointer. It indicates the Container
+     * which owns and manages this Component if any. There are other similar relationships such as
+     * the {@link Ext.button.Button button} which activates a
+     * {@link Ext.button.Button#cfg-menu menu}, or the {@link Ext.menu.Item menu item} which
+     * activated a {@link Ext.menu.Item#cfg-menu submenu}, or the
      * {@link Ext.grid.column.Column column header} which activated the column menu.
      *
      * These differences are abstracted away by the {@link #up} method.
@@ -1899,11 +1954,11 @@ Ext.define('Ext.Component', {
 
     /**
      * @event beforeactivate
-     * Fires before a Component has been visually activated. Returning `false` from an event listener can prevent
-     * the activate from occurring.
+     * Fires before a Component has been visually activated. Returning `false` from an event
+     * listener can prevent the activate from occurring.
      *
-     * **Note** This event is only fired if this Component is a child of a {@link Ext.container.Container}
-     * that uses {@link Ext.layout.container.Card} as it's layout.
+     * **Note** This event is only fired if this Component is a child of a
+     * {@link Ext.container.Container} that uses {@link Ext.layout.container.Card} as it's layout.
      * @param {Ext.Component} this
      */
 
@@ -1911,18 +1966,19 @@ Ext.define('Ext.Component', {
      * @event activate
      * Fires after a Component has been visually activated.
      *
-     * **Note** This event is only fired if this Component is a child of a {@link Ext.container.Container}
-     * that uses {@link Ext.layout.container.Card} as it's layout or this Component is a floating Component.
+     * **Note** This event is only fired if this Component is a child of a
+     * {@link Ext.container.Container} that uses {@link Ext.layout.container.Card} as it's layout
+     * or this Component is a floating Component.
      * @param {Ext.Component} this
      */
 
     /**
      * @event beforedeactivate
-     * Fires before a Component has been visually deactivated. Returning `false` from an event listener can
-     * prevent the deactivate from occurring.
+     * Fires before a Component has been visually deactivated. Returning `false` from an event
+     * listener can prevent the deactivate from occurring.
      *
-     * **Note** This event is only fired if this Component is a child of a {@link Ext.container.Container}
-     * that uses {@link Ext.layout.container.Card} as it's layout.
+     * **Note** This event is only fired if this Component is a child of a
+     * {@link Ext.container.Container} that uses {@link Ext.layout.container.Card} as it's layout.
      * @param {Ext.Component} this
      */
 
@@ -1930,8 +1986,9 @@ Ext.define('Ext.Component', {
      * @event deactivate
      * Fires after a Component has been visually deactivated.
      *
-     * **Note** This event is only fired if this Component is a child of a {@link Ext.container.Container}
-     * that uses {@link Ext.layout.container.Card} as it's layout or this Component is a floating Component.
+     * **Note** This event is only fired if this Component is a child of a
+     * {@link Ext.container.Container} that uses {@link Ext.layout.container.Card} as it's layout
+     * or this Component is a floating Component.
      * @param {Ext.Component} this
      */
 
@@ -1960,31 +2017,32 @@ Ext.define('Ext.Component', {
 
     /**
      * @event beforeshow
-     * Fires before the component is shown when calling the {@link Ext.Component#method-show show} method. Return `false` from an event
-     * handler to stop the show.
+     * Fires before the component is shown when calling the {@link Ext.Component#method-show show}
+     * method. Return `false` from an event handler to stop the show.
      * @param {Ext.Component} this
      * @since 1.1.0
      */
 
     /**
      * @event show
-     * Fires after the component is shown when calling the {@link Ext.Component#method-show show} method.
+     * Fires after the component is shown when calling the {@link Ext.Component#method-show show}
+     * method.
      * @param {Ext.Component} this
      * @since 1.1.0
      */
 
     /**
      * @event beforehide
-     * Fires before the component is hidden when calling the {@link Ext.Component#method-hide hide} method. Return `false` from an event
-     * handler to stop the hide.
+     * Fires before the component is hidden when calling the {@link Ext.Component#method-hide hide}
+     * method. Return `false` from an event handler to stop the hide.
      * @param {Ext.Component} this
      * @since 1.1.0
      */
 
     /**
      * @event hide
-     * Fires after the component is hidden. Fires after the component is hidden when calling the {@link Ext.Component#method-hide hide}
-     * method.
+     * Fires after the component is hidden. Fires after the component is hidden when calling
+     * the {@link Ext.Component#method-hide hide} method.
      * @param {Ext.Component} this
      * @since 1.1.0
      */
@@ -1999,8 +2057,8 @@ Ext.define('Ext.Component', {
 
     /**
      * @event beforerender
-     * Fires before the component is {@link #rendered}. Return `false` from an event handler to stop the
-     * {@link #method-render}.
+     * Fires before the component is {@link #rendered}. Return `false` from an event handler
+     * to stop the {@link #method-render}.
      * @param {Ext.Component} this
      * @since 1.1.0
      */
@@ -2016,15 +2074,16 @@ Ext.define('Ext.Component', {
      * @event afterrender
      * Fires after the component rendering is finished.
      *
-     * The `afterrender` event is fired after this Component has been {@link #rendered}, been post-processed by any
-     * `afterRender` method defined for the Component.
+     * The `afterrender` event is fired after this Component has been {@link #rendered},
+     * been post-processed by any `afterRender` method defined for the Component.
      * @param {Ext.Component} this
      * @since 3.4.0
      */
 
     /**
      * @event boxready
-     * Fires *one time* - after the component has been laid out for the first time at its initial size.
+     * Fires *one time* - after the component has been laid out for the first time at its initial
+     * size.
      *
      * This event does not fire on components that use {@link #cfg-liquidLayout}, such as
      * {@link Ext.button.Button Buttons} and {@link Ext.form.field.Base Form Fields}.
@@ -2056,8 +2115,9 @@ Ext.define('Ext.Component', {
 
     /**
      * @event resize
-     * Fires after the component is resized. Note that this does *not* fire when the component is first laid out at its initial
-     * size. To hook that point in the life cycle, use the {@link #boxready} event.
+     * Fires after the component is resized. Note that this does *not* fire when the component
+     * is first laid out at its initial size. To hook that point in the life cycle, use the
+     * {@link #boxready} event.
      *
      * This event does not fire on components that use {@link #cfg-liquidLayout}, such as
      * {@link Ext.button.Button Buttons} and {@link Ext.form.field.Base Form Fields}.
@@ -2083,11 +2143,14 @@ Ext.define('Ext.Component', {
 
     /**
      * Creates new Component.
-     * @param {Ext.dom.Element/String/Object} config The configuration options may be specified as either:
+     * @param {Ext.dom.Element/String/Object} config The configuration options may be specified
+     * as either:
      *
      * - **an element** : it is set as the internal element and its id used as the component id
-     * - **a string** : it is assumed to be the id of an existing element and is used as the component id
-     * - **anything else** : it is assumed to be a standard config object and is applied to the component
+     * - **a string** : it is assumed to be the id of an existing element and is used as the
+     * component id
+     * - **anything else** : it is assumed to be a standard config object and is applied to the
+     * component
      */
     constructor: function(config) {
         var me = this,
@@ -2100,6 +2163,7 @@ Ext.define('Ext.Component', {
             if (config.isAction) {
                 me.baseAction = config;
             }
+            
             config = config.initialConfig;
             // component cloning / action set up
         }
@@ -2131,10 +2195,13 @@ Ext.define('Ext.Component', {
         // Ensure that we have an id early so that config getters may access it
         me.getId();
         me.protoEl = new Ext.util.ProtoElement();
+        
         //<debug>
         me.$calledInitConfig = true;
         //</debug>
+        
         me.initConfig(config);
+        
         //<debug>
         delete me.$calledInitConfig;
         //</debug>
@@ -2144,7 +2211,8 @@ Ext.define('Ext.Component', {
 
             if (autoScroll) {
                 scrollable = !!autoScroll;
-            } else {
+            }
+            else {
                 overflowX = me.overflowX;
                 overflowY = me.overflowY;
 
@@ -2162,6 +2230,7 @@ Ext.define('Ext.Component', {
         }
 
         xhooks = me.xhooks;
+        
         if (xhooks) {
             delete me.xhooks;
             Ext.override(me, xhooks);
@@ -2173,6 +2242,7 @@ Ext.define('Ext.Component', {
         if (!me.validIdRe.test(me.id)) {
             Ext.raise('Invalid component "id": "' + me.id + '"');
         }
+        
         if (!me.validIdRe.test(me.itemId)) {
             Ext.raise('Invalid component "itemId": "' + me.itemId + '"');
         }
@@ -2180,12 +2250,14 @@ Ext.define('Ext.Component', {
 
         me.setupProtoEl();
 
-        // initComponent, beforeRender, or event handlers may have set the style or `cls` property since the `protoEl` was set up
-        // so we must apply styles and classes here too.
+        // initComponent, beforeRender, or event handlers may have set the style
+        // or `cls` property since the `protoEl` was set up so we must apply styles
+        // and classes here too.
         if (me.cls) {
             me.initialCls = me.cls;
             me.protoEl.addCls(me.cls);
         }
+        
         if (me.style) {
             me.initialStyle = me.style;
             me.protoEl.setStyle(me.style);
@@ -2204,6 +2276,7 @@ Ext.define('Ext.Component', {
         me.addStateEvents('resize');
 
         controller = me.getController();
+        
         if (controller) {
             controller.init(me);
         }
@@ -2230,7 +2303,8 @@ Ext.define('Ext.Component', {
         }
 
         // Auto show only works unilaterally on *uncontained* Components.
-        // If contained, then it is the Container's responsibility to do the showing at next layout time.
+        // If contained, then it is the Container's responsibility to do the showing
+        // at next layout time.
         if (me.autoShow && !me.$initParent) {
             me.show();
         }
@@ -2238,16 +2312,18 @@ Ext.define('Ext.Component', {
         //<debug>
         if (Ext.isDefined(me.disabledClass)) {
             if (Ext.isDefined(Ext.global.console)) {
-                Ext.global.console.warn('Ext.Component: disabledClass has been deprecated. Please use disabledCls.');
+                Ext.global.console.warn('Ext.Component: disabledClass has been deprecated. ' +
+                                        'Please use disabledCls.');
             }
+            
             me.disabledCls = me.disabledClass;
             delete me.disabledClass;
         }
         //</debug>
 
-        // If we were configured from an instance of Ext.Action, (or configured with a baseAction option),
-        // register this Component as one of its items
-        if (me.baseAction){
+        // If we were configured from an instance of Ext.Action, 
+        // (or configured with a baseAction option), register this Component as one of its items
+        if (me.baseAction) {
             me.baseAction.addComponent(me);
         }
     },
@@ -2255,9 +2331,11 @@ Ext.define('Ext.Component', {
     beforeInitConfig: function() {
         //<debug>
         if (!this.$calledInitConfig) {
-            Ext.raise('initConfig should not be called by subclasses, it will be called by Ext.Component');
+            Ext.raise('initConfig should not be called by subclasses, it will be ' +
+                      'called by Ext.Component');
         }
         //</debug>
+        
         this.mixins.observable.constructor.call(this);
     },
 
@@ -2276,14 +2354,16 @@ Ext.define('Ext.Component', {
             el = me.rendered ? me.el : me.protoEl;
 
         el.addCls.apply(el, arguments);
+        
         return me;
     },
 
     /**
-     * Adds a `cls` to the `uiCls` array, which will also call {@link #addUIClsToElement} and adds to all elements of this
-     * component.
+     * Adds a `cls` to the `uiCls` array, which will also call {@link #addUIClsToElement}
+     * and adds to all elements of this component.
      * @param {String/String[]} classes A string or an array of strings to add to the `uiCls`.
-     * @param {Boolean} [skip] `true` to skip adding it to the class and do it later (via the return).
+     * @param {Boolean} [skip] `true` to skip adding it to the class and do it later
+     * (via the return).
      */
     addClsWithUI: function(classes, skip) {
         var me = this,
@@ -2306,7 +2386,8 @@ Ext.define('Ext.Component', {
             if (cls && !me.hasUICls(cls)) {
                 uiCls.push(cls);
 
-                // We can skip this bit if there isn't an activeUI because we'll be called again from setUI
+                // We can skip this bit if there isn't an activeUI because
+                // we'll be called again from setUI
                 if (activeUI) {
                     clsArray = clsArray.concat(me.addUIClsToElement(cls));
                 }
@@ -2328,8 +2409,10 @@ Ext.define('Ext.Component', {
      *
      * @param {Number} width The width that was set
      * @param {Number} height The height that was set
-     * @param {Number/undefined} oldWidth The old width, or `undefined` if this was the initial layout.
-     * @param {Number/undefined} oldHeight The old height, or `undefined` if this was the initial layout.
+     * @param {Number/undefined} oldWidth The old width, or `undefined` if this was the initial
+     * layout.
+     * @param {Number/undefined} oldHeight The old height, or `undefined` if this was the initial
+     * layout.
      *
      * @template
      * @protected
@@ -2340,7 +2423,8 @@ Ext.define('Ext.Component', {
 
         if (++me.componentLayoutCounter === 1) {
             me.afterFirstLayout(width, height);
-        } else if (me.manageLayoutScroll && scroller) {
+        }
+        else if (me.manageLayoutScroll && scroller) {
             scroller.restoreState();
         }
 
@@ -2361,14 +2445,18 @@ Ext.define('Ext.Component', {
         var me = this;
 
         plugin = me.constructPlugin(plugin);
+        
         if (me.plugins) {
             me.plugins.push(plugin);
-        } else {
+        }
+        else {
             me.plugins = [ plugin ];
         }
+        
         if (me.pluginsInitialized) {
             me.initPlugin(plugin);
         }
+        
         return plugin;
     },
 
@@ -2383,7 +2471,7 @@ Ext.define('Ext.Component', {
      * was saved.
      * @protected
      */
-    addPropertyToState: function (state, propName, value) {
+    addPropertyToState: function(state, propName, value) {
         var me = this,
             len = arguments.length;
 
@@ -2410,10 +2498,10 @@ Ext.define('Ext.Component', {
      * @param {String} uiCls The UI class to add to the element.
      * @protected
      */
-    addUIClsToElement: function (uiCls) {
+    addUIClsToElement: function(uiCls) {
         var me = this,
             baseClsUI = me.baseCls + '-' + me.ui + '-' + uiCls,
-            result = [ Ext.baseCSSPrefix + uiCls, me.baseCls + '-' + uiCls, baseClsUI ],
+            result = [Ext.baseCSSPrefix + uiCls, me.baseCls + '-' + uiCls, baseClsUI],
             childEls, childElName, el, suffix;
 
         if (me.rendered && me.frame && !Ext.supports.CSS3BorderRadius) {
@@ -2423,8 +2511,10 @@ Ext.define('Ext.Component', {
 
             for (childElName in childEls) {
                 suffix = childEls[childElName].frame;
+                
                 if (suffix && suffix !== true) {
                     el = me[childElName];
+                    
                     if (el) {
                         el.addCls(baseClsUI + suffix);
                     }
@@ -2454,8 +2544,10 @@ Ext.define('Ext.Component', {
 
             for (childElName in childEls) {
                 suffix = childEls[childElName].frame;
+                
                 if (suffix && suffix !== true) {
                     el = me[childElName];
+                    
                     if (el) {
                         el.removeCls(baseClsUI + suffix);
                     }
@@ -2535,7 +2627,9 @@ Ext.define('Ext.Component', {
      */
     afterSetPosition: function(x, y) {
         var me = this;
+        
         me.onPosition(x, y);
+        
         if (me.hasListeners.move) {
             me.fireEvent('move', me, x, y);
         }
@@ -2556,9 +2650,7 @@ Ext.define('Ext.Component', {
         var me = this,
             myEl = me.el,
             zim = me.zIndexManager,
-            fromBox,
-            toBox,
-            ghostPanel;
+            fromBox, toBox, ghostPanel;
 
         // Default to configured animate target if none passed
         animateTarget = me.getAnimateTarget(animateTarget);
@@ -2572,7 +2664,9 @@ Ext.define('Ext.Component', {
         if (!me.ghost) {
             animateTarget = null;
         }
-        // If we're animating, kick of an animation of the ghost from the target to the *Element* current box
+        
+        // If we're animating, kick of an animation of the ghost from the target
+        // to the *Element* current box
         if (animateTarget) {
             toBox = {
                 x: myEl.getX(),
@@ -2580,6 +2674,7 @@ Ext.define('Ext.Component', {
                 width: myEl.dom.offsetWidth,
                 height: myEl.dom.offsetHeight
             };
+            
             fromBox = {
                 x: animateTarget.getX(),
                 y: animateTarget.getY(),
@@ -2595,7 +2690,8 @@ Ext.define('Ext.Component', {
             ghostPanel = me.ghost();
             ghostPanel.el.stopAnimation();
 
-            // Shunting it offscreen immediately, *before* the Animation class grabs it ensure no flicker.
+            // Shunting it offscreen immediately, *before* the Animation class grabs it
+            // ensure no flicker.
             ghostPanel.setX(-10000);
 
             me.ghostBox = toBox;
@@ -2627,18 +2723,9 @@ Ext.define('Ext.Component', {
 
     animate: function(animObj) {
         var me = this,
-            hasToWidth,
-            hasToHeight,
-            toHeight,
-            toWidth,
-            to,
-            clearWidth,
-            clearHeight,
-            curWidth, w, curHeight, h, isExpanding,
-            wasConstrained,
-            wasConstrainedHeader,
-            passedCallback,
-            oldOverflow;
+            hasToWidth, hasToHeight, toHeight, toWidth, to, clearWidth, clearHeight,
+            curWidth, w, curHeight, h, isExpanding, wasConstrained, wasConstrainedHeader,
+            passedCallback, oldOverflow;
 
         animObj = animObj || {};
         to = animObj.to || {};
@@ -2648,11 +2735,13 @@ Ext.define('Ext.Component', {
         }
 
         hasToWidth = Ext.isDefined(to.width);
+        
         if (hasToWidth) {
             toWidth = Ext.Number.constrain(to.width, me.minWidth, me.maxWidth);
         }
 
         hasToHeight = Ext.isDefined(to.height);
+        
         if (hasToHeight) {
             toHeight = Ext.Number.constrain(to.height, me.minHeight, me.maxHeight);
         }
@@ -2661,14 +2750,17 @@ Ext.define('Ext.Component', {
         if (!animObj.dynamic && (hasToWidth || hasToHeight)) {
             curWidth = (animObj.from ? animObj.from.width : undefined) || me.getWidth();
             w = curWidth;
+            
             curHeight = (animObj.from ? animObj.from.height : undefined) || me.getHeight();
             h = curHeight;
+            
             isExpanding = false;
 
             if (hasToHeight && toHeight > curHeight) {
                 h = toHeight;
                 isExpanding = true;
             }
+            
             if (hasToWidth && toWidth > curWidth) {
                 w = toWidth;
                 isExpanding = true;
@@ -2677,20 +2769,22 @@ Ext.define('Ext.Component', {
             // During animated sizing, overflow has to be hidden to clip expanded content
             if (hasToHeight || hasToWidth) {
                 oldOverflow = me.el.getStyle('overflow');
+                
                 if (oldOverflow !== 'hidden') {
                     me.el.setStyle('overflow', 'hidden');
                 }
             }
 
             // If any dimensions are being increased, we must resize the internal structure
-            // of the Component, but then clip it by sizing its encapsulating element back to original dimensions.
+            // of the Component, but then clip it by sizing its encapsulating element
+            // back to original dimensions.
             // The animation will then progressively reveal the larger content.
             if (isExpanding) {
                 clearWidth = !Ext.isNumber(me.width);
                 clearHeight = !Ext.isNumber(me.height);
 
-                // Lay out this component at the new, larger size to get the internals correctly laid out.
-                // Then size the encapsulating **Element** back down to size.
+                // Lay out this component at the new, larger size to get the internals correctly
+                // laid out. Then size the encapsulating **Element** back down to size.
                 // We will then just animate the element to reveal the correctly laid out content.
                 me.setSize(w, h);
                 me.el.setSize(curWidth, curHeight);
@@ -2698,10 +2792,12 @@ Ext.define('Ext.Component', {
                 if (clearWidth) {
                     delete me.width;
                 }
+                
                 if (clearHeight) {
                     delete me.height;
                 }
             }
+            
             if (hasToWidth) {
                 to.width = toWidth;
             }
@@ -2711,25 +2807,31 @@ Ext.define('Ext.Component', {
             }
         }
 
-        // No constraining during the animate - the "to" size has already been calculated with respect to all settings.
+        // No constraining during the animate - the "to" size has already been calculated
+        // with respect to all settings.
         // Arrange to reinstate any constraining after the animation has completed
         wasConstrained = me.constrain;
         wasConstrainedHeader = me.constrainHeader;
+        
         if (wasConstrained || wasConstrainedHeader) {
             me.constrain = me.constrainHeader = false;
             passedCallback = animObj.callback;
+            
             animObj.callback = function() {
                 me.constrain = wasConstrained;
                 me.constrainHeader = wasConstrainedHeader;
+                
                 // Call the original callback if any
                 if (passedCallback) {
-                    passedCallback.call(animObj.scope||me, arguments);
+                    passedCallback.call(animObj.scope || me, arguments);
                 }
+                
                 if (oldOverflow !== 'hidden') {
                     me.el.setStyle('overflow', oldOverflow);
                 }
             };
         }
+        
         return me.mixins.animate.animate.apply(me, arguments);
     },
 
@@ -2754,7 +2856,8 @@ Ext.define('Ext.Component', {
             if (oldScrollable) {
                 oldScrollable.setConfig(scrollable);
                 scrollable = oldScrollable;
-            } else {
+            }
+            else {
                 scrollable = Ext.Object.chain(scrollable); // don't mutate the user's config
 
                 if (rendered) {
@@ -2782,9 +2885,11 @@ Ext.define('Ext.Component', {
         if (me.rendered && !me.destroying && !me.destroyed) {
             if (scrollable) {
                 me.getOverflowStyle(); // refresh the scrollFlags
-            } else {
+            }
+            else {
                 me.scrollFlags = me._scrollFlags.none;
             }
+            
             me.updateLayout();
         }
 
@@ -2829,7 +2934,7 @@ Ext.define('Ext.Component', {
      * @template
      * @protected
      */
-    beforeLayout: function(){
+    beforeLayout: function() {
         if (this.floating) {
             this.onBeforeFloatLayout();
         }
@@ -2841,7 +2946,7 @@ Ext.define('Ext.Component', {
      *
      * Ensures that the position is adjusted so that the Component is constrained if so configured.
      */
-    beforeSetPosition: function (x, y, animate) {
+    beforeSetPosition: function(x, y, animate) {
         var me = this,
             pos = null,
             x0, hasX, hasY, adj;
@@ -2865,6 +2970,7 @@ Ext.define('Ext.Component', {
 
         if (me.constrain || me.constrainHeader) {
             pos = me.calculateConstrainedPosition(null, [x, y], true);
+            
             if (pos) {
                 x = pos[0];
                 y = pos[1];
@@ -2881,10 +2987,11 @@ Ext.define('Ext.Component', {
             me.y = y;
 
             adj = me.adjustPosition(x, y);
+            
             // Set up the return info and store the position in this object
             pos = {
-                x : adj.x,
-                y : adj.y,
+                x: adj.x,
+                y: adj.y,
                 anim: animate,
                 hasX: hasX,
                 hasY: hasY
@@ -2904,40 +3011,50 @@ Ext.define('Ext.Component', {
     beforeShow: Ext.emptyFn,
 
     /**
-     * Bubbles up the component/container hierarchy, calling the specified function with each component. The scope
-     * (*this*) of function call will be the scope provided or the current component. The arguments to the function will
-     * be the args provided or the current component. If the function returns false at any point, the bubble is stopped.
+     * Bubbles up the component/container hierarchy, calling the specified function with each
+     * component. The scope (*this*) of function call will be the scope provided or the current
+     * component. The arguments to the function will be the args provided or the current component.
+     * If the function returns false at any point, the bubble is stopped.
      *
      * @param {Function} fn The function to call
      * @param {Object} [scope] The scope of the function. Defaults to current node.
-     * @param {Array} [args] The args to call the function with. Defaults to passing the current component.
+     * @param {Array} [args] The args to call the function with. Defaults to passing the current
+     * component.
      * @return {Ext.Component} this
      */
     bubble: function(fn, scope, args) {
         var p = this;
+        
         while (p) {
             if (fn.apply(scope || p, args || [p]) === false) {
                 break;
             }
+            
             p = p.getBubbleTarget();
         }
+        
         return this;
     },
 
     clearListeners: function() {
         var me = this;
+        
         me.mixins.observable.clearListeners.call(me);
         me.mixins.componentDelegation.clearDelegatedListeners.call(me);
     },
 
     /**
-     * Clone the current component using the original config values passed into this instance by default.
-     * @param {Object} overrides A new config containing any properties to override in the cloned version.
-     * An id property can be passed on this object, otherwise one will be generated to avoid duplicates.
+     * Clone the current component using the original config values passed into this instance
+     * by default.
+     * @param {Object} overrides A new config containing any properties to override in the cloned
+     * version. An id property can be passed on this object, otherwise one will be generated
+     * to avoid duplicates.
      * @return {Ext.Component} clone The cloned copy of this component
      */
     cloneConfig: function(overrides) {
         overrides = overrides || {};
+        
+        // eslint-disable-next-line vars-on-top
         var id = overrides.id || Ext.id(),
             cfg = Ext.applyIf(overrides, this.initialConfig),
             self;
@@ -3061,7 +3178,8 @@ Ext.define('Ext.Component', {
             me.destroyFocusable();
         }
 
-        // Destroying the floatingItems ZIndexManager will also destroy descendant floating Components
+        // Destroying the floatingItems ZIndexManager will also destroy descendant floating
+        // Components
         Ext.destroy(
             me.componentLayout,
             me.loadMask,
@@ -3113,6 +3231,7 @@ Ext.define('Ext.Component', {
                 if (!container.destroyed) {
                     container.collect();
                 }
+                
                 me.container = null;
             }
             
@@ -3139,7 +3258,8 @@ Ext.define('Ext.Component', {
 
     /**
      * Disable the component.
-     * @param {Boolean} [silent=false] Passing `true` will suppress the `disable` event from being fired.
+     * @param {Boolean} [silent=false] Passing `true` will suppress the `disable` event
+     * from being fired.
      * @param fromParent (private)
      * @since 1.1.0
      */
@@ -3202,7 +3322,8 @@ Ext.define('Ext.Component', {
 
     /**
      * Enable the component
-     * @param {Boolean} [silent=false] Passing `true` will suppress the `enable` event from being fired.
+     * @param {Boolean} [silent=false] Passing `true` will suppress the `enable` event
+     * from being fired.
      * @param fromParent (private)
      * @since 1.1.0
      */
@@ -3251,21 +3372,25 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Find a container above this component at any level by a custom function. If the passed function returns true, the
-     * container will be returned.
+     * Find a container above this component at any level by a custom function. If the passed
+     * function returns true, the container will be returned.
      *
      * See also the {@link Ext.Component#up up} method.
      *
-     * @param {Function} fn The custom function to call with the arguments (container, this component).
-     * @return {Ext.container.Container} The first Container for which the custom function returns true
+     * @param {Function} fn The custom function to call with the arguments
+     * (container, this component).
+     * @return {Ext.container.Container} The first Container for which the custom function
+     * returns true
      */
     findParentBy: function(fn) {
         var p;
 
-        // Iterate up the owner chain until we don't have one, or we find an ancestor which matches using the selector function.
+        // Iterate up the owner chain until we don't have one, or we find an ancestor
+        // which matches using the selector function.
         for (p = this.getRefOwner(); p && !fn(p, this); p = p.getRefOwner()) {
             // do nothing
         }
+        
         return p || null;
     },
 
@@ -3274,16 +3399,16 @@ Ext.define('Ext.Component', {
      *
      * See also the {@link Ext.Component#up up} method.
      *
-     * @param {String/Ext.Class} xtype The xtype string for a component, or the class of the component directly
+     * @param {String/Ext.Class} xtype The xtype string for a component, or the class
+     * of the component directly
      * @return {Ext.container.Container} The first Container which matches the given xtype or class
      */
     findParentByType: function(xtype) {
-        return Ext.isFunction(xtype) ?
-            this.findParentBy(function(p) {
+        return Ext.isFunction(xtype)
+            ? this.findParentBy(function(p) {
                 return p.self === xtype || p.constructor === xtype;
             })
-        :
-            this.up(xtype);
+            : this.up(xtype);
     },
 
     /**
@@ -3333,17 +3458,20 @@ Ext.define('Ext.Component', {
         }
     },
 
-    getAnimateTarget: function(target){
+    getAnimateTarget: function(target) {
         target = target || this.animateTarget;
+        
         if (target) {
             target = target.isComponent ? target.getEl() : Ext.get(target);
         }
+        
         return target || null;
     },
 
     /**
      * @protected
-     * Implements an upward event bubbling policy. By default a Component bubbles events up to its {@link #getRefOwner reference owner}.
+     * Implements an upward event bubbling policy. By default a Component bubbles events
+     * up to its {@link #getRefOwner reference owner}.
      *
      * Component subclasses may implement a different bubbling strategy by overriding this method.
      */
@@ -3357,6 +3485,7 @@ Ext.define('Ext.Component', {
         if (!me.componentLayout || !me.componentLayout.isLayout) {
             me.setComponentLayout(Ext.layout.Layout.create(me.componentLayout, 'autocomponent'));
         }
+        
         return me.componentLayout;
     },
 
@@ -3382,16 +3511,18 @@ Ext.define('Ext.Component', {
      * requested.
      * @protected
      */
-    initInheritedState: function (inheritedState) {
+    initInheritedState: function(inheritedState) {
         var me = this,
             layout = me.componentLayout;
 
         if (me.hidden) {
             inheritedState.hidden = true;
         }
+        
         if (me.collapseImmune) {
             inheritedState.collapseImmune = true;
         }
+        
         if (me.modelValidation !== undefined) {
             inheritedState.modelValidation = me.modelValidation;
         }
@@ -3408,7 +3539,8 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Retrieves the `id` of this component. Will auto-generate an `id` if one has not already been set.
+     * Retrieves the `id` of this component. Will auto-generate an `id` if one has not already
+     * been set.
      * @return {String}
      */
     getId: function() {
@@ -3419,13 +3551,17 @@ Ext.define('Ext.Component', {
         // Autogenerate it if none was configured.
         if (!(me.id || (me.id = me.initialConfig.id))) {
             xtype = me.getXType();
+            
             if (xtype) {
                 xtype = xtype.replace(Ext.Component.INVALID_ID_CHARS_Re, '-');
-            } else {
+            }
+            else {
                 xtype = Ext.name.toLowerCase() + '-comp';
             }
+            
             me.id = xtype + '-' + me.getAutoId();
         }
+        
         return me.id;
     },
 
@@ -3442,7 +3578,7 @@ Ext.define('Ext.Component', {
      * Gets the {@link Ext.ComponentLoader} for this Component.
      * @return {Ext.ComponentLoader} The loader instance, null if it doesn't exist.
      */
-    getLoader: function(){
+    getLoader: function() {
         var me = this,
             loader = me.loader;
 
@@ -3451,29 +3587,36 @@ Ext.define('Ext.Component', {
                 me.loader = new Ext.ComponentLoader(Ext.apply({
                     target: me
                 }, loader));
-            } else {
+            }
+            else {
                 loader.setTarget(me);
             }
+            
             return me.loader;
 
         }
+        
         return null;
     },
 
     /**
      * @protected
-     * Returns the element which is masked by the {@link #mask} method, or into which the {@link #setLoading LoadMask} is rendered into.
+     * Returns the element which is masked by the {@link #mask} method, or into which the
+     * {@link #setLoading LoadMask} is rendered into.
      *
-     * The default implementation uses the {@link #maskElement} configuration to access the Component's child element by name. By default, {@link #maskElement}
-     * is `null` which means that `null` is returned from this method indicating that the mask needs to be rendered into the document because
-     * component structure should not be contaminated by mask elements.
+     * The default implementation uses the {@link #maskElement} configuration to access
+     * the Component's child element by name. By default, {@link #maskElement} is `null` which means
+     * that `null` is returned from this method indicating that the mask needs to be rendered into
+     * the document because component structure should not be contaminated by mask elements.
      *
-     * Some subclasses may override this method if they have knowledge about external structures where a mask could usefully be rendered.
+     * Some subclasses may override this method if they have knowledge about external structures
+     * where a mask could usefully be rendered.
      *
-     * For example a {@link Ext.view.Table GridView} will request that its owning {@link Ext.panel.Table GridPanel} be masked. The
-     * GridPanel will have its own implementation of `getMaskTarget` which will return the element dictated by its own {@link #maskElement}
-     * Panels use `"el"` as their {@link #maskElement} by default, but that could be overridden to be `"body"` to leave toolbars and the header
-     * mouse-accessible.
+     * For example a {@link Ext.view.Table GridView} will request that its owning
+     * {@link Ext.panel.Table GridPanel} be masked. The GridPanel will have its own implementation
+     * of `getMaskTarget` which will return the element dictated by its own {@link #maskElement}
+     * Panels use `"el"` as their {@link #maskElement} by default, but that could be overridden
+     * to be `"body"` to leave toolbars and the header mouse-accessible.
      *
      */
     getMaskTarget: function() {
@@ -3517,7 +3660,7 @@ Ext.define('Ext.Component', {
      * @param {String} id The `id` set on the plugin config object.
      * @return {Ext.plugin.Abstract} plugin instance or `null` if not found
      */
-    getPlugin: function (id) {
+    getPlugin: function(id) {
         var i,
             plugins = this.plugins,
             ln = plugins && plugins.length,
@@ -3525,6 +3668,7 @@ Ext.define('Ext.Component', {
 
         for (i = 0; i < ln; i++) {
             plugin = plugins[i];
+            
             // pre-6.2 we only considered pluginId property...
             if (plugin.id === id || plugin.pluginId === id) {
                 return plugin;
@@ -3536,7 +3680,8 @@ Ext.define('Ext.Component', {
 
     /**
      * Gets the current XY position of the component's underlying element.
-     * @param {Boolean} [local=false] If true the element's left and top are returned instead of page XY.
+     * @param {Boolean} [local=false] If true the element's left and top are returned instead of
+     * page XY.
      * @return {Number[]} The XY position of the element (e.g., [100, 200])
      */
     getPosition: function(local) {
@@ -3558,6 +3703,7 @@ Ext.define('Ext.Component', {
             xy[0] -= floatParentBox.left;
             xy[1] -= floatParentBox.top;
         }
+        
         return xy;
     },
 
@@ -3568,6 +3714,7 @@ Ext.define('Ext.Component', {
      */
     getScrollX: function() {
         var scroller = this.getScrollable();
+        
         return scroller ? scroller.getPosition().x : 0;
     },
 
@@ -3578,6 +3725,7 @@ Ext.define('Ext.Component', {
      */
     getScrollY: function() {
         var scroller = this.getScrollable();
+        
         return scroller ? scroller.getPosition().y : 0;
     },
 
@@ -3603,7 +3751,7 @@ Ext.define('Ext.Component', {
      * for the height.
      * @protected
      */
-    getSizeModel: function (ownerCtSizeModel) {
+    getSizeModel: function(ownerCtSizeModel) {
         var me = this,
             models = Ext.layout.SizeModel,
             ownerContext = me.componentLayout.ownerContext,
@@ -3614,7 +3762,8 @@ Ext.define('Ext.Component', {
             hasWidthStyle, hasHeightStyle,
             heightModel, ownerLayout, policy, shrinkWrap, topLevel, widthModel,
 
-            // floating === a floating Component, floated === a border layout's slideout view of a region.
+            // floating === a floating Component, floated === a border layout's slideout view
+            // of a region.
             isFloating = me.floating || me.floated;
 
         if (ownerContext) {
@@ -3643,7 +3792,8 @@ Ext.define('Ext.Component', {
                 if (hasPixelHeight) {
                     heightModel = models.configured;
                 }
-            } else {
+            }
+            else {
                 policy = ownerLayout.getItemSizePolicy(me, ownerCtSizeModel);
                 shrinkWrap = ownerLayout.isItemShrinkWrap(me);
             }
@@ -3676,7 +3826,8 @@ Ext.define('Ext.Component', {
                 }
 
                 if (ownerCtSizeModel) {
-                    shrinkWrap |= (ownerCtSizeModel.width.shrinkWrap ? 1 : 0) | (ownerCtSizeModel.height.shrinkWrap ? 2 : 0);
+                    shrinkWrap |= (ownerCtSizeModel.width.shrinkWrap ? 1 : 0) |
+                                  (ownerCtSizeModel.height.shrinkWrap ? 2 : 0);
                 }
             }
 
@@ -3684,17 +3835,22 @@ Ext.define('Ext.Component', {
                 if (!policy.setsWidth && !(me.frame && hasWidthStyle)) {
                     if (hasPixelWidth) {
                         widthModel = models.configured;
-                    } else {
+                    }
+                    else {
                         widthModel = (shrinkWrap & 1) ? models.shrinkWrap : models.natural;
                     }
-                } else if (policy.readsWidth) {
+                }
+                else if (policy.readsWidth) {
                     if (hasPixelWidth) {
                         widthModel = models.calculatedFromConfigured;
-                    } else {
-                        widthModel = (shrinkWrap & 1) ? models.calculatedFromShrinkWrap :
-                                    models.calculatedFromNatural;
                     }
-                } else {
+                    else {
+                        widthModel = (shrinkWrap & 1)
+                            ? models.calculatedFromShrinkWrap
+                            : models.calculatedFromNatural;
+                    }
+                }
+                else {
                     widthModel = models.calculated;
                 }
             }
@@ -3703,17 +3859,22 @@ Ext.define('Ext.Component', {
                 if (!policy.setsHeight && !(me.frame && hasHeightStyle)) {
                     if (hasPixelHeight) {
                         heightModel = models.configured;
-                    } else {
+                    }
+                    else {
                         heightModel = (shrinkWrap & 2) ? models.shrinkWrap : models.natural;
                     }
-                } else if (policy.readsHeight) {
+                }
+                else if (policy.readsHeight) {
                     if (hasPixelHeight) {
                         heightModel = models.calculatedFromConfigured;
-                    } else {
-                        heightModel = (shrinkWrap & 2) ? models.calculatedFromShrinkWrap :
-                                    models.calculatedFromNatural;
                     }
-                } else {
+                    else {
+                        heightModel = (shrinkWrap & 2)
+                            ? models.calculatedFromShrinkWrap
+                            : models.calculatedFromNatural;
+                    }
+                }
+                else {
                     heightModel = models.calculated;
                 }
             }
@@ -3727,14 +3888,14 @@ Ext.define('Ext.Component', {
     /**
      * The supplied default state gathering method for the Component class.
      *
-     * This method returns dimension settings such as `flex`, `anchor`, `width` and `height` along with `collapsed`
-     * state.
+     * This method returns dimension settings such as `flex`, `anchor`, `width` and `height`
+     * along with `collapsed` state.
      *
-     * Subclasses which implement more complex state should call the superclass's implementation, and apply their state
-     * to the result if this basic state is to be saved.
+     * Subclasses which implement more complex state should call the superclass's implementation,
+     * and apply their state to the result if this basic state is to be saved.
      *
-     * Note that Component state will only be saved if the Component has a {@link #stateId} and there as a StateProvider
-     * configured for the document.
+     * Note that Component state will only be saved if the Component has a {@link #stateId}
+     * and there as a StateProvider configured for the document.
      *
      * @return {Object}
      */
@@ -3746,6 +3907,7 @@ Ext.define('Ext.Component', {
         if (sizeModel.width.configured) {
             state = me.addPropertyToState(state, 'width');
         }
+        
         if (sizeModel.height.configured) {
             state = me.addPropertyToState(state, 'height');
         }
@@ -3753,11 +3915,11 @@ Ext.define('Ext.Component', {
         return state;
     },
 
-    getUserCls: function () {
+    getUserCls: function() {
         return this.userCls;
     },
 
-    setUserCls: function (cls) {
+    setUserCls: function(cls) {
         var me = this,
             was = me.userCls;
 
@@ -3781,8 +3943,9 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Gets the xtype for this component as registered with {@link Ext.ComponentManager}. For a list of all available
-     * xtypes, see the {@link Ext.Component} header. Example usage:
+     * Gets the xtype for this component as registered with {@link Ext.ComponentManager}.
+     * For a list of all available xtypes, see the {@link Ext.Component} header.
+     * Example usage:
      *
      *     var t = new Ext.form.field.Text();
      *     alert(t.getXType());  // alerts 'textfield'
@@ -3794,11 +3957,11 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Returns this Component's xtype hierarchy as a slash-delimited string. For a list of all available xtypes, see the
-     * {@link Ext.Component} header.
+     * Returns this Component's xtype hierarchy as a slash-delimited string. For a list of all
+     * available xtypes, see the {@link Ext.Component} header.
      *
-     * **If using your own subclasses, be aware that a Component must register its own xtype to participate in
-     * determination of inherited xtypes.**
+     * **If using your own subclasses, be aware that a Component must register its own xtype
+     * to participate in determination of inherited xtypes.**
      *
      * Example usage:
      *
@@ -3841,8 +4004,9 @@ Ext.define('Ext.Component', {
      * @return {Boolean} `true` if the class exists, else `false`.
      * @method
      */
-    hasCls: function (className) {
+    hasCls: function(className) {
         var el = this.rendered ? this.el : this.protoEl;
+        
         return el.hasCls.apply(el, arguments);
     },
 
@@ -3859,9 +4023,10 @@ Ext.define('Ext.Component', {
 
     /**
      * Hides this Component, setting it to invisible using the configured {@link #cfg-hideMode}.
-     * @param {String/Ext.dom.Element/Ext.Component} [animateTarget=null] **only valid for {@link #cfg-floating} Components
-     * such as {@link Ext.window.Window Window}s or {@link Ext.tip.ToolTip ToolTip}s, or regular Components which have
-     * been configured with `floating: true`.**. The target to which the Component should animate while hiding.
+     * @param {String/Ext.dom.Element/Ext.Component} [animateTarget=null] **only valid for
+     * {@link #cfg-floating} Components such as {@link Ext.window.Window Window}s or
+     * {@link Ext.tip.ToolTip ToolTip}s, or regular Components which have been configured with
+     * `floating: true`.**. The target to which the Component should animate while hiding.
      * @param {Function} [callback] A callback function to call after the Component is hidden.
      * @param {Object} [scope] The scope (`this` reference) in which the callback is executed.
      * Defaults to this Component.
@@ -3878,7 +4043,8 @@ Ext.define('Ext.Component', {
         }
 
         if (!(me.rendered && !me.isVisible())) {
-            if (!me.hasListeners.beforehide || me.fireEvent('beforehide', me) !== false || me.hierarchicallyHidden) {
+            if (!me.hasListeners.beforehide || me.fireEvent('beforehide', me) !== false ||
+                me.hierarchicallyHidden) {
                 me.getInherited().hidden = me.hidden = true;
                 
                 if (container && !container.beforeFocusableChildHide.$nullFn) {
@@ -3900,20 +4066,22 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * The initComponent template method is an important initialization step for a Component. It is intended to be
-     * implemented by each subclass of Ext.Component to provide any needed constructor logic. The
-     * initComponent method of the class being created is called first, with each initComponent method
-     * up the hierarchy to Ext.Component being called thereafter. This makes it easy to implement and,
-     * if needed, override the constructor logic of the Component at any step in the hierarchy.
+     * The initComponent template method is an important initialization step for a Component.
+     * It is intended to be implemented by each subclass of Ext.Component to provide any needed
+     * constructor logic. The initComponent method of the class being created is called first,
+     * with each initComponent method up the hierarchy to Ext.Component being called thereafter.
+     * This makes it easy to implement and, if needed, override the constructor logic
+     * of the Component at any step in the hierarchy.
      *
-     * The initComponent method **must** contain a call to {@link Ext.Base#method!callParent callParent} in order
-     * to ensure that the parent class' initComponent method is also called.
+     * The initComponent method **must** contain a call to
+     * {@link Ext.Base#method!callParent callParent} in order to ensure that the parent class'
+     * initComponent method is also called.
      *
-     * All config options passed to the constructor are applied to `this` before initComponent is called,
-     * so you can simply access them with `this.someOption`.
+     * All config options passed to the constructor are applied to `this` before initComponent
+     * is called, so you can simply access them with `this.someOption`.
      *
-     * The following example demonstrates using a dynamic string for the text of a button at the time of
-     * instantiation of the class.
+     * The following example demonstrates using a dynamic string for the text of a button
+     * at the time of instantiation of the class.
      *
      *     Ext.define('DynamicButtonText', {
      *         extend: 'Ext.button.Button',
@@ -3933,17 +4101,20 @@ Ext.define('Ext.Component', {
      * @protected
      * @since 1.1.0
      */
-    initComponent: function () {
+    initComponent: function() {
         var me = this,
             width = me.width,
             height = me.height;
 
-        // If plugins have been added by a subclass's initComponent before calling up to here (or any components
-        // that don't have a table view), the processed flag will not have been set, and we must process them again.
-        // We could just call getPlugins here however most components don't have them so prevent the extra function call.
+        // If plugins have been added by a subclass's initComponent before calling up to here
+        // (or any components that don't have a table view), the processed flag will not have been
+        // set, and we must process them again.
+        // We could just call getPlugins here however most components don't have them so prevent
+        // the extra function call.
         if (me.plugins && !me.plugins.processed) {
             me.constructPlugins();
         }
+        
         me.pluginsInitialized = true;
 
         // this will properly (ignore or) constrain the configured width/height to their
@@ -3954,7 +4125,7 @@ Ext.define('Ext.Component', {
 
         if (me.listeners) {
             me.on(me.listeners);
-            me.listeners = null; //change the value to remove any on prototype
+            me.listeners = null; // change the value to remove any on prototype
         }
 
         if (me.focusable) {
@@ -3978,10 +4149,10 @@ Ext.define('Ext.Component', {
                 if (el && el.on) {
                     afterRenderEvent = afterRenderEvents[property];
 
-                    for (index = 0, len = afterRenderEvent.length ; index < len ; ++index) {
+                    for (index = 0, len = afterRenderEvent.length; index < len; ++index) {
                         me.mon(el, afterRenderEvent[index]);
-                     }
-                 }
+                    }
+                }
             }
         }
 
@@ -4059,10 +4230,12 @@ Ext.define('Ext.Component', {
         // visible state of the component.
         for (; (parent = child.ownerCt || child.floatParent); child = parent) {
             parentInheritedState = parent.getInherited();
+            
             if (parentInheritedState.hidden) {
                 hidden = true;
                 break;
             }
+            
             if (child.getInherited().collapseImmune) {
                 // The child or one of its ancestors is immune to collapse.
                 if (parent.collapsed && !child.collapseImmune) {
@@ -4072,7 +4245,8 @@ Ext.define('Ext.Component', {
                     hidden = true;
                     break;
                 }
-            } else {
+            }
+            else {
                 // We have ascended the tree to a point where collapse immunity
                 // is not in play.  This means if any ancestor above this point
                 // is collapsed, then the component is not visible.
@@ -4115,9 +4289,9 @@ Ext.define('Ext.Component', {
             ownerLayout = me.ownerLayout;
 
         // Return true if we have been explicitly flagged as the layout root, or if we are floating.
-        // Sometimes floating Components get an ownerCt ref injected into them which is *not* a true ownerCt, merely
-        // an upward link for reference purposes. For example a grid column menu is linked to the
-        // owning header via an ownerCt reference.
+        // Sometimes floating Components get an ownerCt ref injected into them which is *not*
+        // a true ownerCt, merely an upward link for reference purposes. For example a grid column
+        // menu is linked to the owning header via an ownerCt reference.
         if (!ownerLayout || me._isLayoutRoot || me.floating) {
             return true;
         }
@@ -4127,12 +4301,12 @@ Ext.define('Ext.Component', {
 
     /**
      * Returns `true` if layout is suspended for this component. This can come from direct
-     * suspension of this component's layout activity ({@link Ext.Container#suspendLayout}) or if one
-     * of this component's containers is suspended.
+     * suspension of this component's layout activity ({@link Ext.Container#suspendLayout})
+     * or if one of this component's containers is suspended.
      *
      * @return {Boolean} `true` layout of this component is suspended.
      */
-    isLayoutSuspended: function () {
+    isLayoutSuspended: function() {
         var comp = this,
             ownerLayout;
 
@@ -4142,6 +4316,7 @@ Ext.define('Ext.Component', {
             }
 
             ownerLayout = comp.ownerLayout;
+            
             if (!ownerLayout) {
                 break;
             }
@@ -4160,11 +4335,11 @@ Ext.define('Ext.Component', {
     /**
      * Returns `true` if this component is visible.
      *
-     * @param {Boolean} [deep=false] Pass `true` to interrogate the visibility status of all parent Containers to
-     * determine whether this Component is truly visible to the user.
+     * @param {Boolean} [deep=false] Pass `true` to interrogate the visibility status of all
+     * parent Containers to determine whether this Component is truly visible to the user.
      *
-     * Generally, to determine whether a Component is hidden, the no argument form is needed. For example when creating
-     * dynamically laid out UIs in a hidden Container before showing them.
+     * Generally, to determine whether a Component is hidden, the no argument form is needed.
+     * For example when creating dynamically laid out UIs in a hidden Container before showing them.
      *
      * @return {Boolean} `true` if this component is visible, `false` otherwise.
      *
@@ -4176,7 +4351,8 @@ Ext.define('Ext.Component', {
 
         if (me.hidden || !me.rendered || me.destroyed) {
             hidden = true;
-        } else if (deep) {
+        }
+        else if (deep) {
             hidden = me.isHierarchicallyHidden();
         }
 
@@ -4184,11 +4360,12 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Tests whether or not this Component is of a specific xtype. This can test whether this Component is descended
-     * from the xtype (default) or whether it is directly of the xtype specified (`shallow = true`).
+     * Tests whether or not this Component is of a specific xtype. This can test whether this
+     * Component is descended from the xtype (default) or whether it is directly of the xtype
+     * specified (`shallow = true`).
      *
-     * **If using your own subclasses, be aware that a Component must register its own xtype to participate in
-     * determination of inherited xtypes.**
+     * **If using your own subclasses, be aware that a Component must register its own xtype
+     * to participate in determination of inherited xtypes.**
      *
      * For a list of all available xtypes, see the {@link Ext.Component} header.
      *
@@ -4196,20 +4373,21 @@ Ext.define('Ext.Component', {
      *
      *     @example
      *     var t = new Ext.form.field.Text();
-     *     var isText = t.isXType('textfield');        // true
+     *     var isText = t.isXType('textfield');          // true
      *     var isBoxSubclass = t.isXType('field');       // true, descended from Ext.form.field.Base
-     *     var isBoxInstance = t.isXType('field', true); // false, not a direct Ext.form.field.Base instance
+     *     var isBoxInstance = t.isXType('field', true); // false, not a direct Ext.form.field.Base
+     *                                                   // instance
      *
      * @param {String} xtype The xtype to check for this Component
-     * @param {Boolean} [shallow=false] `true` to check whether this Component is directly of the specified xtype, `false` to
-     * check whether this Component is descended from the xtype.
-     * @return {Boolean} `true` if this component descends from the specified xtype, `false` otherwise.
+     * @param {Boolean} [shallow=false] `true` to check whether this Component is directly
+     * of the specified xtype, `false` to check whether this Component is descended from the xtype.
+     * @return {Boolean} `true` if this component descends from the specified xtype,
+     * `false` otherwise.
      *
      * @since 2.3.0
      */
     isXType: function(xtype, shallow) {
-        return shallow ? (Ext.Array.indexOf(this.xtypes, xtype) !== -1) :
-                !!this.xtypesMap[xtype];
+        return shallow ? (Ext.Array.indexOf(this.xtypes, xtype) !== -1) : !!this.xtypesMap[xtype];
     },
 
     /**
@@ -4250,7 +4428,8 @@ Ext.define('Ext.Component', {
         if (isMasked) {
             me.masked = true;
             me.getInherited().masked = isMasked;
-        } else {
+        }
+        else {
             me.masked = false;
             delete me.getInherited().masked;
         }
@@ -4268,10 +4447,11 @@ Ext.define('Ext.Component', {
      * See {@link #unmask}.
      *
      * @param {String} [msg] A message to show in the center of the mask layer.
-     * @param {String} [msgCls] A CSS class name to use on the message element in the center of the layer.
+     * @param {String} [msgCls] A CSS class name to use on the message element in the center
+     * of the layer.
      * @param {Number} elHeight (private) The height of element to be masked
      */
-    mask: function (msg, msgCls, elHeight) {
+    mask: function(msg, msgCls, elHeight) {
         var box = this.lastBox,
             // getMaskTarget may be overridden in subclasses/
             // null means that a LoadMask has to be rendered to document.body
@@ -4282,6 +4462,7 @@ Ext.define('Ext.Component', {
         if (box) {
             elHeight = box.height;
         }
+        
         target.mask(msg, msgCls, elHeight);
 
         this.setMasked(true);
@@ -4290,9 +4471,10 @@ Ext.define('Ext.Component', {
     /**
      * Returns the next node in the Component tree in tree traversal order.
      *
-     * Note that this is not limited to siblings, and if invoked upon a node with no matching siblings, will walk the
-     * tree to attempt to find a match. Contrast with {@link #nextSibling}.
-     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter the following nodes.
+     * Note that this is not limited to siblings, and if invoked upon a node with no matching
+     * siblings, will walk the tree to attempt to find a match. Contrast with {@link #nextSibling}.
+     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter
+     * the following nodes.
      * @param includeSelf (private)
      * @return {Ext.Component} The next node (or the next node which matches the selector).
      * Returns `null` if there is no matching node.
@@ -4300,8 +4482,7 @@ Ext.define('Ext.Component', {
     nextNode: function(selector, includeSelf) {
         var node = this,
             ownerCt = node.ownerCt,
-            result,
-            it, len, i, sib;
+            result, it, len, i, sib;
 
         // If asked to include self, test me
         if (includeSelf && node.is(selector)) {
@@ -4309,41 +4490,52 @@ Ext.define('Ext.Component', {
         }
 
         if (ownerCt) {
+            // eslint-disable-next-line max-len
             for (it = ownerCt.items.items, i = Ext.Array.indexOf(it, node) + 1, len = it.length; i < len; i++) {
                 sib = it[i];
+                
                 if (sib.is(selector)) {
                     return sib;
                 }
+                
                 if (sib.down) {
                     result = sib.down(selector);
+                    
                     if (result) {
                         return result;
                     }
                 }
             }
+            
             return ownerCt.nextNode(selector);
         }
+        
         return null;
     },
 
     /**
      * Returns the next sibling of this Component.
      *
-     * Optionally selects the next sibling which matches the passed {@link Ext.ComponentQuery ComponentQuery} selector.
+     * Optionally selects the next sibling which matches the passed
+     * {@link Ext.ComponentQuery ComponentQuery} selector.
      *
      * May also be referred to as **`next()`**
      *
-     * Note that this is limited to siblings, and if no siblings of the item match, `null` is returned. Contrast with
-     * {@link #nextNode}
-     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter the following items.
+     * Note that this is limited to siblings, and if no siblings of the item match,
+     * `null` is returned. Contrast with {@link #nextNode}
+     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter
+     * the following items.
      * @return {Ext.Component} The next sibling (or the next sibling which matches the selector).
      * Returns `null` if there is no matching sibling.
      */
     nextSibling: function(selector) {
-        var o = this.ownerCt, it, last, idx, c;
+        var o = this.ownerCt,
+            it, last, idx, c;
+        
         if (o) {
             it = o.items;
             idx = it.indexOf(this) + 1;
+            
             if (idx) {
                 if (selector) {
                     for (last = it.getCount(); idx < last; idx++) {
@@ -4351,13 +4543,15 @@ Ext.define('Ext.Component', {
                             return c;
                         }
                     }
-                } else {
+                }
+                else {
                     if (idx < it.getCount()) {
                         return it.getAt(idx);
                     }
                 }
             }
         }
+        
         return null;
     },
 
@@ -4381,7 +4575,7 @@ Ext.define('Ext.Component', {
      * @protected
      * @since 3.4.0
      */
-    onAdded: function (container, pos, instanced) {
+    onAdded: function(container, pos, instanced) {
         var me = this;
 
         me.ownerCt = container;
@@ -4410,8 +4604,8 @@ Ext.define('Ext.Component', {
      * passed a truthy second parameter). After calling the
      * superclass's `onRemoved`, the `ownerCt` and the `refOwner` will not
      * be present.
-     * @param {Boolean} destroying Will be passed as `true` if the Container performing the remove operation will delete this
-     * Component upon remove.
+     * @param {Boolean} destroying Will be passed as `true` if the Container performing
+     * the remove operation will delete this Component upon remove.
      *
      * @template
      * @protected
@@ -4426,6 +4620,7 @@ Ext.define('Ext.Component', {
         // focus restoration.
         if (!me.isLayoutMoving && me.el && me.el.contains(Ext.Element.getActiveElement())) {
             focusTarget = me.findFocusTarget();
+            
             if (focusTarget) {
                 focusTarget.focus();
             }
@@ -4455,7 +4650,7 @@ Ext.define('Ext.Component', {
      * and the controller has a {@link Ext.app.ViewController#boxReady boxReady} method
      * it will be called passing the Component and its width and height.
      *
-     *      boxReady: function (view, width, height) {
+     *      boxReady: function(view, width, height) {
      *          // ...
      *      }
      *
@@ -4465,7 +4660,7 @@ Ext.define('Ext.Component', {
      * @template
      * @protected
      */
-    onBoxReady: function (width, height) {
+    onBoxReady: function(width, height) {
         var me = this,
             label;
 
@@ -4495,7 +4690,8 @@ Ext.define('Ext.Component', {
         }
 
         // Draggability must be initialized after resizability
-        // Because if we have to be wrapped, the resizer wrapper must be dragged as a pseudo-Component
+        // Because if we have to be wrapped, the resizer wrapper must be dragged
+        // as a pseudo-Component
         if (me.draggable) {
             me.initDraggable();
         }
@@ -4521,7 +4717,7 @@ Ext.define('Ext.Component', {
      * @template
      * @protected
      */
-    onDisable: function () {
+    onDisable: function() {
         var me = this,
             dom, nodeName;
 
@@ -4555,7 +4751,7 @@ Ext.define('Ext.Component', {
      * @template
      * @protected
      */
-    onEnable: function () {
+    onEnable: function() {
         var me = this,
             dom, nodeName;
 
@@ -4581,7 +4777,7 @@ Ext.define('Ext.Component', {
         }
     },
 
-    onGlobalShow: function (c) {
+    onGlobalShow: function(c) {
         if (this.up(c)) {
             this.getScrollable().restoreState();
         }
@@ -4619,6 +4815,7 @@ Ext.define('Ext.Component', {
         if (!me.ghost) {
             animateTarget = null;
         }
+        
         // If we're animating, kick off an animation of the ghost down to the target
         if (animateTarget) {
             toBox = {
@@ -4627,9 +4824,11 @@ Ext.define('Ext.Component', {
                 width: animateTarget.dom.offsetWidth,
                 height: animateTarget.dom.offsetHeight
             };
+            
             ghostPanel = me.ghost();
             ghostPanel.el.stopAnimation();
             fromSize = me.getSize();
+            
             ghostPanel.el.animate({
                 to: toBox,
                 listeners: {
@@ -4637,13 +4836,15 @@ Ext.define('Ext.Component', {
                         if (!me.destroying) {
                             ghostPanel.componentLayout.lastComponentSize = null;
                             me.unghost(false);
+                            
                             ghostPanel.el.setSize(fromSize);
                             me.afterHide(callback, scope);
                         }
                     }
                 }
             });
-        } else {
+        }
+        else {
             me.el.hide();
         }
         
@@ -4655,8 +4856,8 @@ Ext.define('Ext.Component', {
 
     /**
      * @method
-     * Called after the component is moved, this method is empty by default but can be implemented by any
-     * subclass that needs to perform custom logic after a move occurs.
+     * Called after the component is moved, this method is empty by default but can be implemented
+     * by any subclass that needs to perform custom logic after a move occurs.
      *
      * @param {Number} x The new x position.
      * @param {Number} y The new y position.
@@ -4713,7 +4914,8 @@ Ext.define('Ext.Component', {
      */
 
     /**
-     * Invoked when a scroll operation is completed via this component's {@link #scrollable scroller}.
+     * Invoked when a scroll operation is completed via this component's
+     * {@link #scrollable scroller}.
      * @method onScrollEnd
      * @param {Number} x The current x position
      * @param {Number} y The current y position
@@ -4745,7 +4947,7 @@ Ext.define('Ext.Component', {
 
         me.el.show();
 
-        me.updateLayout({ 
+        me.updateLayout({
             isRoot: false,
             context: me._showContext
         });
@@ -4799,9 +5001,11 @@ Ext.define('Ext.Component', {
     /**
      * Returns the previous node in the Component tree in tree traversal order.
      *
-     * Note that this is not limited to siblings, and if invoked upon a node with no matching siblings, will walk the
-     * tree in reverse order to attempt to find a match. Contrast with {@link #previousSibling}.
-     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter the preceding nodes.
+     * Note that this is not limited to siblings, and if invoked upon a node with no matching
+     * siblings, will walk the tree in reverse order to attempt to find a match. Contrast with
+     * {@link #previousSibling}.
+     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter
+     * the preceding nodes.
      * @param includeSelf (private)
      * @return {Ext.Component} The previous node (or the previous node which matches the selector).
      * Returns `null` if there is no matching node.
@@ -4809,8 +5013,7 @@ Ext.define('Ext.Component', {
     previousNode: function(selector, includeSelf) {
         var node = this,
             ownerCt = node.ownerCt,
-            result,
-            it, i, sib;
+            result, it, i, sib;
 
         // If asked to include self, test me
         if (includeSelf && node.is(selector)) {
@@ -4820,41 +5023,51 @@ Ext.define('Ext.Component', {
         if (ownerCt) {
             for (it = ownerCt.items.items, i = Ext.Array.indexOf(it, node) - 1; i > -1; i--) {
                 sib = it[i];
+                
                 if (sib.query) {
                     result = sib.query(selector);
                     result = result[result.length - 1];
+                    
                     if (result) {
                         return result;
                     }
                 }
+                
                 if (sib.is(selector)) {
                     return sib;
                 }
             }
+            
             return ownerCt.previousNode(selector, true);
         }
+        
         return null;
     },
 
     /**
      * Returns the previous sibling of this Component.
      *
-     * Optionally selects the previous sibling which matches the passed {@link Ext.ComponentQuery ComponentQuery}
-     * selector.
+     * Optionally selects the previous sibling which matches the passed
+     * {@link Ext.ComponentQuery ComponentQuery} selector.
      *
      * May also be referred to as **`prev()`**
      *
-     * Note that this is limited to siblings, and if no siblings of the item match, `null` is returned. Contrast with
-     * {@link #previousNode}
-     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter the preceding items.
-     * @return {Ext.Component} The previous sibling (or the previous sibling which matches the selector).
+     * Note that this is limited to siblings, and if no siblings of the item match,
+     * `null` is returned. Contrast with {@link #previousNode}
+     * @param {String} [selector] A {@link Ext.ComponentQuery ComponentQuery} selector to filter
+     * the preceding items.
+     * @return {Ext.Component} The previous sibling (or the previous sibling which matches
+     * the selector).
      * Returns `null` if there is no matching sibling.
      */
     previousSibling: function(selector) {
-        var o = this.ownerCt, it, idx, c;
+        var o = this.ownerCt,
+            it, idx, c;
+        
         if (o) {
             it = o.items;
             idx = it.indexOf(this);
+            
             if (idx !== -1) {
                 if (selector) {
                     for (--idx; idx >= 0; idx--) {
@@ -4862,29 +5075,34 @@ Ext.define('Ext.Component', {
                             return c;
                         }
                     }
-                } else {
+                }
+                else {
                     if (idx) {
                         return it.getAt(--idx);
                     }
                 }
             }
         }
+        
         return null;
     },
 
     /**
      * Called by Component#doAutoRender
      *
-     * Register a Container configured `floating: true` with this Component's {@link Ext.ZIndexManager ZIndexManager}.
+     * Register a Container configured `floating: true` with this Component's
+     * {@link Ext.ZIndexManager ZIndexManager}.
      *
      * Components added in this way will not participate in any layout, but will be rendered
      * upon first show in the way that {@link Ext.window.Window Window}s are.
      */
     registerFloatingItem: function(cmp) {
         var me = this;
+        
         if (!me.floatingDescendants) {
             me.floatingDescendants = new Ext.ZIndexManager(me);
         }
+        
         me.floatingDescendants.register(cmp);
     },
 
@@ -4898,12 +5116,13 @@ Ext.define('Ext.Component', {
             el = me.rendered ? me.el : me.protoEl;
 
         el.removeCls.apply(el, arguments);
+        
         return me;
     },
 
     /**
-     * Removes a `cls` to the `uiCls` array, which will also call {@link #removeUIClsFromElement} and removes it from all
-     * elements of this component.
+     * Removes a `cls` to the `uiCls` array, which will also call {@link #removeUIClsFromElement}
+     * and removes it from all elements of this component.
      * @param {String/String[]} classes A string or an array of strings to remove to the `uiCls`.
      * @param {Boolean} skip True to remove the class
      */
@@ -4929,7 +5148,7 @@ Ext.define('Ext.Component', {
             if (cls && me.hasUICls(cls)) {
                 remove(uiCls, cls);
 
-                //If there's no activeUI then there's nothing to remove
+                // If there's no activeUI then there's nothing to remove
                 if (activeUI) {
                     clsArray = clsArray.concat(me.removeUIClsFromElement(cls));
                 }
@@ -4943,18 +5162,22 @@ Ext.define('Ext.Component', {
         return clsArray;
     },
 
-    resumeLayouts: function (flushOptions) {
+    resumeLayouts: function(flushOptions) {
         var me = this;
+        
         if (!me.rendered) {
             return;
         }
+        
         //<debug>
         if (!me.layoutSuspendCount) {
             Ext.log.warn('Mismatched call to resumeLayouts - layouts are currently not suspended.');
         }
         //</debug>
+        
         if (me.layoutSuspendCount && !--me.layoutSuspendCount) {
             me.suspendLayout = false;
+            
             if (flushOptions && !me.isLayoutSuspended()) {
                 me.updateLayout(flushOptions);
             }
@@ -4970,10 +5193,12 @@ Ext.define('Ext.Component', {
      *      comp.scrollBy([10, 10], true);
      *      comp.scrollBy({ x: 10, y: 10 }, true);
      *
-     * @param {Number/Number[]/Object} deltaX Either the x delta, an Array specifying x and y deltas or
-     * an object with "x" and "y" properties.
-     * @param {Number/Boolean/Object} deltaY Either the y delta, or an animate flag or config object.
-     * @param {Boolean/Object} animate Animate flag/config object if the delta values were passed separately.
+     * @param {Number/Number[]/Object} deltaX Either the x delta, an Array specifying x and y deltas
+     * or an object with "x" and "y" properties.
+     * @param {Number/Boolean/Object} deltaY Either the y delta, or an animate flag
+     * or config object.
+     * @param {Boolean/Object} animate Animate flag/config object if the delta values were passed
+     * separately.
      */
     scrollBy: function(deltaX, deltaY, animate) {
         var scroller = this.getScrollable();
@@ -5007,6 +5232,7 @@ Ext.define('Ext.Component', {
      */
     setAutoScroll: function(scroll) {
         this.setScrollable(!!scroll);
+        
         return this;
     },
 
@@ -5026,22 +5252,28 @@ Ext.define('Ext.Component', {
 
             if (!border) {
                 border = 0;
-            } else if (border === true) {
+            }
+            else if (border === true) {
                 border = '1px';
-            } else {
+            }
+            else {
                 border = this.unitizeBox(border);
             }
+            
             targetEl.setStyle('border-width', border);
+            
             if (!initial) {
                 me.updateLayout();
             }
         }
+        
         me.border = border;
     },
 
     /**
-     * Sets the dock position of this component in its parent panel. Note that this only has effect if this item is part
-     * of the `dockedItems` collection of a parent that has a DockLayout (note that any Panel has a DockLayout by default)
+     * Sets the dock position of this component in its parent panel. Note that this only has effect
+     * if this item is part of the `dockedItems` collection of a parent that has a DockLayout
+     * (note that any Panel has a DockLayout by default)
      * @param {Object} dock The dock position.
      * @return {Ext.Component} this
      */
@@ -5052,7 +5284,8 @@ Ext.define('Ext.Component', {
         if (dock !== me.dock) {
             if (ownerCt && ownerCt.moveDocked) {
                 ownerCt.moveDocked(me, dock);
-            } else {
+            }
+            else {
                 me.dock = dock;
             }
         }
@@ -5065,7 +5298,7 @@ Ext.define('Ext.Component', {
      * @param {Boolean} disabled `true` to disable.
      */
     setDisabled: function(disabled) {
-        return this[disabled ? 'disable': 'enable']();
+        return this[disabled ? 'disable' : 'enable']();
     },
 
     /**
@@ -5097,16 +5330,18 @@ Ext.define('Ext.Component', {
     /**
      * This method allows you to show or hide a LoadMask on top of this component.
      *
-     * The mask will be rendered into the element returned by {@link #getMaskTarget} which for most Components is the Component's
-     * element. See {@link #getMaskTarget} and {@link #maskElement}.
+     * The mask will be rendered into the element returned by {@link #getMaskTarget} which for most
+     * Components is the Component's element. See {@link #getMaskTarget} and {@link #maskElement}.
      *
-     * Most Components will return `null` indicating that their LoadMask cannot reside inside their element, but must
-     * be rendered into the document body.
+     * Most Components will return `null` indicating that their LoadMask cannot reside inside
+     * their element, but must be rendered into the document body.
      *
-     * {@link Ext.view.Table Grid Views} however will direct a LoadMask to be rendered into the owning {@link Ext.panel.Table GridPanel}.
+     * {@link Ext.view.Table Grid Views} however will direct a LoadMask to be rendered into
+     * the owning {@link Ext.panel.Table GridPanel}.
      *
-     * @param {Boolean/Object/String} load True to show the default LoadMask, a config object that will be passed to the
-     * LoadMask constructor, or a message String to show. False to hide the current LoadMask.
+     * @param {Boolean/Object/String} load True to show the default LoadMask, a config object
+     * that will be passed to the LoadMask constructor, or a message String to show. False to hide
+     * the current LoadMask.
      * @param targetEl (private) This param is deprecated
      * @return {Ext.LoadMask} The LoadMask instance that has just been shown.
      */
@@ -5133,12 +5368,14 @@ Ext.define('Ext.Component', {
                     if (targetEl && config.useTargetEl == null) {
                         config.useTargetEl = true;
                     }
+                    
                     me.loadMask = new Ext.LoadMask(config);
                 }
                 // Change any settings according to load config
                 else {
                     Ext.apply(me.loadMask, config);
                 }
+                
                 // If already visible, just update display with passed configs.
                 if (me.loadMask.isVisible()) {
                     me.loadMask.syncMaskState();
@@ -5155,6 +5392,7 @@ Ext.define('Ext.Component', {
                 }
             }
         }
+        
         return me.loadMask;
     },
 
@@ -5169,22 +5407,28 @@ Ext.define('Ext.Component', {
         if (me.rendered) {
             if (!margin && margin !== 0) {
                 margin = '';
-            } else {
+            }
+            else {
                 if (margin === true) {
                     margin = 5;
                 }
+                
                 margin = this.unitizeBox(margin);
             }
+            
             me.margin = margin;
+            
             // See: EXTJS-13359
             me.margin$ = null;
             me.getEl().setStyle('margin', margin);
+            
             if (!preventLayout) {
                 // Changing the margins can impact the position of this (and possibly)
                 // other subsequent components in the layout.
                 me.updateLayout(me._notAsLayoutRoot);
             }
-        } else {
+        }
+        else {
             me.margin = margin;
         }
     },
@@ -5209,45 +5453,49 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Sets the page XY position of the component. To set the left and top instead, use {@link #setPosition}.
-     * This method fires the {@link #event-move} event.
+     * Sets the page XY position of the component. To set the left and top instead,
+     * use {@link #setPosition}. This method fires the {@link #event-move} event.
      * @param {Number/Number[]} x The new x position or an array of `[x,y]`.
      * @param {Number} [y] The new y position.
-     * @param {Boolean/Object} [animate] True to animate the Component into its new position. You may also pass an
-     * animation configuration.
+     * @param {Boolean/Object} [animate] True to animate the Component into its new position.
+     * You may also pass an animation configuration.
      * @return {Ext.Component} this
      */
     setPagePosition: function(x, y, animate) {
         var me = this,
-            p,
-            floatParentBox;
+            p, floatParentBox;
 
         if (Ext.isArray(x)) {
             y = x[1];
             x = x[0];
         }
+        
         me.pageX = x;
         me.pageY = y;
 
         if (me.floating) {
-
-            // Floating Components which are registered with a Container have to have their x and y properties made relative
+            // Floating Components which are registered with a Container have to have
+            // their x and y properties made relative
             if (me.isContainedFloater()) {
                 floatParentBox = me.floatParent.getTargetEl().getViewRegion();
+                
                 if (Ext.isNumber(x) && Ext.isNumber(floatParentBox.left)) {
                     x -= floatParentBox.left;
                 }
+                
                 if (Ext.isNumber(y) && Ext.isNumber(floatParentBox.top)) {
                     y -= floatParentBox.top;
                 }
-            } else {
+            }
+            else {
                 p = me.el.translateXY(x, y);
                 x = p.x;
                 y = p.y;
             }
 
             me.setPosition(x, y, animate);
-        } else {
+        }
+        else {
             p = me.el.translateXY(x, y);
             me.setPosition(p.x, p.y, animate);
         }
@@ -5257,12 +5505,14 @@ Ext.define('Ext.Component', {
 
     /**
      * @member Ext.Component
-     * Sets the left and top of the component. To set the page XY position instead, use {@link Ext.Component#setPagePosition setPagePosition}. This
-     * method fires the {@link #event-move} event.
-     * @param {Number/Number[]/Object} x The new left, an array of `[x,y]`, or animation config object containing `x` and `y` properties.
+     * Sets the left and top of the component. To set the page XY position instead,
+     * use {@link Ext.Component#setPagePosition setPagePosition}. This method fires the
+     * {@link #event-move} event.
+     * @param {Number/Number[]/Object} x The new left, an array of `[x,y]`, or animation config
+     * object containing `x` and `y` properties.
      * @param {Number} [y] The new top.
-     * @param {Boolean/Object} [animate] If `true`, the Component is _animated_ into its new position. You may also pass an
-     * animation configuration.
+     * @param {Boolean/Object} [animate] If `true`, the Component is _animated_ into
+     * its new position. You may also pass an animation configuration.
      * @return {Ext.Component} this
      */
     setPosition: function(x, y, animate) {
@@ -5279,6 +5529,7 @@ Ext.define('Ext.Component', {
                 // want to incur the penalty of read/write on every call to setPosition
                 if (x !== me.getLocalX() || y !== me.getLocalY()) {
                     me.stopAnimation();
+                    
                     me.animate(Ext.apply({
                         duration: 1000,
                         listeners: {
@@ -5294,11 +5545,13 @@ Ext.define('Ext.Component', {
                         }
                     }, animate));
                 }
-            } else {
+            }
+            else {
                 me.setLocalXY(x, y);
                 me.afterSetPosition(x, y);
             }
         }
+        
         return me;
     },
 
@@ -5333,8 +5586,9 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Sets the width and height of this Component. This method fires the {@link #resize} event. This method can accept
-     * either width and height as separate arguments, or you can pass a size object like `{width:10, height:20}`.
+     * Sets the width and height of this Component. This method fires the {@link #resize} event.
+     * This method can accept either width and height as separate arguments, or you can pass
+     * a size object like `{ width:10, height:20 }`.
      *
      * @param {Number/String/Object} width The new width to set. This may be one of:
      *
@@ -5343,8 +5597,8 @@ Ext.define('Ext.Component', {
      *   - A size object in the format `{width: widthValue, height: heightValue}`.
      *   - `undefined` to leave the width unchanged.
      *
-     * @param {Number/String} height The new height to set (not required if a size object is passed as the first arg).
-     * This may be one of:
+     * @param {Number/String} height The new height to set (not required if a size object is passed
+     * as the first arg). This may be one of:
      *
      *   - A Number specifying the new height in pixels.
      *   - A String used to set the CSS height style. Animation may **not** be used.
@@ -5361,15 +5615,17 @@ Ext.define('Ext.Component', {
         // support for standard size objects
         if (width && typeof width === 'object') {
             height = width.height;
-            width  = width.width;
+            width = width.width;
         }
 
         // Constrain within configured maximum
         if (typeof width === 'number') {
             me.width = Ext.Number.constrain(width, me.minWidth, me.maxWidth);
-        } else if (width === null) {
+        }
+        else if (width === null) {
             delete me.width;
-        } else if(typeof width === 'string') {
+        }
+        else if (typeof width === 'string') {
             // handle width specified as a string css style
             widthIsString = true;
             me.width = width;
@@ -5377,9 +5633,11 @@ Ext.define('Ext.Component', {
 
         if (typeof height === 'number') {
             me.height = Ext.Number.constrain(height, me.minHeight, me.maxHeight);
-        } else if (height === null) {
+        }
+        else if (height === null) {
             delete me.height;
-        } else if(typeof height === 'string') {
+        }
+        else if (typeof height === 'string') {
             // handle width specified as a string css style
             heightIsString = true;
             me.height = height;
@@ -5433,15 +5691,18 @@ Ext.define('Ext.Component', {
      * object was passed.
      * @return {Ext.Component} this
      */
-    setStyle: function (property, value) {
+    setStyle: function(property, value) {
         var el = this.el || this.protoEl;
+        
         el.setStyle(property, value);
+        
         return this;
     },
 
     /**
-     * Sets the UI for the component. This will remove any existing UIs on the component. It will also loop through any
-     * `uiCls` set on the component and rename them so they include the new UI.
+     * Sets the UI for the component. This will remove any existing UIs on the component.
+     * It will also loop through any `uiCls` set on the component and rename them so they include
+     * the new UI.
      * @param {String} ui The new UI for the component.
      */
     setUI: function(ui) {
@@ -5455,7 +5716,8 @@ Ext.define('Ext.Component', {
             return;
         }
 
-        // activeUI will only be set if setUI has been called before. If it hasn't there's no need to remove anything
+        // activeUI will only be set if setUI has been called before.
+        // If it hasn't there's no need to remove anything
         if (activeUI) {
             classes = me.removeClsWithUI(uiCls, true);
 
@@ -5474,8 +5736,8 @@ Ext.define('Ext.Component', {
         // Set the UI
         me.ui = ui;
 
-        // After the first call to setUI the values ui and activeUI should track each other but initially we need some
-        // way to tell whether the ui has really been set.
+        // After the first call to setUI the values ui and activeUI should track each other
+        // but initially we need some way to tell whether the ui has really been set.
         me.activeUI = ui;
 
         // Add the new UI to the element
@@ -5487,9 +5749,10 @@ Ext.define('Ext.Component', {
             me.addCls(classes);
         }
 
-        // Changing the ui can lead to significant changes to a component's appearance, so the layout needs to be
-        // updated. Internally most calls to setUI are pre-render. Buttons are a notable exception as setScale changes
-        // the ui and often requires the layout to be updated.
+        // Changing the ui can lead to significant changes to a component's appearance,
+        // so the layout needs to be updated. Internally most calls to setUI are pre-render.
+        // Buttons are a notable exception as setScale changes the ui and often requires
+        // the layout to be updated.
         if (me.rendered) {
             me.updateLayout();
         }
@@ -5502,7 +5765,7 @@ Ext.define('Ext.Component', {
      * @since 1.1.0
      */
     setVisible: function(visible) {
-        return this[visible ? 'show': 'hide']();
+        return this[visible ? 'show' : 'hide']();
     },
 
     /**
@@ -5532,14 +5795,16 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Shows this Component, rendering it first if {@link #autoRender} or {@link #cfg-floating} are `true`.
+     * Shows this Component, rendering it first if {@link #autoRender} or {@link #cfg-floating}
+     * are `true`.
      *
-     * After being shown, a {@link #cfg-floating} Component (such as a {@link Ext.window.Window}), is activated it and
-     * brought to the front of its {@link #zIndexManager z-index stack}.
+     * After being shown, a {@link #cfg-floating} Component (such as a {@link Ext.window.Window}),
+     * is activated it and brought to the front of its {@link #zIndexManager z-index stack}.
      *
-     * @param {String/Ext.dom.Element} [animateTarget=null] **only valid for {@link #cfg-floating} Components such as {@link
-     * Ext.window.Window Window}s or {@link Ext.tip.ToolTip ToolTip}s, or regular Components which have been configured
-     * with `floating: true`.** The target from which the Component should animate from while opening.
+     * @param {String/Ext.dom.Element} [animateTarget=null] **only valid for {@link #cfg-floating}
+     * Components such as {@link Ext.window.Window Window}s or {@link Ext.tip.ToolTip ToolTip}s,
+     * or regular Components which have been configured with `floating: true`.** The target
+     * from which the Component should animate from while opening.
      * @param {Function} [callback] A callback function to call after the Component is displayed.
      * Only necessary if animation was specified.
      * @param {Object} [scope] The scope (`this` reference) in which the callback is executed.
@@ -5567,14 +5832,17 @@ Ext.define('Ext.Component', {
                 // it becomes hierarchically visible.
                 me.initHierarchyEvents();
             }
+            
             // defer the show call until next syncHidden(), but ignore animateTarget.
             if (arguments.length > 1) {
-                arguments[0] = null; // jshint ignore:line
+                arguments[0] = null;
                 me.pendingShow = arguments;
-            } else {
+            }
+            else {
                 me.pendingShow = true;
             }
-        } else if (rendered && me.isVisible()) {
+        }
+        else if (rendered && me.isVisible()) {
             if (me.floating) {
                 me.onFloatShow();
 
@@ -5587,7 +5855,8 @@ Ext.define('Ext.Component', {
                     me.toFront();
                 }
             }
-        } else {
+        }
+        else {
             if (me.fireEvent('beforeshow', me) !== false) {
                 me.hidden = false;
                 delete this.getInherited().hidden;
@@ -5605,6 +5874,7 @@ Ext.define('Ext.Component', {
                 // we resume layouts and force a flush because we don't know if something
                 // will force it.
                 Ext.suspendLayouts();
+                
                 if (!rendered && (me.autoRender || me.floating)) {
                     me.doAutoRender();
                     rendered = me.rendered;
@@ -5615,13 +5885,16 @@ Ext.define('Ext.Component', {
                     Ext.resumeLayouts();
                     me.onShow.apply(me, arguments);
                     me.afterShow.apply(me, arguments);
-                } else {
+                }
+                else {
                     Ext.resumeLayouts(true);
                 }
-            } else {
+            }
+            else {
                 me.onShowVeto();
             }
         }
+        
         return me;
     },
 
@@ -5649,8 +5922,8 @@ Ext.define('Ext.Component', {
      *
      * @param {Number/Number[]} x The new x position or array of `[x,y]`.
      * @param {Number} [y] The new y position
-     * @param {Boolean/Object} [animate] True to animate the Component into its new position. You may also pass an
-     * animation configuration.
+     * @param {Boolean/Object} [animate] True to animate the Component into its new position.
+     * You may also pass an animation configuration.
      * @return {Ext.Component} this
      */
     showAt: function(x, y, animate) {
@@ -5661,23 +5934,30 @@ Ext.define('Ext.Component', {
         if (!me.rendered && (me.autoRender || me.floating)) {
             me.x = x;
             me.y = y;
+            
             return me.show();
         }
+        
         if (me.floating) {
             me.setPosition(x, y, animate);
-        } else {
+        }
+        else {
             me.setPagePosition(x, y, animate);
         }
+        
         return me.show();
     },
 
     /**
-     * Shows this component by the specified {@link Ext.Component Component} or {@link Ext.dom.Element Element}.
-     * Used when this component is {@link #cfg-floating}.
-     * @param {Ext.Component/Ext.dom.Element} component The {@link Ext.Component} or {@link Ext.dom.Element} to show the component by.
-     * @param {String} [position] Alignment position as used by {@link Ext.util.Positionable#getAlignToXY}.
-     * Defaults to `{@link #defaultAlign}`. See {@link #alignTo} for possible values.
-     * @param {Number[]} [offset] Alignment offsets as used by {@link Ext.util.Positionable#getAlignToXY}. See {@link #alignTo} for possible values.
+     * Shows this component by the specified {@link Ext.Component Component} or
+     * {@link Ext.dom.Element Element}. Used when this component is {@link #cfg-floating}.
+     * @param {Ext.Component/Ext.dom.Element} component The {@link Ext.Component} or
+     * {@link Ext.dom.Element} to show the component by.
+     * @param {String} [position] Alignment position as used by
+     * {@link Ext.util.Positionable#getAlignToXY}. Defaults to `{@link #defaultAlign}`.
+     * See {@link #alignTo} for possible values.
+     * @param {Number[]} [offset] Alignment offsets as used by
+     * {@link Ext.util.Positionable#getAlignToXY}. See {@link #alignTo} for possible values.
      * @return {Ext.Component} this
      */
     showBy: function(component, position, offset) {
@@ -5691,9 +5971,7 @@ Ext.define('Ext.Component', {
 
         if (me.floating && component) {
             me._lastAlignTarget = component;
-
             me._lastAlignToPos = position || me.defaultAlign;
-
             me._lastAlignToOffsets = offset || me.alignOffset;
 
             me.show();
@@ -5702,11 +5980,13 @@ Ext.define('Ext.Component', {
         return me;
     },
 
-    suspendLayouts: function () {
+    suspendLayouts: function() {
         var me = this;
+        
         if (!me.rendered) {
             return;
         }
+        
         if (++me.layoutSuspendCount === 1) {
             me.suspendLayout = true;
         }
@@ -5721,7 +6001,7 @@ Ext.define('Ext.Component', {
      * @return {Ext.Component} Returns the Component to allow method chaining.
      * @chainable
      */
-    toggleCls: function (className, state) {
+    toggleCls: function(className, state) {
         if (state === undefined) {
             state = !this.hasCls(className);
         }
@@ -5744,17 +6024,20 @@ Ext.define('Ext.Component', {
 
     unregisterFloatingItem: function(cmp) {
         var me = this;
+        
         if (me.floatingDescendants) {
             me.floatingDescendants.unregister(cmp);
         }
     },
 
     /**
-     * Navigates up the ownership hierarchy searching for an ancestor Container which matches any passed selector or component.
+     * Navigates up the ownership hierarchy searching for an ancestor Container which matches
+     * any passed selector or component.
      *
-     * *Important.* There is not a universal upwards navigation pointer. There are several upwards relationships
-     * such as the {@link Ext.button.Button button} which activates a {@link Ext.button.Button#cfg-menu menu}, or the
-     * {@link Ext.menu.Item menu item} which activated a {@link Ext.menu.Item#cfg-menu submenu}, or the
+     * *Important.* There is not a universal upwards navigation pointer. There are several upwards
+     * relationships such as the {@link Ext.button.Button button} which activates
+     * a {@link Ext.button.Button#cfg-menu menu}, or the {@link Ext.menu.Item menu item}
+     * which activated a {@link Ext.menu.Item#cfg-menu submenu}, or the
      * {@link Ext.grid.column.Column column header} which activated the column menu.
      *
      * These differences are abstracted away by this method.
@@ -5763,11 +6046,14 @@ Ext.define('Ext.Component', {
      *
      *     var owningTabPanel = grid.up('tabpanel');
      *
-     * @param {String/Ext.Component} [selector] The selector component or actual component to test. If not passed the immediate owner/activator is returned.
-     * @param {String/Number/Ext.Component} [limit] This may be a selector upon which to stop the upward scan, or a limit of the number of steps, or Component reference to stop on.
-     * @return {Ext.container.Container} The matching ancestor Container (or `undefined` if no match was found).
+     * @param {String/Ext.Component} [selector] The selector component or actual component to test.
+     * If not passed the immediate owner/activator is returned.
+     * @param {String/Number/Ext.Component} [limit] This may be a selector upon which to stop
+     * the upward scan, or a limit of the number of steps, or Component reference to stop on.
+     * @return {Ext.container.Container} The matching ancestor Container (or `undefined` if no match
+     * was found).
      */
-    up: function (selector, limit) {
+    up: function(selector, limit) {
         var result = this.getRefOwner(),
             limitSelector = typeof limit === 'string',
             limitCount = typeof limit === 'number',
@@ -5781,11 +6067,13 @@ Ext.define('Ext.Component', {
                 }
 
                 steps++;
+                
                 if (selector.isComponent) {
                     if (result === selector) {
                         return result;
                     }
-                } else {
+                }
+                else {
                     if (Ext.ComponentQuery.is(result, selector)) {
                         return result;
                     }
@@ -5795,14 +6083,17 @@ Ext.define('Ext.Component', {
                 if (limitSelector && result.is(limit)) {
                     return;
                 }
+                
                 if (limitCount && steps === limit) {
                     return;
                 }
+                
                 if (limitComponent && result === limit) {
                     return;
                 }
             }
         }
+        
         return result;
     },
 
@@ -5832,7 +6123,8 @@ Ext.define('Ext.Component', {
 
         if (isData) {
             me.data = (htmlOrData && htmlOrData.isEntity) ? htmlOrData.getData(true) : htmlOrData;
-        } else {
+        }
+        else {
             me.html = Ext.isObject(htmlOrData) ? Ext.DomHelper.markup(htmlOrData) : htmlOrData;
         }
 
@@ -5845,12 +6137,15 @@ Ext.define('Ext.Component', {
 
                 // If we are a non-empty container being updated with raw content we have to lay out
                 doLayout = doLayout || me.items.items.length > 0;
-            } else {
+            }
+            else {
                 el = me.getTargetEl();
             }
+            
             if (isData) {
                 me.tpl[me.tplWriteMode](el, me.data || {});
-            } else {
+            }
+            else {
                 el.setHtml(me.html, loadScripts, callback, scriptScope || me);
             }
 
@@ -5881,11 +6176,11 @@ Ext.define('Ext.Component', {
      *
      * @since 3.4.0
      */
-    setHtml: function (html, loadScripts, callback, scriptScope) {
+    setHtml: function(html, loadScripts, callback, scriptScope) {
         this.update(html, loadScripts, null, scriptScope);
     },
 
-    applyData: function (data) {
+    applyData: function(data) {
         // Don't return data here, update will set this.data
         this.update(data);
     },
@@ -5895,9 +6190,10 @@ Ext.define('Ext.Component', {
      * @param {Object} box An object in the format {x, y, width, height}
      * @return {Ext.Component} this
      */
-    updateBox: function(box){
+    updateBox: function(box) {
         this.setSize(box.width, box.height);
         this.setPagePosition(box.x, box.y);
+        
         return this;
     },
 
@@ -5913,7 +6209,7 @@ Ext.define('Ext.Component', {
      * @param {Boolean} options.defer `true` if this layout should be deferred.
      * @param {Boolean} options.isRoot `true` if this layout should be the root of the layout.
      */
-    updateLayout: function (options) {
+    updateLayout: function(options) {
         var me = this,
             defer,
             lastBox = me.lastBox,
@@ -5932,7 +6228,8 @@ Ext.define('Ext.Component', {
 
         if (me.hidden) {
             Ext.Component.cancelLayout(me);
-        } else if (typeof isRoot !== 'boolean') {
+        }
+        else if (typeof isRoot !== 'boolean') {
             isRoot = me.isLayoutRoot();
         }
 
@@ -5941,7 +6238,8 @@ Ext.define('Ext.Component', {
             // either we are the root or our ownerLayout doesn't care
             if (!me.isLayoutSuspended()) {
                 // we aren't suspended (knew that), but neither is any of our ownerCt's...
-                defer = (options && options.hasOwnProperty('defer')) ? options.defer : me.deferLayouts;
+                defer =
+                    (options && options.hasOwnProperty('defer')) ? options.defer : me.deferLayouts;
                 Ext.Component.updateLayout(me, defer);
             }
         }
@@ -5972,7 +6270,8 @@ Ext.define('Ext.Component', {
 
             if (childEl && childEl.isElement) {
                 childEl.setTouchAction(value);
-            } else {
+            }
+            else {
                 hasRootActions = true;
             }
         }
@@ -6055,6 +6354,7 @@ Ext.define('Ext.Component', {
     privates: {
         addOverCls: function() {
             var me = this;
+            
             if (!me.disabled) {
                 me.el.addCls(me.overCls);
             }
@@ -6078,8 +6378,10 @@ Ext.define('Ext.Component', {
 
                 for (childElName in childEls) {
                     suffix = childEls[childElName].frame;
+                    
                     if (suffix && suffix !== true) {
                         el = me[childElName];
+                        
                         if (el) {
                             el.addCls(baseClsUI + suffix);
                         }
@@ -6103,7 +6405,8 @@ Ext.define('Ext.Component', {
                 // components that use liquidLayout need their size constraints set in the dom
                 if (newValue != null) {
                     me.setStyle(styleName, newValue + 'px');
-                } else if (oldValue) {
+                }
+                else if (oldValue) {
                     me.setStyle(styleName, '');
                 }
             }
@@ -6119,8 +6422,9 @@ Ext.define('Ext.Component', {
          * Constructs a plugin according to the passed config object/ptype string.
          *
          * Ensures that the constructed plugin always has a `cmp` reference back to this component.
-         * The setting up of this is done in PluginManager. The PluginManager ensures that a reference to this
-         * component is passed to the constructor. It also ensures that the plugin's `setCmp` method (if any) is called.
+         * The setting up of this is done in PluginManager. The PluginManager ensures that
+         * a reference to this component is passed to the constructor. It also ensures that
+         * the plugin's `setCmp` method (if any) is called.
          * @private
          */
         constructPlugin: function(plugin) {
@@ -6140,8 +6444,8 @@ Ext.define('Ext.Component', {
         },
 
         /**
-         * Returns an array of fully constructed plugin instances. This converts any configs into their
-         * appropriate instances.
+         * Returns an array of fully constructed plugin instances. This converts any configs
+         * into their appropriate instances.
          *
          * It does not mutate the plugins array. It creates a new array.
          * @private
@@ -6154,9 +6458,10 @@ Ext.define('Ext.Component', {
             if (plugins) {
                 me.plugins = result = Ext.plugin.Abstract.decode(plugins, 'ptype');
 
-                // The processed flag indicates that the plugins have been constructed. This is usually done
-                // at construction time, so if at initComponent time, there is a non-zero array of plugins which
-                // does NOT have the processed flag, it needs to be processed again.
+                // The processed flag indicates that the plugins have been constructed.
+                // This is usually done at construction time, so if at initComponent time,
+                // there is a non-zero array of plugins which does NOT have the processed flag,
+                // it needs to be processed again.
                 result.processed = true;
 
                 for (i = 0, len = result.length; i < len; i++) {
@@ -6166,6 +6471,7 @@ Ext.define('Ext.Component', {
             }
 
             me.pluginsInitialized = true;
+            
             return result;
         },
 
@@ -6189,48 +6495,63 @@ Ext.define('Ext.Component', {
                     elementName = options.element;
                     listeners = {};
                     listeners[ename] = fn;
+                    
                     if (scope) {
                         listeners.scope = scope;
                     }
 
                     eventOptions = me.$elementEventOptions;
+                    
                     for (option in options) {
                         if (eventOptions[option]) {
                             listeners[option] = options[option];
                         }
                     }
-                } else {
+                }
+                else {
                     listeners = fn;
                     elementName = ename;
                 }
 
                 element = me[elementName];
 
-                if (element && element.isObservable) { // can be any kind of observable, not just element
+                // can be any kind of observable, not just element
+                if (element && element.isObservable) {
                     me.mon(element, listeners);
-                } else {
+                }
+                else {
                     me.afterRenderEvents = me.afterRenderEvents || {};
+                    
                     if (!me.afterRenderEvents[elementName]) {
                         me.afterRenderEvents[elementName] = [];
                     }
+                    
                     me.afterRenderEvents[elementName].push(listeners);
                 }
+                
                 return;
             }
 
             if (options) {
                 delegate = options.delegate;
+                
                 if (delegate) {
-                    me.mixins.componentDelegation.addDelegatedListener.call(me, ename, fn, scope, options, order, caller, manager);
+                    me.mixins.componentDelegation.addDelegatedListener.call(
+                        me, ename, fn, scope, options, order, caller, manager
+                    );
+                    
                     return;
                 }
             }
 
-            me.mixins.observable.doAddListener.call(me, ename, fn, scope, options, order, caller, manager);
+            me.mixins.observable.doAddListener.call(
+                me, ename, fn, scope, options, order, caller, manager
+            );
         },
 
         doRemoveListener: function(eventName, fn, scope) {
             var me = this;
+            
             me.mixins.observable.doRemoveListener.call(me, eventName, fn, scope);
             me.mixins.componentDelegation.removeDelegatedListener.call(me, eventName, fn, scope);
         },
@@ -6256,7 +6577,7 @@ Ext.define('Ext.Component', {
          * @since 4.2.0
          * @private
          */
-        fireHierarchyEvent: function (eventName) {
+        fireHierarchyEvent: function(eventName) {
             var globalEvents = Ext.GlobalEvents;
 
             if (globalEvents.hasListeners[eventName]) {
@@ -6273,6 +6594,7 @@ Ext.define('Ext.Component', {
          */
         getAutoId: function() {
             this.autoGenId = true;
+            
             return ++Ext.Component.AUTO_ID;
         },
 
@@ -6291,7 +6613,7 @@ Ext.define('Ext.Component', {
          * Get an el for overflowing, defaults to the target el
          * @private
          */
-        getOverflowEl: function(){
+        getOverflowEl: function() {
             return this.getTargetEl();
         },
 
@@ -6308,15 +6630,20 @@ Ext.define('Ext.Component', {
 
             if (scroller) {
                 x = scroller.getX();
+                
                 if (x === true) {
                     x = 'auto';
                 }
+                
                 y = scroller.getY();
+                
                 if (y === true) {
                     y = 'auto';
                 }
+                
                 scrollFlags = flags[x][y];
-            } else {
+            }
+            else {
                 scrollFlags = flags.none;
             }
 
@@ -6332,10 +6659,11 @@ Ext.define('Ext.Component', {
          * Returns an array of current fully constructed plugin instances.
          * @private
          */
-        getPlugins : function() {
+        getPlugins: function() {
             var plugins = this.plugins;
 
             plugins = (plugins && plugins.processed) ? plugins : this.constructPlugins();
+            
             return plugins || null;
         },
 
@@ -6347,11 +6675,13 @@ Ext.define('Ext.Component', {
                 target = Ext.getBody();
                 me.proxy = me.el.createProxy(Ext.baseCSSPrefix + 'proxy-el', target, true);
             }
+            
             return me.proxy;
         },
 
         /**
-         * This is used to determine where to insert the 'html', 'contentEl' and 'items' in this component.
+         * This is used to determine where to insert the 'html', 'contentEl' and 'items' in this
+         * component.
          * @private
          */
         getTargetEl: function() {
@@ -6360,7 +6690,8 @@ Ext.define('Ext.Component', {
 
         /**
          * @private
-         * Needed for when widget is rendered into a grid cell. The class to add to the cell element.
+         * Needed for when widget is rendered into a grid cell. The class to add to the cell
+         * element.
          */
         getTdCls: function() {
             return Ext.baseCSSPrefix + this.getTdType() + '-' + this.ui + '-cell';
@@ -6371,8 +6702,9 @@ Ext.define('Ext.Component', {
          * Partner method to {@link #getTdCls}.
          *
          * Returns the base type for the component. Defaults to return `this.xtype`, but
-         * All derived classes of {@link Ext.form.field.Text TextField} can return the type 'textfield',
-         * and all derived classes of {@link Ext.button.Button Button} can return the type 'button'
+         * All derived classes of {@link Ext.form.field.Text TextField} can return the type
+         * 'textfield', and all derived classes of {@link Ext.button.Button Button} can return
+         * the type 'button'
          */
         getTdType: function() {
             return this.xtype;
@@ -6385,6 +6717,7 @@ Ext.define('Ext.Component', {
             //<debug>
             Ext.log.warn('getTpl is deprecated, use lookupTpl.');
             //</debug>
+            
             return this.lookupTpl(name);
         },
 
@@ -6400,8 +6733,11 @@ Ext.define('Ext.Component', {
             //<deprecated since=0.99>
             if (Ext.isDefined(me.cmpCls)) {
                 if (Ext.isDefined(Ext.global.console)) {
-                    Ext.global.console.warn('Ext.Component: cmpCls has been deprecated. Please use componentCls.');
+                    Ext.global.console.warn(
+                        'Ext.Component: cmpCls has been deprecated. Please use componentCls.'
+                    );
                 }
+                
                 me.componentCls = me.cmpCls;
                 delete me.cmpCls;
             }
@@ -6409,7 +6745,8 @@ Ext.define('Ext.Component', {
 
             if (me.componentCls) {
                 cls.push(me.componentCls);
-            } else {
+            }
+            else {
                 me.componentCls = me.baseCls;
             }
 
@@ -6418,19 +6755,24 @@ Ext.define('Ext.Component', {
 
         initDraggable: function() {
             var me = this,
+                dragTarget, ddConfig;
 
             // If we are resizable, and the resizer had to wrap this Component's el (e.g. an Img)
             // Then we have to create a pseudo-Component out of the resizer to drag that,
             // otherwise, we just drag this Component
-                dragTarget = (me.resizer && me.resizer.el !== me.el) ? me.resizerComponent = new Ext.Component({
+            dragTarget = (me.resizer && me.resizer.el !== me.el)
+                ? me.resizerComponent = new Ext.Component({
                     el: me.resizer.el,
                     rendered: true,
                     container: me.container
-                }) : me,
-                ddConfig = Ext.applyIf({
-                    el: dragTarget.getDragEl(),
-                    constrainTo: (me.constrain||me.draggable.constrain) ? (me.constrainTo || (me.floatParent ? me.floatParent.getTargetEl() : me.container)) : undefined
-                }, me.draggable);
+                })
+                : me;
+            
+            ddConfig = Ext.applyIf({
+                el: dragTarget.getDragEl(),
+                // eslint-disable-next-line max-len
+                constrainTo: (me.constrain || me.draggable.constrain) ? (me.constrainTo || (me.floatParent ? me.floatParent.getTargetEl() : me.container)) : undefined
+            }, me.draggable);
 
             // Add extra configs if Component is specified to be constrained
             if (me.constrain || me.constrainDelegate) {
@@ -6451,6 +6793,7 @@ Ext.define('Ext.Component', {
                 padding = me.padding;
 
             if (padding != null) {
+                // eslint-disable-next-line max-len
                 if (me.layout && me.layout.managePadding && me.contentPaddingProperty === 'padding') {
                     // If the container layout manages padding, or if a touch scroller is in
                     // use, the padding will be applied to an inner layout element, or the
@@ -6460,9 +6803,10 @@ Ext.define('Ext.Component', {
                     // that is applied to the target element via style sheet rules.  It is
                     // therefore necessary to set the target element's padding to "0".
                     targetEl.setStyle('padding', 0);
-                } else {
-                    // Convert the padding, margin and border properties from a space separated string
-                    // into a proper style string
+                }
+                else {
+                    // Convert the padding, margin and border properties
+                    // from a space separated string into a proper style string
                     targetEl.setStyle('padding', this.unitizeBox((padding === true) ? 5 : padding));
                 }
             }
@@ -6483,9 +6827,11 @@ Ext.define('Ext.Component', {
             resizable = Ext.apply({
                 target: me,
                 dynamic: false,
-                constrainTo: (me.constrain||(resizable && resizable.constrain)) ? (me.constrainTo || (me.floatParent ? me.floatParent.getTargetEl() : me.container)) : undefined,
+                // eslint-disable-next-line max-len
+                constrainTo: (me.constrain || (resizable && resizable.constrain)) ? (me.constrainTo || (me.floatParent ? me.floatParent.getTargetEl() : me.container)) : undefined,
                 handles: me.resizeHandles
             }, resizable);
+            
             resizable.target = me;
             me.resizer = new Ext.resizer.Resizer(resizable);
         },
@@ -6516,12 +6862,14 @@ Ext.define('Ext.Component', {
                 me.setBorder(border, targetEl);
             }
 
-            // initComponent, beforeRender, or event handlers may have set the style or cls property since the protoEl was set up
-            // so we must apply styles and classes here too.
+            // initComponent, beforeRender, or event handlers may have set the style
+            // or cls property since the protoEl was set up so we must apply styles
+            // and classes here too.
             if (cls && cls !== me.initialCls) {
                 targetEl.addCls(cls);
                 me.cls = me.initialCls = null;
             }
+            
             if (style && style !== me.initialStyle) {
                 targetEl.setStyle(style);
                 me.style = me.initialStyle = null;
@@ -6530,6 +6878,7 @@ Ext.define('Ext.Component', {
             if (x != null) {
                 targetEl.setStyle(me.horizontalPosProp, (typeof x === 'number') ? (x + 'px') : x);
             }
+            
             if (y != null) {
                 targetEl.setStyle('top', (typeof y === 'number') ? (y + 'px') : y);
             }
@@ -6538,6 +6887,7 @@ Ext.define('Ext.Component', {
                 if (Ext.scopeCss) {
                     targetEl.addCls(me.rootCls);
                 }
+                
                 targetEl.addCls(me.borderBoxCls);
             }
 
@@ -6548,38 +6898,45 @@ Ext.define('Ext.Component', {
                 width = me.width;
                 height = me.height;
 
-                // If we're using the content box model, we also cannot assign numeric initial sizes since we do not know the border widths to subtract
+                // If we're using the content box model, we also cannot assign
+                // numeric initial sizes since we do not know the border widths to subtract
                 if (width != null) {
                     if (typeof width === 'number') {
                         targetEl.setStyle('width', width + 'px');
-                    } else {
+                    }
+                    else {
                         targetEl.setStyle('width', width);
                     }
                 }
+                
                 if (height != null) {
                     if (typeof height === 'number') {
                         targetEl.setStyle('height', height + 'px');
-                    } else {
+                    }
+                    else {
                         targetEl.setStyle('height', height);
                     }
                 }
             }
         },
 
-        // Utility method to determine if a Component is floating, and has an owning Container whose coordinate system
-        // it must be positioned in when using setPosition.
+        // Utility method to determine if a Component is floating, and has an owning Container
+        // whose coordinate system it must be positioned in when using setPosition.
         isContainedFloater: function() {
             return (this.floating && this.floatParent);
         },
 
         isDescendant: function(ancestor) {
+            var c;
+            
             if (ancestor.isContainer) {
-                for (var c = this.ownerCt; c; c = c.ownerCt) {
+                for (c = this.ownerCt; c; c = c.ownerCt) {
                     if (c === ancestor) {
                         return true;
                     }
                 }
             }
+            
             return false;
         },
 
@@ -6588,8 +6945,8 @@ Ext.define('Ext.Component', {
          * Returns `true` if the passed element is within the container tree of this component.
          *
          * For example if a menu's submenu contains an {@link Ext.form.field.Date}, that top level
-         * menu owns the elements of the date picker. Using this method, you can tell if an event took place
-         * within a certain component tree.
+         * menu owns the elements of the date picker. Using this method, you can tell if an event
+         * took place within a certain component tree.
          */
         owns: function(element) {
             var result = false,
@@ -6597,7 +6954,8 @@ Ext.define('Ext.Component', {
 
             if (element.isEvent) {
                 element = element.target;
-            } else if (element.isElement) {
+            }
+            else if (element.isElement) {
                 element = element.dom;
             }
 
@@ -6619,21 +6977,27 @@ Ext.define('Ext.Component', {
             this.isDetached = false;
         },
 
-        removeManagedListenerItem: function(isClear, managedListener, item, ename, fn, scope){
+        removeManagedListenerItem: function(isClear, managedListener, item, ename, fn, scope) {
             var me = this,
                 element = managedListener.options ? managedListener.options.element : null;
 
             if (element) {
                 element = me[element];
+                
                 if (element && element.un) {
+                    // eslint-disable-next-line max-len
                     if (isClear || (managedListener.item === item && managedListener.ename === ename && (!fn || managedListener.fn === fn) && (!scope || managedListener.scope === scope))) {
-                        element.un(managedListener.ename, managedListener.fn, managedListener.scope);
+                        element.un(
+                            managedListener.ename, managedListener.fn, managedListener.scope
+                        );
+                        
                         if (!isClear) {
                             Ext.Array.remove(me.managedListeners, managedListener);
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 return me.mixins.observable.removeManagedListenerItem.apply(me, arguments);
             }
         },
@@ -6665,8 +7029,10 @@ Ext.define('Ext.Component', {
 
                 for (childElName in childEls) {
                     suffix = childEls[childElName].frame;
+                    
                     if (suffix && suffix !== true) {
                         el = me[childElName];
+                        
                         if (el) {
                             el.removeCls(baseClsUI + suffix);
                         }
@@ -6680,14 +7046,16 @@ Ext.define('Ext.Component', {
          */
         setComponentLayout: function(layout) {
             var currentLayout = this.componentLayout;
+            
             if (currentLayout && currentLayout.isLayout && currentLayout !== layout) {
                 currentLayout.setOwner(null);
             }
+            
             this.componentLayout = layout;
             layout.setOwner(this);
         },
 
-        setHiddenState: function (hidden) {
+        setHiddenState: function(hidden) {
             var me = this,
                 inheritedState = me.getInherited(),
                 zIndexManager = me.zIndexManager;
@@ -6696,11 +7064,13 @@ Ext.define('Ext.Component', {
 
             if (hidden) {
                 inheritedState.hidden = true;
-            } else {
+            }
+            else {
                 delete inheritedState.hidden;
             }
 
-            // Ensure any ZIndexManager knowns about visibility state change to keep its filtering correct
+            // Ensure any ZIndexManager knowns about visibility state change
+            // to keep its filtering correct
             if (zIndexManager) {
                 zIndexManager.onComponentShowHide(me);
             }
@@ -6712,7 +7082,7 @@ Ext.define('Ext.Component', {
             this.protoEl.addCls(cls);
         },
 
-        wrapPrimaryEl: function (dom) {
+        wrapPrimaryEl: function(dom) {
             var me = this,
                 el = me.el;
 
@@ -6739,13 +7109,14 @@ Ext.define('Ext.Component', {
 
                 /**
                  * @method doComponentLayout
-                 * This method needs to be called whenever you change something on this component that
-                 * requires the Component's layout to be recalculated.
+                 * This method needs to be called whenever you change something on this
+                 * component that equires the Component's layout to be recalculated.
                  * @return {Ext.Component} this
                  * @deprecated 4.1 Use {@link Ext.Component#method-updateLayout} instead.
                  */
                 doComponentLayout: function() {
                     this.updateLayout();
+                    
                     return this;
                 },
 
@@ -6794,7 +7165,7 @@ Ext.define('Ext.Component', {
      * @inheritdoc Ext.Component#static-method-resumeLayouts
      * @member Ext
      */
-    Ext.resumeLayouts = function (flush) {
+    Ext.resumeLayouts = function(flush) {
         Component.resumeLayouts(flush);
     };
 
@@ -6803,7 +7174,7 @@ Ext.define('Ext.Component', {
      * @inheritdoc Ext.Component#static-method-suspendLayouts
      * @member Ext
      */
-    Ext.suspendLayouts = function () {
+    Ext.suspendLayouts = function() {
         Component.suspendLayouts();
     };
 
@@ -6818,6 +7189,7 @@ Ext.define('Ext.Component', {
      */
     Ext.batchLayouts = function(fn, scope) {
         Component.suspendLayouts();
+        
         // Invoke the function
         // note: try/finally works in IE8 standards mode
         try {
@@ -6834,7 +7206,7 @@ Ext.define('Ext.Component', {
      * @param {String} fontFamily The name of the font-family
      * @member Ext
      */
-    Ext.setGlyphFontFamily = function (fontFamily) {
+    Ext.setGlyphFontFamily = function(fontFamily) {
         Ext._glyphFontFamily = fontFamily;
     };
 
@@ -6851,8 +7223,6 @@ Ext.define('Ext.Component', {
         }
     });
 });
-
-
 
 /* TODO
  *
@@ -6878,7 +7248,7 @@ Ext.define('Ext.Component', {
  *              xtype: 'button',
  *              text: 'OK',
  *              listeners: {
- *                  click: function () {
+ *                  click: function() {
  *                      // Get the Session this component has inherited (from
  *                      // the Window) and save it back to the parent session.
  *                      //
@@ -6913,7 +7283,7 @@ Ext.define('Ext.Component', {
  *              xtype: 'button',
  *              text: 'OK',
  *              listeners: {
- *                  click: function () {
+ *                  click: function() {
  *                      // Get the Session this component has inherited (from
  *                      // the Window) and save it back to the server.
  *                      //

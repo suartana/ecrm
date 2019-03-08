@@ -30,13 +30,15 @@ Ext.define('Ext.data.field.Boolean', {
      */
     trueRe: /^\s*(?:true|yes|on|1)\s*$/i,
 
-    convert: function (v) {
+    convert: function(v) {
         if (typeof v === 'boolean') {
             return v;
         }
+        
         if (this.allowNull && (v === undefined || v === null || v === '')) {
             return null;
         }
+        
         return this.trueRe.test(String(v));
     },
     

@@ -16,6 +16,10 @@
 Ext.define('Ext.plugin.Abstract', {
     alternateClassName: 'Ext.AbstractPlugin',
 
+    mixins: [
+        'Ext.mixin.Identifiable'
+    ],
+
     /**
      * @property {Boolean} isPlugin
      * The value `true` to identify objects of this class or a subclass thereof.
@@ -27,8 +31,9 @@ Ext.define('Ext.plugin.Abstract', {
      * Initializes the plugin.
      * @param {Object} [config] Configuration object.
      */
-    constructor: function (config) {
+    constructor: function(config) {
         if (config) {
+            this.cmp = config.cmp;
             this.pluginConfig = config;
             this.initConfig(config);
         }
@@ -38,7 +43,7 @@ Ext.define('Ext.plugin.Abstract', {
      * Creates clone of the plugin.
      * @param {Object} [overrideCfg] Additional config for the derived plugin.
      */
-    clonePlugin: function (overrideCfg) {
+    clonePlugin: function(overrideCfg) {
         return new this.self(Ext.apply({}, overrideCfg, this.pluginConfig));
     },
 
@@ -63,8 +68,12 @@ Ext.define('Ext.plugin.Abstract', {
      * to receive `null` for the component.
      * @param {Ext.Component} host The owning host component.
      */
-    setCmp: function (host) {
+    setCmp: function(host) {
         this.cmp = host;
+    },
+
+    getStatefulOwner: function() {
+        return [this.cmp, 'plugins'];
     },
 
     /**
@@ -115,7 +124,7 @@ Ext.define('Ext.plugin.Abstract', {
         this.callParent();
     },
 
-    onClassExtended: function (cls, data, hooks) {
+    onClassExtended: function(cls, data, hooks) {
         var alias = data.alias,
             prototype = cls.prototype;
 
@@ -129,7 +138,7 @@ Ext.define('Ext.plugin.Abstract', {
         }
     },
 
-    resolveListenerScope: function (defaultScope) {
+    resolveListenerScope: function(defaultScope) {
         var me = this,
             cmp = me.getCmp(),
             scope;
@@ -146,8 +155,9 @@ Ext.define('Ext.plugin.Abstract', {
     },
 
     statics: {
-        decode: function (plugins, typeProp, include) {
+        decode: function(plugins, typeProp, include) {
             if (plugins) {
+                // eslint-disable-next-line vars-on-top
                 var type = Ext.typeOf(plugins), // 'object', 'array', 'string'
                     entry, key, obj, value;
 
@@ -181,10 +191,6 @@ Ext.define('Ext.plugin.Abstract', {
                             };
 
                             entry[typeProp] = key;
-
-                            if (key === 'responsive') {
-                                entry.weight = -1000;
-                            }
 
                             Ext.apply(entry, value);
                             plugins.push(entry);

@@ -1,5 +1,3 @@
-/* global Ext, expect, jasmine */
-
 topSuite("Ext.resizer.Splitter",
     ['Ext.Panel', 'Ext.layout.container.Border'],
 function() {
@@ -24,22 +22,23 @@ function() {
         });
     }
 
-    afterEach(function () {
+    afterEach(function() {
         if (c) {
             c.destroy();
         }
+        
         splitter = c = null;
     });
 
-    describe("init", function () {
-        describe("the tracker", function () {
-            it("should create a SplitterTracker by default", function () {
+    describe("init", function() {
+        describe("the tracker", function() {
+            it("should create a SplitterTracker by default", function() {
                 makeContainer();
 
                 expect(splitter.tracker instanceof Ext.resizer.SplitterTracker).toBe(true);
             });
 
-            it("should honor a custom tracker config", function () {
+            it("should honor a custom tracker config", function() {
                 makeContainer({
                     tracker: {
                         xclass: 'Ext.resizer.BorderSplitter',
@@ -99,6 +98,7 @@ function() {
     
     describe("splitter with border layout and iframes", function() {
         var iframe;
+        
         beforeEach(function() {
             iframe = new Ext.Component({
                 autoEl: {
@@ -116,7 +116,8 @@ function() {
                     width: 200,
                     region: 'west',
                     split: true,
-                    collapsible: true
+                    collapsible: true,
+                    animCollapse: false
                 }, iframe]
             });
             splitter = c.down('splitter');

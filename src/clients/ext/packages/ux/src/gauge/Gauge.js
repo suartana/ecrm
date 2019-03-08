@@ -211,9 +211,11 @@ Ext.define('Ext.ux.gauge.Gauge', {
          *
          * @cfg {Number} trackStyle.fillOpacity Track sector fill opacity. Defaults to CSS value.
          * @cfg {String} trackStyle.stroke Track sector stroke color. Defaults to CSS value.
-         * @cfg {Number} trackStyle.strokeOpacity Track sector stroke opacity. Defaults to CSS value.
+         * @cfg {Number} trackStyle.strokeOpacity Track sector stroke opacity.
+         * Defaults to CSS value.
          * @cfg {Number} trackStyle.strokeWidth Track sector stroke width. Defaults to CSS value.
-         * @cfg {Number/String} [trackStyle.outerRadius='100%'] The outer radius of the track sector.
+         * @cfg {Number/String} [trackStyle.outerRadius='100%'] The outer radius of the track
+         * sector.
          * For example:
          *
          *     outerRadius: '90%',      // 90% of the maximum radius
@@ -238,11 +240,14 @@ Ext.define('Ext.ux.gauge.Gauge', {
          * See the `trackStyle.fill` config documentation for more information.
          * @cfg {Number} valueStyle.fillOpacity Value sector fill opacity. Defaults to CSS value.
          * @cfg {String} valueStyle.stroke Value sector stroke color. Defaults to CSS value.
-         * @cfg {Number} valueStyle.strokeOpacity Value sector stroke opacity. Defaults to CSS value.
+         * @cfg {Number} valueStyle.strokeOpacity Value sector stroke opacity. Defaults to
+         * CSS value.
          * @cfg {Number} valueStyle.strokeWidth Value sector stroke width. Defaults to CSS value.
-         * @cfg {Number/String} [valueStyle.outerRadius='100% - 4'] The outer radius of the value sector.
+         * @cfg {Number/String} [valueStyle.outerRadius='100% - 4'] The outer radius of the value
+         * sector.
          * See the `trackStyle.outerRadius` config documentation for more information.
-         * @cfg {Number/String} [valueStyle.innerRadius='50% + 4'] The inner radius of the value sector.
+         * @cfg {Number/String} [valueStyle.innerRadius='50% + 4'] The inner radius of the value
+         * sector.
          * See the `trackStyle.outerRadius` config documentation for more information.
          * @cfg {Boolean} [valueStyle.round=false] Whether to round the value sector edges or not.
          */
@@ -293,9 +298,15 @@ Ext.define('Ext.ux.gauge.Gauge', {
     easings: {
         linear: Ext.identityFn,
         // cubic easings
-        'in': function (t) { return t*t*t; },
-        out: function (t) { return (--t)*t*t+1; },
-        inOut: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; }
+        'in': function(t) {
+            return t * t * t;
+        },
+        out: function(t) {
+            return (--t) * t * t + 1;
+        },
+        inOut: function(t) {
+            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        }
     },
 
     resizeDelay: 0,   // in milliseconds
@@ -312,7 +323,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     fxValue: 0,       // the actual value rendered/animated
     fxAngleOffset: 0,
 
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this;
 
         me.fitSectorInRectCache = {
@@ -330,7 +341,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         me.el.on('resize', 'onElementResize', me);
     },
 
-    doDestroy: function () {
+    doDestroy: function() {
         var me = this;
 
         Ext.undefer(me.resizeTimerId);
@@ -355,11 +366,11 @@ Ext.define('Ext.ux.gauge.Gauge', {
     },
     // </if>
 
-    onElementResize: function (element, size) {
+    onElementResize: function(element, size) {
         this.handleResize(size);
     },
 
-    handleResize: function (size, instantly) {
+    handleResize: function(size, instantly) {
         var me = this,
             el = me.element;
 
@@ -371,6 +382,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
 
         if (!instantly && me.resizeDelay) {
             me.resizeTimerId = Ext.defer(me.handleResize, me.resizeDelay, me, [size, true]);
+
             return;
         }
 
@@ -378,25 +390,27 @@ Ext.define('Ext.ux.gauge.Gauge', {
         me.resizeHandler(size);
     },
 
-    updateMinValue: function (minValue) {
+    updateMinValue: function(minValue) {
         var me = this;
 
         me.interpolator.setDomain(minValue, me.getMaxValue());
+
         if (!me.isConfiguring) {
             me.render();
         }
     },
 
-    updateMaxValue: function (maxValue) {
+    updateMaxValue: function(maxValue) {
         var me = this;
 
         me.interpolator.setDomain(me.getMinValue(), maxValue);
+
         if (!me.isConfiguring) {
             me.render();
         }
     },
 
-    updateAngleOffset: function (angleOffset, oldAngleOffset) {
+    updateAngleOffset: function(angleOffset, oldAngleOffset) {
         var me = this,
             animation = me.getAnimation();
 
@@ -410,33 +424,36 @@ Ext.define('Ext.ux.gauge.Gauge', {
             me.animate(
                 oldAngleOffset, angleOffset,
                 animation.duration, me.easings[animation.easing],
-                function (angleOffset) {
+                function(angleOffset) {
                     me.fxAngleOffset = angleOffset;
                     me.render();
                 }
             );
-        } else {
+        }
+        else {
             me.render();
         }
     },
 
     //<debug>
-    applyTrackStart: function (trackStart) {
+    applyTrackStart: function(trackStart) {
         if (trackStart < 0 || trackStart >= 360) {
             Ext.raise("'trackStart' should be within [0, 360).");
         }
+
         return trackStart;
     },
 
-    applyTrackLength: function (trackLength) {
+    applyTrackLength: function(trackLength) {
         if (trackLength <= 0 || trackLength > 360) {
             Ext.raise("'trackLength' should be within (0, 360].");
         }
+
         return trackLength;
     },
     //</debug>
 
-    updateTrackStart: function (trackStart) {
+    updateTrackStart: function(trackStart) {
         var me = this;
 
         if (!me.isConfiguring) {
@@ -444,41 +461,46 @@ Ext.define('Ext.ux.gauge.Gauge', {
         }
     },
 
-    updateTrackLength: function (trackLength) {
+    updateTrackLength: function(trackLength) {
         var me = this;
 
         me.interpolator.setRange(0, trackLength);
+
         if (!me.isConfiguring) {
             me.render();
         }
     },
 
-    applyPadding: function (padding) {
+    applyPadding: function(padding) {
+        var ratio;
+        
         if (typeof padding === 'string') {
-            var ratio = parseFloat(padding) / 100;
-            return function (x) {
+            ratio = parseFloat(padding) / 100;
+
+            return function(x) {
                 return x * ratio;
             };
         }
-        return function () {
+
+        return function() {
             return padding;
         };
     },
 
-    updatePadding: function () {
+    updatePadding: function() {
         if (!this.isConfiguring) {
             this.render();
         }
     },
 
-    applyValue: function (value) {
+    applyValue: function(value) {
         var minValue = this.getMinValue(),
             maxValue = this.getMaxValue();
 
         return Math.min(Math.max(value, minValue), maxValue);
     },
 
-    updateValue: function (value, oldValue) {
+    updateValue: function(value, oldValue) {
         var me = this,
             animation = me.getAnimation();
 
@@ -494,38 +516,42 @@ Ext.define('Ext.ux.gauge.Gauge', {
             me.animate(
                 oldValue, value,
                 animation.duration, me.easings[animation.easing],
-                function (value) {
+                function(value) {
                     me.fxValue = value;
                     me.render();
                 }
             );
-        } else {
+        }
+        else {
             me.render();
         }
     },
 
-    applyTextTpl: function (textTpl) {
+    applyTextTpl: function(textTpl) {
         if (textTpl && !textTpl.isTemplate) {
             textTpl = new Ext.XTemplate(textTpl);
         }
+
         return textTpl;
     },
 
-    applyTextOffset: function (offset) {
+    applyTextOffset: function(offset) {
         offset = offset || {};
         offset.dx = offset.dx || 0;
         offset.dy = offset.dy || 0;
+
         return offset;
     },
 
-    updateTextTpl: function () {
+    updateTextTpl: function() {
         this.writeText();
+
         if (!this.isConfiguring) {
             this.centerText(); // text will be centered on first size
         }
     },
 
-    writeText: function (options) {
+    writeText: function(options) {
         var me = this,
             value = me.getValue(),
             minValue = me.getMinValue(),
@@ -542,19 +568,23 @@ Ext.define('Ext.ux.gauge.Gauge', {
         });
     },
 
-    centerText: function (cx, cy, sectorRegion, innerRadius, outerRadius) {
+    centerText: function(cx, cy, sectorRegion, innerRadius, outerRadius) {
         var textElement = this.textElement,
             textAlign = this.getTextAlign(),
             alignedRegion, textBox;
 
-        if (Ext.Number.isEqual(innerRadius, 0, 0.1) || sectorRegion.isOutOfBound({x: cx, y: cy})) {
+        if (Ext.Number.isEqual(innerRadius, 0, 0.1) ||
+            sectorRegion.isOutOfBound({ x: cx, y: cy })) {
+            
             alignedRegion = textElement.getRegion().alignTo({
                 align: textAlign, // align text region's center to sector region's center
                 target: sectorRegion
             });
+            
             textElement.setLeft(alignedRegion.left);
             textElement.setTop(alignedRegion.top);
-        } else {
+        }
+        else {
             textBox = textElement.getBox();
             textElement.setLeft(cx - textBox.width / 2);
             textElement.setTop(cy - textBox.height / 2);
@@ -566,11 +596,11 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    camelToHyphen: function (name) {
+    camelToHyphen: function(name) {
         return name.replace(this.camelCaseRe, '$1-$2').toLowerCase();
     },
 
-    applyTrackStyle: function (trackStyle) {
+    applyTrackStyle: function(trackStyle) {
         var me = this,
             trackGradient;
 
@@ -586,7 +616,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return trackStyle;
     },
 
-    updateTrackStyle: function (trackStyle) {
+    updateTrackStyle: function(trackStyle) {
         var me = this,
             trackArc = Ext.fly(me.getTrackArc()),
             name;
@@ -594,13 +624,14 @@ Ext.define('Ext.ux.gauge.Gauge', {
         for (name in trackStyle) {
             if (name in me.pathAttributes) {
                 trackArc.setStyle(me.camelToHyphen(name), trackStyle[name]);
-            } else {
+            }
+            else {
                 trackArc.setStyle(name, trackStyle[name]);
             }
         }
     },
 
-    applyValueStyle: function (valueStyle) {
+    applyValueStyle: function(valueStyle) {
         var me = this,
             valueGradient;
 
@@ -616,7 +647,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return valueStyle;
     },
 
-    updateValueStyle: function (valueStyle) {
+    updateValueStyle: function(valueStyle) {
         var me = this,
             valueArc = Ext.fly(me.getValueArc()),
             name;
@@ -624,7 +655,8 @@ Ext.define('Ext.ux.gauge.Gauge', {
         for (name in valueStyle) {
             if (name in me.pathAttributes) {
                 valueArc.setStyle(me.camelToHyphen(name), valueStyle[name]);
-            } else {
+            }
+            else {
                 valueArc.setStyle(name, valueStyle[name]);
             }
         }
@@ -633,31 +665,35 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    getRadiusFn: function (radius) {
+    getRadiusFn: function(radius) {
         var result, pos, ratio,
             increment = 0;
 
         if (Ext.isNumber(radius)) {
-            result = function () {
+            result = function() {
                 return radius;
             };
-        } else if (Ext.isString(radius)) {
+        }
+        else if (Ext.isString(radius)) {
             radius = radius.replace(/ /g, '');
             ratio = parseFloat(radius) / 100;
             pos = radius.search('%'); // E.g. '100% - 4'
+
             if (pos < radius.length - 1) {
                 increment = parseFloat(radius.substr(pos + 1));
             }
-            result = function (radius) {
+
+            result = function(radius) {
                 return radius * ratio + increment;
             };
+
             result.ratio = ratio;
         }
 
         return result;
     },
 
-    getSvg: function () {
+    getSvg: function() {
         var me = this,
             svg = me.svg;
 
@@ -669,7 +705,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return svg;
     },
 
-    getTrackArc: function () {
+    getTrackArc: function() {
         var me = this,
             trackArc = me.trackArc;
         
@@ -686,11 +722,12 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return trackArc;
     },
 
-    getValueArc: function () {
+    getValueArc: function() {
         var me = this,
             valueArc = me.valueArc;
 
         me.getTrackArc(); // make sure the track arc is created first for proper draw order
+
         if (!valueArc) {
             valueArc = me.valueArc = document.createElementNS(me.svgNS, 'path');
             me.getSvg().append(valueArc, true);
@@ -700,22 +737,22 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return valueArc;
     },
 
-    applyNeedle: function (needle, oldNeedle) {
+    applyNeedle: function(needle, oldNeedle) {
         // Make sure the track and value elements have been already created,
         // so that the needle element renders on top.
         this.getValueArc();
 
-        return Ext.Factory.gaugeNeedle.update(oldNeedle, needle, 
+        return Ext.Factory.gaugeNeedle.update(oldNeedle, needle,
                                               this, 'createNeedle', 'needleDefaults');
     },
     
-    createNeedle: function (config) {
+    createNeedle: function(config) {
         return Ext.apply({
             gauge: this
         }, config);
     },
 
-    getDefs: function () {
+    getDefs: function() {
         var me = this,
             defs = me.defs;
 
@@ -730,7 +767,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    setGradientSize: function (gradient, x1, y1, x2, y2) {
+    setGradientSize: function(gradient, x1, y1, x2, y2) {
         gradient.setAttribute('x1', x1);
         gradient.setAttribute('y1', y1);
         gradient.setAttribute('x2', x2);
@@ -740,7 +777,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    resizeGradients: function (size) {
+    resizeGradients: function(size) {
         var me = this,
             trackGradient = me.getTrackGradient(),
             valueGradient = me.getValueGradient(),
@@ -756,13 +793,14 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    setGradientStops: function (gradient, stops) {
+    setGradientStops: function(gradient, stops) {
         var ln = stops.length,
             i, stopCfg, stopEl;
 
         while (gradient.firstChild) {
             gradient.removeChild(gradient.firstChild);
         }
+
         for (i = 0; i < ln; i++) {
             stopCfg = stops[i];
             stopEl = document.createElementNS(this.svgNS, 'stop');
@@ -773,12 +811,14 @@ Ext.define('Ext.ux.gauge.Gauge', {
         }
     },
 
-    getTrackGradient: function () {
+    getTrackGradient: function() {
         var me = this,
             trackGradient = me.trackGradient;
 
         if (!trackGradient) {
-            trackGradient = me.trackGradient = Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
+            trackGradient = me.trackGradient =
+                Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
+            
             // Using absolute values for x1, y1, x2, y2 attributes.
             trackGradient.dom.setAttribute('gradientUnits', 'userSpaceOnUse');
             me.getDefs().appendChild(trackGradient);
@@ -788,12 +828,14 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return trackGradient;
     },
 
-    getValueGradient: function () {
+    getValueGradient: function() {
         var me = this,
             valueGradient = me.valueGradient;
 
         if (!valueGradient) {
-            valueGradient = me.valueGradient = Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
+            valueGradient = me.valueGradient =
+                Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
+            
             // Using absolute values for x1, y1, x2, y2 attributes.
             valueGradient.dom.setAttribute('gradientUnits', 'userSpaceOnUse');
             me.getDefs().appendChild(valueGradient);
@@ -803,7 +845,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return valueGradient;
     },
 
-    getArcPoint: function (centerX, centerY, radius, degrees) {
+    getArcPoint: function(centerX, centerY, radius, degrees) {
         var radians = degrees / 180 * Math.PI;
 
         return [
@@ -812,15 +854,15 @@ Ext.define('Ext.ux.gauge.Gauge', {
         ];
     },
 
-    isCircle: function (startAngle, endAngle) {
-        return Ext.Number.isEqual(Math.abs(endAngle - startAngle), 360, .001);
+    isCircle: function(startAngle, endAngle) {
+        return Ext.Number.isEqual(Math.abs(endAngle - startAngle), 360, 0.001);
     },
 
-    getArcPath: function (centerX, centerY, innerRadius, outerRadius, startAngle, endAngle, round) {
+    getArcPath: function(centerX, centerY, innerRadius, outerRadius, startAngle, endAngle, round) {
         var me = this,
             isCircle = me.isCircle(startAngle, endAngle),
             // It's not possible to draw a circle using arcs.
-            endAngle = endAngle - 0.01,
+            endAngle = endAngle - 0.01, // eslint-disable-line no-redeclare
             innerStartPoint = me.getArcPoint(centerX, centerY, innerRadius, startAngle),
             innerEndPoint = me.getArcPoint(centerX, centerY, innerRadius, endAngle),
             outerStartPoint = me.getArcPoint(centerX, centerY, outerRadius, startAngle),
@@ -834,25 +876,29 @@ Ext.define('Ext.ux.gauge.Gauge', {
 
         if (isCircle) {
             path.push('M', outerEndPoint[0], outerEndPoint[1]);
-        } else {
+        }
+        else {
             if (round) {
                 path.push('A', capRadius, capRadius, 0, 0, 0, outerEndPoint[0], outerEndPoint[1]);
-            } else {
+            }
+            else {
                 path.push('L', outerEndPoint[0], outerEndPoint[1]);
             }
         }
 
-        path.push('A', outerRadius, outerRadius, 0, large, 0, outerStartPoint[0], outerStartPoint[1]);
+        path.push('A', outerRadius, outerRadius, 0, large, 0, outerStartPoint[0],
+                  outerStartPoint[1]);
 
         if (round && !isCircle) {
             path.push('A', capRadius, capRadius, 0, 0, 0, innerStartPoint[0], innerStartPoint[1]);
         }
+
         path.push('Z');
 
         return path.join(' ');
     },
 
-    resizeHandler: function (size) {
+    resizeHandler: function(size) {
         var me = this,
             svg = me.getSvg();
 
@@ -876,66 +922,78 @@ Ext.define('Ext.ux.gauge.Gauge', {
      * to the end of range. This is useful, for example, when you want to render
      * increasing domain values counter-clockwise instead of clockwise.
      */
-    createInterpolator: function (rangeCheck) {
+    createInterpolator: function(rangeCheck) {
         var domainStart = 0,
             domainDelta = 1,
             rangeStart = 0,
-            rangeEnd = 1;
+            rangeEnd = 1,
 
-        var interpolator = function (x, invert) {
-            var t = 0;
+            interpolator = function(x, invert) {
+                var t = 0;
 
-            if (domainDelta) {
-                t = (x - domainStart) / domainDelta;
-                if (rangeCheck) {
-                    t = Math.max(0, t);
-                    t = Math.min(1, t);
+                if (domainDelta) {
+                    t = (x - domainStart) / domainDelta;
+
+                    if (rangeCheck) {
+                        t = Math.max(0, t);
+                        t = Math.min(1, t);
+                    }
+
+                    if (invert) {
+                        t = 1 - t;
+                    }
                 }
-                if (invert) {
-                    t = 1 - t;
-                }
-            }
 
-            return (1 - t) * rangeStart + t * rangeEnd;
-        };
-        interpolator.setDomain = function (a, b) {
+                return (1 - t) * rangeStart + t * rangeEnd;
+            };
+
+        interpolator.setDomain = function(a, b) {
             domainStart = a;
             domainDelta = b - a;
+
             return this;
         };
-        interpolator.setRange = function (a, b) {
+
+        interpolator.setRange = function(a, b) {
             rangeStart = a;
             rangeEnd = b;
+
             return this;
         };
-        interpolator.getDomain = function () {
+
+        interpolator.getDomain = function() {
             return [domainStart, domainStart + domainDelta];
         };
-        interpolator.getRange = function () {
+
+        interpolator.getRange = function() {
             return [rangeStart, rangeEnd];
         };
 
         return interpolator;
     },
 
-    applyAnimation: function (animation) {
+    applyAnimation: function(animation) {
         if (true === animation) {
             animation = {};
-        } else if (false === animation) {
+        }
+        else if (false === animation) {
             animation = {
                 duration: 0
             };
         }
+
         if (!('duration' in animation)) {
             animation.duration = 1000;
         }
+
         if (!(animation.easing in this.easings)) {
             animation.easing = 'out';
         }
+
         return animation;
     },
 
-    updateAnimation: function () {
+    updateAnimation: function() {
         this.stopAnimation();
     },
 
@@ -951,7 +1009,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
      * With certain easings, the value may overshoot the range slighly.
      * @param {Object} scope
      */
-    animate: function (from, to, duration, easing, fn, scope) {
+    animate: function(from, to, duration, easing, fn, scope) {
         var me = this,
             start = Ext.now(),
             interpolator = me.createInterpolator().setRange(from, to);
@@ -964,10 +1022,12 @@ Ext.define('Ext.ux.gauge.Gauge', {
             if (scope) {
                 if (typeof fn === 'string') {
                     scope[fn].call(scope, value);
-                } else {
+                }
+                else {
                     fn.call(scope, value);
                 }
-            } else {
+            }
+            else {
                 fn(value);
             }
 
@@ -976,6 +1036,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
                 me.fx = null;
             }
         }
+
         me.stopAnimation();
         Ext.AnimationQueue.start(frame, scope);
         me.fx = {
@@ -987,7 +1048,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * Stops the current {@link #value} or {@link #angleOffset} animation.
      */
-    stopAnimation: function () {
+    stopAnimation: function() {
         var me = this;
 
         if (me.fx) {
@@ -1010,7 +1071,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    getUnitSectorExtrema: function (startAngle, lengthAngle) {
+    getUnitSectorExtrema: function(startAngle, lengthAngle) {
         var extrema = this.unitCircleExtrema,
             points = [],
             angle;
@@ -1031,7 +1092,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
      * The end and start angles of the sector are also known, as well as the relationship
      * between the inner and outer radii.
      */
-    fitSectorInRect: function (width, height, startAngle, lengthAngle, ratio) {
+    fitSectorInRect: function(width, height, startAngle, lengthAngle, ratio) {
         if (Ext.Number.isEqual(lengthAngle, 360, 0.001)) {
             return {
                 cx: width / 2,
@@ -1041,26 +1102,41 @@ Ext.define('Ext.ux.gauge.Gauge', {
             };
         }
 
+        // eslint-disable-next-line vars-on-top
         var me = this,
             points, xx, yy, minX, maxX, minY, maxY,
             cache = me.fitSectorInRectCache,
-            sameAngles = cache.startAngle === startAngle
-                      && cache.lengthAngle === lengthAngle;
+            sameAngles = cache.startAngle === startAngle && cache.lengthAngle === lengthAngle;
 
         if (sameAngles) {
             minX = cache.minX;
             maxX = cache.maxX;
             minY = cache.minY;
             maxY = cache.maxY;
-        } else {
+        }
+        else {
             points = me.getUnitSectorExtrema(startAngle, lengthAngle).concat([
-                me.getArcPoint(0, 0, 1, startAngle),                  // start angle outer radius point
-                me.getArcPoint(0, 0, ratio, startAngle),              // start angle inner radius point
-                me.getArcPoint(0, 0, 1, startAngle + lengthAngle),    // end angle outer radius point
-                me.getArcPoint(0, 0, ratio, startAngle + lengthAngle) // end angle inner radius point
+                // start angle outer radius point
+                me.getArcPoint(0, 0, 1, startAngle),
+                
+                // start angle inner radius point
+                me.getArcPoint(0, 0, ratio, startAngle),
+                
+                // end angle outer radius point
+                me.getArcPoint(0, 0, 1, startAngle + lengthAngle),
+                
+                // end angle inner radius point
+                me.getArcPoint(0, 0, ratio, startAngle + lengthAngle)
             ]);
-            xx = points.map(function (point) { return point[0]; });
-            yy = points.map(function (point) { return point[1]; });
+            
+            xx = points.map(function(point) {
+                return point[0];
+            });
+            
+            yy = points.map(function(point) {
+                return point[1];
+            });
+            
             // The bounding box of a unit sector with the given properties.
             minX = Math.min.apply(null, xx);
             maxX = Math.max.apply(null, xx);
@@ -1075,13 +1151,15 @@ Ext.define('Ext.ux.gauge.Gauge', {
             cache.maxY = maxY;
         }
 
+        // eslint-disable-next-line vars-on-top, one-var
         var sectorWidth = maxX - minX,
             sectorHeight = maxY - minY,
             scaleX = width / sectorWidth,
             scaleY = height / sectorHeight,
             scale = Math.min(scaleX, scaleY),
             // Region constructor takes: top, right, bottom, left.
-            sectorRegion = new Ext.util.Region(minY * scale, maxX * scale, maxY * scale, minX * scale),
+            sectorRegion = new Ext.util.Region(minY * scale, maxX * scale, maxY * scale,
+                                               minX * scale),
             rectRegion = new Ext.util.Region(0, width, height, 0),
             alignedRegion = sectorRegion.alignTo({
                 align: 'c-c', // align sector region's center to rect region's center
@@ -1101,7 +1179,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    fitSectorInPaddedRect: function (width, height, padding, startAngle, lengthAngle, ratio) {
+    fitSectorInPaddedRect: function(width, height, padding, startAngle, lengthAngle, ratio) {
         var result = this.fitSectorInRect(
             width - padding * 2,
             height - padding * 2,
@@ -1118,15 +1196,16 @@ Ext.define('Ext.ux.gauge.Gauge', {
     /**
      * @private
      */
-    normalizeAngle: function (angle) {
+    normalizeAngle: function(angle) {
         return (angle % 360 + 360) % 360;
     },
 
-    render: function () {
+    render: function() {
         if (!this.size) {
             return;
         }
 
+        // eslint-disable-next-line vars-on-top
         var me = this,
             textOffset = me.getTextOffset(),
             trackArc = me.getTrackArc(),
@@ -1140,8 +1219,12 @@ Ext.define('Ext.ux.gauge.Gauge', {
             height = me.size.height,
             paddingFn = me.getPadding(),
             padding = paddingFn(Math.min(width, height)),
-            trackStart = me.normalizeAngle(me.getTrackStart() + angleOffset), // in the range of [0, 360)
-            trackEnd = trackStart + trackLength,                              // in the range of (0, 720)
+            
+            // in the range of [0, 360)
+            trackStart = me.normalizeAngle(me.getTrackStart() + angleOffset),
+            
+            // in the range of (0, 720)
+            trackEnd = trackStart + trackLength,
             valueLength = me.interpolator(value),
             trackStyle = me.getTrackStyle(),
             valueStyle = me.getValueStyle(),
@@ -1180,5 +1263,4 @@ Ext.define('Ext.ux.gauge.Gauge', {
 
         me.fireEvent('render', me);
     }
-
 });

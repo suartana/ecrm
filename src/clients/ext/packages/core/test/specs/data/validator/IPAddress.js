@@ -1,9 +1,9 @@
-describe("Ext.data.validator.IPAddress", function() {
-    
+topSuite("Ext.data.validator.IPAddress", function() {
     var v;
     
     function validate(value) {
         v = new Ext.data.validator.IPAddress();
+
         return v.validate(value);
     }
     
@@ -33,10 +33,10 @@ describe("Ext.data.validator.IPAddress", function() {
     
     describe("valid values", function() {
         it("should validate valid IP addresses", function() {
-            expect(validate('192.168.0.1')).toBe(true);    
-            expect(validate('2001:558:1418:d::1')).toBe(true);    
-            expect(validate('2001:558:3da:9::1')).toBe(true);    
-            expect(validate('2001:0000:3238:DFE1:0063:0000:0000:FEFB')).toBe(true);    
+            expect(validate('192.168.0.1')).toBe(true);
+            expect(validate('2001:558:1418:d::1')).toBe(true);
+            expect(validate('2001:558:3da:9::1')).toBe(true);
+            expect(validate('2001:0000:3238:DFE1:0063:0000:0000:FEFB')).toBe(true);
         });
     });
     

@@ -5,9 +5,9 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
         AlienModelConfig =  {
             extend: 'Ext.data.Model',
             fields: [
-                {name: 'name',  type: 'string'},
-                {name: 'age',   type: 'int'},
-                {name: 'planet', type: 'string'}
+                { name: 'name',  type: 'string' },
+                { name: 'age',   type: 'int' },
+                { name: 'planet', type: 'string' }
             ]
         },
         AlienModel, HumanModel,
@@ -15,14 +15,14 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
         HumanModelConfig =  {
             extend: 'Ext.data.Model',
             fields: [
-                {name: 'name',  type: 'string'},
-                {name: 'age',   type: 'int'},
-                {name: 'planet', type: 'string', defaultValue: 'Earth'}
+                { name: 'name',  type: 'string' },
+                { name: 'age',   type: 'int' },
+                { name: 'planet', type: 'string', defaultValue: 'Earth' }
             ]
         };
 
     beforeEach(function() {
-        Ext.ClassManager.enableNamespaceParseCache = false; 
+        Ext.ClassManager.enableNamespaceParseCache = false;
         proxy = new Proxy({});
         
         AlienModel = Ext.define(AlienModelName, AlienModelConfig);
@@ -30,8 +30,8 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
 
     });
     
-    afterEach(function(){
-        Ext.ClassManager.enableNamespaceParseCache = true; 
+    afterEach(function() {
+        Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Alien');
         Ext.undefine('spec.Human');
@@ -66,14 +66,14 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
 
     describe("methods", function() {
         describe("getModel", function() {
-            it ("should return the proxy model", function() {
+            it("should return the proxy model", function() {
                 proxy.setModel(AlienModel);
                 expect(proxy.getModel()).toEqual(AlienModel);
             });
         });
 
         describe("setModel", function() {
-            it('should have a model equal to AlienModel', function(){
+            it('should have a model equal to AlienModel', function() {
                 proxy.setModel(AlienModel);
                 expect(proxy.getModel()).toEqual(AlienModel);
             });
@@ -98,31 +98,31 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
         describe("batch", function() {
             var spy,
                 batchOperations = {
-                    create : [AlienModel, HumanModel],
-                    update : [AlienModel]
+                    create: [AlienModel, HumanModel],
+                    update: [AlienModel]
                 },
                 batchListeners = {
                     complete: {
-                        fn    : Ext.emptyFn,
-                        scope : this
+                        fn: Ext.emptyFn,
+                        scope: this
                     }
                 };
 
             it('should run Ext.data.Batch.prototype.add 2 times', function() {
                 spy = spyOn(Ext.data.Batch.prototype, 'add').andCallThrough();
-                proxy.batch(batchOperations, batchListeners); 
+                proxy.batch(batchOperations, batchListeners);
                 expect(spy.callCount).toEqual(2);
             });
 
-            it('should run Ext.data.Batch.prototype.start 1 times', function(){
+            it('should run Ext.data.Batch.prototype.start 1 times', function() {
                 spy = spyOn(Ext.data.Batch.prototype, 'start').andCallThrough();
-                proxy.batch(batchOperations, batchListeners); 
+                proxy.batch(batchOperations, batchListeners);
                 expect(spy.callCount).toEqual(1);
             });
         });
     });
 
-    describe("metachange event", function () {
+    describe("metachange event", function() {
         function completeWithData(data) {
             Ext.Ajax.mockComplete({
                 status: 200,
@@ -134,12 +134,12 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
             successData = {
                 success: true,
                 data: [
-                    {name: 'alex'},
-                    {name: 'ben'},
-                    {name: 'don'},
-                    {name: 'evan'},
-                    {name: 'nige'},
-                    {name: 'phil'}
+                    { name: 'alex' },
+                    { name: 'ben' },
+                    { name: 'don' },
+                    { name: 'evan' },
+                    { name: 'nige' },
+                    { name: 'phil' }
                 ],
                 metaData: {
                     root: 'data',
@@ -148,11 +148,11 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
             },
             args, proxyArg, metaArg;
 
-        beforeEach(function () {
+        beforeEach(function() {
             MockAjaxManager.addMethods();
             proxy = new Ext.data.proxy.Ajax({
                 listeners: {
-                    metachange: function (proxy, meta) {
+                    metachange: function(proxy, meta) {
                         wasCalled = true;
                         args = arguments;
                         proxyArg = proxy;
@@ -167,29 +167,29 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
             completeWithData(successData);
         });
 
-        afterEach(function () {
+        afterEach(function() {
             MockAjaxManager.removeMethods();
             wasCalled = false;
             args = proxyArg = metaArg = null;
         });
 
-        it("should call the listener", function () {
+        it("should call the listener", function() {
             expect(wasCalled).toBe(true);
         });
 
-        it("should return the proxy", function () {
+        it("should return the proxy", function() {
             expect(proxyArg).toBe(proxy);
         });
 
-        it("should return the meta data", function () {
+        it("should return the meta data", function() {
             expect(metaArg).toEqual(successData.metaData);
         });
 
-        it("should return the proxy as the first arg", function () {
+        it("should return the proxy as the first arg", function() {
             expect(args[0]).toBe(proxy);
         });
 
-        it("should return the meta data as the second arg", function () {
+        it("should return the meta data as the second arg", function() {
             expect(args[1]).toBe(metaArg);
         });
     });

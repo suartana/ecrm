@@ -1,3 +1,4 @@
+/* global ActiveXObject */
 topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'], function() {
     var reader, proxy;
     
@@ -33,7 +34,7 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
     }
     
     it("should have the nullResultSet defined on the prototype", function() {
-        expect(Ext.data.reader.Reader.prototype.nullResultSet).toBeDefined();    
+        expect(Ext.data.reader.Reader.prototype.nullResultSet).toBeDefined();
     });
     
     describe("reading", function() {
@@ -121,7 +122,8 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
             };
             
             var transformFn = function(data) {
-                data[0] = {id: 2};
+                data[0] = { id: 2 };
+
                 return data;
             };
             
@@ -129,7 +131,7 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
                 transform: transformFn
             });
             
-            reader.extractData = function(root, readOptions) {return root;};
+            reader.extractData = function(root, readOptions) { return root; };
             var rec = reader.readRecords([o]).getRecords()[0];
             
             expect(rec.id).not.toEqual(o.id);
@@ -145,7 +147,8 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
             
             var transformFn = function(data) {
                 expect(this).toEqual(mockScope);
-                data[0] = {id: 2};
+                data[0] = { id: 2 };
+
                 return data;
             };
             
@@ -156,7 +159,7 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
                 }
             });
             
-            reader.extractData = function(root, readOptions) {return root;};
+            reader.extractData = function(root, readOptions) { return root; };
             var rec = reader.readRecords([o]).getRecords()[0];
             
             expect(rec.id).not.toEqual(o.id);
@@ -169,7 +172,8 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
             };
             
             var transformFn = function(data) {
-                data[0] = {id: 2};
+                data[0] = { id: 2 };
+
                 return data;
             };
             
@@ -178,7 +182,7 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
                 transform: 'fooFn'
             });
             
-            reader.extractData = function(root, readOptions) {return root;};
+            reader.extractData = function(root, readOptions) { return root; };
             var rec = reader.readRecords([o]).getRecords()[0];
             
             expect(rec.id).not.toEqual(o.id);
@@ -212,8 +216,8 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
             makeReader();
             
             meta = {
-                root           : 'someRootProperty',
-                totalProperty  : 'someTotalProperty',
+                root: 'someRootProperty',
+                totalProperty: 'someTotalProperty',
                 successProperty: 'someSuccessProperty'
             };
 
@@ -253,8 +257,8 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
             beforeEach(function() {
                 Ext.apply(meta, {
                     fields: [
-                        {name: 'uniqueId', type: 'int'},
-                        {name: 'name',     type: 'string'}
+                        { name: 'uniqueId', type: 'int' },
+                        { name: 'name',     type: 'string' }
                     ]
                 });
 
@@ -279,6 +283,7 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
         describe("if fields are not present in the meta data", function() {
             it("should leave the existing model in place", function() {
                 var model = reader.getModel();
+
                 reader.onMetaChange(meta);
                 expect(reader.getModel()).toBe(model);
             });
@@ -289,11 +294,15 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
         function parseXml(str) {
             if (window.ActiveXObject) {
                 var doc = new ActiveXObject('Microsoft.XMLDOM');
+                
                 doc.loadXML(str);
+                
                 return doc;
-            } else if (window.DOMParser) {
+            }
+            else if (window.DOMParser) {
                 return (new DOMParser()).parseFromString(str, 'text/xml');
             }
+            
             return '';
         }
 

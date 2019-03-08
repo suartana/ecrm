@@ -3,8 +3,8 @@
   "ext-react-name": "@extjs/ext-react-reactor",
   "ext-name": "@extjs/ext-reactor",
   "SenchaExtName": "@sencha/ext-reactor",
-  "SenchaExtReactName": "@sencha/ext-react-reactor",
-  "version": "6.6.0.258",
+  "SenchaExtReactName": "@sencha/ext-react",
+  "version": "6.7.0.210",
   "description": "This package contains all classes related to the Ext.reactor namespace",
   "keywords": [
     "sencha",
@@ -22,7 +22,7 @@
   "main": "index.js",
   "sencha": {
     "name": "reactor",
-    "version": "6.6.0.258",
+    "version": "6.6.0",
     "compatVersion": "6.6.0",
     "namespace": "Ext.reactor",
     "type": "code",

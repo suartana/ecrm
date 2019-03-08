@@ -220,6 +220,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (delegated && !me.directEvents[eventName]) {
             // delegated listeners
             subscribers = capture ? me.captureSubscribers : me.bubbleSubscribers;
+            
             if (!me.handles[eventName] && !me.delegatedListeners[eventName]) {
                 // First time we've attached a listener for this eventName - need to begin
                 // listening at the dom level
@@ -228,10 +229,12 @@ Ext.define('Ext.event.publisher.Dom', {
 
             if (subscribers[eventName]) {
                 ++subscribers[eventName];
-            } else {
+            }
+            else {
                 subscribers[eventName] = 1;
             }
-        } else {
+        }
+        else {
             subscribers = capture ? me.directCaptureSubscribers : me.directSubscribers;
 
             id = element.id;
@@ -240,9 +243,11 @@ Ext.define('Ext.event.publisher.Dom', {
             // so that this map does not grow indefinitely (it can only grow to a finite
             // set of event names) - see unsubscribe
             subscribers = subscribers[eventName] || (subscribers[eventName] = {});
+            
             if (subscribers[id]) {
                 ++subscribers[id];
-            } else {
+            }
+            else {
                 subscribers[id] = 1;
                 me.addDirectListener(eventName, element, capture);
             }
@@ -262,16 +267,19 @@ Ext.define('Ext.event.publisher.Dom', {
                 --subscribers[eventName];
             }
 
-            if (!me.handles[eventName] && !bubbleSubscribers[eventName] && !captureSubscribers[eventName]) {
+            if (!me.handles[eventName] && !bubbleSubscribers[eventName] &&
+                !captureSubscribers[eventName]) {
                 // decremented subscribers back to 0 - and the event is not in "handledEvents"
                 // no longer need to listen at the dom level
                 this.removeDelegatedListener(eventName);
             }
-        } else {
+        }
+        else {
             subscribers = capture ? me.directCaptureSubscribers : me.directSubscribers;
 
             id = element.id;
             subscribers = subscribers[eventName];
+            
             if (subscribers[id]) {
                 --subscribers[id];
             }
@@ -333,7 +341,8 @@ Ext.define('Ext.event.publisher.Dom', {
         if (!targets) {
             //<debug>
             if (e instanceof Array) {
-                Ext.raise("Propagation targets must be supplied when publishing an array of events.");
+                Ext.raise("Propagation targets must be supplied when publishing " +
+                          "an array of events.");
             }
             //</debug>
 
@@ -343,7 +352,8 @@ Ext.define('Ext.event.publisher.Dom', {
             if (me.captureEvents[e.type]) {
                 el = Ext.cache[target.id];
                 targets = el ? [el] : [];
-            } else {
+            }
+            else {
                 targets = me.getPropagatingTargets(target);
             }
         }
@@ -358,6 +368,7 @@ Ext.define('Ext.event.publisher.Dom', {
 
         for (i = 0; i < eLn; i++) {
             type = events[i].type;
+            
             if (!hasCaptureSubscribers && me.captureSubscribers[type]) {
                 hasCaptureSubscribers = true;
             }
@@ -379,6 +390,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (hasCaptureSubscribers) {
             for (i = ln; i--;) {
                 el = Ext.cache[targets[i].id];
+                
                 if (el) {
                     for (j = 0; j < eLn; j++) {
                         e = events[j];
@@ -406,6 +418,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (hasBubbleSubscribers && !e.stopped) {
             for (i = 0; i < ln; i++) {
                 el = Ext.cache[targets[i].id];
+                
                 if (el) {
                     for (j = 0; j < eLn; j++) {
                         e = events[j];
@@ -446,9 +459,11 @@ Ext.define('Ext.event.publisher.Dom', {
             if (event) {
                 if (capture && direct) {
                     event = event.directCaptures;
-                } else if (capture) {
+                }
+                else if (capture) {
                     event = event.captures;
-                } else if (direct) {
+                }
+                else if (direct) {
                     event = event.directs;
                 }
 
@@ -467,7 +482,8 @@ Ext.define('Ext.event.publisher.Dom', {
             // using [e] is faster than using arguments in most browsers
             // http://jsperf.com/passing-arguments
             Ext.elevateFunction(this.doDelegatedEvent, this, [e]);
-        } else {
+        }
+        else {
             this.doDelegatedEvent(e);
         }
     },
@@ -508,7 +524,8 @@ Ext.define('Ext.event.publisher.Dom', {
             // using [e] is faster than using arguments in most browsers
             // http://jsperf.com/passing-arguments
             Ext.elevateFunction(this.doDirectEvent, this, [e, false]);
-        } else {
+        }
+        else {
             this.doDirectEvent(e, false);
         }
     },
@@ -520,7 +537,8 @@ Ext.define('Ext.event.publisher.Dom', {
             // using [e] is faster than using arguments in most browsers
             // http://jsperf.com/passing-arguments
             Ext.elevateFunction(this.doDirectEvent, this, [e, true]);
-        } else {
+        }
+        else {
             this.doDirectEvent(e, true);
         }
     },
@@ -691,7 +709,7 @@ Ext.define('Ext.event.publisher.Dom', {
     },
 
     destroy: function() {
-        var GC = Ext.dom['GarbageCollector'],
+        var GC = Ext.dom['GarbageCollector'], // eslint-disable-line dot-notation
             eventName;
 
         for (eventName in this.delegatedListeners) {
@@ -701,6 +719,7 @@ Ext.define('Ext.event.publisher.Dom', {
         // We are wired to the unload event, so we ensure cleanup of low-level stuff
         // like the Reaper and the GarbageCollector.
         Ext.Reaper.flush();
+        
         if (GC) {
             GC.collect();
         }
@@ -745,7 +764,8 @@ Ext.define('Ext.event.publisher.Dom', {
         // was carried forward as well - it may be required for older mobile browsers.
         // see also TOUCH-5408
         prototype.target = doc;
-    } else {
+    }
+    else {
         /**
          * @member Ext.event.publisher.Dom
          * @property {Object} target the DOM target to which listeners are attached for

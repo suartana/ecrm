@@ -165,6 +165,7 @@ Ext.define('Ext.menu.Item', {
 
     isMenuOwner: true,
 
+
     template: [{
         reference: 'bodyElement',
         tag: 'a',
@@ -209,6 +210,10 @@ Ext.define('Ext.menu.Item', {
     initialize: function () {
         this.callParent();
         this.syncHasIconCls();
+        
+        if (Ext.supports.Touch) {
+            this.handleTouch();
+        }
     },
 
     getFocusClsEl: function() {
@@ -315,7 +320,9 @@ Ext.define('Ext.menu.Item', {
 
         me.separatorElement = Ext.destroy(me.separatorElement);
         me.setMenu(null);
-
+    
+        me.linkClickListener = Ext.destroy(me.linkClickListener);
+            
         me.callParent();
     },
 
@@ -432,17 +439,44 @@ Ext.define('Ext.menu.Item', {
     },
 
     privates: {
+
+        /**
+        * Function to add click listener for touch devices. 
+        */
+        handleTouch: function() {
+            var me = this,
+                linkEl = me.bodyElement;
+          
+            me.linkClickListener = linkEl.on({
+                click: me. onClick,
+                capture: true,
+                translate: false,
+                scope: me,
+                destroyable: true
+            });
+
+        },
+
         onSpace: function(e) {
             return this.onClick(e);
         },
 
-        onClick: function (e) {
+        onClick: function(e) {
             var me = this,
                 href = me.getHref(),
                 clickHideDelay = me.clickHideDelay,
                 browserEvent = e.browserEvent,
                 handler = me.getHandler(),
+                isTouchEvent = e.pointerType === 'touch',
                 clickResult;
+
+            if (me.linkClickListener && !isTouchEvent && e.parentEvent) {
+                // If this is a touch device and event is not a touch event
+                // And is wrapped with parent event then ignore it
+                // as we already have another click listener for this
+                e.stopEvent();
+                return;
+            }
 
             // Stop clicks on the anchor if there's no href, or we're disabled
             if ((!href || me.getDisabled()) && me.bodyElement.dom === e.getTarget('a')) {

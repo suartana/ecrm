@@ -1,8 +1,8 @@
 /**
  * Encapsulates a read operation as performed by a {@link Ext.data.proxy.Proxy proxy}.
  *
- * This class is instantiated by {@link Ext.data.Store stores} and {@link Ext.data.Model records} and should
- * not need to be instantiated in user code.
+ * This class is instantiated by {@link Ext.data.Store stores} and {@link Ext.data.Model records}
+ * and should not need to be instantiated in user code.
  */
 Ext.define('Ext.data.operation.Read', {
     extend: 'Ext.data.operation.Operation',
@@ -27,7 +27,8 @@ Ext.define('Ext.data.operation.Read', {
     
         /**
          * @cfg {Ext.util.Grouper} grouper
-         * Optional grouping configuration. Only applies to 'read' actions where grouping is desired.
+         * Optional grouping configuration. Only applies to 'read' actions where grouping is
+         * desired.
          */
         grouper: undefined,
     

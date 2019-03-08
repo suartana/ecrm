@@ -1,5 +1,4 @@
 topSuite("Ext.data.identifier.Uuid", function() {
-    
     var Generator = Ext.data.identifier.Generator,
         idgen;
     
@@ -25,7 +24,8 @@ topSuite("Ext.data.identifier.Uuid", function() {
     it("should allow creation of a new instance", function() {
         make({
             id: 'foo'
-        });    
+        });
+        
         expect(Ext.Factory.dataIdentifier('foo')).toBe(idgen);
         expect(Ext.Factory.dataIdentifier('uuid')).not.toBe(idgen);
     });
@@ -54,10 +54,11 @@ topSuite("Ext.data.identifier.Uuid", function() {
             expect(idgen.generate()).toBe('0badf00e-aced-1def-b123-dfad0badbeef');
         });
         
-        it('should generate Version 4 uuids', function () {
+        it('should generate Version 4 uuids', function() {
             make();
             
-            // 2fc0fdf4-d127-4db1-a47e-7b4bc2fb8d5a           
+            // 2fc0fdf4-d127-4db1-a47e-7b4bc2fb8d5a
+            // eslint-disable-next-line no-useless-escape
             var guidRegex = /[0-9a-f]{8}(\-[0-9a-f]{4}){3}\-[0-9a-f]{12}/;
 
             var id1 = idgen.generate(),
@@ -70,5 +71,4 @@ topSuite("Ext.data.identifier.Uuid", function() {
             expect(id2.charAt(14)).toEqual('4');
         });
     });
-    
 });

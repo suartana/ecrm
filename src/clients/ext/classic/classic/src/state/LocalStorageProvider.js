@@ -13,20 +13,22 @@ Ext.define('Ext.state.LocalStorageProvider', {
     
     alias: 'state.localstorage',
    
-    constructor: function () {
+    constructor: function() {
         var me = this;
 
         me.callParent(arguments);
 
         me.store = me.getStorageObject();
+
         if (me.store) {
             me.state = me.readLocalStorage();
-        } else {
+        }
+        else {
             me.state = {};
         }
     },
     
-    readLocalStorage: function () {
+    readLocalStorage: function() {
         var store = this.store,
             data = {},
             keys = store.getKeys(),
@@ -41,10 +43,11 @@ Ext.define('Ext.state.LocalStorageProvider', {
         return data;
     },
     
-    set: function (name, value) {
+    set: function(name, value) {
         var me = this;
         
         me.clear(name);
+
         if (value != null) { // !== undefined && !== null
             me.store.setItem(name, me.encodeValue(value));
             me.callParent(arguments);
@@ -54,12 +57,12 @@ Ext.define('Ext.state.LocalStorageProvider', {
     /**
      * @private
      */
-    clear: function (name) {
+    clear: function(name) {
         this.store.removeItem(name);
         this.callParent(arguments);
     },
     
-    getStorageObject: function () {
+    getStorageObject: function() {
         var prefix = this.prefix,
             id = prefix,
             n = id.length - 1;
@@ -72,5 +75,5 @@ Ext.define('Ext.state.LocalStorageProvider', {
             id: id,
             prefix: prefix
         });
-    }    
+    }
 });

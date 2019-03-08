@@ -28,7 +28,7 @@ Ext.define('Ext.container.Monitor', {
         this.callParent();
     },
     
-    bind: function(target){
+    bind: function(target) {
         var me = this;
         
         me.target = target;
@@ -48,11 +48,11 @@ Ext.define('Ext.container.Monitor', {
         me.items = Ext.destroy(me.items);
     },
     
-    disable: function(){
-        ++this.disabled;    
+    disable: function() {
+        ++this.disabled;
     },
     
-    enable: function(){
+    enable: function() {
         if (this.disabled > 0) {
             --this.disabled;
         }
@@ -90,7 +90,7 @@ Ext.define('Ext.container.Monitor', {
         comp.clearPropertiesOnDestroy = comp.clearPrototypeOnDestroy = false;
     },
     
-    onItemRemove: function(ct, comp){
+    onItemRemove: function(ct, comp) {
         var me = this,
             items = me.items,
             handler = me.removeHandler;
@@ -99,6 +99,7 @@ Ext.define('Ext.container.Monitor', {
             if (handler) {
                 handler.call(me.scope || comp, comp);
             }
+
             if (items) {
                 items.remove(comp);
             }
@@ -124,6 +125,7 @@ Ext.define('Ext.container.Monitor', {
         // matchers have already been processed
         if (preventChildren !== true) {
             items = ct.query(me.selector);
+
             for (i = 0, len = items.length; i < len; ++i) {
                 comp = items[i];
                 me.onItemAdd(comp.ownerCt, comp);
@@ -131,6 +133,7 @@ Ext.define('Ext.container.Monitor', {
         }
          
         items = ct.query('>container');
+
         for (i = 0, len = items.length; i < len; ++i) {
             me.onContainerAdd(items[i], true);
         }
@@ -156,7 +159,7 @@ Ext.define('Ext.container.Monitor', {
         }
     },
     
-    onContainerRemove: function(ct, comp){
+    onContainerRemove: function(ct, comp) {
         var me = this,
             items, i, len, item;
          
@@ -167,12 +170,14 @@ Ext.define('Ext.container.Monitor', {
             
             if (!comp.destroying) {
                 items = comp.query(me.selector);
+
                 for (i = 0, len = items.length; i < len; ++i) {
                     item = items[i];
                     me.onItemRemove(item.ownerCt, item);
                 }
                 
                 items = comp.query('container');
+
                 for (i = 0, len = items.length; i < len; ++i) {
                     me.removeCtListeners(items[i]);
                 }
@@ -195,7 +200,7 @@ Ext.define('Ext.container.Monitor', {
         });
     },
     
-    getItems: function(){
+    getItems: function() {
         var me = this,
             items = me.items;
             
@@ -203,6 +208,7 @@ Ext.define('Ext.container.Monitor', {
             items = me.items = new Ext.util.MixedCollection();
             items.addAll(me.target.query(me.selector));
         }
+
         return items;
     },
     

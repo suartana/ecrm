@@ -1,5 +1,3 @@
-/* global expect, Ext, jasmine, spyOn */
-
 topSuite("Ext.data.NodeInterface",
     ['Ext.data.TreeModel', 'Ext.data.TreeStore', 'Ext.data.Session'],
 function() {
@@ -10,7 +8,9 @@ function() {
             fn: fn || Ext.emptyFn
         },
         spy = spyOn(obj, "fn");
+
         object.addListener(eventName, obj.fn);
+
         return spy;
     }
 
@@ -18,7 +18,7 @@ function() {
         Ext.define('spec.TreeNode', {
             extend: 'Ext.data.TreeModel',
             fields: [
-                {name: 'text', type: 'string'}
+                { name: 'text', type: 'string' }
             ],
             proxy: {
                 type: 'memory'
@@ -196,17 +196,18 @@ function() {
         });
         it('should decorate Model class of a given record', function() {
             var MyModel, record1, record2;
+
             MyModel = Ext.define('spec.MyModel', {
                 extend: 'Ext.data.Model',
                 fields: [
-                    {name: 'text', type: 'string'}
+                    { name: 'text', type: 'string' }
                 ],
                 proxy: {
                     type: 'memory'
                 }
             });
-            record1 = MyModel.create({text: 'record1'});
-            record2 = MyModel.create({text: 'record2'});
+            record1 = MyModel.create({ text: 'record1' });
+            record2 = MyModel.create({ text: 'record2' });
             expect(MyModel.prototype.isNode).toBeUndefined();
             expect(record1.isNode).toBeUndefined();
             expect(record2.isNode).toBeUndefined();
@@ -250,7 +251,7 @@ function() {
                 id: 'root'
             });
         
-            //we use this in several tests as an example node to add
+            // we use this in several tests as an example node to add
             spareNode = new spec.TreeNode({
                 id: 'spare'
             });
@@ -274,7 +275,7 @@ function() {
         });
 
         describe("isLast", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
             });
         
@@ -310,35 +311,43 @@ function() {
     
             it("should have node expandable if has no children", function() {
                 expect(spareNode.isExpandable()).toBe(true);
-            });               
+            });
             it("should have node not expandable if it is a leaf node", function() {
                 spareNode.set('leaf', true);
                 expect(spareNode.isExpandable()).toBe(false);
             });
+            
+            it("should not be expandable if expandable proprety is explicitly set to false", function() {
+                spareNode.set('expandable', false);
+                spareNode.appendChild(leftChild);
+                expect(spareNode.isExpandable()).toBe(false);
+            });
         });
 
-        describe("expand", function () {
+        describe("expand", function() {
             var store;
-            it("should not add phantom children to an expanding empty node", function () {
+
+            it("should not add phantom children to an expanding empty node", function() {
                 store = new Ext.data.TreeStore({
                     root: { // if 'data' is used here, the test won't pass
                         name: 'Root',
                         children: [
-                            {name: 'Child1'},
-                            {name: 'Child2'}
+                            { name: 'Child1' },
+                            { name: 'Child2' }
                         ]
                     }
                 });
                 var child2 = store.getRoot().childNodes[1];
+
                 child2.expand();
                 expect(child2.childNodes.length).toBe(0);
             });
-            afterEach(function () {
+            afterEach(function() {
                 Ext.destroy(store);
             });
         });
 
-        describe("append", function(){
+        describe("append", function() {
             describe("appending children", function() {
                 
                 it("should fire beforeappend", function() {
@@ -408,7 +417,7 @@ function() {
         
             describe("appending with existing siblings", function() {
                 beforeEach(function() {
-                    insertDefaultChildren.call(this); 
+                    insertDefaultChildren.call(this);
                 });
         
                 it("should set next sibling", function() {
@@ -426,7 +435,7 @@ function() {
                 var oldParent, spy;
         
                 beforeEach(function() {
-                    oldParent = new spec.TreeNode({id: 'oldparent'});
+                    oldParent = new spec.TreeNode({ id: 'oldparent' });
                     oldParent.appendChild(spareNode);
                 });
         
@@ -438,7 +447,7 @@ function() {
                     expect(spy).toHaveBeenCalledWith(spareNode, false, undefined, true);
                 });
         
-                it("should fire beforeremove event", function(){
+                it("should fire beforeremove event", function() {
                     spy = spyOnEvent(oldParent, "beforeremove").andCallThrough();
         
                     rootNode.appendChild(spareNode);
@@ -446,7 +455,7 @@ function() {
                     expect(spy).toHaveBeenCalledWith(oldParent, spareNode, true);
                 });
         
-                it("should fire remove event", function(){
+                it("should fire remove event", function() {
                     spy = spyOnEvent(oldParent, "remove").andCallThrough();
         
                     rootNode.appendChild(spareNode);
@@ -467,14 +476,14 @@ function() {
         
                     rootNode.appendChild(spareNode);
         
-                    expect(spy).toHaveBeenCalledWith(spareNode, oldParent, rootNode, 0);                    
+                    expect(spy).toHaveBeenCalledWith(spareNode, oldParent, rootNode, 0);
                 });
             });
         });
 
-        describe("insert", function(){
+        describe("insert", function() {
         
-            beforeEach(function(){
+            beforeEach(function() {
                 rootNode.appendChild(rightChild);
             });
         
@@ -496,7 +505,7 @@ function() {
         
                     rootNode.insertBefore(leftChild, rightChild);
         
-                    expect(spy).toHaveBeenCalledWith(rootNode, leftChild, rightChild);                    
+                    expect(spy).toHaveBeenCalledWith(rootNode, leftChild, rightChild);
                 });
         
                 it("should cancel insert if beforeinsert return false", function() {
@@ -524,7 +533,7 @@ function() {
         
                     rootNode.insertBefore(leftChild, rightChild);
         
-                    expect(spy).toHaveBeenCalledWith(rootNode, leftChild, rightChild);                    
+                    expect(spy).toHaveBeenCalledWith(rootNode, leftChild, rightChild);
                 });
         
                 it("should update indexes for all siblings after the position where the node was inserted", function() {
@@ -537,7 +546,7 @@ function() {
                 });
 
         
-                it("should handle siblings", function(){
+                it("should handle siblings", function() {
                     expect(leftChild.previousSibling).toBeNull();
                     expect(leftChild.nextSibling).toBeNull();
                     expect(rightChild.previousSibling).toBeNull();
@@ -561,7 +570,7 @@ function() {
         
                         rootNode.insertBefore(leftChild, rightChild);
         
-                        expect(spy).toHaveBeenCalledWith(leftChild, rootNode, rootNode, 0, rightChild);                    
+                        expect(spy).toHaveBeenCalledWith(leftChild, rootNode, rootNode, 0, rightChild);
                     });
         
                     it("should cancel insert if beforemove return false", function() {
@@ -577,19 +586,19 @@ function() {
         
                         rootNode.insertBefore(leftChild, rightChild);
         
-                        expect(spy).toHaveBeenCalledWith(leftChild, rootNode, rootNode, 0, rightChild);                    
-                    });                    
+                        expect(spy).toHaveBeenCalledWith(leftChild, rootNode, rootNode, 0, rightChild);
+                    });
         
                 });
             });
         });
 
         describe("removing children", function() {
-            it("should return false when removing bad node", function(){
-                expect(rootNode.removeChild(leftChild)).toBe(false); 
+            it("should return false when removing bad node", function() {
+                expect(rootNode.removeChild(leftChild)).toBe(false);
             });
         
-            it("should fire beforeremove event", function(){
+            it("should fire beforeremove event", function() {
                 insertDefaultChildren.call(this);
         
                 spy = spyOnEvent(rootNode, "beforeremove").andCallThrough();
@@ -637,7 +646,7 @@ function() {
             it("should manage siblings", function() {
                 insertDefaultChildren.call(this);
         
-                //this gives us a third child - 'right' is actually now center
+                // this gives us a third child - 'right' is actually now center
                 rootNode.appendChild(spareNode);
         
                 rootNode.removeChild(rightChild);
@@ -665,7 +674,7 @@ function() {
                 rootNode.removeChild(leftChild, false);
         
                 expect(spy).toHaveBeenCalled();
-            });            
+            });
             it("should update indexes for all siblings after the node's old position", function() {
                 insertDefaultChildren.call(this);
 
@@ -679,7 +688,7 @@ function() {
         });
         
         describe("clearing references", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
                 rootNode.appendChild(spareNode);
             });
@@ -824,17 +833,17 @@ function() {
                 leftChild.appendChild(spareNode);
             });
         
-            it("should have a depth of 0 for rootNode", function(){
+            it("should have a depth of 0 for rootNode", function() {
                 expect(rootNode.getDepth()).toEqual(0);
             });
         
-            it("should have a depth of 1 for leftChild and rightChild", function(){
+            it("should have a depth of 1 for leftChild and rightChild", function() {
                 expect(rightChild.getDepth()).toEqual(1);
                 expect(leftChild.getDepth()).toEqual(1);
             });
         
-            it("should have a depth of 2 for spareNode", function(){
-                expect(spareNode.getDepth()).toEqual(2);                
+            it("should have a depth of 2 for spareNode", function() {
+                expect(spareNode.getDepth()).toEqual(2);
             });
         });
 
@@ -858,35 +867,35 @@ function() {
             });
         });
         
-        describe("indexOf", function(){
-            it("should always return -1 when the node is empty", function(){
+        describe("indexOf", function() {
+            it("should always return -1 when the node is empty", function() {
                 expect(rootNode.indexOf(spareNode)).toBe(-1);
             });
             
-            it("should return -1 when the passed node is not a child", function(){
+            it("should return -1 when the passed node is not a child", function() {
                 rootNode.appendChild(leftChild);
-                expect(rootNode.indexOf(spareNode)).toBe(-1);    
+                expect(rootNode.indexOf(spareNode)).toBe(-1);
             });
             
-            it("should return the correct index when the node exists", function(){
-                rootNode.appendChild([leftChild, spareNode, rightChild]);  
-                expect(rootNode.indexOf(spareNode)).toBe(1);     
+            it("should return the correct index when the node exists", function() {
+                rootNode.appendChild([leftChild, spareNode, rightChild]);
+                expect(rootNode.indexOf(spareNode)).toBe(1);
             });
         });
         
-        describe("indexOfId", function(){
-            it("should always return -1 when the node is empty", function(){
+        describe("indexOfId", function() {
+            it("should always return -1 when the node is empty", function() {
                 expect(rootNode.indexOfId('spare')).toBe(-1);
             });
             
-            it("should return -1 when the passed node is not a child", function(){
+            it("should return -1 when the passed node is not a child", function() {
                 rootNode.appendChild(leftChild);
-                expect(rootNode.indexOfId('spare')).toBe(-1);    
+                expect(rootNode.indexOfId('spare')).toBe(-1);
             });
             
-            it("should return the correct index when the node exists", function(){
-                rootNode.appendChild([leftChild, spareNode, rightChild]);   
-                expect(rootNode.indexOfId('spare')).toBe(1);      
+            it("should return the correct index when the node exists", function() {
+                rootNode.appendChild([leftChild, spareNode, rightChild]);
+                expect(rootNode.indexOfId('spare')).toBe(1);
             });
         });
         
@@ -947,7 +956,7 @@ function() {
         describe("cascading", function() {
             var cascadeFn;
         
-            beforeEach(function(){
+            beforeEach(function() {
                insertDefaultChildren.call(this);
                leftChild.appendChild(spareNode);
                cascadeFn = jasmine.createSpy();
@@ -1004,7 +1013,7 @@ function() {
         describe("each child", function() {
             var eachFn;
         
-            beforeEach(function (){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
                 eachFn = jasmine.createSpy();
             });
@@ -1053,7 +1062,7 @@ function() {
         });
         
         describe("ancestors", function() {
-            beforeEach(function (){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
                 leftChild.appendChild(spareNode);
             });
@@ -1068,11 +1077,11 @@ function() {
         
             it("should not have uncle as ancestor", function() {
                 expect(spareNode.isAncestor(rightChild)).toBe(false);
-            });            
+            });
         });
         
         describe("contains", function() {
-            beforeEach(function (){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
                 leftChild.appendChild(spareNode);
             });
@@ -1087,11 +1096,11 @@ function() {
         
             it("should not contain parent", function() {
                 expect(spareNode.contains(leftChild)).toBe(false);
-            });            
+            });
         });
 
         describe("finding children", function() {
-            beforeEach(function (){
+            beforeEach(function() {
                 insertDefaultChildren.call(this);
                 leftChild.appendChild(spareNode);
             });
@@ -1111,13 +1120,13 @@ function() {
         
                 it("should find deep children if deep is true", function() {
                     expect(rootNode.findChild('id', 'spare', true)).toEqual(spareNode);
-                });                
+                });
             });
         
             describe("findChildBy", function() {
                 var child;
         
-                it("should find shallow children", function(){
+                it("should find shallow children", function() {
                     child = rootNode.findChildBy(function(node) {
                         return node.getId() === 'right';
                     });
@@ -1125,7 +1134,7 @@ function() {
                     expect(child).toEqual(rightChild);
                 });
         
-                it("should not find deep children if deep is not specified", function(){
+                it("should not find deep children if deep is not specified", function() {
                     child = rootNode.findChildBy(function(node) {
                         return node.getId() === 'spare';
                     });
@@ -1133,7 +1142,7 @@ function() {
                     expect(child).toBeNull();
                 });
         
-                it("should not find deep children if deep is false", function(){
+                it("should not find deep children if deep is false", function() {
                     child = rootNode.findChildBy(function(node) {
                         return node.getId() === 'spare';
                     }, this, false);
@@ -1141,7 +1150,7 @@ function() {
                     expect(child).toBeNull();
                 });
         
-                it("should find deep children if deep is true", function(){
+                it("should find deep children if deep is true", function() {
                     child = rootNode.findChildBy(function(node) {
                         return node.getId() === 'spare';
                     }, this, true);
@@ -1149,14 +1158,14 @@ function() {
                     expect(child).toEqual(spareNode);
                 });
         
-                it("should call function with good scope", function(){
+                it("should call function with good scope", function() {
                     var findChildFn = jasmine.createSpy().andReturn(false);
         
                     child = rootNode.findChildBy(findChildFn, fakeScope, true);
         
                     expect(findChildFn.calls[0].object).toBe(fakeScope);
                     expect(findChildFn.calls[1].object).toBe(fakeScope);
-                    expect(findChildFn.calls[2].object).toBe(fakeScope);  
+                    expect(findChildFn.calls[2].object).toBe(fakeScope);
                 });
             });
         });
@@ -1177,18 +1186,19 @@ function() {
                     ]
                 });
                 Ext.data.NodeInterface.decorate(spec.EmployeeTreeNode);
-                node1 = new spec.EmployeeTreeNode({lastname: "Avins", firstname: "Jamie"});
-                node2 = new spec.EmployeeTreeNode({lastname: "Dougan", firstname: "Robert"});
-                node3 = new spec.EmployeeTreeNode({lastname: "Ferrero", firstname: "Nicolas"});
-                node4 = new spec.EmployeeTreeNode({lastname: "Spencer", firstname: "Edward"});
+                node1 = new spec.EmployeeTreeNode({ lastname: "Avins", firstname: "Jamie" });
+                node2 = new spec.EmployeeTreeNode({ lastname: "Dougan", firstname: "Robert" });
+                node3 = new spec.EmployeeTreeNode({ lastname: "Ferrero", firstname: "Nicolas" });
+                node4 = new spec.EmployeeTreeNode({ lastname: "Spencer", firstname: "Edward" });
         
                 rootNode.appendChild([node4, node2, node3, node1]);
         
                 sortFn = jasmine.createSpy();
-                sortFn.andCallFake(function(a, b){
+                sortFn.andCallFake(function(a, b) {
                     if (a.get('lastname') ===  b.get('lastname')) {
                         return 0;
                     }
+
                     return (a.get('lastname') < b.get('lastname')) ? -1 : 1;
                 });
         
@@ -1207,8 +1217,8 @@ function() {
         
         });
         
-        describe("copy", function(){
-            it("should not copy childNodes by default", function(){
+        describe("copy", function() {
+            it("should not copy childNodes by default", function() {
                 var node = new spec.TreeNode({
                     text: 'Text',
                     id: 1
@@ -1247,7 +1257,7 @@ function() {
                 });
             });
             
-            it("should accept a new id", function(){
+            it("should accept a new id", function() {
                 var node = new spec.TreeNode({
                     text: 'Text',
                     id: 1
@@ -1286,19 +1296,22 @@ function() {
                 });
             });
             
-            it("should clone children if deep: true is specified", function(){
+            it("should clone children if deep: true is specified", function() {
                 var root = new spec.TreeNode({
                     id: 1,
                     text: 'Root'
-                });    
+                });
+    
                 var child1 = root.appendChild(new spec.TreeNode({
                     id: 2,
                     text: 'Child1'
                 }));
+
                 var child2 = child1.appendChild(new spec.TreeNode({
                     id: 3,
                     text: 'Child2'
                 }));
+
                 child2.appendChild(new spec.TreeNode({
                     id: 4,
                     text: 'Child3'
@@ -1354,13 +1367,13 @@ function() {
                 expect(newNode.childNodes.length).toBe(0);
 
                 // Copy must be in new session
-                expect(session.peekRecord(spec.TreeNode, newNode.id)).toBe(newNode);                
+                expect(session.peekRecord(spec.TreeNode, newNode.id)).toBe(newNode);
             });
         });
         
     });
     
-    describe("serialize", function(){
+    describe("serialize", function() {
         it('should create an object representation of the node', function() {
             var node = new spec.TreeNode({
                 text: 'Root',
@@ -1374,11 +1387,12 @@ function() {
                 text: 'C1',
                 id: 3
             }));
-            c1.appendChild( new spec.TreeNode({
+
+            c1.appendChild(new spec.TreeNode({
                 text: 'c1.1',
                 id: 4
             }));
-            c2.appendChild( new spec.TreeNode({
+            c2.appendChild(new spec.TreeNode({
                 text: 'c2.1',
                 id: 5
             }));
@@ -1421,19 +1435,21 @@ function() {
             });
         });
 
-        it("should not include children if there are none", function(){
+        it("should not include children if there are none", function() {
             var o = new spec.TreeNode({
-                text: 'foo'
-            }),  s = o.serialize();
+                    text: 'foo'
+                }),
+                s = o.serialize();
                 
             expect(s.text).toBe('foo');
             expect(s.children).toBeUndefined();
         });
         
-        it("should include children if they exist", function(){
+        it("should include children if they exist", function() {
             var o = new spec.TreeNode({
-                text: 'foo'
-            }), s;
+                    text: 'foo'
+                }),
+                s;
             
             o.appendChild(new spec.TreeNode({
                 text: 'bar'
@@ -1442,7 +1458,7 @@ function() {
             s = o.serialize();
             expect(s.text).toBe('foo');
             expect(s.children[0].text).toBe('bar');
-        });  
+        });
     });
     
     describe("collapse", function() {
@@ -1455,7 +1471,7 @@ function() {
             });
             expect(called).toBe(true);
             root = null;
-        });  
+        });
     });
 
     describe("modified property tracking", function() {
@@ -1466,8 +1482,8 @@ function() {
             Ext.define('spec.PersistentIndexTreeNode', {
                 extend: 'Ext.data.TreeModel',
                 fields: [
-                    {name: 'text', type: 'string'},
-                    {name: 'index', type: 'int', persist: true, defaultValue: -1}
+                    { name: 'text', type: 'string' },
+                    { name: 'index', type: 'int', persist: true, defaultValue: -1 }
                 ],
                 proxy: {
                     type: 'memory'
@@ -1475,15 +1491,16 @@ function() {
             });
 
             var root = new spec.PersistentIndexTreeNode({
-                id: 'TestRoot'
-            }),
-            root1 = new spec.PersistentIndexTreeNode({
-                id: 'OtherTestRoot'
-            }),
-            node = new spec.PersistentIndexTreeNode({
-                id: 'node'
-            }),
-            node1;
+                    id: 'TestRoot'
+                }),
+                root1 = new spec.PersistentIndexTreeNode({
+                    id: 'OtherTestRoot'
+                }),
+                node = new spec.PersistentIndexTreeNode({
+                    id: 'node'
+                }),
+                node1;
+            
             root.appendChild(node);
 
             // The modified shows that parentId was changed *from* null.

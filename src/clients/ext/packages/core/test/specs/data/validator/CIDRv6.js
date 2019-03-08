@@ -1,9 +1,9 @@
-describe("Ext.data.validator.CIDRv6", function() {
-    
+topSuite("Ext.data.validator.CIDRv6", function() {
     var v;
     
     function validate(value) {
         v = new Ext.data.validator.CIDRv6();
+        
         return v.validate(value);
     }
     
@@ -180,4 +180,3 @@ describe("Ext.data.validator.CIDRv6", function() {
     });
     
 });
-

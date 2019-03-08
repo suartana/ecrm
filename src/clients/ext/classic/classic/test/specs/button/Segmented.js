@@ -149,7 +149,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
             it("should throw an error if multiple values are set", function() {
                 makeButton();
 
-                expect(function () {
+                expect(function() {
                     button.setValue(['foo', 1]);
                 }).toThrow("Cannot set multiple values when allowMultiple is false");
             });
@@ -159,7 +159,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                     id: 'my-button'
                 });
 
-                expect(function () {
+                expect(function() {
                     button.setValue('blah');
                 }).toThrow("Invalid value 'blah' for segmented button: 'my-button'");
             });
@@ -169,7 +169,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                     id: 'my-button'
                 });
 
-                expect(function () {
+                expect(function() {
                     button.setValue(2);
                 }).toThrow("Invalid value '2' for segmented button: 'my-button'");
             });
@@ -432,7 +432,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                     id: 'my-button'
                 });
 
-                expect(function () {
+                expect(function() {
                     button.setValue(['seg', 'blah']);
                 }).toThrow("Invalid value 'blah' for segmented button: 'my-button'");
             });
@@ -442,16 +442,18 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                     id: 'my-button'
                 });
 
-                expect(function () {
+                expect(function() {
                     button.setValue(['seg', 3, 'ted']);
                 }).toThrow("Invalid value '3' for segmented button: 'my-button'");
             });
 
             it("should not mutate a passed value", function() {
                 var arr = ['seg'];
+                
                 makeButton({
                     value: arr
                 });
+                
                 clickButton(2);
                 expect(arr).toEqual(['seg']);
             });
@@ -543,6 +545,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                         value: 'baz'
                     }
                 });
+
                 makeButton({
                     viewModel: vm,
                     bind: '{value}'
@@ -553,6 +556,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
 
             it("should react to view model changes", function() {
                 var vm = new Ext.app.ViewModel();
+
                 makeButton({
                     viewModel: vm,
                     bind: '{value}'
@@ -564,6 +568,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
 
             it("should update the value in the view model", function() {
                 var vm = new Ext.app.ViewModel();
+
                 makeButton({
                     viewModel: vm,
                     bind: '{value}'
@@ -945,7 +950,8 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                 expect(el.hasCls(firstCls)).toBe(false);
                 expect(el.hasCls(middleCls)).toBe(false);
                 expect(el.hasCls(lastCls)).toBe(false);
-            } else {
+            }
+            else {
                 Ext.each(items, function(item, index) {
                     el = item.getEl();
 
@@ -953,11 +959,13 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                         expect(el.hasCls(firstCls)).toBe(true);
                         expect(el.hasCls(middleCls)).toBe(false);
                         expect(el.hasCls(lastCls)).toBe(false);
-                    } else if (index === itemCount - 1) {
+                    }
+                    else if (index === itemCount - 1) {
                         expect(el.hasCls(firstCls)).toBe(false);
                         expect(el.hasCls(middleCls)).toBe(false);
                         expect(el.hasCls(lastCls)).toBe(true);
-                    } else {
+                    }
+                    else {
                         expect(el.hasCls(firstCls)).toBe(false);
                         expect(el.hasCls(middleCls)).toBe(true);
                         expect(el.hasCls(lastCls)).toBe(false);
@@ -1013,7 +1021,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
             expectClasses();
         });
 
-        it("should have the correct classes when items are added or removed", function () {
+        it("should have the correct classes when items are added or removed", function() {
             makeButton({
                 items: [
                     { text: 'Seg' }
@@ -1045,7 +1053,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
             expectClasses();
         });
 
-        it("should have the correct classes when items are shown or hidden", function () {
+        it("should have the correct classes when items are shown or hidden", function() {
             makeButton({
                 items: [
                     { text: 'Seg', hidden: true },

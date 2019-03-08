@@ -1,28 +1,29 @@
 topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
     var manager;
     
-    beforeEach(function(){
+    beforeEach(function() {
         manager = new Ext.AbstractManager();
     });
     
-    afterEach(function(){
+    afterEach(function() {
         manager = null;
     });
     
-    describe("get/register/unregister", function(){
-        it("should return undefined for an item not in the collection", function(){
-            expect(manager.get('notthere')).toBeUndefined();    
+    describe("get/register/unregister", function() {
+        it("should return undefined for an item not in the collection", function() {
+            expect(manager.get('notthere')).toBeUndefined();
         });
         
-        it("should return the object if it exists in the collection", function(){
-            var o = {id: 'item'};
+        it("should return the object if it exists in the collection", function() {
+            var o = { id: 'item' };
+
             manager.register(o);
             expect(manager.get('item')).toBe(o);
         });
         
-        it("should register multiple items", function(){
-            var o1 = {id: 'item1'},
-                o2 = {id: 'item2'};
+        it("should register multiple items", function() {
+            var o1 = { id: 'item1' },
+                o2 = { id: 'item2' };
                 
             manager.register(o1);
             manager.register(o2);
@@ -31,9 +32,9 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
             expect(manager.get('item2')).toBe(o2);
         });
         
-        it("should remove items when unregistered", function(){
-            var o1 = {id: 'item1'},
-                o2 = {id: 'item2'};
+        it("should remove items when unregistered", function() {
+            var o1 = { id: 'item1' },
+                o2 = { id: 'item2' };
                 
             manager.register(o1);
             manager.register(o2);
@@ -44,33 +45,32 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
         });
     });
     
-    describe("registerType/isRegistered/create", function(){
-        
-        afterEach(function(){
+    describe("registerType/isRegistered/create", function() {
+        afterEach(function() {
             delete Ext.util.Filter.type;
         });
         
-        it("should copy the type name onto the prototype", function(){
+        it("should copy the type name onto the prototype", function() {
             manager.registerType('filter', Ext.util.Filter);
             expect(Ext.util.Filter.type).toEqual('filter');
         });
         
-        it("should return true when a type is registered", function(){
+        it("should return true when a type is registered", function() {
             manager.registerType('filter', Ext.util.Filter);
             expect(manager.isRegistered('filter')).toBe(true);
-        }); 
+        });
         
-        it("should return false when a type is not registered", function(){
+        it("should return false when a type is not registered", function() {
             expect(manager.isRegistered('notRegged')).toBe(false);
         });
         
-        it("should thrown an exception when trying to create a type that doesn't exist", function(){
-            expect(function(){
+        it("should thrown an exception when trying to create a type that doesn't exist", function() {
+            expect(function() {
                 manager.create('filter');
-            }).toThrow();    
+            }).toThrow();
         });
         
-        it("should return an instance of the type", function(){
+        it("should return an instance of the type", function() {
             manager.registerType('filter', Ext.util.Filter);
             expect(manager.create({
                 type: 'filter',
@@ -78,14 +78,14 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
             }) instanceof Ext.util.Filter).toBe(true);
         });
         
-        it("should fallback to the default type", function(){
+        it("should fallback to the default type", function() {
             manager.registerType('filter', Ext.util.Filter);
             expect(manager.create({
                 filterFn: Ext.emptyFn
             }, 'filter') instanceof Ext.util.Filter).toBe(true);
         });
         
-        it("should pass the config to the constructor", function(){
+        it("should pass the config to the constructor", function() {
             manager.registerType('filter', Ext.util.Filter);
             var filter = manager.create({
                 type: 'filter',
@@ -97,107 +97,121 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
         });
     });
     
-    describe("onAvailable", function(){
-        it("should never fire if no items are added", function(){
+    describe("onAvailable", function() {
+        it("should never fire if no items are added", function() {
             var spy = jasmine.createSpy('spy');
+
             manager.onAvailable('item', spy);
             expect(spy.callCount).toBe(0);
         });
         
-        it("should never fire if items with no matching id are added", function(){
+        it("should never fire if items with no matching id are added", function() {
             var spy = jasmine.createSpy('spy');
+
             manager.onAvailable('item', spy);
             manager.register({
                 id: 'other'
             });
+            
             expect(spy.callCount).toBe(0);
         });
         
-        it("should fire the function if an item is added with a matching id", function(){
+        it("should fire the function if an item is added with a matching id", function() {
             var spy = jasmine.createSpy('spy');
+
             manager.onAvailable('item', spy);
             manager.register({
                 id: 'item'
             });
+            
             expect(spy.callCount).toBe(1);
         });
         
-        it("should fire the function if the onAvailable is bound when the item already exists", function(){
+        it("should fire the function if the onAvailable is bound when the item already exists", function() {
             var spy = jasmine.createSpy('spy');
+
             manager.register({
                 id: 'item'
             });
+            
             manager.onAvailable('item', spy);
+            
             expect(spy.callCount).toBe(1);
         });
         
-        it("should pass the item as a parameter", function(){
-            var o = {id: 'item'},
+        it("should pass the item as a parameter", function() {
+            var o = { id: 'item' },
                 actual,
-                fn = function(item){
+                fn = function(item) {
                     actual = item;
                 };
                 
             manager.onAvailable('item', fn);
             manager.register(o);
+            
             expect(actual).toBe(o);
         });
         
-        it("should default the scope to the item if not specified", function(){
-            var o = {id: 'item'},
+        it("should default the scope to the item if not specified", function() {
+            var o = { id: 'item' },
                 actual,
-                fn = function(){
+                fn = function() {
                     actual = this;
                 };
                 
             manager.onAvailable('item', fn);
             manager.register(o);
+            
             expect(actual).toBe(o);
         });
         
-        it("should use the passed scope", function(){
-            var o = {id: 'item'},
+        it("should use the passed scope", function() {
+            var o = { id: 'item' },
                 actual,
                 scope = {},
-                fn = function(){
+                fn = function() {
                     actual = this;
                 };
                 
             manager.onAvailable('item', fn, scope);
             manager.register(o);
+            
             expect(actual).toBe(scope);
         });
         
-        it("should remove the listener once the component is created", function(){
-            var fn1 = function(){
+        it("should remove the listener once the component is created", function() {
+            var fn1 = function() {
                 ++first;
-            }, fn2 = function(){
+            },
+            fn2 = function() {
                 ++second;
-            }, first = 0,
-               second = 0,
-               o = {
-                   id: 'item'
-               };
+            },
+            first = 0,
+            second = 0,
+            o = {
+                id: 'item'
+            };
                
-           manager.onAvailable('item', fn1);
-           manager.register(o);
-           manager.unregister(o);
-           manager.onAvailable('item', fn2);
-           manager.register(o);
+            manager.onAvailable('item', fn1);
+            manager.register(o);
+            manager.unregister(o);
+            manager.onAvailable('item', fn2);
+            manager.register(o);
            
-           expect(first).toBe(1);
-           expect(second).toBe(1);
-        })
+            expect(first).toBe(1);
+            expect(second).toBe(1);
+        });
     });
     
-    describe("each", function(){
-        it("should not iterate if there are no items", function(){
+    describe("each", function() {
+        it("should not iterate if there are no items", function() {
             var spy = jasmine.createSpy('spy');
+
             manager.each(spy);
             expect(spy.callCount).toBe(0);
         });
         
-        it("should loop over each item", function(){
+        it("should loop over each item", function() {
             var spy = jasmine.createSpy('spy'),
                 i = 0;
                 
@@ -206,14 +220,15 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
                     id: 'id' + i
                 });
             }
+
             manager.each(spy);
             expect(spy.callCount).toBe(5);
         });
         
-        it("should default the scope to the manager", function(){
-            var o = {id: 'item'},
+        it("should default the scope to the manager", function() {
+            var o = { id: 'item' },
                 scope,
-                fn = function(){
+                fn = function() {
                     scope = this;
                 };
                 
@@ -222,11 +237,11 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
             expect(scope).toBe(manager);
         });
         
-        it("should use the passed scope", function(){
-            var o = {id: 'item'},
+        it("should use the passed scope", function() {
+            var o = { id: 'item' },
                 scope = {},
                 actual,
-                fn = function(){
+                fn = function() {
                     actual = this;
                 };
                 
@@ -234,15 +249,14 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
             manager.each(fn, scope);
             expect(actual).toBe(scope);
         });
-        
     });
     
-    describe("getCount", function(){
-        it("should return 0 by default", function(){
+    describe("getCount", function() {
+        it("should return 0 by default", function() {
             expect(manager.getCount()).toBe(0);
         });
         
-        it("should return the correct count after adding items", function(){
+        it("should return the correct count after adding items", function() {
             manager.register({
                 id: 'a'
             });
@@ -254,11 +268,12 @@ topSuite("Ext.AbstractManager", ["Ext.util.Filter"], function() {
             expect(manager.getCount()).toBe(2);
         });
         
-        it("should return the correct count after removing items", function(){
-            var o = {id: 'item'};
+        it("should return the correct count after removing items", function() {
+            var o = { id: 'item' };
+
             manager.register(o);
             manager.unregister(o);
             expect(manager.getCount()).toBe(0);
         });
-    })
+    });
 });

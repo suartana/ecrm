@@ -3,3 +3,4 @@ Ext.define('Ext.theme.crisp.view.Table', {
     
     stripeRows: false
 });
+

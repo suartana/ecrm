@@ -61,10 +61,11 @@ Ext.define('Ext.ComponentManager', {
      * contain a `xtype`. (Optional if the config contains a `xtype`).
      * @return {Ext.Component} The newly instantiated Component.
      */
-    create: function (config, defaultType) {
+    create: function(config, defaultType) {
         if (typeof config === 'string') {
             return Ext.widget(config);
         }
+
         if (config.isComponent) {
             return config;
         }
@@ -94,9 +95,11 @@ Ext.define('Ext.ComponentManager', {
         if (id === undefined) {
             Ext.raise('Component id is undefined. Please ensure the component has an id.');
         }
+
         if (id in me.all) {
             Ext.raise('Duplicate component id "' + id + '"');
         }
+
         if (component.$iid in me.byInstanceId) {
             Ext.raise('Duplicate component instance id "' + component.$iid + '"');
         }
@@ -112,6 +115,7 @@ Ext.define('Ext.ComponentManager', {
         if (component.name && component.nameable) {
             me.names[id] = component;
         }
+
         if (component.nameHolder || component.referenceHolder) {
             me.holders[id] = component;
         }
@@ -123,12 +127,13 @@ Ext.define('Ext.ComponentManager', {
         }
 
         onAvailableCallbacks = onAvailableCallbacks && onAvailableCallbacks[id];
+
         if (onAvailableCallbacks && onAvailableCallbacks.length) {
             me.notifyAvailable(component);
         }
     },
 
-    unregister: function (component) {
+    unregister: function(component) {
         var me = this,
             all = me.all,
             byInstanceId = me.byInstanceId,
@@ -157,7 +162,7 @@ Ext.define('Ext.ComponentManager', {
 
         all[id] = null;
         delete all[id];
-
+        
         id = component.$iid;
         byInstanceId[id] = null;
         delete byInstanceId[id];
@@ -202,37 +207,42 @@ Ext.define('Ext.ComponentManager', {
     },
 
     /**
-     * Registers a function that will be called (a single time) when an item with the specified id is added to the manager.
-     * This will happen on instantiation.
+     * Registers a function that will be called (a single time) when an item with the specified
+     * id is added to the manager. This will happen on instantiation.
      * @param {String} id The item id
      * @param {Function} fn The callback function. Called with a single parameter, the item.
      * @param {Object} scope The scope ('this' reference) in which the callback is executed.
      * Defaults to the item.
      */
-    onAvailable : function(id, fn, scope){
+    onAvailable: function(id, fn, scope) {
         var me = this,
             callbacks = me.onAvailableCallbacks,
             all = me.all,
             item;
 
-        if (id in all) {    //if already an instance, callback immediately
+        if (id in all) { // if already an instance, callback immediately
             item = all[id];
             fn.call(scope || item, item);
 
-        } else if (id) {    // otherwise, queue for dispatch
+        }
+        else if (id) { // otherwise, queue for dispatch
 
             if (!Ext.isArray(callbacks[id])) {
                 callbacks[id] = [ ];
             }
-            callbacks[id].push( function(item) { fn.call(scope || item, item);} );
+
+            callbacks[id].push(function(item) {
+                fn.call(scope || item, item);
+            });
         }
     },
 
     /**
     * @private
     */
-    notifyAvailable : function(item) {
+    notifyAvailable: function(item) {
         var callbacks = this.onAvailableCallbacks[item && item.getId()] || [];
+
         while (callbacks.length) {
             (callbacks.shift())(item);
         }
@@ -248,7 +258,7 @@ Ext.define('Ext.ComponentManager', {
      * @param {Boolean} fn.return False to cease iteration.
      * @param {Object} scope The scope to execute in. Defaults to `this`.
      */
-    each: function(fn, scope){
+    each: function(fn, scope) {
         Ext.Object.each(this.all, fn, scope);
     },
 
@@ -279,46 +289,48 @@ Ext.define('Ext.ComponentManager', {
     },
 
     // Deliver focus events to Component
-    onGlobalFocus: function(e) {
+    onGlobalFocus: function(info) {
         var me = this,
-            event = e.event,
-            toComponent = event.toComponent = e.toComponent = Ext.Component.from(e.toElement),
-            fromComponent = event.fromComponent = e.fromComponent = Ext.Component.from(e.fromElement),
-            commonAncestor = me.getCommonAncestor(fromComponent, toComponent),
-            targetComponent;
+            event = info.event.chain(),
+            infoCopy = Ext.applyIf({ event: event }, info),
+            to, from, ancestor, target;
+            
+        to = event.toComponent = infoCopy.toComponent = Ext.Component.from(info.toElement);
+        from = event.fromComponent = infoCopy.fromComponent = Ext.Component.from(info.fromElement);
+        ancestor = me.getCommonAncestor(from, to);
 
         // Focus moves *within* a component should not cause component focus leave/enter
-        if (toComponent !== fromComponent) {
-            if (fromComponent && !fromComponent.destroyed && !fromComponent.isDestructing()) {
-                if (fromComponent.handleBlurEvent) {
-                    fromComponent.handleBlurEvent(e);
+        if (to !== from) {
+            if (from && !from.destroyed && !from.isDestructing()) {
+                if (from.handleBlurEvent) {
+                    from.handleBlurEvent(infoCopy);
                 }
 
                 // Call onFocusLeave on the component axis from which focus is exiting
-                for (targetComponent = fromComponent; targetComponent && targetComponent !== commonAncestor; targetComponent = targetComponent.getRefOwner()) {
-                    if (!(targetComponent.destroyed || targetComponent.destroying)) {
-                        e.type = 'focusleave';
-                        targetComponent.onFocusLeave(event);
+                for (target = from; target && target !== ancestor; target = target.getRefOwner()) {
+                    if (!(target.destroyed || target.destroying)) {
+                        event.type = 'focusleave';
+                        target.onFocusLeave(event);
                     }
                 }
             }
 
-            if (toComponent && !toComponent.destroyed && !toComponent.isDestructing()) {
-                if (toComponent.handleFocusEvent) {
-                    toComponent.handleFocusEvent(e);
+            if (to && !to.destroyed && !to.isDestructing()) {
+                if (to.handleFocusEvent) {
+                    to.handleFocusEvent(infoCopy);
                 }
 
                 // Call onFocusEnter on the component axis to which focus is entering
-                for (targetComponent = toComponent; targetComponent && targetComponent !== commonAncestor; targetComponent = targetComponent.getRefOwner()) {
-                    e.type = 'focusenter';
-                    targetComponent.onFocusEnter(event);
+                for (target = to; target && target !== ancestor; target = target.getRefOwner()) {
+                    event.type = 'focusenter';
+                    target.onFocusEnter(event);
                 }
             }
         }
 
-        for (targetComponent = commonAncestor; targetComponent; targetComponent = targetComponent.getRefOwner()) {
-            if (!(targetComponent.destroying || targetComponent.destroyed)) {
-                targetComponent.onFocusMove(e);
+        for (target = ancestor; target; target = target.getRefOwner()) {
+            if (!(target.destroying || target.destroyed)) {
+                target.onFocusMove(infoCopy);
             }
         }
     },
@@ -327,9 +339,11 @@ Ext.define('Ext.ComponentManager', {
         if (compA === compB) {
             return compA;
         }
+
         while (compA && !(compA.isAncestor(compB) || compA === compB)) {
             compA = compA.getRefOwner();
         }
+
         return compA;
     },
     
@@ -360,6 +374,7 @@ Ext.define('Ext.ComponentManager', {
             // its place in the hierarchy.
             if (floatedSelector) {
                 targetFloated = Ext.Component.from(e.getTarget(floatedSelector, Ext.getBody()));
+
                 // If the mousedown is in a floated, move it to top.
                 if (targetFloated) {
                     targetFloated.toFront(true);
@@ -375,10 +390,14 @@ Ext.define('Ext.ComponentManager', {
         },
 
         clearAll: function() {
-            this.all = {};
-            this.names = {};
-            this.references = {};
-            this.onAvailableCallbacks = {};
+            var me = this;
+            
+            me.all = {};
+            me.byInstanceId = {};
+            me.holders = {};
+            me.names = {};
+            me.references = {};
+            me.onAvailableCallbacks = {};
         },
 
         /**
@@ -397,14 +416,15 @@ Ext.define('Ext.ComponentManager', {
          * @since 6.5.0
          */
         from: function(el, limit, selector) {
+            var cache = this.all,
+                depth = 0,
+                target, topmost, cmpId, cmp;
+
             if (el && el.isEvent) {
                 el = el.target;
             }
-
-            var target = Ext.getDom(el),
-                cache = this.all,
-                depth = 0,
-                topmost, cmpId, cmp;
+            
+            target = Ext.getDom(el);
 
             if (typeof limit !== 'number') {
                 topmost = Ext.getDom(limit);
@@ -416,6 +436,7 @@ Ext.define('Ext.ComponentManager', {
 
                 if (cmpId) {
                     cmp = cache[cmpId];
+
                     if (cmp && (!selector || Ext.ComponentQuery.is(cmp, selector))) {
                         return cmp;
                     }
@@ -430,11 +451,8 @@ Ext.define('Ext.ComponentManager', {
             return null;
         }
     }
-},
-function () {
-    var ComponentManager = Ext.ComponentManager;
-
-    // Backwards compat
+}, function(ComponentManager) {
+    // Backwards compat:
     ComponentManager.fromElement = ComponentManager.from;
 
     /**
@@ -451,7 +469,7 @@ function () {
         return ComponentManager.get(id);
     };
 
-    Ext.iidToCmp = function (iid) {
+    Ext.iidToCmp = function(iid) {
         return ComponentManager.byInstanceId[iid] || null;
     };
     

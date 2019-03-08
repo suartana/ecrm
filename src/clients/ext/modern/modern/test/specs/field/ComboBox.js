@@ -26,21 +26,30 @@ function() {
     // There's no simple way to simulate user typing, so going
     // to reach in too far here to call this method. Not ideal, but
     // the infrastructure to get typing simulation is fairly large
-    function doTyping(value, isBackspace, keepPickerVisible) {
+    function doTyping(value, skipFlush, append) {
+        var supportsInputEventData = Ext.supports.inputEventData;
+
         // Focus the field so that trigger taps are processed immediately
         if (document.activeElement !== component.inputElement.dom) {
             component.inputElement.focus();
         }
 
-        component.inputElement.dom.value = value;
+        component.inputElement.dom.value = append ? (component.inputElement.dom.value + value) : value;
+
+        // We are faking the inputEvent containing the typed data
+        Ext.supports.inputEventData = true;
         component.onInput({
             type: 'input',
-            target: component.inputElement.dom
+            target: component.inputElement.dom,
+            browserEvent: {
+                data: value
+            }
         });
+        Ext.supports.inputEventData = supportsInputEventData;
 
         var filterTask = component.doFilterTask;
 
-        if (filterTask) {
+        if (filterTask && !skipFlush) {
             filterTask.flush();
             // // Query not executed on empty
             // component.doFilterTask.cancel();
@@ -76,7 +85,16 @@ function() {
 
         component = new Ext.form.field.ComboBox(config);
 
+        // The inline data will have autoLoaded by default.
+        // We must start with an empty store if we are queryMode: 'remote'
+        if (component.getQueryMode() === 'remote') {
+            store.clearData();
+        }
+
         valueCollection = component.getValueCollection();
+
+        // Grab this in case it's created on initialize
+        pickerStore = component._pickerStore;
 
         Ext.override(component, {
             getPicker: function () {
@@ -638,10 +656,6 @@ function() {
     });
 
     describe("onExpand", function() {
-        var getInnerTpl = function() {
-            return 'foo';
-        };
-
         beforeEach(function() {
             makeComponent({
                 renderTo: Ext.getBody(),
@@ -653,7 +667,7 @@ function() {
                     maxHeight: 345,
                     loadingText: 'gazingazang',
                     emptyText: 'buffoopaloo',
-                    getInnerTpl: getInnerTpl,
+                    itemTpl: '<b>{value}</b>',
                     type: 'floated'
                 },
                 matchFieldWidth: false,
@@ -671,9 +685,6 @@ function() {
             expect(pickerStore.isChainedStore).toBe(true);
             expect(pickerStore.getSource()).toBe(component.getStore());
         });
-        xit("should pass the configured displayField to the BoundList", function() {
-            expect(component.getPicker().displayField).toEqual(component.displayField);
-        });
         it("should pass the configured picker.width to the BoundList", function() {
             expect(component.getPicker().getWidth()).toEqual(234);
         });
@@ -686,15 +697,14 @@ function() {
         it("should pass the configured picker.emptyText to the BoundList", function() {
             expect(component.getPicker().getEmptyText()).toEqual('buffoopaloo');
         });
-        xit("should pass a configured picker.getInnerTpl method to the BoundList config", function() {
-            expect(component.getPicker().getInnerTpl).toBe(getInnerTpl);
+        it("should use the configured itemTpl to create BoundList items", function() {
+            expect(component.getPicker().getFastItems()[0].getInnerHtmlElement().dom.firstChild.outerHTML).toBe('<b>value 1</b>');
         });
         it("should set the BoundList's selection to match the current value", function() {
             expect(component.getPicker().getSelections().length).toEqual(1);
         });
-        xit("should initialize a BoundListKeyNav on the BoundList", function() {
-            expect(component.keyMap).toBeDefined();
-            expect(component.getPicker().getNavigationModel() instanceof Ext.view.BoundListKeyNav).toBe(true);
+        it("should initialize a BoundListNavigationModel on the BoundList", function() {
+            expect(component.getPicker().getNavigationModel() instanceof Ext.dataview.BoundListNavigationModel).toBe(true);
         });
         it("should enable the BoundListKeyNav", function() {
             waitsFor(function() {
@@ -708,7 +718,6 @@ function() {
             expect(component.ariaEl).toHaveAttr('aria-activedescendant', node.id);
         });
     });
-
 
     describe("onCollapse", function() {
         it("should disable the BoundListKeyNav", function() {
@@ -738,7 +747,7 @@ function() {
                 });
                 expect(component.getValue()).toEqual('value 2');
             });
-            xit("should accept an array of string values", function() {
+            it("should accept an array of string values", function() {
                 makeComponent({
                     multiSelect: true,
                     value: ['value 3', 'not in store'],
@@ -753,25 +762,13 @@ function() {
                 });
                 expect(component.getValue()).toEqual('value 1');
             });
-            //\\TODO: multiselect
-            xit("should accept an array of Ext.data.Model objects", function() {
+            it("should accept an array of Ext.data.Model objects", function() {
                 makeComponent({
                     multiSelect: true,
                     value: [store.getAt(0), store.getAt(2)],
                     valueField: 'value'
                 });
                 expect(component.getValue()).toEqual(['value 1', 'value 3']);
-            });
-            //\\TODO: multiselect
-            xit("should display the values separated by the configured delimiter", function() {
-                makeComponent({
-                    multiSelect: true,
-                    value: ['value 1', 'value 2'],
-                    valueField: 'value',
-                    renderTo: Ext.getBody(),
-                    delimiter: '|'
-                });
-                expect(component.inputElement.dom.value).toEqual('text 1|text 2');
             });
         });
 
@@ -783,8 +780,7 @@ function() {
                 component.setValue('value 2');
                 expect(component.getValue()).toBe('value 2');
             });
-            //\\TODO: multiselect
-            xit("should accept an array of string values", function() {
+            it("should accept an array of string values", function() {
                 makeComponent({
                     multiSelect: true,
                     valueField: 'value'
@@ -799,8 +795,7 @@ function() {
                 component.setValue(store.getAt(0));
                 expect(component.getValue()).toEqual('value 1');
             });
-            //\\TODO: multiselect
-            xit("should accept an array of Ext.data.Model objects", function() {
+            it("should accept an array of Ext.data.Model objects", function() {
                 makeComponent({
                     multiSelect: true,
                     valueField: 'value'
@@ -809,76 +804,81 @@ function() {
                 expect(component.getValue()).toEqual(['value 1', 'value 3']);
             });
 
-            //\\ TODO: Define behaviour for multi values passed to single value combo
-            xit("should only display the first value if not multiSelect", function() {
-                makeComponent({
-                    valueField: 'value',
-                    renderTo: Ext.getBody(),
-                    delimiter: '|'
+                it("should single select when switched from multiselection", function() {
+                    makeComponent({
+                        multiSelect: true,
+                        valueField: 'value'
+                    });
+                    component.setValue([store.getAt(0), store.getAt(2)]);
+                    expect(component.getValue()).toEqual(['value 1', 'value 3']);
+
+                    // Now change to single select
+                    component.setMultiSelect(false);
+
+                    component.setValue(store.getAt(0));
+                    expect(component.getValue()).toEqual('value 1');
                 });
-                component.setValue(['value 1', 'value 2']);
-                expect(component.inputElement.dom.value).toEqual('text 1');
-            });
-            //\\TODO: multiselect
-            xit("should display the values separated by the configured delimiter if multiSelect", function() {
-                makeComponent({
-                    valueField: 'value',
-                    multiSelect: true,
-                    renderTo: Ext.getBody(),
-                    delimiter: '|'
+
+                it("should multiselect when switched from single selection", function() {
+                    makeComponent({
+                        multiSelect: false,
+                        valueField: 'value'
+                    });
+                    component.setValue(store.getAt(0));
+                    expect(component.getValue()).toEqual('value 1');
+
+                    // Now change to multiselect
+                    component.setMultiSelect(true);
+
+                    component.setValue([store.getAt(0), store.getAt(2)]);
+                    expect(component.getValue()).toEqual(['value 1', 'value 3']);
                 });
-                component.setValue(['value 1', 'value 2']);
-                expect(component.inputElement.dom.value).toEqual('text 1|text 2');
-            });
-            //\\TODO: multiselect
-            xit("should display the valueNotFoundText for values not in the store if multiSelect", function() {
-                makeComponent({
-                    valueField: 'value',
-                    forceSelection: true,
-                    multiSelect: true,
-                    valueNotFoundText: 'oops!',
-                    renderTo: Ext.getBody()
+
+                it("should only display the first value if not multiSelect", function() {
+                    makeComponent({
+                        valueField: 'value',
+                        renderTo: Ext.getBody(),
+                        delimiter: '|'
+                    });
+                    component.setValue(['value 1', 'value 2']);
+                    expect(component.inputElement.dom.value).toEqual('text 1');
                 });
-                component.setValue(['value 1', 'value not in store']);
-                expect(component.inputElement.dom.value).toEqual('text 1, oops!');
-            });
-            xit("should not display the valueNotFoundText for values not in the store if not multiSelect", function() {
-                makeComponent({
-                    valueField: 'value',
-                    forceSelection: true,
-                    valueNotFoundText: 'oops!',
-                    renderTo: Ext.getBody()
+                it("should use the valueCollection as the data collection in the ChipView's store", function() {
+                    makeComponent({
+                        valueField: 'value',
+                        multiSelect: true,
+                        renderTo: Ext.getBody(),
+                        delimiter: '|'
+                    });
+                    component.setValue(['value 1', 'value 2']);
+                    expect(component.chipView.getStore().getData()).toBe(component.getValueCollection());
                 });
-                component.setValue(['value 1', 'value not in store']);
-                expect(component.inputElement.dom.value).toEqual('text 1');
-            });
-            it("should update the expanded dropdown's selection - single select", function() {
-                makeComponent({
-                    valueField: 'value',
-                    renderTo: Ext.getBody()
+                it("should update the expanded dropdown's selection - single select", function() {
+                    makeComponent({
+                        valueField: 'value',
+                        renderTo: Ext.getBody()
+                    });
+                    component.expand();
+
+                    waits(1);
+                    runs(function() {
+                        component.setValue('value 2');
+                        expect(component.getPicker().getSelections()).toEqual([store.getAt(1)]);
+                    });
+
                 });
-                component.expand();
-            
-                waits(1);
-                runs(function() {
-                    component.setValue('value 2');
-                    expect(component.getPicker().getSelections()).toEqual([store.getAt(1)]);
-                });
-                
-            });
-            //\\TODO: multiselect
-            xit("should update the expanded dropdown's selection - multi select", function() {
-                makeComponent({
-                    valueField: 'value',
-                    renderTo: Ext.getBody(),
-                    multiSelect: true
-                });
-                component.expand();
-                waits(1);
-                runs(function() {
-                    component.setValue(['value 1', 'value 3']);
-                    expect(component.getPicker().getSelections()).toEqual([store.getAt(0), store.getAt(2)]);
-                });
+                it("should update the expanded dropdown's selection - multi select", function() {
+                    makeComponent({
+                        valueField: 'value',
+                        renderTo: Ext.getBody(),
+                        multiSelect: true
+                    });
+                    component.expand();
+                    waits(1);
+                    runs(function() {
+                        component.setValue(['value 1', 'value 3']);
+                        expect(component.getPicker().getSelections()).toEqual([store.getAt(0), store.getAt(2)]);
+                    });
 
             });
 
@@ -912,7 +912,7 @@ function() {
                     expect(spy.mostRecentCall.args[1]).toEqual('value2');
                     expect(spy.mostRecentCall.args[2]).toEqual('value1');
                 });
-                xit("should not fire the change event when the value stays the same - multiple values", function() {
+                it("should not fire the change event when the value stays the same - multiple values", function() {
                     var spy = jasmine.createSpy();
                     makeComponent({
                         multiSelect: true,
@@ -926,7 +926,7 @@ function() {
                     component.setValue(['value1', 'value2']);
                     expect(spy).not.toHaveBeenCalled();
                 });
-                xit("should fire the change event when the value changes - multiple values", function() {
+                it("should fire the change event when the value changes - multiple values", function() {
                     var spy = jasmine.createSpy();
                     makeComponent({
                         multiSelect: true,
@@ -977,7 +977,7 @@ function() {
                     waitsForSpy(spy, 'first refresh event');
                     runs(function() {
                         spy.reset();
-                        doTyping('', true);
+                        doTyping('');
                     });
                     waitsForSpy(spy, 'second refresh event');
                     runs(function() {
@@ -1085,7 +1085,7 @@ function() {
                     queryMode: 'local',
                     value: 'text 3'
                 });
-                doTyping('', true);
+                doTyping('');
                 var filters = component._pickerStore.getFilters();
                 expect(filters.first().getDisabled()).toBe(true);
                 // Value not set during filtering.
@@ -1213,8 +1213,13 @@ function() {
                 expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
 
                 component.completeEdit();
-                expect(component.getValueCollection().length).toBe(0);
-                expect(component.getSelection()).toBe(null);
+
+                // When forceSelection true, exiting the field with an unmatchable text
+                // should revert to the underlying value
+                expect(component.getValueCollection().length).toBe(1);
+                expect(component.getValueCollection().getRange()[0]).toBe(foo2Rec);
+                expect(component.getSelection()).toBe(foo2Rec);
+                expect(component.getInputValue()).toEqual('Foo');
 
                 component.onExpandTap();
                 clickListItem('foo2');
@@ -1255,7 +1260,7 @@ function() {
                     queryMode: 'local',
                     value: 'text 3'
                 });
-                doTyping('', true);
+                doTyping('');
                 // Value not set during filtering.
                 // TODO: Should it?
                 // expect(component.getValue()).toBeNull();
@@ -1269,7 +1274,7 @@ function() {
                     queryMode: 'local',
                     value: 'text 3'
                 });
-                doTyping('', true);
+                doTyping('');
                 clickListItem('value 2');
                 expect(component.getValue()).toBe('value 2');
                 expect(getRawValue()).toBe('text 2');
@@ -1283,9 +1288,9 @@ function() {
                     queryMode: 'local',
                     value: 'value 1'
                 });
-                doTyping('', true);
+                doTyping('');
                 doTyping('text 2');
-                doTyping('', true);
+                doTyping('');
                 doTyping('text 2');
                 clickListItem('value 2');
                 expect(component.getValue()).toBe('value 2');
@@ -1307,9 +1312,9 @@ function() {
                 }));
 
                 doTyping('f');
-                doTyping('', true);
+                doTyping('');
                 doTyping('v');
-                doTyping('', true);
+                doTyping('');
                 doTyping('v');
                 
                 expect(component.expanded).toBe(false);
@@ -1716,7 +1721,7 @@ function() {
                 });
                 var loadSpy = spyOn(component.getStore(), 'load');
 
-                // minChars is supposed to default to 4, only type 3
+                // minChars is supposed to default to 4, only type 3`
                 doTyping('foo');
 
                 // Not yet
@@ -1728,26 +1733,104 @@ function() {
                 // It should have queried
                 expect(loadSpy).toHaveBeenCalled();
             });
+
+            it('should not collapse on typing when forceSelection: false', function() {
+                // We need to emulate real-world execution time
+                Ext.data.ProxyStore.prototype.load = storeLoad;
+                store.setAsynchronousLoad(true);
+                makeComponent({
+                    queryMode: 'remote',
+                    queryDelay: 0,
+                    anyMatch: true,
+                    forceSelection: false
+                });
+                var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                // minChars is supposed to default to 4, only type 3
+                doTyping('tex');
+
+                // Not yet
+                expect(loadSpy).not.toHaveBeenCalled();
+
+                // Now we typed 4 characters
+                // Do not flush immediately
+                doTyping('text', true);
+
+                // Wait for the filter to kick off the load
+                waitsForSpy(loadSpy);
+
+                runs(function() {
+                    // It should have queried and found all the "text*" records
+                    expect(store.getCount()).not.toBe(0);
+
+                    // Should be expanded
+                    expect(component.expanded).toBeTruthy();
+                    expect(component.getPicker().isVisible()).toBe(true);
+                });
+            });
+
+            it('should not collapse on typing when forceSelection: true', function() {
+                // We need to emulate real-world execution time
+                Ext.data.ProxyStore.prototype.load = storeLoad;
+                store.setAsynchronousLoad(true);
+                makeComponent({
+                    queryMode: 'remote',
+                    queryDelay: 0,
+                    anyMatch: true,
+                    forceSelection: true
+                });
+                var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                // minChars is supposed to default to 4, only type 3
+                doTyping('tex');
+
+                // Not yet
+                expect(loadSpy).not.toHaveBeenCalled();
+
+                // Now we typed 4 characters
+                // Do not flush immediately
+                doTyping('text', true);
+
+                // Wait for the filter to kick off the load
+                waitsForSpy(loadSpy);
+
+                runs(function() {
+                    // It should have queried and found all the "text*" records
+                    expect(store.getCount()).not.toBe(0);
+
+                    // Should be expanded
+                    expect(component.expanded).toBeTruthy();
+                    expect(component.getPicker().isVisible()).toBe(true);
+                });
+            });
         });
 
         describe("beforeFilter event", function() {
             it("should fire the 'beforeFilter' event", function() {
                 makeComponent();
                 
-                var spy = jasmine.createSpy(),
-                    lastQuery = component.lastQuery;
+                var lastQuery = component.lastQuery;
+                var queryPlan = null;
 
-                component.on('beforequery', spy);
+                component.on('beforequery', function (qp) {
+                    expect(queryPlan).toBe(null);
+                    queryPlan = qp;
+                });
+
                 component.doFilter({
                     query: 'foobar',
                     force: true
                 });
-                expect(spy).toHaveBeenCalledWith({
-                    filterGeneration: 6, // Magic number. This is where the filter ends up.
+
+                expect(queryPlan.combo === component).toBe(true);
+                queryPlan = Ext.apply({}, queryPlan);
+                delete queryPlan.combo;
+
+                expect(queryPlan).toEqual({
+                    filterGeneration: 5, // Magic number. This is where the filter ends up.
                     query: 'foobar',
                     lastQuery: lastQuery,
                     force: true,
-                    combo: component,
                     cancel: false
                 });
                 expect(component.lastQuery).toBeDefined();
@@ -1850,7 +1933,7 @@ function() {
 
             component.expand();
             component.setValue('value 32');
-            node = component.getPicker().getNode(component.getPicker().selModel.lastSelected);
+            node = component.getPicker().getNode(component.getPicker().getSelectable().lastSelected);
 
             spyOn(component.getPicker().getNavigationModel(), 'setPosition').andCallThrough();
 
@@ -2176,7 +2259,7 @@ function() {
                     waitForSpy(expandSpy, 'expand');
                     
                     runs(function() {
-                        expect(component.expanded).toBe(true);
+                        expect(component.expanded).toBeTruthy();
                     });
                 });
                 
@@ -2186,7 +2269,7 @@ function() {
                     waitForSpy(expandSpy, 'expand');
                     
                     runs(function() {
-                        expect(component.expanded).toBe(true);
+                        expect(component.expanded).toBeTruthy();
                     });
                 });
             });
@@ -2354,7 +2437,7 @@ function() {
         });
     });
 
-    xdescribe("keyboard input with multiSelect", function() {
+    describe("keyboard input with multiSelect", function() {
         beforeEach(function() {
             makeComponent({
                 renderTo: Ext.getBody(),
@@ -2367,7 +2450,6 @@ function() {
         it('should select the value upon tab with multiSelect', function() {
             var sm,
                 selected,
-                rawVal = '',
                 hideSpy;
 
             // Expand the picker
@@ -2376,7 +2458,7 @@ function() {
             // Picker should be visible
             expect(component.getPicker().isVisible()).toBe(true);
             hideSpy = spyOnEvent(component.getPicker(), 'hide');
-            sm = component.getPicker().selModel;
+            sm = component.getPicker().getSelectable();
 
             // But with no selection
             expect(sm.getSelections().length).toBe(0);
@@ -2412,21 +2494,59 @@ function() {
                 // 4th record should now be selected
                 expect(selected.length).toBe(3);
                 expect(selected[2] === store.getAt(3)).toBe(true);
+            });
+        });
 
-                for (var i = 0, len = selected.length; i < len; i++) {
-                    if (i > 0) {
-                        rawVal += ', ';
-                    }
-                    rawVal += selected[i].get(component.displayField);
-                }
+        it('should filter on typing and allow selection from the dropdown', function() {
+            var expandSpy = spyOnEvent(component, 'expand'),
+                unfilteredCount = store.getCount(),
+                selectedRecord, sm, selected;
 
-                // The raw value of the input field should be the display field of the selected record
-                expect(getRawValue()).toEqual(rawVal);
+            doTyping('f');
+
+            waitsForSpy(expandSpy);
+
+            runs(function() {
+                sm = component.getPicker().getSelectable();
+
+                // This is the one we're going to select
+                selectedRecord = pickerStore.getAt(0);
+
+                // Should have filtered down to the items with text beginning with "f" ignoring case
+                expect(component.getPicker().getFastItems().length).toBe(2);
+
+                // This should select the 1st record
+                jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.ENTER);
+                selected = sm.getSelections();
+                expect(selected.length).toBe(1);
+                expect(selected[0] === selectedRecord).toBe(true);
+
+                // The value field from the selected record is the sole value
+                expect(component.getValue()).toEqual(['foo1']);
+
+                // The raw value has cleared, filtering has been released.
+                // So all records will be visible.
+                expect(component.getPicker().getFastItems().length).toBe(unfilteredCount);
+
+                component.setFilterPickList(true);
+
+                // The picker list should not contain the selected value
+                expect(component.getPicker().getFastItems().length).toBe(unfilteredCount - 1);
+
+                doTyping('bar');
+
+                // The value field from the selected record is still the sole value
+                expect(component.getValue()).toEqual(['foo1']);
+
+                doTyping(',', false, true);
+
+                // Typing the delimiter will add a new record because forceSelection is false
+                expect(component.getValue()).toEqual(['foo1', 'bar']);
             });
         });
     });
 
-    xdescribe("forceSelection", function(){
+    describe("forceSelection", function(){
         it('should not clear the raw value', function() {
             store.load();
             makeComponent({
@@ -2461,7 +2581,7 @@ function() {
                 expect(component.getValue()).toBe('NOT IN STORE');
             });
 
-            it("should not collapse the list if there are items in the store", function() {
+            it("should collapseOnSelect by default", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
                     forceSelection: false,
@@ -2469,7 +2589,7 @@ function() {
                 });
                 component.expand();
                 component.setValue('asdf');
-                expect(component.getPicker().isVisible()).toBe(true);
+                expect(component.getPicker().isVisible()).toBe(false);
             });
         });
 
@@ -2617,7 +2737,7 @@ function() {
                         component.setRequired(true);
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -2630,7 +2750,7 @@ function() {
                         makeWithValue('foo2');
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -2724,7 +2844,7 @@ function() {
                         component.setRequired(true);
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -2737,7 +2857,7 @@ function() {
                         clickListItem('foo2');
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -2815,7 +2935,7 @@ function() {
                         component.setRequired(true);
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -2828,7 +2948,7 @@ function() {
                         component.setValue('value 31');
                         jasmine.focusAndWait(component);
                         runs(function() {
-                            doTyping('', true);
+                            doTyping('');
                         });
                         jasmine.blurAndWait(component);
                         runs(function() {
@@ -4544,7 +4664,7 @@ function() {
             
             jasmine.focusAndWait(component);
 
-            doTyping('t', false, true);
+            doTyping('t');
             completeWithData([
                 {text: 'text 10', value: 'value 10'},
                 {text: 'text 11', value: 'value 11'},
@@ -4556,7 +4676,7 @@ function() {
             ]);
             expect(component.getPicker().getViewItems().length).toBe(7);
 
-            doTyping('text 1', false);
+            doTyping('text 1');
 
             completeWithData([
                 {text: 'text 10', value: 'value 10'},
@@ -4715,8 +4835,7 @@ function() {
             expect(rec).toBe(null);
         });
 
-        //TODO reconcile w/local queryMode fixes
-        xit('should retain value until store load then keep if match is locally filtered', function() {
+        it('should retain value until store load then keep if match is locally filtered', function() {
             create();
 
             component = panel.child('combobox');
@@ -4934,7 +5053,7 @@ function() {
             vm = component.getViewModel();
             component.on('collapse', spy);
 
-            doTyping('Foo', false, true);
+            doTyping('Foo');
 
             expect(spy).not.toHaveBeenCalled();
             component.getPicker().refresh();
@@ -4942,17 +5061,14 @@ function() {
             // Should have filtered down to 2
             expect(component.getPicker().getViewItems().length).toBe(2);
 
-/*TODO: enable when keyboard navigation is enabled for DataViews
-            // Pick Foo.
             jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.DOWN);
             jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.TAB);
 
             vm.notify();
             expect(vm.get('name')).toBe('Foo');
-*/
         });
 
-        xit("should not clear the combobox while typing and forceSelection is true", function() {
+        it("should not clear the combobox while typing and forceSelection is true", function() {
             var vm;
             makeComponent({
                 queryMode: 'local',
@@ -4979,7 +5095,7 @@ function() {
             jasmine.focusAndWait(component);
 
             runs(function(){
-                doTyping('t', false, true);
+                doTyping('t');
                 vm.notify();
 
                 expect(vm.get('address')).toBe(9);
@@ -4987,7 +5103,7 @@ function() {
             });
         });
 
-        xit("should be able to set an Array value using binding while the field is focused", function() {
+        it("should be able to set an Array value using binding while the field is focused", function() {
             var vm;
             makeComponent({
                 queryMode: 'local',
@@ -5018,7 +5134,7 @@ function() {
         });
     });
 
-    xdescribe("forceSelection: true", function() {
+    describe("forceSelection: true", function() {
         beforeEach(function() {
             makeComponent({
                 renderTo        : document.body,
@@ -5036,7 +5152,7 @@ function() {
 
             runs(function() {
                 // Should narrow down to 3, 31, 32 etc
-                doTyping('text 3', false, true);
+                doTyping('text 3');
             });
 
             // Wait for the query timer to show the narrowed list
@@ -5103,7 +5219,7 @@ function() {
 
                 // Not editable to begin with, should expand on inputEl Click
                 jasmine.fireMouseEvent(component.inputElement, 'click');
-                expect(component.expanded).toBe(true);
+                expect(component.expanded).toBeTruthy();
                 component.collapse();
 
                 component.setEditable(true);
@@ -5114,7 +5230,7 @@ function() {
                 component.setEditable(false);
                 // Not edtable again, SHOULD expand
                 jasmine.fireMouseEvent(component.inputElement, 'click');
-                expect(component.expanded).toBe(true);
+                expect(component.expanded).toBeTruthy();
             });
         });
     }
@@ -5134,6 +5250,9 @@ function() {
             });
             doTyping('tex');
 
+            // The text selection expectation will fail w/o focus, so be more explicit:
+            waitsForFocus(component);
+
             // The typeahead setting will extend the raw value with a text selection
             waitsFor(function() {
                 return getRawValue() === 'text 1';
@@ -5147,7 +5266,7 @@ function() {
                 expect(indices[1]).toBe(6);
 
                 // Erasing the selected typeahead chars "t 1", should not typeahead
-                doTyping('tex', true);
+                doTyping('tex');
             });
             
             // We are testing that nothing happens here, so we just have to wait.
@@ -5159,7 +5278,7 @@ function() {
                 expect(component.inputElement.dom.value.length).toBe(3);
 
                 // Erasing the "x" chars "xt 1", should not typeahead
-                doTyping('te', true);
+                doTyping('te');
             });
 
             // We are testing that nothing happens here, so we just have to wait.
@@ -5317,7 +5436,7 @@ function() {
                 });
 
                 runs(function() {
-                    doTyping('', true);
+                    doTyping('');
                 });
 
                 jasmine.blurAndWait(component);
@@ -5669,7 +5788,7 @@ function() {
 
             runs(function() {
                 expect(collapseSpy).not.toHaveBeenCalled();
-                expect(component.expanded).toBe(true);
+                expect(component.expanded).toBeTruthy();
             });
         });
     });

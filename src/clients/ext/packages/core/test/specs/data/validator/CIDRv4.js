@@ -1,9 +1,9 @@
-describe("Ext.data.validator.CIDRv4", function() {
-    
+topSuite("Ext.data.validator.CIDRv4", function() {
     var v;
     
     function validate(value) {
         v = new Ext.data.validator.CIDRv4();
+        
         return v.validate(value);
     }
     
@@ -32,7 +32,7 @@ describe("Ext.data.validator.CIDRv4", function() {
     
     describe("valid values", function() {
         it("should validate a CIDR block", function() {
-            expect(validate('192.168.0.1/8')).toBe(true);    
+            expect(validate('192.168.0.1/8')).toBe(true);
         });
     });
     

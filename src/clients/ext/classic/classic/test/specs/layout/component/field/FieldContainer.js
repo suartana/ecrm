@@ -57,7 +57,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
                     renderTo: document.body,
                     width: 500,
                     hideLabel: true,
-                    msgTarget : 'side',
+                    msgTarget: 'side',
                     layout: 'hbox',
                     items: {
                         flex: 1,
@@ -85,7 +85,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
                     hideLabel: true,
                     width: 200,
                     height: 200,
-                    msgTarget : 'under',
+                    msgTarget: 'under',
                     layout: 'vbox',
                     items: {
                         flex: 1,
@@ -234,7 +234,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
                         xtype: 'fieldcontainer',
                         hideLabel: true,
                         margin: 0,
-                        msgTarget : 'side',
+                        msgTarget: 'side',
                         items: {
                             xtype: 'component',
                             width: 50
@@ -272,7 +272,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
                         xtype: 'fieldcontainer',
                         hideLabel: true,
                         margin: 0,
-                        msgTarget : 'under',
+                        msgTarget: 'under',
                         items: {
                             xtype: 'component',
                             height: 50

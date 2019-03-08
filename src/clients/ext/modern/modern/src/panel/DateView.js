@@ -268,6 +268,7 @@ Ext.define('Ext.panel.DateView', {
 
             me.refreshCell(params);
         }
+        
 
         me.captionElement.setHtml(Ext.Date.format(monthStart, me.getCaptionFormat()));
 

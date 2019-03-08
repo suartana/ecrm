@@ -289,10 +289,10 @@ topSuite("Ext.data.proxy.Direct", ['Ext.data.ArrayStore', 'Ext.direct.RemotingPr
                 });
             });
         
-            makeSuite('read',    'directFn', 'read',     function() { readSome() });
-            makeSuite('create',  'create',   'directFn', function() { createSome() });
-            makeSuite('update',  'update',   'directFn', function() { updateSome() });
-            makeSuite('destroy', 'destroy',  'directFn', function() { destroySome() });
+            makeSuite('read',    'directFn', 'read',     function() { readSome(); });
+            makeSuite('create',  'create',   'directFn', function() { createSome(); });
+            makeSuite('update',  'update',   'directFn', function() { updateSome(); });
+            makeSuite('destroy', 'destroy',  'directFn', function() { destroySome(); });
         });
 
         describe("string name resolving", function() {
@@ -796,7 +796,7 @@ topSuite("Ext.data.proxy.Direct", ['Ext.data.ArrayStore', 'Ext.direct.RemotingPr
                     });
                     
                     it("should pass correct params to the fn", function() {
-                        expectArgs(proxy.api.read, [0,25,1]);
+                        expectArgs(proxy.api.read, [0, 25, 1]);
                     });
                 });
             });

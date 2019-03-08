@@ -54,6 +54,7 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
         submitSpy.andCallFake(function() {
             var cb = arguments[1],
                 scope = arguments[2];
+
             cb.call(scope, result, trans);
         });
     }
@@ -90,8 +91,19 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
         loadSpy = submitSpy = action = provider = window.spec = null;
     });
 
+    describe("alternate class name", function() {
+        it("should have Ext.form.Action.DirectSubmit as the alternate class name", function() {
+            expect(Ext.form.action.DirectSubmit.prototype.alternateClassName).toEqual("Ext.form.Action.DirectSubmit");
+        });
+
+        it("should allow the use of Ext.form.Action.DirectSubmit", function() {
+            expect(Ext.form.Action.DirectSubmit).toBeDefined();
+        });
+    });
+
     it("should be registered in the action manager under the alias 'formaction.directsubmit'", function() {
         var inst = Ext.ClassManager.instantiateByAlias('formaction.directsubmit', {});
+
         expect(inst instanceof Ext.form.action.DirectSubmit).toBeTruthy();
     });
 
@@ -145,7 +157,7 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
         });
 
         it("should pass a form element containing all the field values and configured base params as the first argument", function() {
-            var fieldValues = {one: '1', two: '2', three: '3'},
+            var fieldValues = { one: '1', two: '2', three: '3' },
                 allParams = Ext.apply({}, fieldValues, { fromParams: '1', fromBaseParams: '1' });
             
             createAction({
@@ -165,12 +177,13 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
             expect(form).toBeDefined();
             expect(form.tagName).toEqual('FORM');
 
-            //collect the name-value pairs from the form
+            // collect the name-value pairs from the form
             var valuesFromForm = {},
                 inputs = form.getElementsByTagName("*"),
-                i = 0, len = inputs.length;
+                i = 0,
+                len = inputs.length;
 
-            for(; i < len; i++) {
+            for (; i < len; i++) {
                 valuesFromForm[inputs[i].name] = inputs[i].value;
             }
 
@@ -184,6 +197,7 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
             createAction();
             action.run();
             var args = submitSpy.mostRecentCall.args;
+
             expect(typeof args[1]).toEqual('function');
         });
 
@@ -191,6 +205,7 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
             createAction();
             action.run();
             var args = submitSpy.mostRecentCall.args;
+
             expect(args[2]).toBe(action);
         });
 
@@ -257,7 +272,7 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
 
     describe("validation", function() {
         beforeEach(function() {
-            spyOn(Ext.Ajax, 'request'); //block ajax request
+            spyOn(Ext.Ajax, 'request'); // block ajax request
         });
 
         it("should validate by default", function() {
@@ -297,15 +312,15 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
     });
 
     describe("submit failure", function() {
-        //causes
+        // causes
         it("should fail if the callback is passed an exception with type=Ext.direct.Manager.exceptions.SERVER", function() {
-            createActionWithCallbackArgs({}, {}, {type: Ext.direct.Manager.exceptions.SERVER});
+            createActionWithCallbackArgs({}, {}, { type: Ext.direct.Manager.exceptions.SERVER });
             action.run();
             expect(action.failureType).toBeDefined();
         });
 
         it("should fail if the result object does not have success=true", function() {
-            createActionWithCallbackArgs({}, {success: false}, {});
+            createActionWithCallbackArgs({}, { success: false }, {});
             action.run();
             expect(action.failureType).toBeDefined();
         });
@@ -326,16 +341,16 @@ topSuite("Ext.form.action.DirectSubmit", ['Ext.direct.RemotingProvider', 'Ext.fo
         });
 
         it("should call the BasicForm's markInvalid method with any errors in the result", function() {
-            createActionWithCallbackArgs({}, {success:false, errors:{foo:'bar'}}, {});
+            createActionWithCallbackArgs({}, { success: false, errors: { foo: 'bar' } }, {});
             spyOn(action.form, 'markInvalid');
             action.run();
-            expect(action.form.markInvalid).toHaveBeenCalledWith({foo:"bar"});
+            expect(action.form.markInvalid).toHaveBeenCalledWith({ foo: "bar" });
         });
     });
 
     describe("submit success", function() {
         beforeEach(function() {
-            createActionWithCallbackArgs({}, {success: true}, {});
+            createActionWithCallbackArgs({}, { success: true }, {});
         });
 
         it("should treat a result with success:true as success", function() {

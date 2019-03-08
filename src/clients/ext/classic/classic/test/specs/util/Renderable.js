@@ -5,16 +5,17 @@ function() {
         var comp,
             styleEl;
 
-        afterEach(function () {
+        afterEach(function() {
             Ext.destroy(comp);
             comp = null;
+
             if (styleEl) {
                 styleEl.destroy();
                 styleEl = null;
             }
         });
 
-        function createComp (framing) {
+        function createComp(framing) {
             var supportsBorderRadius = Ext.supports.CSS3BorderRadius,
                 CSS = Ext.util.CSS;
 
@@ -31,7 +32,7 @@ function() {
 
             comp = new Ext.Component({
                 frame: true,
-                getStyleProxy: function () {
+                getStyleProxy: function() {
                     return styleEl;
                 }
             });
@@ -88,6 +89,7 @@ function() {
             // Temporarily pull all content out of the document.
             // We need to put it back in case any of it is being left erroneously to be picked up by Jasmine
             previousNodes = document.createDocumentFragment();
+
             for (i = 0; i < len; i++) {
                 previousNodes.appendChild(n[0]);
             }
@@ -139,7 +141,8 @@ function() {
                 have = viewport.el.dom.innerHTML.replace(htmlRe, '')
                                                 .replace(/\s{2,}/g, ' ');
             
-            var want = (Ext.isIE8 ? [
+            var want = (Ext.isIE8
+                ? [
                     '<DIV id=existing-element> ',
                         '<UL> ',
                             '<LI>',
@@ -159,7 +162,8 @@ function() {
                             '</DIV>',
                         '</DIV>',
                     '</DIV>'
-                ] : [
+                ]
+                : [
                     '<div id="existing-element">',
                         '<ul>',
                             '<li>',
@@ -268,7 +272,7 @@ function() {
                                     defaultConfig.ariaEl === 'el',
                         shouldMain = onMainEl ? "should" : "should not",
                         shouldWrap = onMainEl ? "should not" : "should",
-                        el, dom, wrapEl, wrapDom, expectMain, expectWrap, attrIt;
+                        el, dom, wrapEl, wrapDom, expectMain, expectWrap;
                     
                     function makeC(config) {
                         config = Ext.apply({}, config, defaultConfig);
@@ -306,7 +310,7 @@ function() {
                             else {
                                 expect(c.el.dom.hasAttribute(attr)).toBe(false);
                             }
-                        }
+                        };
                         
                         expectWrap = function(attr, want) {
                             if (typeof want === 'function') {
@@ -321,7 +325,7 @@ function() {
                             else {
                                 expect(c.wrapEl.dom.hasAttribute(attr)).toBe(false);
                             }
-                        }
+                        };
                     });
                     
                     afterEach(function() {

@@ -6,6 +6,7 @@ topSuite("Ext.data.validator.Range", function() {
             min: min,
             max: max
         });
+
         return v.validate(value);
     }
     
@@ -19,42 +20,44 @@ topSuite("Ext.data.validator.Range", function() {
     
     describe("invalid values", function() {
         it("should not validate undefined", function() {
-            expect(validate(undefined)).toBe(v.getEmptyMessage());    
+            expect(validate(undefined)).toBe(v.getEmptyMessage());
         });
         
         it("should not validate null", function() {
-            expect(validate(null)).toBe(v.getEmptyMessage());    
+            expect(validate(null)).toBe(v.getEmptyMessage());
         });
 
         it("should not validate non-numbers", function() {
             expect(validate('foo')).toBe(v.getNanMessage());
-        })
+        });
         
         describe("min only", function() {
             it("should not validate if the value is less than the minimum", function() {
                 var min = 10;
-                expect(validate(9, min)).toBe(f(v.getMinOnlyMessage(), min));    
+
+                expect(validate(9, min)).toBe(f(v.getMinOnlyMessage(), min));
             });
         });
         
         describe("max only", function() {
             it("should not validate if the value is greater than the maximum", function() {
                 var max = 10;
+
                 expect(validate(20, undefined, max)).toBe(f(v.getMaxOnlyMessage(), max));
-            });    
+            });
         });
         
-        describe("min & max", function() {  
+        describe("min & max", function() {
             describe("string", function() {
-                var min = 5, 
+                var min = 5,
                     max = 10;
                     
                 it("should not validate if the value is less than the minimum", function() {
-                    expect(validate(1, min, max)).toBe(f(v.getBothMessage(), min, max));    
+                    expect(validate(1, min, max)).toBe(f(v.getBothMessage(), min, max));
                 });
             
                 it("should not validate if the value is greater than the maximum", function() {
-                    expect(validate(26, min, max)).toBe(f(v.getBothMessage(), min, max));    
+                    expect(validate(26, min, max)).toBe(f(v.getBothMessage(), min, max));
                 });
             });
         });
@@ -64,7 +67,7 @@ topSuite("Ext.data.validator.Range", function() {
         describe("min only", function() {
             it("should validate if the value is equal to the minimum", function() {
                 expect(validate(3, 3)).toBe(true);
-            });  
+            });
         
             it("should validate if the value is greater than the minimum", function() {
                 expect(validate(7, 3)).toBe(true);
@@ -74,7 +77,7 @@ topSuite("Ext.data.validator.Range", function() {
         describe("max only", function() {
             it("should validate if the value is equal to the maximum", function() {
                 expect(validate(18, undefined, 18)).toBe(true);
-            });  
+            });
         
             it("should validate if the value is less than the maximum", function() {
                 expect(validate(18, undefined, 22)).toBe(true);

@@ -28,8 +28,8 @@ Ext.define('Ext.data.ResultSet', {
 
         /**
          * @cfg {Number} total
-         * The total number of records reported by the data source. This ResultSet may form a subset of
-         * those records (see {@link #count}).
+         * The total number of records reported by the data source. This ResultSet may form
+         * a subset of those records (see {@link #count}).
          */
         total: null,
 
@@ -90,10 +90,12 @@ Ext.define('Ext.data.ResultSet', {
 
         if (!count) {
             records = this.getRecords();
+            
             if (records) {
                 count = records.length;
             }
         }
+        
         return count;
     }
 });

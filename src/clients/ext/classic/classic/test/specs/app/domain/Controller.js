@@ -80,8 +80,8 @@ topSuite("Ext.app.domain.Controller", ['Ext.app.Application'], function() {
                 }
             });
             ctrlTest.fireEvent('custom');
-            expect(handlerFoo).toHaveBeenCalled();    
-        });  
+            expect(handlerFoo).toHaveBeenCalled();
+        });
         
         it("should not listen when the alias does not match", function() {
             ctrlFoo.listen({
@@ -92,12 +92,13 @@ topSuite("Ext.app.domain.Controller", ['Ext.app.Application'], function() {
                 }
             });
             ctrlTest.fireEvent('custom');
-            expect(handlerFoo).not.toHaveBeenCalled(); 
+            expect(handlerFoo).not.toHaveBeenCalled();
         });
     });
     
     describe("# selector", function() {
         var app;
+        
         beforeEach(function() {
             app = new Ext.app.Application({
                 name: 'ControllerDomainSpec'
@@ -107,9 +108,11 @@ topSuite("Ext.app.domain.Controller", ['Ext.app.Application'], function() {
         afterEach(function() {
             app.destroy();
             app = null;
+            
             try {
                 delete window.ControllerDomainSpec;
-            } catch (e) {
+            }
+            catch (e) {
                 window.ControllerDomainSpec = undefined;
             }
         });

@@ -40,10 +40,11 @@ Ext.define('Ext.TaskQueue', {
         //</debug>
         
         // iOS has a nasty bug which causes pending requestAnimationFrame to not release
-        // the callback when the WebView is switched back and forth from / to being background process
-        // We use a watchdog timer to workaround this, and restore the pending state correctly if this happens
-        // This timer has to be set as an interval from the very beginning and we have to keep it running for
-        // as long as the app lives, setting it later doesn't seem to work.
+        // the callback when the WebView is switched back and forth from / to being background 
+        // process. We use a watchdog timer to workaround this, and restore the pending state
+        // correctly if this happens. This timer has to be set as an interval from the very
+        // beginning and we have to keep it running for as long as the app lives, setting it later
+        // doesn't seem to work.
         // The watchdog timer must be accessible for environments to cancel.
         if (Ext.os.is.iOS) {
             //<debug>
@@ -55,11 +56,11 @@ Ext.define('Ext.TaskQueue', {
 
     requestRead: function(fn, scope, args) {
         var request = {
-                id: ++this.readRequestId,
-                fn: fn,
-                scope: scope,
-                args: args
-            };
+            id: ++this.readRequestId,
+            fn: fn,
+            scope: scope,
+            args: args
+        };
 
         //<debug>
         if (arguments[3] === true) {
@@ -116,6 +117,7 @@ Ext.define('Ext.TaskQueue', {
 
         //<debug>
         // Used below to cancel the correct timer.
+        /* eslint-disable-next-line one-var */
         var oldMode = me.mode;
         //</debug>
 
@@ -137,7 +139,8 @@ Ext.define('Ext.TaskQueue', {
         if (me.mode === mode && me.timer) {
             if (oldMode) {
                 Ext.undefer(me.timer);
-            } else {
+            }
+            else {
                 Ext.unraf(me.timer);
             }
 
@@ -152,7 +155,9 @@ Ext.define('Ext.TaskQueue', {
     },
     
     cancelRequest: function(queue, id, mode) {
-        for (var i = 0; i < queue.length; i++) {
+        var i;
+        
+        for (i = 0; i < queue.length; i++) {
             if (queue[i].id === id) {
                 queue.splice(i, 1);
                 
@@ -238,7 +243,8 @@ Ext.define('Ext.TaskQueue', {
         if (timer) {
             if (me.mode) {
                 Ext.undefer(timer);
-            } else {
+            }
+            else {
                 Ext.unraf(timer);
             }
         }
@@ -249,7 +255,8 @@ Ext.define('Ext.TaskQueue', {
     }
 
     //<debug>
-    ,privates: {
+    /* eslint-disable-next-line comma-style */
+    , privates: {
         flush: function() {
             var me = this,
                 mode = me.mode;
@@ -257,7 +264,8 @@ Ext.define('Ext.TaskQueue', {
             while (me.readQueue.length || me.writeQueue.length) {
                 if (mode) {
                     Ext.undefer(me.timer);
-                } else {
+                }
+                else {
                     Ext.unraf(me.timer);
                 }
 

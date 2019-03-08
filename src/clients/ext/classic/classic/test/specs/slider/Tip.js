@@ -28,15 +28,18 @@ topSuite("Ext.slider.Tip", ['Ext.slider.Single'], function() {
         if (slider) {
             slider.destroy();
         }
+
         spaceEl.destroy();
         slider = null;
     });
 
     describe("when thumb is dragged", function() {
         var thumbXY, thumbSize, tipXY, tipSize;
+
         beforeEach(function() {
             createSlider();
             var xy = thumb0.el.getXY();
+
             jasmine.fireMouseEvent(thumb0.el, 'mousedown', xy[0], xy[1] + 5);
             jasmine.fireMouseEvent(thumb0.el, 'mousemove', xy[0] + 50, xy[1] + 5);
             
@@ -68,5 +71,4 @@ topSuite("Ext.slider.Tip", ['Ext.slider.Single'], function() {
         });
             
     });
-    
 });

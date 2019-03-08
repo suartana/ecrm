@@ -1,5 +1,4 @@
-/* global Ext, jasmine, expect, spyOn, provider */
-
+/* global test, nonexistent */
 topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
     var Manager = Ext.direct.Manager,
         provider, handler;
@@ -32,7 +31,7 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
         
         it("adds provider as config object", function() {
             Manager.addProvider({
-                id:   'bar',
+                id: 'bar',
                 type: ''
             });
             
@@ -314,7 +313,7 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
         beforeEach(function() {
             Ext.define('test.Provider', {
                 extend: 'Ext.direct.Provider',
-                alias:  'direct.testprovider',
+                alias: 'direct.testprovider',
                 type: 'test',
                 inheritableStatics: {
                     checkConfig: Ext.returnTrue
@@ -347,9 +346,11 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
 
             Ext.undefine('test.Provider');
             Manager.providerClasses.test = provider = null;
+
             try {
                 delete Ext.global.test;
-            } catch (e) {
+            }
+            catch (e) {
                 Ext.global.test = undefined;
             }
             
@@ -393,7 +394,7 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
             beforeEach(function() {
                 Manager.loadProvider({
                     type: 'test',
-                    url:  'test'
+                    url: 'test'
                 }, callbackSpy, callbackScope);
                 
                 provider = Manager.providers.getAt(0);
@@ -618,9 +619,10 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
                     var message,
                         error;
 
-                    try{
-                        (function(){var a = nonexistent;})();
-                    } catch(e) {
+                    try {
+                        (function() { var a = nonexistent; })();
+                    }
+                    catch (e) {
                         // Grab first line of stack trace to ascertain displayed message
                         // IE < 10 do not support stack property
                         if (e.stack) {
@@ -637,10 +639,13 @@ topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
                     // fall back to hoping we know what the browser *really* is
                     // (We test in emulation modes) and what the browser does.
                     if (!message) {
-                        message = Ext.isIE8         ? "TypeError: 'nonexistent' is undefined" :
-                            Ext.isIE || Ext.isEdge  ? "ReferenceError: 'nonexistent' is undefined" :
-                            Ext.isSafari            ? "ReferenceError: Can't find variable: nonexistent" :
-                                                      "ReferenceError: nonexistent is not defined"
+                        /* eslint-disable multiline-ternary */
+                        message = Ext.isIE8              ? "TypeError: 'nonexistent' is undefined"
+                                : Ext.isIE || Ext.isEdge ? "ReferenceError: 'nonexistent' is undefined"
+                                : Ext.isSafari           ? "ReferenceError: Can't find variable: nonexistent"
+                                :                          "ReferenceError: nonexistent is not defined"
+                                ;
+                        /* eslint-enable multiline-ternary */
                     }
 
                     error = ['blerg', message];

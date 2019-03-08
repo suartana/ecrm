@@ -1,5 +1,3 @@
-/* global expect, Ext, spyOn, xdescribe, jasmine */
-
 topSuite("Ext.slider.Multi", function() {
     var slider, createSlider;
 
@@ -23,6 +21,7 @@ topSuite("Ext.slider.Multi", function() {
         if (slider) {
             slider.destroy();
         }
+
         slider = null;
     });
     
@@ -170,6 +169,7 @@ topSuite("Ext.slider.Multi", function() {
 
         it("should not render the thumb is slider isn't rendered", function() {
             var thumb;
+
             slider.rendered = false;
             thumb = slider.addThumb(17);
             expect(Ext.slider.Thumb.prototype.render).not.toHaveBeenCalled();
@@ -178,33 +178,35 @@ topSuite("Ext.slider.Multi", function() {
         });
     });
 
-    describe("removeThumbs", function () {
+    describe("removeThumbs", function() {
         beforeEach(function() {
             createSlider({
                 values: [10, 20, 30]
             });
         });
 
-        it("should remove the thumb from the slider", function () {
+        it("should remove the thumb from the slider", function() {
             slider.removeThumb(2);
             expect(slider.thumbs.length).toBe(2);
             expect(slider.thumbStack.length).toBe(2);
-            expect(slider.getValues()).toEqual([10,20]);
+            expect(slider.getValues()).toEqual([10, 20]);
         });
 
-        it("should destroy the thumb instance", function () {
+        it("should destroy the thumb instance", function() {
             var thumb = slider.thumbs[2];
+
             slider.removeThumb(thumb);
             expect(thumb.destroyed).toBe(true);
         });
 
-        it("should remove a thumb by index", function () {
+        it("should remove a thumb by index", function() {
             slider.removeThumb(0);
             expect(slider.getValues()).toEqual([20, 30]);
         });
 
-        it("should remove a thumb by instance", function () {
+        it("should remove a thumb by instance", function() {
             var thumb = slider.thumbs[1];
+
             slider.removeThumb(thumb);
             expect(slider.getValues()).toEqual([10, 30]);
         });
@@ -232,6 +234,7 @@ topSuite("Ext.slider.Multi", function() {
                             beforeEach(function() {
                                 setupSlider();
                                 var xy = thumb0.el.getXY();
+
                                 jasmine.fireMouseEvent(thumb0.el, 'mousedown', xy[0], xy[1]);
                                 jasmine.fireMouseEvent(thumb0.el, 'mouseup', xy[0], xy[1]);
                             });
@@ -330,6 +333,7 @@ topSuite("Ext.slider.Multi", function() {
                         describe("if slider enabled", function() {
                             beforeEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'click', xy[0] + 100, xy[1] + 8);
                             });
                             
@@ -350,11 +354,13 @@ topSuite("Ext.slider.Multi", function() {
                             beforeEach(function() {
                                 slider.disable();
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0] + 10, xy[1] + 10);
                             });
                             
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mouseup', xy[0] + 10, xy[1] + 10);
                             });
 
@@ -367,7 +373,7 @@ topSuite("Ext.slider.Multi", function() {
                                     call = calls[i];
                                     expect(call.args[0].search("change")).toEqual(-1);
                                 }
-                            });                  
+                            });
                         });
                     });
                 });
@@ -397,6 +403,7 @@ topSuite("Ext.slider.Multi", function() {
                             beforeEach(function() {
                                 setupSlider();
                                 var xy = thumb0.el.getXY();
+
                                 jasmine.fireMouseEvent(thumb0.el, 'mousedown', xy[0], xy[1] - 17);
                                 jasmine.fireMouseEvent(thumb0.el, 'mouseup', xy[0], xy[1] - 17);
                             });
@@ -406,7 +413,7 @@ topSuite("Ext.slider.Multi", function() {
                                     length = calls.length;
 
                                 expect(length).toEqual(0);
-                            });   
+                            });
                         });
 
                         var dragConfig = {};
@@ -547,11 +554,13 @@ topSuite("Ext.slider.Multi", function() {
                             beforeEach(function() {
                                 slider.disable();
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0], xy[1] - 93);
                             });
                             
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
+
                                 jasmine.fireMouseEvent(slider.el, 'mouseup', xy[0], xy[1] - 93);
                             });
 
@@ -568,7 +577,7 @@ topSuite("Ext.slider.Multi", function() {
 
                             it("should not change the thumb value", function() {
                                 expect(thumb0.value).toEqual(0);
-                            });                        
+                            });
                         });
                     });
                 });
@@ -576,17 +585,17 @@ topSuite("Ext.slider.Multi", function() {
         });
     });
     
-    describe("readOnly", function(){
-        it("should disable the thumb if configured with readOnly: true", function(){
+    describe("readOnly", function() {
+        it("should disable the thumb if configured with readOnly: true", function() {
             createSlider({
                 renderTo: Ext.getBody(),
                 readOnly: true,
                 value: 0
             });
             expect(slider.thumbs[0].disabled).toBe(true);
-        });   
+        });
         
-        it("should disable all thumbs if configured with readOnly: true", function(){
+        it("should disable all thumbs if configured with readOnly: true", function() {
             createSlider({
                 renderTo: Ext.getBody(),
                 readOnly: true,
@@ -595,9 +604,9 @@ topSuite("Ext.slider.Multi", function() {
             expect(slider.thumbs[0].disabled).toBe(true);
             expect(slider.thumbs[1].disabled).toBe(true);
             expect(slider.thumbs[2].disabled).toBe(true);
-        }); 
+        });
         
-        it("should disable thumbs if setReadOnly(true) is called after render", function(){
+        it("should disable thumbs if setReadOnly(true) is called after render", function() {
             createSlider({
                 renderTo: Ext.getBody(),
                 values: [1, 2, 3]
@@ -608,7 +617,7 @@ topSuite("Ext.slider.Multi", function() {
             expect(slider.thumbs[2].disabled).toBe(true);
         });
         
-        it("should enable thumbs if setReadOnly(false) is called after render", function(){
+        it("should enable thumbs if setReadOnly(false) is called after render", function() {
             createSlider({
                 renderTo: Ext.getBody(),
                 readOnly: true,
@@ -621,7 +630,7 @@ topSuite("Ext.slider.Multi", function() {
         });
     });
     
-    describe("snapping", function(){
+    describe("snapping", function() {
         it("should not alter the max value when specifying an increment", function() {
             createSlider({
                 width: 200,
@@ -703,6 +712,7 @@ topSuite("Ext.slider.Multi", function() {
                 });
                 it("should fire the beforechange event", function() {
                     var spy = jasmine.createSpy("beforechange handler");
+
                     slider.on('beforechange', spy);
                     slider.setValue(1, 23);
                 
@@ -713,8 +723,9 @@ topSuite("Ext.slider.Multi", function() {
                 });
                 it("should fire the change event", function() {
                     var changeSpy = jasmine.createSpy('change handler');
+
                     slider.on('change', changeSpy);
-                    slider.setValue(1, 23); 
+                    slider.setValue(1, 23);
                     expect(changeSpy.calls[0].args[0].id).toBe(slider.id);
                     expect(changeSpy.calls[0].args[1]).toBe(23);
                     expect(changeSpy.calls[0].args[2].el.id).toBe(slider.thumbs[1].el.id);
@@ -722,12 +733,15 @@ topSuite("Ext.slider.Multi", function() {
                 });
                 it("should move the thumb", function() {
                     var thumbSpy = spyOn(slider.thumbs[1], 'move');
+                    
                     slider.setValue(1, 23);
-                    expect(thumbSpy).toHaveBeenCalled(); //should check parameters too
+                    expect(thumbSpy).toHaveBeenCalled(); // should check parameters too
                 });
+                
                 it("should not perform the change if the beforechange handler returns false", function() {
                     var changeSpy = jasmine.createSpy('change handler'),
                         thumbSpy = spyOn(slider.thumbs[1], 'move');
+                    
                     slider.on('beforechange', function() { return false; });
                     slider.on('change', changeSpy);
                     slider.setValue(1, 23);
@@ -737,28 +751,31 @@ topSuite("Ext.slider.Multi", function() {
                 });
             });
             
-            describe("multiple values", function (){
-                it("should set the value for multiple thumbs", function(){
+            describe("multiple values", function() {
+                it("should set the value for multiple thumbs", function() {
                     slider.setValue([40, 50, 60]);
                     var thumbs = slider.thumbs;
+
                     expect(thumbs[0].value).toBe(40);
                     expect(thumbs[1].value).toBe(50);
-                    expect(thumbs[2].value).toBe(60);    
+                    expect(thumbs[2].value).toBe(60);
                 });
                 
-                describe("with thumbPerValue:false", function () {
-                    it("should only set the values passed", function (){
+                describe("with thumbPerValue:false", function() {
+                    it("should only set the values passed", function() {
                         slider.setValue([40, 50]);
                         var thumbs = slider.thumbs;
+
                         expect(thumbs[0].value).toBe(40);
                         expect(thumbs[1].value).toBe(50);
                         expect(thumbs[2].value).toBe(30);
                         expect(thumbs.length).toBe(3);
                     });
                     
-                    it("should ignore extraneous values", function (){
+                    it("should ignore extraneous values", function() {
                         slider.setValue([40, 50, 60, 70, 80]);
                         var thumbs = slider.thumbs;
+
                         expect(thumbs[0].value).toBe(40);
                         expect(thumbs[1].value).toBe(50);
                         expect(thumbs[2].value).toBe(60);
@@ -766,40 +783,44 @@ topSuite("Ext.slider.Multi", function() {
                     });
                 });
                 
-                describe("with thumbPerValue:true", function () {
-                    beforeEach(function () {
+                describe("with thumbPerValue:true", function() {
+                    beforeEach(function() {
                         slider.thumbPerValue = true;
                     });
 
-                    it("should add thumbs for extra values", function () {
+                    it("should add thumbs for extra values", function() {
                         slider.setValue([10, 20, 30, 40]);
                         // values array length is greater than the number of thumbs; should add 1
                         var thumbs = slider.thumbs;
+
                         expect(thumbs[3].value).toBe(40);
                         expect(thumbs.length).toBe(4);
                     });
 
-                    it("should remove thumbs for missing values", function () {
+                    it("should remove thumbs for missing values", function() {
                         slider.setValue([10, 20]);
                         // values array length is less than the number of thumbs; should remove 1
                         var thumbs = slider.thumbs;
+
                         expect(thumbs.length).toBe(2);
                     });
 
-                    it("should fire change event for added thumb", function () {
+                    it("should fire change event for added thumb", function() {
                         var changeSpy = jasmine.createSpy('change handler');
+
                         slider.on('change', changeSpy);
-                        slider.setValue([10, 20, 30, 40]); 
+                        slider.setValue([10, 20, 30, 40]);
                         expect(changeSpy.calls[0].args[0].id).toBe(slider.id);
                         expect(changeSpy.calls[0].args[1]).toBe(40);
                         expect(changeSpy.calls[0].args[2].el.id).toBe(slider.thumbs[3].el.id);
                         expect(changeSpy).toHaveBeenCalledWith(slider, 40, slider.thumbs[3], 'add');
                     });
 
-                    it("should fire change event for removed thumb", function () {
+                    it("should fire change event for removed thumb", function() {
                         var changeSpy = jasmine.createSpy('change handler');
+
                         slider.on('change', changeSpy);
-                        slider.setValue([10, 20]); 
+                        slider.setValue([10, 20]);
                         expect(changeSpy.calls[0].args[0].id).toBe(slider.id);
                         expect(changeSpy.calls[0].args[1]).toBe(null);
                         expect(changeSpy.calls[0].args[2]).toBe(null);
@@ -821,20 +842,22 @@ topSuite("Ext.slider.Multi", function() {
             });
         });
         
-        describe("dirty", function(){
-            it("should fire the dirtychange event when the value is modified", function(){
+        describe("dirty", function() {
+            it("should fire the dirtychange event when the value is modified", function() {
                 var fired = 0;
-                slider.on('dirtychange', function(){
-                    ++fired;  
+
+                slider.on('dirtychange', function() {
+                    ++fired;
                 });
                 slider.setValue(0, 40);
                 expect(fired).toBe(1);
             });
             
-            it("should fire the dirtychange event when the value is reset", function(){
+            it("should fire the dirtychange event when the value is reset", function() {
                 var fired = 0;
-                slider.on('dirtychange', function(){
-                    ++fired;  
+
+                slider.on('dirtychange', function() {
+                    ++fired;
                 });
                 slider.setValue(0, 40);
                 expect(fired).toBe(1);
@@ -844,64 +867,68 @@ topSuite("Ext.slider.Multi", function() {
         });
     });
     
-    describe("setMinValue/setMaxValue", function(){
-        var getLeft = function(){
-            return parseFloat(slider.thumbs[0].el.getStyle('left'));    
+    describe("setMinValue/setMaxValue", function() {
+        var getLeft = function() {
+            return parseFloat(slider.thumbs[0].el.getStyle('left'));
         };
         
         describe("setMinValue", function() {
-            it("should limit the value to the minimum", function(){
+            it("should limit the value to the minimum", function() {
                 createSlider();
                 slider.setMinValue(50);
                 slider.setValue(0, 25);
                 expect(slider.getValue()[0]).toBe(50);
             });
         
-            it("should adjust existing values", function(){
+            it("should adjust existing values", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 slider.setMinValue(60);
-                expect(slider.getValue()[0]).toBe(60);    
+                expect(slider.getValue()[0]).toBe(60);
             });
         
-            it("should update the thumb position if value is < minValue", function(){
+            it("should update the thumb position if value is < minValue", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 var oldLeft = getLeft();
+
                 slider.setMinValue(60);
                 var newLeft = getLeft();
+
                 // Should move to the leftmost since it will be at the min
                 expect(newLeft).toBeLessThan(oldLeft);
             });
             
-            it("should update the thumb position for values > minValue", function(){
+            it("should update the thumb position for values > minValue", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 var oldLeft = getLeft();
+
                 slider.setMinValue(-50);
                 var newLeft = getLeft();
+
                 // Should move to the right because the minValue got smaller
                 expect(newLeft).toBeGreaterThan(oldLeft);
             });
             
-            it("should not fire the change event if the value stays the same", function(){
+            it("should not fire the change event if the value stays the same", function() {
                 var called = false;
                 
                 createSlider();
                 slider.setValue(0, 50);
-                slider.on('change', function(){
+                slider.on('change', function() {
                     called = true;
                 });
                 slider.setMinValue(10);
                 expect(called).toBe(false);
             });
             
-            it("should fire the change event if the value changes", function(){
+            it("should fire the change event if the value changes", function() {
                 var called = false;
                 
                 createSlider();
                 slider.setValue(0, 50);
-                slider.on('change', function(){
+                slider.on('change', function() {
                     called = true;
                 });
                 slider.setMinValue(60);
@@ -917,58 +944,62 @@ topSuite("Ext.slider.Multi", function() {
         });
         
         describe("setMaxValue", function() {
-            it("should limit the value to the maximum", function(){
+            it("should limit the value to the maximum", function() {
                 createSlider();
                 slider.setMaxValue(50);
                 slider.setValue(0, 75);
                 expect(slider.getValue()[0]).toBe(50);
             });
         
-            it("should adjust existing values", function(){
+            it("should adjust existing values", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 slider.setMaxValue(40);
-                expect(slider.getValue()[0]).toBe(40);    
+                expect(slider.getValue()[0]).toBe(40);
             });
         
-            it("should update the thumb position if value is < minValue", function(){
+            it("should update the thumb position if value is < minValue", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 var oldLeft = getLeft();
+
                 slider.setMaxValue(40);
                 var newLeft = getLeft();
+
                 // Should move to the rightmost since it will be at the max
                 expect(newLeft).toBeGreaterThan(oldLeft);
             });
             
-            it("should update the thumb position for values < maxValue", function(){
+            it("should update the thumb position for values < maxValue", function() {
                 createSlider();
                 slider.setValue(0, 50);
                 var oldLeft = getLeft();
+
                 slider.setMaxValue(150);
                 var newLeft = getLeft();
+
                 // Should move to the left because the maxValue got bigger
                 expect(newLeft).toBeLessThan(oldLeft);
             });
             
-            it("should not fire the change event if the value stays the same", function(){
+            it("should not fire the change event if the value stays the same", function() {
                 var called = false;
                 
                 createSlider();
                 slider.setValue(0, 50);
-                slider.on('change', function(){
+                slider.on('change', function() {
                     called = true;
                 });
                 slider.setMaxValue(90);
                 expect(called).toBe(false);
             });
             
-            it("should fire the change event if the value changes", function(){
+            it("should fire the change event if the value changes", function() {
                 var called = false;
                 
                 createSlider();
                 slider.setValue(0, 50);
-                slider.on('change', function(){
+                slider.on('change', function() {
                     called = true;
                 });
                 slider.setMaxValue(40);
@@ -987,11 +1018,11 @@ topSuite("Ext.slider.Multi", function() {
     describe("getNearest should always keep thumbs in order", function() {
         it("should work when all thumbs have the max value and we click on the left", function() {
             createSlider({
-                values: [30,70],
+                values: [30, 70],
                 minValue: 0,
                 maxValue: 100
             });
-            slider.setValue([100,100]);
+            slider.setValue([100, 100]);
             jasmine.fireMouseEvent(slider.el, 'click', Math.max(slider.el.getX(), 1), 0);
             waitsFor(function() {
                 return slider.getValue(0) === 0;
@@ -999,11 +1030,11 @@ topSuite("Ext.slider.Multi", function() {
         });
         it("should work when all thumbs have the min value and we click on the right", function() {
             createSlider({
-                values: [30,70],
+                values: [30, 70],
                 minValue: 0,
                 maxValue: 100
             });
-            slider.setValue([0,0]);
+            slider.setValue([0, 0]);
             jasmine.fireMouseEvent(slider.el, 'click', slider.el.getWidth(), 0);
             waitsFor(function() {
                 return slider.getValue(1) === 100;

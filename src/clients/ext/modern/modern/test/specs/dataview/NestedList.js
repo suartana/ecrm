@@ -1,4 +1,4 @@
-describe('Ext.dataview.NestedList', function () {
+topSuite('Ext.dataview.NestedList', function () {
     var nestedlist, store;
 
     function createNestedList (cfg, nodes) {

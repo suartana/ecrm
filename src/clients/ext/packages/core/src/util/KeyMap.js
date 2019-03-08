@@ -98,21 +98,22 @@ Ext.define('Ext.util.KeyMap', {
 
     /**
      * @cfg {Ext.Component/Ext.dom.Element/HTMLElement/String} target
-     * The object on which to listen for the event specified by the {@link #eventName} config option.
+     * The object on which to listen for the event specified by the {@link #eventName}
+     * config option.
      */
 
     /**
      * @cfg {Object/Object[][]} binding
-     * Either a single object describing a handling function for s specified key (or set of keys), or
-     * an array of such objects.
+     * Either a single object describing a handling function for s specified key (or set of keys),
+     * or an array of such objects.
      * @cfg {String/String[]} binding.key A single keycode or an array of keycodes to handle, or
      * a RegExp which specifies characters to handle, eg `/[a-z]/`.
-     * @cfg {Boolean} binding.shift `true` to handle key only when shift is pressed, `false` to handle
-     * the key only when shift is not pressed (defaults to undefined)
-     * @cfg {Boolean} binding.ctrl `true` to handle key only when ctrl is pressed, `false` to handle
-     * the key only when ctrl is not pressed (defaults to undefined)
-     * @cfg {Boolean} binding.alt `true` to handle key only when alt is pressed, `false` to handle
-     * the key only when alt is not pressed (defaults to undefined)
+     * @cfg {Boolean} binding.shift `true` to handle key only when shift is pressed, `false`
+     * to handle the key only when shift is not pressed (defaults to undefined)
+     * @cfg {Boolean} binding.ctrl `true` to handle key only when ctrl is pressed, `false`
+     * to handle the key only when ctrl is not pressed (defaults to undefined)
+     * @cfg {Boolean} binding.alt `true` to handle key only when alt is pressed, `false`
+     * to handle the key only when alt is not pressed (defaults to undefined)
      * @cfg {Function} binding.handler The function to call when KeyMap finds the expected
      * key combination
      * @cfg {Function} binding.fn Alias of handler (for backwards-compatibility)
@@ -153,8 +154,10 @@ Ext.define('Ext.util.KeyMap', {
         // Handle legacy arg list in which the first argument is the target.
         // TODO: Deprecate in V5
         //<debug>
-        if ((arguments.length !== 1) || (typeof config === 'string') || config.dom || config.tagName || config === document || config.isComponent) {
-            Ext.raise("Legacy multi-argument KeyMap constructor is removed. Use a config object instead.");
+        if ((arguments.length !== 1) || (typeof config === 'string') || config.dom ||
+            config.tagName || config === document || config.isComponent) {
+            Ext.raise("Legacy multi-argument KeyMap constructor is removed. " +
+                      "Use a config object instead.");
         }
         //</debug>
 
@@ -261,6 +264,7 @@ Ext.define('Ext.util.KeyMap', {
                     binding.shift === item.shift) {
                     if (Ext.Array.equals(item.keyCode, keys)) {
                         Ext.Array.erase(me.bindings, i, 1);
+
                         return;
                     }
                 }
@@ -282,7 +286,7 @@ Ext.define('Ext.util.KeyMap', {
             keys = [];
             keyString = keyCode.toUpperCase();
 
-            for (i = 0, len = keyString.length; i < len; i++){
+            for (i = 0, len = keyString.length; i < len; i++) {
                 keys.push(keyString.charCodeAt(i));
             }
             
@@ -377,6 +381,7 @@ Ext.define('Ext.util.KeyMap', {
      */
     processBinding: function(binding, event) {
         if (this.checkModifiers(binding, event)) {
+            // eslint-disable-next-line vars-on-top
             var key = event.getKey(),
                 handler = binding.fn || binding.handler,
                 scope = binding.scope || this,
@@ -523,7 +528,11 @@ Ext.define('Ext.util.KeyMap', {
         var me = this;
         
         if (!me.enabled) {
-            me.target.on(me.eventName, me.handleTargetEvent, me, {capture: me.capture, priority: me.priority});
+            me.target.on(me.eventName, me.handleTargetEvent, me, {
+                capture: me.capture,
+                priority: me.priority
+            });
+            
             me.enabled = true;
         }
     },

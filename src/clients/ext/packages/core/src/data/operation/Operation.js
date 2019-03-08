@@ -14,13 +14,15 @@ Ext.define('Ext.data.operation.Operation', {
         /**
          * @cfg {Boolean} synchronous
          * True if this Operation is to be executed synchronously. This property is inspected by a
-         * {@link Ext.data.Batch Batch} to see if a series of Operations can be executed in parallel or not.
+         * {@link Ext.data.Batch Batch} to see if a series of Operations can be executed in parallel
+         * or not.
          */
         synchronous: false,
 
         /**
          * @cfg {String} url
-         * The url for this operation. Typically this will be provided by a proxy and not configured here.
+         * The url for this operation. Typically this will be provided by a proxy and not configured
+         * here.
          */
         url: '',
         
@@ -97,7 +99,7 @@ Ext.define('Ext.data.operation.Operation', {
          */
         recordCreator: null,
         
-        //We use this because in a lot of cases the developer can indirectly pass
+        // We use this because in a lot of cases the developer can indirectly pass
         // a callback/scope and that will get pushed on to the operation. As such,
         // create our own hook for the callback that will fire first
         /**
@@ -165,8 +167,8 @@ Ext.define('Ext.data.operation.Operation', {
     /**
      * @property {Boolean} success
      * Whether the Operation was successful or not. This starts as undefined and is set to true
-     * or false by the Proxy that is executing the Operation. It is also set to false by {@link #setException}. Use
-     * {@link #wasSuccessful} to query success status.
+     * or false by the Proxy that is executing the Operation. It is also set to false by
+     * {@link #setException}. Use {@link #wasSuccessful} to query success status.
      * @readonly
      * @private
      */
@@ -182,7 +184,8 @@ Ext.define('Ext.data.operation.Operation', {
 
     /**
      * @property {String/Object} error
-     * The error object passed when {@link #setException} was called. This could be any object or primitive.
+     * The error object passed when {@link #setException} was called. This could be any object or
+     * primitive.
      * @private
      */
     error: undefined,
@@ -218,7 +221,7 @@ Ext.define('Ext.data.operation.Operation', {
     },
     
     getAction: function() {
-        return this.action;    
+        return this.action;
     },
     
     /**
@@ -236,9 +239,11 @@ Ext.define('Ext.data.operation.Operation', {
         
         me.setStarted();
         me.request = request = me.doExecute();
+        
         if (request) {
             request.setOperation(me);
         }
+        
         return request;
     },
     
@@ -275,10 +280,12 @@ Ext.define('Ext.data.operation.Operation', {
         
         me.setResponse(response);
         me.setResultSet(resultSet);
+        
         if (resultSet.getSuccess()) {
             me.doProcess(resultSet, request, response);
             me.setSuccessful(autoComplete);
-        } else if (autoComplete) {
+        }
+        else if (autoComplete) {
             me.setException(resultSet.getMessage());
         }
     },
@@ -352,7 +359,8 @@ Ext.define('Ext.data.operation.Operation', {
                 if (serverLen === 0 || !(serverRecord = serverRecords[i])) {
                     // once i > serverLen then serverRecords[i] will be undefined...
                     clientRecord.commit();
-                } else {
+                }
+                else {
                     clientRecord.set(serverRecord, commitSetOptions);
                 }
             }
@@ -374,7 +382,7 @@ Ext.define('Ext.data.operation.Operation', {
             proxy;
         
         me.complete = true;
-        me.running  = false;
+        me.running = false;
         
         if (!me.destroying) {
             me.triggerCallbacks();
@@ -400,13 +408,15 @@ Ext.define('Ext.data.operation.Operation', {
      */
     setSuccessful: function(complete) {
         this.success = true;
+        
         if (complete) {
             this.setCompleted();
         }
     },
 
     /**
-     * Marks the Operation as having experienced an exception. Can be supplied with an option error message/object.
+     * Marks the Operation as having experienced an exception. Can be supplied with an option
+     * error message/object.
      * @param {String/Object} error (optional) error string/object
      */
     setException: function(error) {
@@ -437,7 +447,9 @@ Ext.define('Ext.data.operation.Operation', {
         }
 
         // Call the user's callback as passed to Store's read/write
-        if (callback = me.getCallback()) {
+        callback = me.getCallback();
+        
+        if (callback) {
             // Maintain the public API for callback
             callback.call(me.getScope() || me, me.getRecords(), me, me.wasSuccessful());
             
@@ -479,13 +491,14 @@ Ext.define('Ext.data.operation.Operation', {
      */
     getRecords: function() {
         var resultSet;
-        return this._records ||
-               ((resultSet = this.getResultSet()) ? resultSet.getRecords() : null);
+        
+        /* eslint-disable-next-line no-cond-assign */
+        return this._records || ((resultSet = this.getResultSet()) ? resultSet.getRecords() : null);
     },
 
     /**
-     * Returns true if the Operation has been started. Note that the Operation may have started AND completed, see
-     * {@link #isRunning} to test if the Operation is currently running.
+     * Returns true if the Operation has been started. Note that the Operation may have started
+     * AND completed, see {@link #isRunning} to test if the Operation is currently running.
      * @return {Boolean} True if the Operation has started
      */
     isStarted: function() {

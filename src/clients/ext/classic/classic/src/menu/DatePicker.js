@@ -30,14 +30,14 @@
  *         }]
  *     }).showAt([5, 5]);
  */
- Ext.define('Ext.menu.DatePicker', {
-     extend: 'Ext.menu.Menu',
+Ext.define('Ext.menu.DatePicker', {
+    extend: 'Ext.menu.Menu',
 
-     alias: 'widget.datemenu',
+    alias: 'widget.datemenu',
 
-     requires: [
+    requires: [
         'Ext.picker.Date'
-     ],
+    ],
      
     ariaRole: 'dialog',
     
@@ -118,7 +118,8 @@
         Ext.apply(me, {
             showSeparator: false,
             plain: true,
-            bodyPadding: 0, // remove the body padding from the datepicker menu item so it looks like 3.3
+            // remove the body padding from the datepicker menu item so it looks like 3.3
+            bodyPadding: 0,
             items: [pickerConfig]
         });
 
@@ -153,5 +154,4 @@
     hidePickerOnSelect: function() {
         Ext.menu.Manager.hideAll();
     }
- });
- 
+});

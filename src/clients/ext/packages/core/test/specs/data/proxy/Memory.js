@@ -1,5 +1,3 @@
-/* global Ext, expect */
-
 topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
     var proxy, operation, records;
 
@@ -34,6 +32,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                 name: 'Item ' + i
             });
         }
+
         proxy = new Ext.data.proxy.Memory({
             data: largeDataSet,
             model: 'spec.User',
@@ -43,16 +42,16 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
     
     function createOperation() {
         operation = new Ext.data.operation.Read({
-        });    
+        });
     }
 
     beforeEach(function() {
         Ext.define('spec.User', {
             extend: 'Ext.data.Model',
             fields: [
-                {name: 'id',    type: 'int'},
-                {name: 'name',  type: 'string'},
-                {name: 'phone', type: 'string', mapping: 'phoneNumber'}
+                { name: 'id',    type: 'int' },
+                { name: 'name',  type: 'string' },
+                { name: 'phone', type: 'string', mapping: 'phoneNumber' }
             ]
         });
     });
@@ -84,12 +83,12 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
         });
     });
     
-    describe("filtering", function(){
-        it("should filter data", function(){
+    describe("filtering", function() {
+        it("should filter data", function() {
             createLargeProxy();
             createOperation();
             operation.setFilters([new Ext.util.Filter({
-                filterFn: function(rec){
+                filterFn: function(rec) {
                     return rec.getId() % 2 === 0;
                 }
             })]);
@@ -98,11 +97,11 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             expect(operation.getRecords().length).toBe(50);
         });
         
-        it("should filter with paging", function(){
+        it("should filter with paging", function() {
             createLargeProxy();
             createOperation();
             operation.setFilters([new Ext.util.Filter({
-                filterFn: function(rec){
+                filterFn: function(rec) {
                     return rec.getId() < 10;
                 }
             })]);
@@ -137,8 +136,8 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
         });
     });
     
-    describe("sorting", function(){
-        it("should apply sorting", function(){
+    describe("sorting", function() {
+        it("should apply sorting", function() {
             createLargeProxy();
             createOperation();
             operation.setSorters([new Ext.util.Sorter({
@@ -152,8 +151,8 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
         });
     });
     
-    describe("paging", function(){
-        it("should page the data", function(){
+    describe("paging", function() {
+        it("should page the data", function() {
             createLargeProxy(true);
             createOperation();
             operation.setStart(0);
@@ -169,6 +168,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
     
     describe("with a store", function() {
         var store;
+
         function createStore(cfg) {
             store = new Ext.data.Store(Ext.apply({
                 model: 'spec.User'
@@ -234,7 +234,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                 filterFn: function(rec) {
                     return rec.getId() % 4 === 0;
                 }
-            });           
+            });
             expect(store.getCount()).toBe(25);
             
             store.removeAll();

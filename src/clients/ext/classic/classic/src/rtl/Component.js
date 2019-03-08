@@ -24,6 +24,7 @@ Ext.define('Ext.rtl.Component', {
         // Since anchoring is done based on page level coordinates, we need to invert
         // left and right in the position spec when the direction of the compoent being
         // aligned is not the same as the direction of the viewport/body
+        // eslint-disable-next-line max-len
         return Ext.util.Region.getAlignInfo(posSpec, (Ext.rootInheritedState.rtl || false) !== (this.getInherited().rtl || false));
     },
 
@@ -36,7 +37,8 @@ Ext.define('Ext.rtl.Component', {
             scroll = Ext.rootInheritedState.rtl ? el.rtlGetScroll() : el.getScroll();
             extraX = scroll.left;
             extraY = scroll.top;
-        } else {
+        }
+        else {
             pos = el.getXY();
             extraX = local ? 0 : pos[0];
             extraY = local ? 0 : pos[1];
@@ -68,15 +70,17 @@ Ext.define('Ext.rtl.Component', {
     
     unitizeBox: function(box) {
         if (this.getInherited().rtl) {
-            return Ext.dom.Element.rtlUnitizeBox(box); 
-        } else {
+            return Ext.dom.Element.rtlUnitizeBox(box);
+        }
+        else {
             return this.callParent(arguments);
-        } 
+        }
     },
 
-    initInheritedState: function (inheritedState) {
+    initInheritedState: function(inheritedState) {
         this.callParent(arguments);
 
+        // eslint-disable-next-line vars-on-top
         var rtl = this.rtl;
 
         if (rtl !== undefined) {
@@ -106,13 +110,16 @@ Ext.define('Ext.rtl.Component', {
                 
                 // position:fixed elements do not report an offsetParent, so fall back to parentNode
                 offsetParent = this.el.dom.offsetParent || this.el.dom.parentNode;
+
                 if (offsetParent) {
                     me._isOffsetParentRtl =
                         Ext.fly(offsetParent, '_isLocalRtl').isStyle('direction', 'rtl');
                 }
             }
+
             rtl = !!me._isOffsetParentRtl;
-        } else {
+        }
+        else {
             rtl = this.isParentRtl();
         }
 
@@ -165,22 +172,24 @@ Ext.define('Ext.rtl.Component', {
         return this.isLocalRtl() ? this.el.rtlSetLocalXY(x, y) : this.el.setLocalXY(x, y);
     },
     
-    isOppositeRootDirection: function(){
-        return !this.getInherited().rtl !== !Ext.rootInheritedState.rtl; // jshint ignore:line
+    isOppositeRootDirection: function() {
+        return !this.getInherited().rtl !== !Ext.rootInheritedState.rtl;
     },
 
     privates: {
-        initStyles: function(){
+        initStyles: function() {
             if (this.getInherited().rtl) {
                 this.horizontalPosProp = 'right';
             }
+
             this.callParent(arguments);
         },
 
         parseBox: function(box) {
             if (this.getInherited().rtl) {
                 return Ext.dom.Element.rtlParseBox(box);
-            } else {
+            }
+            else {
                 return this.callParent(arguments);
             }
         }

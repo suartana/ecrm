@@ -1,8 +1,6 @@
-/* global Ext, xit, it, expect, jasmine */
-
-topSuite("Ext.resizer.Resizer", ['Ext.window.Window'], function () {
+topSuite("Ext.resizer.Resizer", ['Ext.window.Window'], function() {
     var resizer, target,
-    testIt = Ext.isWebKit ? it : xit;
+        testIt = Ext.isWebKit ? it : xit;
 
     function makeResizer(cfg) {
         target = new Ext.Component(Ext.apply({
@@ -15,14 +13,14 @@ topSuite("Ext.resizer.Resizer", ['Ext.window.Window'], function () {
         });
     }
 
-    afterEach(function () {
+    afterEach(function() {
         Ext.destroy(resizer, target);
         resizer = target = null;
     });
 
-    describe('init', function () {
-        describe('when target el needs to be wrapped', function () {
-            beforeEach(function () {
+    describe('init', function() {
+        describe('when target el needs to be wrapped', function() {
+            beforeEach(function() {
                 makeResizer({
                     autoEl: {
                         tag: 'textarea',
@@ -31,15 +29,15 @@ topSuite("Ext.resizer.Resizer", ['Ext.window.Window'], function () {
                 });
             });
 
-            it('should be given an `originalTarget` property', function () {
+            it('should be given an `originalTarget` property', function() {
                 expect(resizer.originalTarget).toBeDefined();
             });
 
-            it('should redefine the target to be an element', function () {
+            it('should redefine the target to be an element', function() {
                 expect(resizer.target.isElement).toBe(true);
             });
 
-            it('should not set originalTarget equalTo target', function () {
+            it('should not set originalTarget equalTo target', function() {
                 expect(resizer.originalTarget).not.toBe(resizer.target);
             });
         });

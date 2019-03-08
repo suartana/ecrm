@@ -645,6 +645,66 @@ function() {
         });
 
         describe("adding columns", function() {
+            it("should be able to add to an empty grid", function() {
+                makeGrid(null, null, null, {
+                    preventColumns: true
+                });
+                grid.addColumn({
+                    dataIndex: 'f1'
+                });
+                setColMap();
+
+                var header = grid.getHeaderContainer();
+                expect(header.isAncestor(colMap.colf1));
+                expect(header.getItems().getCount()).toBe(1);
+                expectRowHtml(0, ['f11']);
+            });
+
+            it("should append to existing items", function() {
+                makeGrid();
+                grid.addColumn({
+                    dataIndex: 'f6',
+                    itemId: 'colf6'
+                });
+                setColMap();
+
+                var header = grid.getHeaderContainer();
+                expect(header.isAncestor(colMap.colf6));
+                expect(colMap.colf6.previousSibling()).toBe(colMap.colf5);
+                expectRowHtml(0, ['f11', 'f21', 'f31', 'f41', 'f51', 'f61']);
+            });
+
+            it("should return a single column when passing an object", function() {
+                makeGrid();
+                var ret = grid.addColumn({
+                    itemId: 'colf6'
+                });
+                expect(ret.getItemId()).toEqual('colf6');
+            });
+
+            it("should return an array when passing an array", function() {
+                var ret;
+
+                makeGrid();
+
+                ret = grid.addColumn([{
+                    itemId: 'colf6'
+                }, {
+                    itemId: 'colf7'
+                }]);
+
+                expect(Ext.isArray(ret)).toBe(true);
+                expect(ret[0].getItemId()).toEqual('colf6');
+                expect(ret[1].getItemId()).toEqual('colf7');
+
+                ret = grid.addColumn([{
+                    itemId: 'colf9'
+                }]);
+
+                expect(Ext.isArray(ret)).toBe(true);
+                expect(ret[0].getItemId()).toEqual('colf9');
+            });
+
             describe("events", function() {
                 it("should not fire events during construction", function() {
                     var spy = jasmine.createSpy();
@@ -689,40 +749,238 @@ function() {
         });
 
         describe("inserting columns", function() {
-            describe("events", function() {
-                it("should fire after construction before painting", function() {
-                    var spy = jasmine.createSpy(),
-                        col;
-
-                    makeGrid(null, null);
-                    grid.on('columnadd', spy);
-                    col = grid.insertColumn(0, {
-                        dataIndex: 'f9'
+            describe("insertColumnBefore", function() {
+                describe("new columns", function() {
+                    it("should be able to insert at the start", function() {
+                        makeGrid();
+                        grid.insertColumnBefore({
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        }, colMap.colf1);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBeNull();
+                        expectRowHtml(0, ['f61', 'f11', 'f21', 'f31', 'f41', 'f51']);
                     });
-                    expect(spy.callCount).toBe(1);
-                    expect(spy.mostRecentCall.args[0]).toBe(grid);
-                    expect(spy.mostRecentCall.args[1]).toBe(col);
-                    expect(spy.mostRecentCall.args[2]).toBe(0);
+
+                    it("should be able to insert in the middle", function() {
+                        makeGrid();
+                        grid.insertColumnBefore({
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        }, colMap.colf3);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBe(colMap.colf2);
+                        expectRowHtml(0, ['f11', 'f21', 'f61', 'f31', 'f41', 'f51']);
+                    });
+
+                    it("should be able to insert at the end", function() {
+                        makeGrid();
+                        grid.insertColumnBefore({
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        }, null);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBe(colMap.colf5);
+                        expectRowHtml(0, ['f11', 'f21', 'f31', 'f41', 'f51', 'f61']);
+                    });
+
+                    it("should return the column", function() {
+                        makeGrid();
+                        var ret = grid.insertColumnBefore({
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        }, null);
+                        expect(ret.getItemId()).toBe('colf6');
+                    });
                 });
 
-                it("should fire after construction after painting", function() {
-                    var spy = jasmine.createSpy(),
-                        col;
-
-                    makeGrid(null, null);
-                    grid.on('columnadd', spy);
-                    col = grid.insertColumn(0, {
-                        dataIndex: 'f9'
+                describe("existing columns", function() {
+                    it("should be able to insert at the start", function() {
+                        makeGrid();
+                        grid.insertColumnBefore(colMap.colf5, colMap.colf1);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf5)).toBe(true);
+                        expect(colMap.colf5.previousSibling()).toBeNull();
+                        expectRowHtml(0, ['f51', 'f11', 'f21', 'f31', 'f41']);
                     });
-                    expect(spy.callCount).toBe(1);
-                    expect(spy.mostRecentCall.args[0]).toBe(grid);
-                    expect(spy.mostRecentCall.args[1]).toBe(col);
-                    expect(spy.mostRecentCall.args[2]).toBe(0);
+
+                    it("should be able to insert in the middle", function() {
+                        makeGrid();
+                        grid.insertColumnBefore(colMap.colf1, colMap.colf3);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf1)).toBe(true);
+                        expect(colMap.colf1.previousSibling()).toBe(colMap.colf2);
+                        expectRowHtml(0, ['f21', 'f11', 'f31', 'f41', 'f51']);
+                    });
+
+                    it("should be able to insert at the end", function() {
+                        makeGrid();
+                        grid.insertColumnBefore(colMap.colf1, null);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf1)).toBe(true);
+                        expect(colMap.colf1.previousSibling()).toBe(colMap.colf5);
+                        expectRowHtml(0, ['f21', 'f31', 'f41', 'f51', 'f11']);
+                    });
+
+                    it("should return the column", function() {
+                        makeGrid();
+                        var ret = grid.insertColumnBefore(colMap.colf1, null);
+                        expect(ret).toBe(colMap.colf1);
+                    });
+                });
+            });
+
+            describe("insertColumn", function() {
+                describe("new columns", function() {
+                    it("should be able to insert at the start", function() {
+                        makeGrid();
+                        grid.insertColumn(0, {
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        });
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBeNull();
+                        expectRowHtml(0, ['f61', 'f11', 'f21', 'f31', 'f41', 'f51']);
+                    });
+
+                    it("should be able to insert in the middle", function() {
+                        makeGrid();
+                        grid.insertColumn(2, {
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        });
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBe(colMap.colf2);
+                        expectRowHtml(0, ['f11', 'f21', 'f61', 'f31', 'f41', 'f51']);
+                    });
+
+                    it("should be able to insert at the end", function() {
+                        makeGrid();
+                        grid.insertColumn(100, {
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        });
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf6)).toBe(true);
+                        expect(colMap.colf6.previousSibling()).toBe(colMap.colf5);
+                        expectRowHtml(0, ['f11', 'f21', 'f31', 'f41', 'f51', 'f61']);
+                    });
+
+                    it("should return the column", function() {
+                        makeGrid();
+                        var ret = grid.insertColumn(0, {
+                            itemId: 'colf6',
+                            dataIndex: 'f6'
+                        });
+                        expect(ret.getItemId()).toBe('colf6');
+                    });
+                });
+
+                describe("existing instance", function() {
+                    it("should be able to insert at the start", function() {
+                        makeGrid();
+                        grid.insertColumn(0, colMap.colf5);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf5)).toBe(true);
+                        expect(colMap.colf5.previousSibling()).toBeNull();
+                        expectRowHtml(0, ['f51', 'f11', 'f21', 'f31', 'f41']);
+                    });
+
+                    it("should be able to insert in the middle", function() {
+                        makeGrid();
+                        grid.insertColumn(2, colMap.colf5);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf5)).toBe(true);
+                        expect(colMap.colf5.previousSibling()).toBe(colMap.colf2);
+                        expectRowHtml(0, ['f11', 'f21', 'f51', 'f31', 'f41']);
+                    });
+
+                    it("should be able to insert at the end", function() {
+                        makeGrid();
+                        grid.insertColumn(100, colMap.colf1);
+                        setColMap();
+                        expect(grid.getHeaderContainer().isAncestor(colMap.colf1)).toBe(true);
+                        expect(colMap.colf1.previousSibling()).toBe(colMap.colf5);
+                        expectRowHtml(0, ['f21', 'f31', 'f41', 'f51', 'f11']);
+                    });
+
+                    it("should return the column", function() {
+                        makeGrid();
+                        var ret = grid.insertColumn(0, colMap.colf5);
+                        expect(ret).toBe(colMap.colf5);
+                    });
+                });
+
+                describe("events", function() {
+                    it("should fire after construction before painting", function() {
+                        var spy = jasmine.createSpy(),
+                            col;
+
+                        makeGrid(null, null);
+                        grid.on('columnadd', spy);
+                        col = grid.insertColumn(0, {
+                            dataIndex: 'f9'
+                        });
+                        expect(spy.callCount).toBe(1);
+                        expect(spy.mostRecentCall.args[0]).toBe(grid);
+                        expect(spy.mostRecentCall.args[1]).toBe(col);
+                        expect(spy.mostRecentCall.args[2]).toBe(0);
+                    });
+
+                    it("should fire after construction after painting", function() {
+                        var spy = jasmine.createSpy(),
+                            col;
+
+                        makeGrid(null, null);
+                        grid.on('columnadd', spy);
+                        col = grid.insertColumn(0, {
+                            dataIndex: 'f9'
+                        });
+                        expect(spy.callCount).toBe(1);
+                        expect(spy.mostRecentCall.args[0]).toBe(grid);
+                        expect(spy.mostRecentCall.args[1]).toBe(col);
+                        expect(spy.mostRecentCall.args[2]).toBe(0);
+                    });
                 });
             });
         });
 
         describe("removing columns", function() {
+            it("should remove from the start", function() {
+                makeGrid();
+                grid.removeColumn(colMap.colf1);
+                expect(grid.getHeaderContainer().items.getCount()).toBe(4);
+                expect(colMap.colf2.previousSibling()).toBeNull();
+                expectRowHtml(0, ['f21', 'f31', 'f41', 'f51']);
+            });
+
+            it("should remove from the middle", function() {
+                makeGrid();
+                grid.removeColumn(colMap.colf3);
+                expect(grid.getHeaderContainer().items.getCount()).toBe(4);
+                expect(colMap.colf4.previousSibling()).toBe(colMap.colf2);
+                expectRowHtml(0, ['f11', 'f21', 'f41', 'f51']);
+            });
+
+            it("should remove from the end", function() {
+                makeGrid();
+                grid.removeColumn(colMap.colf5);
+                expect(grid.getHeaderContainer().items.getCount()).toBe(4);
+                expect(colMap.colf4.nextSibling()).toBeNull();
+                expectRowHtml(0, ['f11', 'f21', 'f31', 'f41']);
+            });
+
+            it("should return the removed column", function() {
+                makeGrid();
+                var ret = grid.removeColumn(colMap.colf5);
+                expect(ret).toBe(colMap.colf5);
+            });
+
             describe("events", function() {
                 it("should fire after construction before painting", function() {
                     var spy = jasmine.createSpy(),
@@ -2558,7 +2816,7 @@ function() {
             makeGrid([{
                 itemId: 'colf1',
                 grouper: function() {
-                    return 'test'
+                    return 'test';
                 }
             }], null, null, {
                 preventColumns: true
@@ -2779,7 +3037,7 @@ function() {
                     });
                 }
                 expect(location.equals(expectedLocation)).toBe(true);
-                expect(document.activeElement).toBe(location.getFocusEl(true));
+                expect(document.activeElement).toBe(location.getFocusEl('dom'));
                 expect(location.getFocusEl()).toHaveCls(grid.focusedCls);
             }
         }
@@ -3017,10 +3275,11 @@ function() {
                     jasmine.fireKeyEvent(Ext.Msg.down('#ok').getFocusEl(), 'keydown', Ext.event.Event.SPACE);
                 });
 
-                // Wait for the animation
-                waitsFor(function() {
-                    return !Ext.Msg.activeAnimation;
-                });
+                    // Cleanup for modal
+                    runs(function() {
+                        Ext.Msg.hide();
+                        Ext.Msg.hideModalMask();
+                    });
 
                 // Automatic focus reversion must send focus back into the grid
                 waitsForSpy(focusEnterSpy);
@@ -3038,7 +3297,8 @@ function() {
 
                 // Wait for navigation into next row to occur
                 waitsFor(function() {
-                    return navigationModel.getLocation().recordIndex === 1;
+                    var location = navigationModel.getLocation();
+                    return location.recordIndex === 1 && location.columnIndex === 0;
                 });
 
                 runs(function() {
@@ -3047,10 +3307,16 @@ function() {
                     expectLocation(1, 0, tool.getFocusEl());
                     expect(tool.isTool).toBe(true);
                     expect(tool.hasFocus).toBe(true);
-
                     // SHIT+TAB should move back
                     jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB, true);
+                });
 
+                waitsFor(function() {
+                    var location = navigationModel.getLocation();
+                    return location.recordIndex === 0 && location.columnIndex === 0;
+                });
+
+                runs(function() {
                     // expectlocation will create an ActionLocation to match the passed position
                     tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
                     expectLocation(0, 0, tool.getFocusEl());
@@ -3093,7 +3359,7 @@ function() {
                     });
                 }
                 expect(location.equals(expectedLocation)).toBe(true);
-                expect(document.activeElement).toBe(location.getFocusEl(true));
+                expect(document.activeElement).toBe(location.getFocusEl('dom'));
                 expect(location.getFocusEl()).toHaveCls(grid.focusedCls);
             }
         }
@@ -3353,10 +3619,11 @@ function() {
                     Ext.testHelper.tap(Ext.Msg.down('#ok').getFocusEl());
                 });
 
-                // Wait for the animation
-                waitsFor(function() {
-                    return !Ext.Msg.activeAnimation;
-                });
+                    // Cleanup for modal
+                    runs(function() {
+                        Ext.Msg.hide();
+                        Ext.Msg.hideModalMask();
+                    });
 
                 // Automatic focus reversion must send focus back into the grid
                 waitsForSpy(focusEnterSpy);
@@ -3374,7 +3641,8 @@ function() {
 
                 // Wait for navigation into next row to occur
                 waitsFor(function() {
-                    return navigationModel.getLocation().recordIndex === 1;
+                    var location = navigationModel.getLocation();
+                    return location.recordIndex === 1 && location.columnIndex === 0;
                 });
 
                 runs(function() {
@@ -3386,7 +3654,14 @@ function() {
 
                     // SHIT+TAB should move back
                     jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB, true);
+                });
 
+                waitsFor(function() {
+                    var location = navigationModel.getLocation();
+                    return location.recordIndex === 0 && location.columnIndex === 0;
+                });
+
+                runs(function() {
                     // expectlocation will create an ActionLocation to match the passed position
                     tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
                     expectLocation(0, 0, tool.getFocusEl());

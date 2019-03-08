@@ -5,6 +5,7 @@ topSuite("Ext.data.validator.Inclusion", function() {
         v = new Ext.data.validator.Inclusion({
             list: list
         });
+
         return v.validate(value);
     }
     
@@ -15,22 +16,22 @@ topSuite("Ext.data.validator.Inclusion", function() {
     it("should throw an error when configured without a list", function() {
         expect(function() {
             v = new Ext.data.validator.Exclusion();
-        }).toThrow();    
+        }).toThrow();
     });
     
     describe("invalid values", function() {
         it("should not validate if the value is not in the list", function() {
-            expect(validate(5, [1, 2, 3, 4])).toBe(v.getMessage());    
+            expect(validate(5, [1, 2, 3, 4])).toBe(v.getMessage());
         });
         
         it("should use strict type checking", function() {
-            expect(validate('3', [1, 2, 3, 4])).toBe(v.getMessage());    
+            expect(validate('3', [1, 2, 3, 4])).toBe(v.getMessage());
         });
     });
     
     describe("valid values", function() {
         it("should validate if the value is in the list", function() {
-            expect(validate(3, [1, 2, 3, 4])).toBe(true);    
+            expect(validate(3, [1, 2, 3, 4])).toBe(true);
         });
     });
     

@@ -40,7 +40,8 @@ Ext.define('Ext.data.amf.Reader', {
             packet, messages, resultSet;
 
         if (!bytes) {
-            throw "AMF Reader cannot process the response because it does not contain binary data. Make sure the Proxy's 'binary' config is true.";
+            throw "AMF Reader cannot process the response because it does not contain " +
+                  "binary data. Make sure the Proxy's 'binary' config is true.";
         }
             
         packet = new Ext.data.amf.Packet();
@@ -49,9 +50,11 @@ Ext.define('Ext.data.amf.Reader', {
 
         if (messages.length) {
             resultSet = me.readRecords(messages[me.messageIndex].body);
-        } else {
+        }
+        else {
             // no messages, return null result set
             resultSet = me.nullResultSet;
+            
             if (packet.invalid) {
                 // packet contains invalid data
                 resultSet.success = false;

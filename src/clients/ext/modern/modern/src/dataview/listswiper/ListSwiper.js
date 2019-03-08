@@ -65,7 +65,7 @@ Ext.define('Ext.dataview.listswiper.ListSwiper', {
          * The section of the list item that is swipable.  Supports the following values:
          *
          * - `'inner'` - the default value. the body of the list item, which includes any
-         * tools is swipable, and any docked items remain fixed in place while swiping.
+         *   tools is swipable, and any docked items remain fixed in place while swiping.
          * - `'outer'` - the entire list item including the docked items is swipable
          */
         target: null

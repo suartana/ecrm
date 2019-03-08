@@ -16,6 +16,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                 renderTo: Ext.getBody()
             }, options));
 
+        // eslint-disable-next-line eqeqeq
         if (failedLayouts != Ext.failedLayouts) {
             expect('failedLayout=true').toBe('false');
         }
@@ -28,6 +29,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
             
         var makeDocked = function(dock, w, h, html) {
             var style = {};
+
             if (w) {
                 style.width = w + 'px';
             }
@@ -51,7 +53,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                     border: false,
                     bodyBorder: false,
                     shrinkWrapDock: 2
-                }, options));    
+                }, options));
             };
             
             it("should stretch the body width if the docked item is larger", function() {
@@ -106,9 +108,9 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         makeDocked(top, 100, u, u)
                     ],
                     html: '<div style="width: 100px;"></div>'
-                }); 
+                });
                 expect(ct.getDockedItems()[0].getWidth()).toBe(100);
-                expect(ct.getDockedItems()[1].getWidth()).toBe(100);   
+                expect(ct.getDockedItems()[1].getWidth()).toBe(100);
             });
         });
         
@@ -119,7 +121,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                     border: false,
                     bodyBorder: false,
                     shrinkWrapDock: 1
-                }, options));    
+                }, options));
             };
             
             it("should stretch the body height if the docked item is larger", function() {
@@ -174,9 +176,9 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         makeDocked(left, u, 100, u)
                     ],
                     html: '<div style="height: 100px;"></div>'
-                }); 
+                });
                 expect(ct.getDockedItems()[0].getHeight()).toBe(100);
-                expect(ct.getDockedItems()[1].getHeight()).toBe(100);   
+                expect(ct.getDockedItems()[1].getHeight()).toBe(100);
             });
         });
         
@@ -187,7 +189,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                     border: false,
                     bodyBorder: false,
                     shrinkWrapDock: true
-                }, options));    
+                }, options));
             };
             
             it("should stretch the body in both dimensions if the docked items are larger", function() {
@@ -259,7 +261,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         border: false,
                         bodyBorder: false,
                         shrinkWrapDock: 2
-                    }, options));    
+                    }, options));
                 };
                 
                 it("should constrain to a minWidth", function() {
@@ -268,7 +270,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         dockedItems: [
                             makeDocked(top, 100, u)
                         ]
-                    });    
+                    });
                     expect(ct.getWidth()).toBe(200);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(200);
                 });
@@ -279,7 +281,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         dockedItems: [
                             makeDocked(top, 200, u)
                         ]
-                    });    
+                    });
                     expect(ct.getWidth()).toBe(100);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(100);
                 });
@@ -292,7 +294,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         border: false,
                         bodyBorder: false,
                         shrinkWrapDock: 1
-                    }, options));    
+                    }, options));
                 };
                 
                 it("should constrain to a minHeight", function() {
@@ -301,7 +303,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         dockedItems: [
                             makeDocked(left, u, 100)
                         ]
-                    });    
+                    });
                     expect(ct.getHeight()).toBe(200);
                     expect(ct.getDockedItems()[0].getHeight()).toBe(200);
                 });
@@ -312,7 +314,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         dockedItems: [
                             makeDocked(left, u, 200)
                         ]
-                    });    
+                    });
                     expect(ct.getHeight()).toBe(100);
                     expect(ct.getDockedItems()[0].getHeight()).toBe(100);
                 });
@@ -325,7 +327,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                         border: false,
                         bodyBorder: false,
                         shrinkWrapDock: true
-                    }, options));    
+                    }, options));
                 };
                 
                 it("should constrain a minHeight & maxWidth", function() {
@@ -336,8 +338,8 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                             makeDocked(top, 200, u),
                             makeDocked(left, u, 50)
                         ]
-                    });  
-                    expect(ct.getWidth()).toBe(100);  
+                    });
+                    expect(ct.getWidth()).toBe(100);
                     expect(ct.getHeight()).toBe(100);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(100);
                     expect(ct.getDockedItems()[1].getHeight()).toBe(100);
@@ -351,8 +353,8 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                             makeDocked(top, 50, u),
                             makeDocked(left, u, 200)
                         ]
-                    });  
-                    expect(ct.getWidth()).toBe(100);  
+                    });
+                    expect(ct.getWidth()).toBe(100);
                     expect(ct.getHeight()).toBe(100);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(100);
                     expect(ct.getDockedItems()[1].getHeight()).toBe(100);
@@ -366,8 +368,8 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                             makeDocked(top, 50, u),
                             makeDocked(left, u, 50)
                         ]
-                    });  
-                    expect(ct.getWidth()).toBe(100);  
+                    });
+                    expect(ct.getWidth()).toBe(100);
                     expect(ct.getHeight()).toBe(100);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(100);
                     expect(ct.getDockedItems()[1].getHeight()).toBe(100);
@@ -381,8 +383,8 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                             makeDocked(top, 200, u),
                             makeDocked(left, u, 200)
                         ]
-                    });  
-                    expect(ct.getWidth()).toBe(100);  
+                    });
+                    expect(ct.getWidth()).toBe(100);
                     expect(ct.getHeight()).toBe(100);
                     expect(ct.getDockedItems()[0].getWidth()).toBe(100);
                     expect(ct.getDockedItems()[1].getHeight()).toBe(100);
@@ -521,13 +523,16 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
             desc = desc ? desc + ',' : 'panel w/';
             
             var hasHeader = config.title === null ? false : true;
+
             var numElChildren = elOrder.length;
+
             var numWrapChildren = wrapOrder.length;
             
-            var suiteDesc = desc + (config.title === null ? ' no header' : ' header position: ' + 
-                                (config.headerPosition || 'left')) + 
+            var suiteDesc = desc +
+                            ((config.title === null ? ' no header' : ' header position: ') +
+                            (config.headerPosition || 'left')) +
                             (config.dockedItems === null ? ' no dockedItems' : ' w/ dockedItems') +
-                            ', frame: ' + !!config.frame + 
+                            ', frame: ' + !!config.frame +
                             ', tab guards: ' + (config.tabGuard ? 'on' : 'off');
             
             function countChicks(panel, property, expected) {
@@ -752,7 +757,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
             ['tabGuardBeforeEl', 'bodyWrap', 0, 'tabGuardAfterEl'],
             [1, 2, 5, 8, 'body', 4, 3, 6, 7], addHeader, 'dynamic header 11');
         makeSuite({ title: null, tabGuard: true, headerPosition: 'bottom' },
-            ['tabGuardBeforeEl', 'bodyWrap', 0, 'tabGuardAfterEl'], 
+            ['tabGuardBeforeEl', 'bodyWrap', 0, 'tabGuardAfterEl'],
             [1, 2, 5, 8, 'body', 4, 3, 6, 7], addHeader, 'dynamic header 12');
         
         // Finally, dynamically added dockedItems. One by one. Ha!
@@ -862,7 +867,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                 ['frameTL', 'bodyContainer', 'frameBL', 0], ['body'], addHeader, 'dynamic header 4');
             
             // Header added after rendering onto existing tab guards
-            makeSuite({ frame: true, dockedItems: null, title: null, tabGuard: true, 
+            makeSuite({ frame: true, dockedItems: null, title: null, tabGuard: true,
                         headerPosition: 'top' },
                 ['tabGuardBeforeEl', 0, 'frameTL', 'bodyContainer', 'frameBL', 'tabGuardAfterEl'],
                 ['body'], addHeader, 'dynamic header 5');
@@ -888,7 +893,7 @@ topSuite("Ext.layout.component.Dock", ['Ext.Panel', 'Ext.Button'], function() {
                 ['tabGuardBeforeEl', 'frameTL', 'bodyContainer', 'frameBL', 0, 'tabGuardAfterEl'],
                 [1, 2, 5, 8, 'body', 4, 3, 6, 7], addHeader, 'dynamic header 11');
             makeSuite({ frame: true, title: null, tabGuard: true, headerPosition: 'bottom' },
-                ['tabGuardBeforeEl', 'frameTL', 'bodyContainer', 'frameBL', 0, 'tabGuardAfterEl'], 
+                ['tabGuardBeforeEl', 'frameTL', 'bodyContainer', 'frameBL', 0, 'tabGuardAfterEl'],
                 [1, 2, 5, 8, 'body', 4, 3, 6, 7], addHeader, 'dynamic header 12');
             
             // Finally, dynamically added dockedItems. One by one. Ha!

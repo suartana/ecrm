@@ -10,6 +10,7 @@ topSuite("Ext.picker.Color", function() {
         this.addMatchers({
             toHaveSelected: function(color) {
                 var el = this.actual.el.down('a.color-' + color, true);
+
                 return Ext.fly(el).hasCls(colorPicker.selectedCls);
             }
         });
@@ -22,6 +23,16 @@ topSuite("Ext.picker.Color", function() {
         }
     });
     
+    describe("alternate class name", function() {
+        it("should have Ext.ColorPalette as the alternate class name", function() {
+            expect(Ext.picker.Color.prototype.alternateClassName).toEqual("Ext.ColorPalette");
+        });
+
+        it("should allow the use of Ext.ColorPalette", function() {
+            expect(Ext.ColorPalette).toBeDefined();
+        });
+    });
+
     describe("initialisation", function() {
         beforeEach(function() {
             createPicker({
@@ -41,6 +52,7 @@ topSuite("Ext.picker.Color", function() {
     describe("mouse click", function() {
         beforeEach(function() {
             var a, xy;
+
             createPicker();
             a = colorPicker.el.down('a.color-339966', true);
             xy = Ext.fly(a).getAnchorXY('c');

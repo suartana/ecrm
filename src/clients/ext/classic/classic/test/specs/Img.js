@@ -186,7 +186,7 @@ topSuite("Ext.Img", function() {
 
                 it("should be able to set alt value", function() {
                     makeBaseImage();
-                    img.setAlt('Test Alt')
+                    img.setAlt('Test Alt');
                     expect(img.getAlt()).toBe('Test Alt');
                     img.render(document.body);
                     expect(img.el.dom.alt).toBe('Test Alt');
@@ -201,7 +201,7 @@ topSuite("Ext.Img", function() {
 
                 it("should be able to set title value", function() {
                     makeBaseImage();
-                    img.setTitle('Test Title')
+                    img.setTitle('Test Title');
                     expect(img.getTitle()).toBe('Test Title');
                     
                     // Warning here is expected
@@ -215,7 +215,7 @@ topSuite("Ext.Img", function() {
             describe("src attribute", function() {
                 it("should be able to set src value", function() {
                     makeBaseImage();
-                    img.setSrc(senchaPng)
+                    img.setSrc(senchaPng);
                     expect(img.getSrc()).toBe(senchaPng);
                     
                     // Warning here is expected
@@ -259,13 +259,13 @@ topSuite("Ext.Img", function() {
         });
 
         describe("after render", function() {
-            describe("alt attribute",function() {
+            describe("alt attribute", function() {
                 it("should not have default alt value", function() {
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
                     
                     img = new Ext.Img({
-                        renderTo : document.body
+                        renderTo: document.body
                     });
                     expect(img.el.dom.alt).toBe('');
                 });
@@ -275,16 +275,16 @@ topSuite("Ext.Img", function() {
                     spyOn(Ext.log, 'warn');
                     
                     img = new Ext.Img({
-                        renderTo : document.body
+                        renderTo: document.body
                     });
-                    img.setAlt('Test Alt')
+                    img.setAlt('Test Alt');
                     expect(img.getAlt()).toBe('Test Alt');
                     expect(img.el.dom.alt).toBe('Test Alt');
                 });
 
             });
 
-            describe("title attribute",function() {
+            describe("title attribute", function() {
                 it("should not have default title attribute", function() {
                     makeImage();
                     expect(img.el.dom.hasAttribute('title')).toBe(false);
@@ -292,13 +292,13 @@ topSuite("Ext.Img", function() {
 
                 it("should be able to set title value", function() {
                     makeImage();
-                    img.setTitle('Test Title')
+                    img.setTitle('Test Title');
                     expect(img.getTitle()).toBe('Test Title');
                     expect(img.el.dom.title).toBe('Test Title');
                 });
             });
 
-            describe("src attribute",function() {
+            describe("src attribute", function() {
                 it("should be able to set src value", function() {
                     makeImage();
                     img.setSrc(senchaPng);

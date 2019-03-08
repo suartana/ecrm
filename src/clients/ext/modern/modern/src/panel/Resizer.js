@@ -641,11 +641,11 @@ Ext.define('Ext.panel.Resizer', {
                 dragRatio, oppX, oppY, newBox;
 
             if (adjustWidthOffset) {
-                offsetWidth = adjustWidthOffset * e.deltaX;
+                offsetWidth = Math.round(adjustWidthOffset * e.deltaX);
             }
 
             if (adjustHeightOffset) {
-                offsetHeight = adjustHeightOffset * e.deltaY;
+                offsetHeight = Math.round(adjustHeightOffset * e.deltaY);
             }
 
             newBox = {

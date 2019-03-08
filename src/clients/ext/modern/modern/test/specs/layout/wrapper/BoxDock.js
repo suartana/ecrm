@@ -1,4 +1,4 @@
-describe("Ext.layout.wrapper.BoxDock", function() {
+topSuite("Ext.layout.wrapper.BoxDock", ['Ext.Container'], function() {
     describe("border management", function() {
         beforeEach(function() {
             this.addMatchers({

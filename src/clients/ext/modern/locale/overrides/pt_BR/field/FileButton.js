@@ -1,7 +1,7 @@
-Ext.define("Ext.locale.pt_BR.field.FileButton", { 
-    override: "Ext.field.FileButton", 
+Ext.define("Ext.locale.pt_BR.field.FileButton", {
+    override: "Ext.field.FileButton",
 
-    config:{
+    config: {
         text: 'Arquivo...'
     }
 });

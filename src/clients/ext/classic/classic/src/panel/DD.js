@@ -6,11 +6,11 @@ Ext.define('Ext.panel.DD', {
     extend: 'Ext.dd.DragSource',
     requires: ['Ext.panel.Proxy'],
 
-    constructor : function(panel, cfg){
+    constructor: function(panel, cfg) {
         var me = this;
         
         me.panel = panel;
-        me.dragData = {panel: panel};
+        me.dragData = { panel: panel };
         me.panelProxy = new Ext.panel.Proxy(panel, cfg);
         me.proxy = me.panelProxy.proxy;
 
@@ -18,7 +18,7 @@ Ext.define('Ext.panel.DD', {
         me.setupEl(panel);
     },
     
-    setupEl: function(panel){
+    setupEl: function(panel) {
         var me = this,
             header = panel.header,
             el = panel.body;
@@ -27,12 +27,14 @@ Ext.define('Ext.panel.DD', {
             me.setHandleElId(header.id);
             el = header.el;
         }
+
         if (el) {
             el.setStyle('cursor', 'move');
             me.scroll = false;
-        } else {
+        }
+        else {
             // boxready fires after first layout, so we'll definitely be rendered
-            panel.on('boxready', me.setupEl, me, {single: true});
+            panel.on('boxready', me.setupEl, me, { single: true });
         }
     },
 
@@ -48,29 +50,31 @@ Ext.define('Ext.panel.DD', {
             x = xy[0],
             y = xy[1];
             
-       this.autoOffset(x, y);
+        this.autoOffset(x, y);
     },
     
-    onInitDrag : function(x, y){
+    onInitDrag: function(x, y) {
         this.onStartDrag(x, y);
+
         return true;
     },
     
-    createFrame : Ext.emptyFn,
+    createFrame: Ext.emptyFn,
     
-    getDragEl : function(e){
+    getDragEl: function(e) {
         var ghost = this.panelProxy.ghost;
+
         if (ghost) {
             return ghost.el.dom;
         }
     },
     
-    endDrag : function(e){
+    endDrag: function(e) {
         this.panelProxy.hide();
         this.panel.saveState();
     },
 
-    autoOffset : function(x, y) {
+    autoOffset: function(x, y) {
         x -= this.startPageX;
         y -= this.startPageY;
         this.setDelta(x, y);
@@ -83,9 +87,10 @@ Ext.define('Ext.panel.DD', {
         
         if (me.beforeInvalidDrop(target, e, id) !== false) {
             if (me.cachedTarget) {
-                if(me.cachedTarget.isNotifyTarget){
+                if (me.cachedTarget.isNotifyTarget) {
                     me.cachedTarget.notifyOut(me, e, me.dragData);
                 }
+
                 me.cacheTarget = null;
             }
 

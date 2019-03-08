@@ -4,10 +4,12 @@
 Ext.define('Ext.grid.ViewDropZone', {
     extend: 'Ext.view.DropZone',
 
-    indicatorHtml: '<div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-left" role="presentation"></div><div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-right" role="presentation"></div>',
+    indicatorHtml: '<div class="' + Ext.baseCSSPrefix +
+                   'grid-drop-indicator-left" role="presentation"></div><div class="' +
+                   Ext.baseCSSPrefix + 'grid-drop-indicator-right" role="presentation"></div>',
     indicatorCls: Ext.baseCSSPrefix + 'grid-drop-indicator',
 
-    handleNodeDrop : function(data, record, position) {
+    handleNodeDrop: function(data, record, position) {
         var view = this.view,
             store = view.getStore(),
             crossView = view !== data.view,
@@ -17,12 +19,15 @@ Ext.define('Ext.grid.ViewDropZone', {
         // If the copy flag is set, create a copy of the models
         if (data.copy) {
             records = data.records;
+            
             for (i = 0, len = records.length; i < len; i++) {
                 records[i] = records[i].copy();
             }
-        } else if (selectAfter) {
+        }
+        else if (selectAfter) {
             /*
-             * Remove from the source store only if we are moving to a different store or shifting multiple records.
+             * Remove from the source store only if we are moving to a different store
+             * or shifting multiple records.
              */
             data.view.store.remove(data.records);
         }

@@ -77,9 +77,9 @@ topSuite("Ext.direct.JsonProvider", ['Ext.direct.*'], function() {
         events = provider.createEvents(xhr);
         
         result = {
-            status:  events[0].status,
-            xhr:     events[0].xhr,
-            code:    events[0].code,
+            status: events[0].status,
+            xhr: events[0].xhr,
+            code: events[0].code,
             message: events[0].message
         };
         

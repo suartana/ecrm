@@ -28,15 +28,18 @@ Ext.define('Ext.app.domain.Component', {
          
         while (controller) {
             domain = controller.compDomain;
+            
             if (domain) {
                 if (domain.dispatch(target, ev, args) === false) {
                     return false;
                 }
             }
+            
             view = controller.getView();
             controller = view ? view.lookupController(true) : null;
         }
-        return this.callParent([target, ev, args]);    
+        
+        return this.callParent([target, ev, args]);
     },
 
     match: function(target, selector) {

@@ -68,7 +68,7 @@ function() {
         });
         
         fooPanel = new TestController.view.FooPanel({
-            id:   'fooPanel',
+            itemId: 'fooPanel',
             prop: 'foo',
             
             width: 100,

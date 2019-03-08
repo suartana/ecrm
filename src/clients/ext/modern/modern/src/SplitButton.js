@@ -1,7 +1,8 @@
 /**
- * A split button that provides a built-in dropdown arrow that can fire an event separately from the default click event
- * of the button. Typically this would be used to display a dropdown menu that provides additional options to the
- * primary button action, but any custom handler can provide the arrowclick implementation.  Example usage:
+ * A split button that provides a built-in dropdown arrow that can fire an event separately from
+ * the default click event of the button. Typically this would be used to display a dropdown menu
+ * that provides additional options to the primary button action, but any custom handler can
+ * provide the arrowclick implementation.  Example usage:
  *
  *     @example
  *     // display a dropdown menu:
@@ -34,13 +35,13 @@
 Ext.define('Ext.SplitButton', {
     extend: 'Ext.Button',
     xtype: 'splitbutton',
-    
+
     requires: [
         'Ext.menu.Menu'
     ],
-    
+
     isSplitButton: true,
-    
+
     baseCls: Ext.baseCSSPrefix + 'splitButton',
 
     /**
@@ -73,7 +74,7 @@ Ext.define('Ext.SplitButton', {
 
         me.arrowElement.addClsOnOver(me.hoveredCls, me.isEnabled, me);
         me.splitInnerElement.addClsOnOver(me.hoveredCls, me.isEnabled, me);
-        
+
         me.splitArrowCoverElement.on({
             focus: 'handleFocusEvent',
             blur: 'handleBlurEvent',
@@ -83,34 +84,31 @@ Ext.define('Ext.SplitButton', {
 
     getTemplate: function() {
         return [{
-                reference: 'innerElement',
-                cls: Ext.baseCSSPrefix + 'splitBody-el',
+            reference: 'innerElement',
+            cls: Ext.baseCSSPrefix + 'splitBody-el',
+            children: [{
+                reference: 'splitInnerElement',
+                cls: Ext.baseCSSPrefix + 'splitInner-el',
                 children: [{
-                        reference: 'splitInnerElement',
-                        cls: Ext.baseCSSPrefix + 'splitInner-el',
-                        children: [{
-                            reference: 'bodyElement',
-                            cls: Ext.baseCSSPrefix + 'body-el',
-                            children: [{
-                                cls: Ext.baseCSSPrefix + 'icon-el ' + Ext.baseCSSPrefix + 'font-icon',
-                                reference: 'iconElement'
-                            }, {
-                                reference: 'textElement',
-                                cls: Ext.baseCSSPrefix + 'text-el'
-                            }]
-                        }, this.getButtonTemplate()]
-                    },
-                    {
-                        reference: 'arrowElement',
-                        cls: Ext.baseCSSPrefix + 'splitArrow-el',
-                        children: [{
-                            reference: 'splitArrowElement',
-                            cls: Ext.baseCSSPrefix + 'arrow-el ' + Ext.baseCSSPrefix + 'font-icon'
-                        }, this.getArrowButtonTemplate()]
-                    }
-                ]
-            }
-        ];
+                    reference: 'bodyElement',
+                    cls: Ext.baseCSSPrefix + 'body-el',
+                    children: [{
+                        cls: Ext.baseCSSPrefix + 'icon-el ' + Ext.baseCSSPrefix + 'font-icon',
+                        reference: 'iconElement'
+                    }, {
+                        reference: 'textElement',
+                        cls: Ext.baseCSSPrefix + 'text-el'
+                    }]
+                }, this.getButtonTemplate()]
+            }, {
+                reference: 'arrowElement',
+                cls: Ext.baseCSSPrefix + 'splitArrow-el',
+                children: [{
+                    reference: 'splitArrowElement',
+                    cls: Ext.baseCSSPrefix + 'arrow-el ' + Ext.baseCSSPrefix + 'font-icon'
+                }, this.getArrowButtonTemplate()]
+            }]
+        }];
     },
 
     getArrowButtonTemplate: function() {
@@ -136,7 +134,7 @@ Ext.define('Ext.SplitButton', {
                 (e.target === this.splitArrowCoverElement.dom)) {
                 // This is done to give delay in showing menu to match ripple timing
                 if (!Ext.isEmpty(me.menuShowDelay) && me.menuShowDelay > 0) {
-                    me.menuShowTimeout = Ext.defer(handleArrowKeyDown, me.menuShowDelay);
+                    me.menuShowTimeout = Ext.defer(me.getArrowHandler(), me.menuShowDelay);
                 }
                 else {
                     me.toggleMenu(e, me.getMenu());
@@ -148,6 +146,7 @@ Ext.define('Ext.SplitButton', {
                 if (me.getMenu().isVisible()) {
                     me.hideMenu(e, me.getMenu());
                 }
+
                 Ext.callback(me.getHandler(), me.getScope(), [me, e], 0, me);
             }
         }
@@ -155,7 +154,7 @@ Ext.define('Ext.SplitButton', {
 
     onDownKey: function(e) {
         if (e.target === this.splitArrowCoverElement.dom) {
-           this.callParent([e]);
+            this.callParent([e]);
         }
     },
 
@@ -170,9 +169,12 @@ Ext.define('Ext.SplitButton', {
 
     shouldRipple: function(e) {
         var arrowEl = this.splitArrowCoverElement,
-            ripple = (arrowEl && e.target === arrowEl.dom) ? this.getArrowRipple() : this.getSplitRipple();
+            ripple = (arrowEl && e.target === arrowEl.dom)
+                ? this.getArrowRipple()
+                : this.getSplitRipple();
 
         this.setRipple(ripple);
+
         return this.callParent([e]);
     },
 
@@ -207,7 +209,7 @@ Ext.define('Ext.SplitButton', {
 
         handleFocusEvent: function(e) {
             this.callParent([e]);
-            
+
             if (e.target === this.splitArrowCoverElement.dom) {
                 this.onArrowFocus([e]);
             }
@@ -218,7 +220,7 @@ Ext.define('Ext.SplitButton', {
 
         handleBlurEvent: function(e) {
             this.callParent([e]);
-            
+
             if (e.target === this.splitArrowCoverElement.dom) {
                 this.onArrowBlur([e]);
             }

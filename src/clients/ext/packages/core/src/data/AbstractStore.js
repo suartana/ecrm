@@ -1,6 +1,6 @@
 /**
- * AbstractStore is a superclass of {@link Ext.data.ProxyStore} and {@link Ext.data.ChainedStore}. It's never used directly,
- * but offers a set of methods used by both of those subclasses.
+ * AbstractStore is a superclass of {@link Ext.data.ProxyStore} and {@link Ext.data.ChainedStore}.
+ * It's never used directly, but offers a set of methods used by both of those subclasses.
  *
  * Unless you need to make a whole new type of Store, see {@link Ext.data.Store} instead.
  */
@@ -64,15 +64,16 @@ Ext.define('Ext.data.AbstractStore', {
 
         /**
          * @cfg {Boolean} [autoDestroy]
-         * When a Store is used by only one {@link Ext.view.View DataView}, and should only exist for the lifetime of that view, then
-         * configure the autoDestroy flag as `true`. This causes the destruction of the view to trigger the destruction of its Store.
+         * When a Store is used by only one {@link Ext.view.View DataView}, and should only exist
+         * for the lifetime of that view, then configure the autoDestroy flag as `true`. This
+         * causes the destruction of the view to trigger the destruction of its Store.
          */
         autoDestroy: undefined,
 
         /**
          * @cfg {String} storeId
-         * Unique identifier for this store. If present, this Store will be registered with the {@link Ext.data.StoreManager},
-         * making it easy to reuse elsewhere.
+         * Unique identifier for this store. If present, this Store will be registered with the
+         * {@link Ext.data.StoreManager}, making it easy to reuse elsewhere.
          *
          * Note that when a store is instantiated by a Controller, the storeId will default
          * to the name of the store if not specified in the class.
@@ -81,7 +82,8 @@ Ext.define('Ext.data.AbstractStore', {
 
         /**
          * @cfg {Boolean} statefulFilters
-         * Configure as `true` to have the filters saved when a client {@link Ext.grid.Panel grid} saves its state.
+         * Configure as `true` to have the filters saved when a client {@link Ext.grid.Panel grid}
+         * saves its state.
          */
         statefulFilters: false,
 
@@ -122,7 +124,8 @@ Ext.define('Ext.data.AbstractStore', {
 
         /**
         * @cfg {Boolean} [remoteFilter=false]
-        * `true` to defer any filtering operation to the server. If `false`, filtering is done locally on the client.
+        * `true` to defer any filtering operation to the server. If `false`, filtering is done
+        * locally on the client.
         */
         remoteFilter: {
             lazy: true,
@@ -131,21 +134,24 @@ Ext.define('Ext.data.AbstractStore', {
 
         /**
         * @cfg {String} groupField
-        * The field by which to group data in the store. Internally, grouping is very similar to sorting - the
-        * groupField and {@link #groupDir} are injected as the first sorter (see {@link #method-sort}). Stores support a single
-        * level of grouping, and groups can be fetched via the {@link #getGroups} method.
+        * The field by which to group data in the store. Internally, grouping is very similar to
+        * sorting - the groupField and {@link #groupDir} are injected as the first sorter
+        * (see {@link #method-sort}). Stores support a single level of grouping, and groups can be
+        * fetched via the {@link #getGroups} method.
         */
         groupField: undefined,
 
         /**
         * @cfg {String} groupDir
-        * The direction in which sorting should be applied when grouping. Supported values are "ASC" and "DESC".
+        * The direction in which sorting should be applied when grouping. Supported values are
+        * "ASC" and "DESC".
         */
         groupDir: 'ASC',
 
         /**
          * @cfg {Object/Ext.util.Grouper} grouper
-         * The grouper by which to group the data store. May also be specified by the {@link #groupField} config, however
+         * The grouper by which to group the data store. May also be specified by the
+         * {@link #groupField} config, however
          * they should not be used together.
          */
         grouper: null,
@@ -191,7 +197,8 @@ Ext.define('Ext.data.AbstractStore', {
 
     /**
      * @property {Number} currentPage
-     * The page that the Store has most recently loaded (see {@link Ext.data.Store#loadPage loadPage})
+     * The page that the Store has most recently loaded
+     * (see {@link Ext.data.Store#loadPage loadPage})
      */
     currentPage: 1,
 
@@ -219,8 +226,7 @@ Ext.define('Ext.data.AbstractStore', {
      */
     updating: 0,
 
-    //documented above
-    constructor: function (config) {
+    constructor: function(config) {
         var me = this,
             storeId;
 
@@ -265,7 +271,8 @@ Ext.define('Ext.data.AbstractStore', {
          *     Ext.data.Model.COMMIT
          * @param {String[]} modifiedFieldNames Array of field names changed during edit.
          * @param {Object} details An object describing the change. See the
-         * {@link Ext.util.Collection#event-itemchange itemchange event} of the store's backing collection
+         * {@link Ext.util.Collection#event-itemchange itemchange event} of the store's backing
+         * collection
          * @since 1.1.0
          */
 
@@ -286,33 +293,37 @@ Ext.define('Ext.data.AbstractStore', {
 
         /**
          * @event refresh
-         * Fires when the data cache has changed in a bulk manner (e.g., it has been sorted, filtered, etc.) and a
-         * widget that is using this Store as a Record cache should refresh its view.
+         * Fires when the data cache has changed in a bulk manner (e.g., it has been sorted,
+         * filtered, etc.) and a widget that is using this Store as a Record cache should refresh
+         * its view.
          * @param {Ext.data.Store} this The data store
          */
 
         /**
          * @event beginupdate
-         * Fires when the {@link #beginUpdate} method is called. Automatic synchronization as configured
-         * by the {@link Ext.data.ProxyStore#autoSync autoSync} flag is deferred until the {@link #endUpdate} method is called, so multiple
-         * mutations can be coalesced into one synchronization operation.
+         * Fires when the {@link #beginUpdate} method is called. Automatic synchronization as
+         * configured by the {@link Ext.data.ProxyStore#autoSync autoSync} flag is deferred until
+         * the {@link #endUpdate} method is called, so multiple mutations can be coalesced into one
+         * synchronization operation.
          */
 
         /**
          * @event endupdate
-         * Fires when the {@link #endUpdate} method is called. Automatic synchronization as configured
-         * by the {@link Ext.data.ProxyStore#autoSync autoSync} flag is deferred until the {@link #endUpdate} method is called, so multiple
-         * mutations can be coalesced into one synchronization operation.
+         * Fires when the {@link #endUpdate} method is called. Automatic synchronization as
+         * configured by the {@link Ext.data.ProxyStore#autoSync autoSync} flag is deferred until
+         * the {@link #endUpdate} method is called, so multiple mutations can be coalesced into one
+         * synchronization operation.
          */
 
         /**
          * @event beforesort
          * Fires before a store is sorted.
          *
-         * For {@link #remoteSort remotely sorted} stores, this will be just before the load operation triggered by changing the
-         * store's sorters.
+         * For {@link #remoteSort remotely sorted} stores, this will be just before the load
+         * operation triggered by changing the store's sorters.
          *
-         * For locally sorted stores, this will be just before the data items in the store's backing collection are sorted.
+         * For locally sorted stores, this will be just before the data items in the store's
+         * backing collection are sorted.
          * @param {Ext.data.Store} store The store being sorted
          * @param {Ext.util.Sorter[]} sorters Array of sorters applied to the store
          */
@@ -321,10 +332,11 @@ Ext.define('Ext.data.AbstractStore', {
          * @event sort
          * Fires after a store is sorted.
          *
-         * For {@link #remoteSort remotely sorted} stores, this will be upon the success of a load operation triggered by
-         * changing the store's sorters.
+         * For {@link #remoteSort remotely sorted} stores, this will be upon the success of a load
+         * operation triggered by changing the store's sorters.
          *
-         * For locally sorted stores, this will be just after the data items in the store's backing collection are sorted.
+         * For locally sorted stores, this will be just after the data items in the store's backing
+         * collection are sorted.
          * @param {Ext.data.Store} store The store being sorted
          */
         me.isInitializing = true;
@@ -332,6 +344,7 @@ Ext.define('Ext.data.AbstractStore', {
         me.isInitializing = false;
 
         storeId = me.getStoreId();
+        
         if (!storeId && (config && config.id)) {
             me.setStoreId(storeId = config.id);
         }
@@ -348,7 +361,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @return {Ext.data.Range}
      * @since 6.5.0
      */
-    createActiveRange: function (config) {
+    createActiveRange: function(config) {
         var range = Ext.apply({ store: this }, config);
 
         return new Ext.data.Range(range);
@@ -373,15 +386,16 @@ Ext.define('Ext.data.AbstractStore', {
     /**
      * Gets the number of records in store.
      *
-     * If using paging, this may not be the total size of the dataset. If the data object
-     * used by the Reader contains the dataset size, then the {@link Ext.data.ProxyStore#getTotalCount} function returns
-     * the dataset size.  **Note**: see the Important note in {@link Ext.data.ProxyStore#method-load}.
+     * If using paging, this may not be the total size of the dataset. If the data object used by
+     * the Reader contains the dataset size, then the {@link Ext.data.ProxyStore#getTotalCount}
+     * function returns the dataset size. **Note**: see the Important note in
+     * {@link Ext.data.ProxyStore#method-load}.
      *
      * When store is filtered, it's the number of records matching the filter.
      *
      * @return {Number} The number of Records in the Store.
      */
-    getCount: function () {
+    getCount: function() {
         var data = this.getData();
 
         // We may be destroyed, in which case "data" will be null... best to just
@@ -396,7 +410,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Number} start The start index
      * @param {Number} end The end index in the range
      */
-    rangeCached: function (start, end) {
+    rangeCached: function(start, end) {
         return this.getData().getCount() >= Math.max(start, end);
     },
 
@@ -414,9 +428,10 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * **IMPORTANT**
      *
-     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
-     * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
-     * have not yet been purged from the cache.**
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records
+     * which happen to be cached in the page cache. This will be parts of the dataset around the
+     * currently visible zone, or recently visited zones if the pages have not yet been purged from
+     * the cache.**
      *
      * @param {String} property The name of the Record field to test.
      * @param {String/RegExp} value Either a string that the field value
@@ -429,7 +444,7 @@ Ext.define('Ext.data.AbstractStore', {
      * added to the regex). Ignored if `anyMatch` is `true`.
      * @return {Number} The matched index or -1
      */
-    find: function (property, value, startIndex, anyMatch, caseSensitive, exactMatch) {
+    find: function(property, value, startIndex, anyMatch, caseSensitive, exactMatch) {
         //             exactMatch
         //  anyMatch    F       T
         //      F       ^abc    ^abc$
@@ -440,7 +455,7 @@ Ext.define('Ext.data.AbstractStore', {
 
 
         return this.getData().findIndex(property, value, startIndex, startsWith, endsWith,
-                    !caseSensitive);
+                                        !caseSensitive);
     },
 
     /**
@@ -450,9 +465,10 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * **IMPORTANT**
      *
-     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
-     * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
-     * have not yet been purged from the cache.**
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which
+     * happen to be cached in the page cache. This will be parts of the dataset around the
+     * currently visible zone, or recently visited zones if the pages have not yet been purged
+     * from the cache.**
      *
      * @param {String} fieldName The name of the Record field to test.
      * @param {String/RegExp} value Either a string that the field value
@@ -465,9 +481,10 @@ Ext.define('Ext.data.AbstractStore', {
      * added to the regex). Ignored if `anyMatch` is `true`.
      * @return {Ext.data.Model} The matched record or null
      */
-    findRecord: function () {
+    findRecord: function() {
         var me = this,
             index = me.find.apply(me, arguments);
+        
         return index !== -1 ? me.getAt(index) : null;
     },
 
@@ -478,16 +495,17 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * **IMPORTANT**
      *
-     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
-     * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
-     * have not yet been purged from the cache.**
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which
+     * happen to be cached in the page cache. This will be parts of the dataset around the
+     * currently visible zone, or recently visited zones if the pages have not yet been purged
+     * from the cache.**
      *
      * @param {String} fieldName The name of the Record field to test.
      * @param {Object} value The value to match the field against.
      * @param {Number} [startIndex=0] The index to start searching at
      * @return {Number} The matched index or -1
      */
-    findExact: function (fieldName, value, startIndex) {
+    findExact: function(fieldName, value, startIndex) {
         return this.getData().findIndexBy(function(rec) {
             return rec.isEqual(rec.get(fieldName), value);
         }, this, startIndex);
@@ -501,9 +519,10 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * **IMPORTANT**
      *
-     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
-     * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
-     * have not yet been purged from the cache.**
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which
+     * happen to be cached in the page cache. This will be parts of the dataset around the
+     * currently visible zone, or recently visited zones if the pages have not yet been purged
+     * from the cache.**
      *
      * @param {Function} fn The function to be called. It will be passed the following parameters:
      *  @param {Ext.data.Model} fn.record The record to test for filtering. Access field values
@@ -514,7 +533,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Number} [start=0] The index at which to start searching.
      * @return {Number} The matched index or -1
      */
-    findBy: function (fn, scope, start) {
+    findBy: function(fn, scope, start) {
         return this.getData().findIndexBy(fn, scope, start);
     },
 
@@ -526,7 +545,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Number} index The index of the Record to find.
      * @return {Ext.data.Model} The Record at the passed index. Returns null if not found.
      */
-    getAt: function (index) {
+    getAt: function(index) {
         return this.getData().getAt(index) || null;
     },
 
@@ -541,15 +560,18 @@ Ext.define('Ext.data.AbstractStore', {
      * @param [options] (private) Used by BufferedRenderer when using a BufferedStore.
      * @return {Ext.data.Model[]} An array of records.
      */
-    getRange: function (start, end, options) {
-        // Collection's getRange is exclusive. Do NOT mutate the value: it is passed to the callback.
+    getRange: function(start, end, options) {
+        // Collection's getRange is exclusive. Do NOT mutate the value: it is passed to the
+        // callback.
         var result = this.getData().getRange(start, Ext.isNumber(end) ? end + 1 : end);
 
         // BufferedRenderer requests a range with a callback to process that range.
-        // Because it may be dealing with a buffered store and the range may not be available synchronously.
+        // Because it may be dealing with a buffered store and the range may not be available
+        // synchronously.
         if (options && options.callback) {
             options.callback.call(options.scope || this, result, start, end, options);
         }
+        
         return result;
     },
 
@@ -558,17 +580,20 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Boolean} [autoCreate] (private)
      * @return {Ext.util.FilterCollection} The filters
      */
-    getFilters: function (autoCreate) {
+    getFilters: function(autoCreate) {
         var result = this.callParent();
+        
         if (!result && autoCreate !== false) {
             this.setFilters([]);
             result = this.callParent();
         }
+        
         return result;
     },
 
-    applyFilters: function (filters, filtersCollection) {
+    applyFilters: function(filters, filtersCollection) {
         var created;
+        
         if (!filtersCollection) {
             filtersCollection = this.createFiltersCollection();
             created = true;
@@ -588,18 +613,22 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Boolean} [autoCreate] (private)
      * @return {Ext.util.SorterCollection} The sorters
      */
-    getSorters: function (autoCreate) {
+    getSorters: function(autoCreate) {
         var result = this.callParent();
+        
         if (!result && autoCreate !== false) {
             // If not preventing creation, force it here
             this.setSorters([]);
+            
             result = this.callParent();
         }
+        
         return result;
     },
 
-    applySorters: function (sorters, sortersCollection) {
+    applySorters: function(sorters, sortersCollection) {
         var created;
+        
         if (!sortersCollection) {
             sortersCollection = this.createSortersCollection();
             created = true;
@@ -643,13 +672,14 @@ Ext.define('Ext.data.AbstractStore', {
      * `filters` is a string.
      * @param {Boolean} [suppressEvent] (private)
      */
-    filter: function (filters, value, suppressEvent) {
+    filter: function(filters, value, suppressEvent) {
         if (Ext.isString(filters)) {
             filters = {
                 property: filters,
                 value: value
             };
         }
+        
         this.suppressNextFilter = !!suppressEvent;
         this.getFilters().add(filters);
         this.suppressNextFilter = false;
@@ -664,41 +694,45 @@ Ext.define('Ext.data.AbstractStore', {
      * filter set, or a Filter instance to remove.
      * @param {Boolean} [suppressEvent] If `true` the filter is cleared silently.
      */
-    removeFilter: function (toRemove, suppressEvent) {
+    removeFilter: function(toRemove, suppressEvent) {
         var me = this,
             filters = me.getFilters();
 
         me.suppressNextFilter = !!suppressEvent;
+        
         if (toRemove instanceof Ext.util.Filter) {
             filters.remove(toRemove);
-        } else {
+        }
+        else {
             filters.removeByKey(toRemove);
         }
+        
         me.suppressNextFilter = false;
     },
 
-    updateAutoSort: function (autoSort) {
+    updateAutoSort: function(autoSort) {
         // Keep collection synced with our autoSort setting
         this.getData().setAutoSort(autoSort);
     },
 
-    updateRemoteSort: function (remoteSort) {
+    updateRemoteSort: function(remoteSort) {
         // Don't call the getter here, we don't want to force sorters to be created here.
         // Also, applySorters calls getRemoteSort, which may trigger the initGetter.
         this.onRemoteSortSet(this.getSorters(false), remoteSort);
     },
 
-    updateRemoteFilter: function (remoteFilter) {
+    updateRemoteFilter: function(remoteFilter) {
         this.onRemoteFilterSet(this.getFilters(false), remoteFilter);
     },
 
     /**
      * Adds a new Filter to this Store's {@link #cfg-filters filter set} and
      * by default, applies the updated filter set to the Store's unfiltered dataset.
-     * @param {Object[]/Ext.util.Filter[]} filters The set of filters to add to the current {@link #cfg-filters filter set}.
+     * @param {Object[]/Ext.util.Filter[]} filters The set of filters to add to the current
+     * {@link #cfg-filters filter set}.
      * @param {Boolean} [suppressEvent] If `true` the filter is cleared silently.
      */
-    addFilter: function (filters, suppressEvent) {
+    addFilter: function(filters, suppressEvent) {
         this.suppressNextFilter = !!suppressEvent;
         this.getFilters().add(filters);
         this.suppressNextFilter = false;
@@ -718,7 +752,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {Object} [scope] The scope (this reference) in which the function is executed.
      * Defaults to this Store.
      */
-    filterBy: function (fn, scope) {
+    filterBy: function(fn, scope) {
         this.getFilters().add({
             filterFn: fn,
             scope: scope || this
@@ -729,19 +763,20 @@ Ext.define('Ext.data.AbstractStore', {
      * Reverts to a view of the Record cache with no filtering applied.
      * @param {Boolean} [suppressEvent] If `true` the filter is cleared silently.
      *
-     * For a locally filtered Store, this means that the filter collection is cleared without firing the
-     * {@link #datachanged} event.
+     * For a locally filtered Store, this means that the filter collection is cleared without
+     * firing the {@link #datachanged} event.
      *
-     * For a remotely filtered Store, this means that the filter collection is cleared, but the store
-     * is not reloaded from the server.
+     * For a remotely filtered Store, this means that the filter collection is cleared, but
+     * the store is not reloaded from the server.
      */
-    clearFilter: function (suppressEvent) {
+    clearFilter: function(suppressEvent) {
         var me = this,
             filters = me.getFilters(false);
 
         if (!filters || filters.getCount() === 0) {
             return;
         }
+        
         me.suppressNextFilter = !!suppressEvent;
         filters.removeAll();
         me.suppressNextFilter = false;
@@ -751,7 +786,7 @@ Ext.define('Ext.data.AbstractStore', {
      * Tests whether the store currently has any active filters.
      * @return {Boolean} `true` if the store is filtered.
      */
-    isFiltered: function () {
+    isFiltered: function() {
         return this.getFilters().getCount() > 0;
     },
 
@@ -759,17 +794,19 @@ Ext.define('Ext.data.AbstractStore', {
      * Tests whether the store currently has any active sorters.
      * @return {Boolean} `true` if the store is sorted.
      */
-    isSorted: function () {
+    isSorted: function() {
         var sorters = this.getSorters(false);
+        
         return !!(sorters && sorters.length > 0) || this.isGrouped();
     },
 
-    addFieldTransform: function (sorter) {
+    addFieldTransform: function(sorter) {
         // Transform already specified, leave it
         if (sorter.getTransform()) {
             return;
         }
 
+        /* eslint-disable-next-line vars-on-top */
         var fieldName = sorter.getProperty(),
             Model = this.getModel(),
             field, sortType;
@@ -779,7 +816,7 @@ Ext.define('Ext.data.AbstractStore', {
             sortType = field ? field.getSortType() : null;
         }
 
-        if (sortType && sortType !== Ext.identityFn)  {
+        if (sortType && sortType !== Ext.identityFn) {
             sorter.setTransform(sortType);
         }
     },
@@ -787,9 +824,9 @@ Ext.define('Ext.data.AbstractStore', {
     /**
      * This method may be called to indicate the start of multiple changes to the store.
      *
-     * Automatic synchronization as configured by the {@link Ext.data.ProxyStore#autoSync autoSync} flag is deferred
-     * until the {@link #endUpdate} method is called, so multiple mutations can be coalesced
-     * into one synchronization operation.
+     * Automatic synchronization as configured by the {@link Ext.data.ProxyStore#autoSync autoSync}
+     * flag is deferred until the {@link #endUpdate} method is called, so multiple mutations can be
+     * coalesced into one synchronization operation.
      *
      * Internally this method increments a counter that is decremented by `endUpdate`. It
      * is important, therefore, that if you call `beginUpdate` directly you match that
@@ -818,8 +855,8 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * @since 5.0.0
      */
-    beginUpdate: function () {
-        if (!this.updating++ && this.hasListeners.beginupdate) { // jshint ignore:line
+    beginUpdate: function() {
+        if (!this.updating++ && this.hasListeners.beginupdate) {
             this.fireEvent('beginupdate');
         }
     },
@@ -829,11 +866,12 @@ Ext.define('Ext.data.AbstractStore', {
      * see `{@link #beginUpdate}`.
      * @since 5.0.0
      */
-    endUpdate: function () {
+    endUpdate: function() {
         if (this.updating && ! --this.updating) {
             if (this.hasListeners.endupdate) {
                 this.fireEvent('endupdate');
             }
+            
             this.onEndUpdate();
         }
     },
@@ -842,7 +880,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @private
      * Returns the grouping, sorting and filtered state of this Store.
      */
-    getState: function () {
+    getState: function() {
         var me = this,
             sorters = [],
             filters = me.getFilters(),
@@ -855,15 +893,16 @@ Ext.define('Ext.data.AbstractStore', {
             hasState = true;
         });
 
-        // Because we do not provide a filter changing mechanism, only statify the filters if they opt in.
-        // Otherwise filters would get "stuck".
+        // Because we do not provide a filter changing mechanism, only statify the filters if they
+        // opt in. Otherwise filters would get "stuck".
         if (me.statefulFilters && me.saveStatefulFilters) {
-            // If saveStatefulFilters is turned on then we know that the filter collection has changed since
-            // page load. Initiate the filterState as an empty stack, which is meaningful in itself. If there
-            // are any filter in the collection, persist them.
+            // If saveStatefulFilters is turned on then we know that the filter collection has
+            // changed since page load. Initiate the filterState as an empty stack, which is
+            // meaningful in itself. If there are any filter in the collection, persist them.
             hasState = true;
             filterState = [];
-            filters.each(function (f) {
+            
+            filters.each(function(f) {
                 filterState[filterState.length] = f.getState();
             });
         }
@@ -875,16 +914,20 @@ Ext.define('Ext.data.AbstractStore', {
         // If there is any state to save, return it as an object
         if (hasState) {
             result = {};
+            
             if (sorters.length) {
                 result.sorters = sorters;
             }
+            
             if (filterState) {
                 result.filters = filterState;
             }
+            
             if (grouper) {
                 result.grouper = grouper.getState();
             }
         }
+        
         return result;
     },
 
@@ -892,7 +935,7 @@ Ext.define('Ext.data.AbstractStore', {
      * @private
      * Restores state to the passed state
      */
-    applyState: function (state) {
+    applyState: function(state) {
         var me = this,
             stateSorters = state.sorters,
             stateFilters = state.filters,
@@ -946,7 +989,7 @@ Ext.define('Ext.data.AbstractStore', {
      */
     isLoading: Ext.emptyFn,
 
-    destroy: function () {
+    destroy: function() {
         var me = this;
         
         if (me.hasListeners.beforedestroy) {
@@ -996,10 +1039,12 @@ Ext.define('Ext.data.AbstractStore', {
      *         }
      *     ]);
      *
-     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Sorter} instances, and
-     * either delegates the actual sorting to its internal {@link Ext.util.Collection} or the remote server.
+     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Sorter}
+     * instances, and either delegates the actual sorting to its internal
+     * {@link Ext.util.Collection} or the remote server.
      *
-     * When passing a single string argument to sort, Store maintains a ASC/DESC toggler per field, so this code:
+     * When passing a single string argument to sort, Store maintains a ASC/DESC toggler per field,
+     * so this code:
      *
      *     store.sort('myField');
      *     store.sort('myField');
@@ -1015,29 +1060,31 @@ Ext.define('Ext.data.AbstractStore', {
      * @param {"ASC"/"DESC"} [direction="ASC"] The overall direction to sort the data by.
      * @param {"append"/"prepend"/"replace"/"multi"} [mode="replace"]
      */
-    sort: function (field, direction, mode) {
+    sort: function(field, direction, mode) {
         var me = this;
 
         if (arguments.length === 0) {
             if (me.getRemoteSort()) {
                 me.load();
-            } else {
+            }
+            else {
                 me.forceLocalSort();
             }
-        } else {
+        }
+        else {
             me.getSorters().addSort(field, direction, mode);
         }
     },
 
     // This is attached to the data Collection's beforesort event only if not remoteSort
     // If remoteSort, the event is fired before the reload call in Ext.data.ProxyStore#load.
-    onBeforeCollectionSort: function (store, sorters) {
+    onBeforeCollectionSort: function(store, sorters) {
         if (sorters) {
             this.fireEvent('beforesort', this, sorters.getRange());
         }
     },
 
-    onSorterEndUpdate: function () {
+    onSorterEndUpdate: function() {
         var me = this,
             fireSort = true,
             sorters = me.getSorters(false),
@@ -1060,13 +1107,15 @@ Ext.define('Ext.data.AbstractStore', {
             if (sorters.length || me.getReloadOnClearSorters()) {
                 // The sort event will fire in the load callback;
                 fireSort = false;
+                
                 me.load({
-                    callback: function () {
+                    callback: function() {
                         me.fireEvent('sort', me, sorters);
                     }
                 });
             }
-        } else if (sorterCount) {
+        }
+        else if (sorterCount) {
             me.fireEvent('datachanged', me);
             me.fireEvent('refresh', me);
         }
@@ -1077,7 +1126,7 @@ Ext.define('Ext.data.AbstractStore', {
         }
     },
 
-    onFilterEndUpdate: function () {
+    onFilterEndUpdate: function() {
         var me = this,
             suppressNext = me.suppressNextFilter,
             filters = me.getFilters(false);
@@ -1091,21 +1140,25 @@ Ext.define('Ext.data.AbstractStore', {
             //<debug>
             me.getFilters().each(function(filter) {
                 if (filter.getInitialConfig().filterFn) {
-                    Ext.raise('Unable to use a filtering function in conjunction with remote filtering.');
+                    Ext.raise('Unable to use a filtering function in conjunction with ' +
+                              'remote filtering.');
                 }
             });
             //</debug>
             me.currentPage = 1;
+            
             if (!suppressNext) {
                 me.load();
             }
-        } else if (!suppressNext) {
+        }
+        else if (!suppressNext) {
             me.fireEvent('datachanged', me);
             me.fireEvent('refresh', me);
         }
 
         if (me.trackStateChanges) {
-            // We just mutated the filter collection so let's save stateful filters from this point forward.
+            // We just mutated the filter collection so let's save stateful filters
+            // from this point forward.
             me.saveStatefulFilters = true;
         }
 
@@ -1113,13 +1166,14 @@ Ext.define('Ext.data.AbstractStore', {
         me.fireEvent('filterchange', me, me.getFilters().getRange());
     },
 
-    updateGroupField: function (field) {
+    updateGroupField: function(field) {
         if (field) {
             this.setGrouper({
                 property: field,
                 direction: this.getGroupDir()
             });
-        } else {
+        }
+        else {
             this.setGrouper(null);
         }
     },
@@ -1132,17 +1186,19 @@ Ext.define('Ext.data.AbstractStore', {
      * @method setSorters
      */
 
-    getGrouper: function () {
+    getGrouper: function() {
         return this.getData().getGrouper();
     },
 
     /**
      * Groups data inside the store.
      * @param {String/Object} grouper Either a string name of one of the fields in this Store's
-     * configured {@link Ext.data.Model Model}, or an object, or a {@link Ext.util.Grouper grouper} configuration object.
-     * @param {String} [direction] The overall direction to group the data by. Defaults to the value of {@link #groupDir}.
+     * configured {@link Ext.data.Model Model}, or an object, or a {@link Ext.util.Grouper grouper}
+     * configuration object.
+     * @param {String} [direction] The overall direction to group the data by. Defaults to the
+     * value of {@link #groupDir}.
      */
-    group: function (grouper, direction) {
+    group: function(grouper, direction) {
         var me = this,
             sorters = me.getSorters(false),
             change = grouper || (sorters && sorters.length),
@@ -1162,9 +1218,11 @@ Ext.define('Ext.data.AbstractStore', {
         // and requires the sorting to be redone.
         if (grouper === data.getGrouper()) {
             data.updateGrouper(grouper);
-        } else {
+        }
+        else {
             data.setGrouper(grouper);
         }
+        
         delete me.settingGroups;
 
         if (change) {
@@ -1175,7 +1233,8 @@ Ext.define('Ext.data.AbstractStore', {
                         callback: me.fireGroupChange
                     });
                 }
-            } else {
+            }
+            else {
                 me.fireEvent('datachanged', me);
                 me.fireEvent('refresh', me);
                 me.fireGroupChange();
@@ -1188,7 +1247,7 @@ Ext.define('Ext.data.AbstractStore', {
         }
     },
 
-    fireGroupChange: function () {
+    fireGroupChange: function() {
         if (!this.destroyed) {
             this.fireEvent('groupchange', this, this.getGrouper());
         }
@@ -1197,17 +1256,18 @@ Ext.define('Ext.data.AbstractStore', {
     /**
      * Clear the store grouping
      */
-    clearGrouping: function () {
+    clearGrouping: function() {
         this.group(null);
     },
 
-    getGroupField: function (){
+    getGroupField: function() {
         var grouper = this.getGrouper(),
             group = '';
 
         if (grouper) {
             group = grouper.getProperty();
         }
+        
         return group;
     },
 
@@ -1215,12 +1275,13 @@ Ext.define('Ext.data.AbstractStore', {
      * Tests whether the store currently has an active grouper.
      * @return {Boolean} `true` if the store is grouped.
      */
-    isGrouped: function () {
+    isGrouped: function() {
         return !!this.getGrouper();
     },
 
-    applyGrouper: function (grouper) {
+    applyGrouper: function(grouper) {
         this.group(grouper);
+        
         return this.getData().getGrouper();
     },
 
@@ -1260,7 +1321,7 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * @return {Ext.util.Collection} The grouped data
      */
-    getGroups: function () {
+    getGroups: function() {
         return this.getData().getGroups();
     },
 
@@ -1275,7 +1336,7 @@ Ext.define('Ext.data.AbstractStore', {
             totalCount: 'getTotalCount'
         },
 
-        interpret: function (name) {
+        interpret: function(name) {
             var me = this,
                 accessor = me._metaProperties[name];
 
@@ -1284,7 +1345,7 @@ Ext.define('Ext.data.AbstractStore', {
 
         loadsSynchronously: Ext.privateFn,
 
-        onRemoteFilterSet: function (filters, remoteFilter) {
+        onRemoteFilterSet: function(filters, remoteFilter) {
             if (filters) {
                 filters[remoteFilter ? 'on' : 'un']('endupdate', 'onFilterEndUpdate', this);
             }
@@ -1292,11 +1353,13 @@ Ext.define('Ext.data.AbstractStore', {
 
         // If remoteSort is set, we react to the endUpdate of the sorters Collection by reloading
         // if there are still some sorters, or we're configured to reload on sorter remove.
-        // If remoteSort is set, we do not need to listen for the data Collection's beforesort event.
+        // If remoteSort is set, we do not need to listen for the data Collection's beforesort
+        // event.
         //
         // If local sorting, we do not need to react to the endUpdate of the sorters Collection.
-        // If local sorting, we listen for the data Collection's beforesort event to fire our beforesort event.
-        onRemoteSortSet: function (sorters, remoteSort) {
+        // If local sorting, we listen for the data Collection's beforesort event to fire our
+        // beforesort event.
+        onRemoteSortSet: function(sorters, remoteSort) {
             var me = this,
                 data;
 
@@ -1304,6 +1367,7 @@ Ext.define('Ext.data.AbstractStore', {
                 sorters[remoteSort ? 'on' : 'un']('endupdate', 'onSorterEndUpdate', me);
 
                 data = me.getData();
+                
                 if (data) {
                     data[remoteSort ? 'un' : 'on']('beforesort', 'onBeforeCollectionSort', me);
                 }
@@ -1314,11 +1378,10 @@ Ext.define('Ext.data.AbstractStore', {
     deprecated: {
         5: {
             methods: {
-                destroyStore: function () {
+                destroyStore: function() {
                     this.destroy();
                 }
             }
         }
     }
-
 });

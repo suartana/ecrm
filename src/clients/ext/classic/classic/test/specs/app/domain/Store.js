@@ -99,6 +99,7 @@ topSuite("Ext.app.domain.Store", function() {
         spyOn(Ext.log, 'warn');
         
         var s = new spec.CustomStore();
+
         ctrl.listen({
             store: {
                 'customstore': {
@@ -113,7 +114,7 @@ topSuite("Ext.app.domain.Store", function() {
     });
     
     it("passes event arguments correctly", function() {
-        var data = [{ foo: 1, bar: 2}, { foo: 3, bar: 4}];
+        var data = [{ foo: 1, bar: 2 }, { foo: 3, bar: 4 }];
         
         ctrl.listen({
             store: {

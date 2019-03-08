@@ -16,61 +16,61 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         describe("initial state", function() {
             beforeEach(function() {
                 makeOperation();
-            });    
+            });
             
             it("should not be started", function() {
                 expect(op.isStarted()).toBe(false);
             });
             
             it("should not be running", function() {
-                expect(op.isRunning()).toBe(false);    
+                expect(op.isRunning()).toBe(false);
             });
             
             it("should not be complete", function() {
-                expect(op.isComplete()).toBe(false);    
+                expect(op.isComplete()).toBe(false);
             });
             
             it("should not be successful", function() {
-                expect(op.wasSuccessful()).toBe(false);    
+                expect(op.wasSuccessful()).toBe(false);
             });
             
             it("should have no error", function() {
-                expect(op.getError()).toBeUndefined();   
+                expect(op.getError()).toBeUndefined();
             });
             
             it("should have no exception", function() {
-                expect(op.hasException()).toBe(false);    
+                expect(op.hasException()).toBe(false);
             });
-        });  
+        });
         
         describe("starting", function() {
             beforeEach(function() {
                 makeOperation();
                 op.execute();
-            });    
+            });
             
             it("should be started", function() {
                 expect(op.isStarted()).toBe(true);
             });
             
             it("should be running", function() {
-                expect(op.isRunning()).toBe(true);    
+                expect(op.isRunning()).toBe(true);
             });
             
             it("should not be complete", function() {
-                expect(op.isComplete()).toBe(false);    
+                expect(op.isComplete()).toBe(false);
             });
             
             it("should not be successful", function() {
-                expect(op.wasSuccessful()).toBe(false);    
+                expect(op.wasSuccessful()).toBe(false);
             });
             
             it("should have no error", function() {
-                expect(op.getError()).toBeUndefined();   
+                expect(op.getError()).toBeUndefined();
             });
             
             it("should have no exception", function() {
-                expect(op.hasException()).toBe(false);    
+                expect(op.hasException()).toBe(false);
             });
         });
         
@@ -78,7 +78,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             beforeEach(function() {
                 makeOperation();
                 op.execute();
-                op.setSuccessful(true);    
+                op.setSuccessful(true);
             });
             
             it("should be started", function() {
@@ -86,23 +86,23 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             });
             
             it("should not be running", function() {
-                expect(op.isRunning()).toBe(false);    
+                expect(op.isRunning()).toBe(false);
             });
             
             it("should be complete", function() {
-                expect(op.isComplete()).toBe(true);    
+                expect(op.isComplete()).toBe(true);
             });
             
             it("should be successful", function() {
-                expect(op.wasSuccessful()).toBe(true);    
+                expect(op.wasSuccessful()).toBe(true);
             });
             
             it("should have no error", function() {
-                expect(op.getError()).toBeUndefined();   
+                expect(op.getError()).toBeUndefined();
             });
             
             it("should have no exception", function() {
-                expect(op.hasException()).toBe(false);    
+                expect(op.hasException()).toBe(false);
             });
         });
         
@@ -110,7 +110,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             beforeEach(function() {
                 makeOperation();
                 op.execute();
-                op.setException('Failed');    
+                op.setException('Failed');
             });
             
             it("should be started", function() {
@@ -118,24 +118,24 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             });
             
             it("should not be running", function() {
-                expect(op.isRunning()).toBe(false);    
+                expect(op.isRunning()).toBe(false);
             });
             
             it("should be complete", function() {
-                expect(op.isComplete()).toBe(true);    
+                expect(op.isComplete()).toBe(true);
             });
             
             it("should not be successful", function() {
-                expect(op.wasSuccessful()).toBe(false);    
+                expect(op.wasSuccessful()).toBe(false);
             });
             
             it("should have the passed error", function() {
-                expect(op.getError()).toBe('Failed');   
+                expect(op.getError()).toBe('Failed');
             });
             
             it("should have an exception", function() {
-                expect(op.hasException()).toBe(true);    
-            });    
+                expect(op.hasException()).toBe(true);
+            });
         });
         
         describe("completeOperation", function() {
@@ -179,10 +179,13 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             makeOperation({
                 proxy: proxy
             });
+
             op.doExecute = function() {
                 request = new Ext.data.Request();
-                return request;    
+
+                return request;
             };
+
             spyOn(proxy, 'abort');
             spyOn(proxy, 'completeOperation');
         });
@@ -206,7 +209,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         it("should pass the request for this operation to abort", function() {
             op.execute();
             op.abort();
-            expect(proxy.abort).toHaveBeenCalledWith(request);    
+            expect(proxy.abort).toHaveBeenCalledWith(request);
         });
         
         it("should not call completeOperation", function() {
@@ -240,6 +243,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
     describe("callbacks", function() {
         it("should trigger when setting completed", function() {
             var called = false;
+
             makeOperation({
                 callback: function() {
                     called = true;
@@ -252,6 +256,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         
         it("should trigger when setting an exception", function() {
             var called = false;
+
             makeOperation({
                 callback: function() {
                     called = true;
@@ -264,6 +269,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         
         it("should default the scope to the operation", function() {
             var scope;
+
             makeOperation({
                 callback: function() {
                     scope = this;
@@ -291,9 +297,10 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         
         it("should pass the records, operation and success state", function() {
             var callback = jasmine.createSpy();
+
             makeOperation({
                 callback: callback
-            });    
+            });
             op.execute();
             op.setSuccessful(true);
             expect(callback).toHaveBeenCalledWith(op.getRecords(), op, true);
@@ -331,7 +338,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         });
         
         afterEach(function() {
-            Model = response = request = resultSet = null;    
+            Model = response = request = resultSet = null;
         });
         
         it("should set the resultSet", function() {
@@ -348,7 +355,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             it("should set an exception ", function() {
                 op.process(new Ext.data.ResultSet({
                     success: false
-                }), request, response);    
+                }), request, response);
                 expect(op.hasException()).toBe(true);
                 expect(op.wasSuccessful()).toBe(false);
             });
@@ -357,7 +364,7 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
                 op.process(new Ext.data.ResultSet({
                     success: false,
                     message: 'Failed'
-                }), request, response);    
+                }), request, response);
                 expect(op.getError()).toBe('Failed');
             });
         });
@@ -365,13 +372,13 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
         describe("result set with success: true", function() {
             it("should set success if the result set is successful", function() {
                 op.process(empty, request, response);
-                expect(op.wasSuccessful()).toBe(true);    
+                expect(op.wasSuccessful()).toBe(true);
             });
         
             it("should call doProcess", function() {
                 spyOn(op, 'doProcess');
                 op.process(empty, request, response);
-                expect(op.doProcess).toHaveBeenCalledWith(empty, request, response);   
+                expect(op.doProcess).toHaveBeenCalledWith(empty, request, response);
             });
         });
     });
@@ -379,27 +386,29 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
     describe("retrying an operation", function() {
         beforeEach(function() {
             makeOperation();
+
             op.doExecute = function() {
                 return new Ext.data.Request();
             };
+
             op.setException('Err');
             op.execute();
-        });   
+        });
         
         it("should clear any error", function() {
             expect(op.getError()).toBeUndefined();
-        });   
+        });
         
         it("should clear the success flag", function() {
             expect(op.wasSuccessful()).toBe(false);
-        });  
+        });
         
         it("should clear the complete flag", function() {
-            expect(op.isComplete()).toBe(false);    
+            expect(op.isComplete()).toBe(false);
         });
         
         it("should clear the exception flag", function() {
-            expect(op.hasException()).toBe(false);    
+            expect(op.hasException()).toBe(false);
         });
     });
     

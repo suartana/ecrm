@@ -25,6 +25,7 @@ Ext.define('Ext.ProgressBase', {
         if (!textTpl.isTemplate) {
             textTpl = new Ext.XTemplate(textTpl);
         }
+        
         return textTpl;
     },
 

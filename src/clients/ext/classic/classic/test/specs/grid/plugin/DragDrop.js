@@ -1,4 +1,6 @@
-describe("Ext.grid.plugin.DragDrop", function() {
+topSuite("Ext.grid.plugin.DragDrop",
+    ['Ext.grid.Panel', 'Ext.grid.feature.Grouping', 'Ext.data.ArrayStore', 'Ext.dom.Query'],
+function() {
     var dragThresh = Ext.dd.DragDropManager.clickPixelThresh + 1,
         grid1, grid2;
 
@@ -17,11 +19,14 @@ describe("Ext.grid.plugin.DragDrop", function() {
     function buildData(columns, rowNum) {
         var data = [],
             row;
+        
         for (var i = 0; i < rowNum; i++) {
             row = {};
+            
             for (var j = 0; j < columns.length; j++) {
                 row[columns[j]] = columns[j] + ' - row #' + i;
             }
+            
             data.push(row);
         }
 
@@ -36,7 +41,9 @@ describe("Ext.grid.plugin.DragDrop", function() {
 
     function selectRow(grid, rowIdx) {
         var target = findCell(grid, rowIdx, 0);
+        
         jasmine.fireMouseEvent(target, 'click', 0, 0, false, false, true, false);
+        
         return target;
     }
 
@@ -120,8 +127,8 @@ describe("Ext.grid.plugin.DragDrop", function() {
 
             grid1 = makeGrid(undefined, data, {
                 columns: [
-                    {dataIndex: 'foo'}, 
-                    {dataIndex: 'bar'}
+                    { dataIndex: 'foo' },
+                    { dataIndex: 'bar' }
                 ]
             });
 
@@ -153,8 +160,8 @@ describe("Ext.grid.plugin.DragDrop", function() {
 
             grid1 = makeGrid(undefined, data, {
                 columns: [
-                    {dataIndex: 'foo'}, 
-                    {dataIndex: 'bar'}
+                    { dataIndex: 'foo' },
+                    { dataIndex: 'bar' }
                 ]
             });
 

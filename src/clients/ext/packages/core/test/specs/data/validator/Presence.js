@@ -3,6 +3,7 @@ topSuite("Ext.data.validator.Presence", function() {
     
     function validate(value, cfg) {
         v = new Ext.data.validator.Presence(cfg);
+
         return v.validate(value);
     }
     
@@ -29,7 +30,7 @@ topSuite("Ext.data.validator.Presence", function() {
     describe("valid values", function() {
         describe("with allowEmpty: true", function() {
             it("should validate if passed an empty string", function() {
-                expect(validate('', {allowEmpty: true})).toBe(true);
+                expect(validate('', { allowEmpty: true })).toBe(true);
             });
         });
         
@@ -42,23 +43,23 @@ topSuite("Ext.data.validator.Presence", function() {
         });
         
         it("should validate a string", function() {
-            expect(validate('foo')).toBe(true);    
+            expect(validate('foo')).toBe(true);
         });
         
         it("should validate a number", function() {
-            expect(validate(100)).toBe(true);    
+            expect(validate(100)).toBe(true);
         });
         
         it("should validate an array", function() {
-            expect(validate([])).toBe(true);    
+            expect(validate([])).toBe(true);
         });
         
         it("should validate an object", function() {
-            expect(validate({})).toBe(true);    
+            expect(validate({})).toBe(true);
         });
         
         it("should validate a date", function() {
-            expect(validate(new Date())).toBe(true);    
+            expect(validate(new Date())).toBe(true);
         });
     });
     

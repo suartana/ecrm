@@ -23,14 +23,15 @@
  */
 Ext.define('Ext.picker.Month', {
     extend: 'Ext.Component',
+    alias: 'widget.monthpicker',
+    alternateClassName: 'Ext.MonthPicker',
+    
     requires: [
-        'Ext.XTemplate', 
-        'Ext.util.ClickRepeater', 
+        'Ext.XTemplate',
+        'Ext.util.ClickRepeater',
         'Ext.Date',
         'Ext.button.Button'
     ],
-    alias: 'widget.monthpicker',
-    alternateClassName: 'Ext.MonthPicker',
     
     isMonthPicker: true,
     
@@ -48,6 +49,7 @@ Ext.define('Ext.picker.Month', {
         'bodyEl', 'prevEl', 'nextEl', 'monthEl', 'yearEl', 'buttons'
     ],
 
+    /* eslint-disable indent, max-len */
     /**
      * @cfg renderTpl
      * @inheritdoc
@@ -88,6 +90,7 @@ Ext.define('Ext.picker.Month', {
           '</tpl>',
         '</div>'
     ],
+    /* eslint-enable indent, max-len */
 
     /**
      * @cfg {String} okText
@@ -204,7 +207,7 @@ Ext.define('Ext.picker.Month', {
      * @inheritdoc
      * @private
      */
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
 
         me.selectedCls = me.baseCls + '-selected';
@@ -212,6 +215,7 @@ Ext.define('Ext.picker.Month', {
         if (me.small) {
             me.addCls(me.smallCls);
         }
+
         me.setValue(me.value);
         me.activeYear = me.getYear(new Date().getFullYear() - 4, -4);
 
@@ -238,7 +242,7 @@ Ext.define('Ext.picker.Month', {
      * @inheritdoc
      * @private
      */
-    beforeRender: function(){
+    beforeRender: function() {
         var me = this,
             i = 0,
             months = [],
@@ -287,7 +291,7 @@ Ext.define('Ext.picker.Month', {
      * @inheritdoc
      * @private
      */
-    afterRender: function(){
+    afterRender: function() {
         var me = this,
             body = me.bodyEl;
 
@@ -298,7 +302,7 @@ Ext.define('Ext.picker.Month', {
         // of the floating parent such as Date picker or a menu, and cause it to hide.
         // To work around that, we stop the mousedown events completely.
         if (me.up('[floating=true]')) {
-            me.el.on('mousedown', me.onElClick, me, {translate: false});
+            me.el.on('mousedown', me.onElClick, me, { translate: false });
         }
 
         body.on({
@@ -327,7 +331,7 @@ Ext.define('Ext.picker.Month', {
         }
     },
     
-    calculateMonthMargin: function(){
+    calculateMonthMargin: function() {
         // We use this method for locales where the short month name
         // may be longer than we see in English. For example in the 
         // zh_TW locale the month ends up spanning lines, so we loosen
@@ -341,47 +345,56 @@ Ext.define('Ext.picker.Month', {
             --itemMargin;
             months.setStyle('margin', '0 ' + itemMargin + 'px');
         }
+
         return itemMargin;
     },
     
-    getLargest: function(months){
+    getLargest: function(months) {
         var largest = 0;
-        this.months.each(function(item){
+
+        this.months.each(function(item) {
             var h = item.getHeight();
+
             if (h > largest) {
                 largest = h;
             }
         });
+
         return largest;
         
     },
 
     /**
      * Set the value for the picker.
-     * @param {Date/Number[]} value The value to set. It can be a Date object, where the month/year will be extracted, or
-     * it can be an array, with the month as the first index and the year as the second.
+     * @param {Date/Number[]} value The value to set. It can be a Date object,
+     * where the month/year will be extracted, or it can be an array, with the month
+     * as the first index and the year as the second.
      * @return {Ext.picker.Month} this
      */
-    setValue: function(value){
+    setValue: function(value) {
         var me = this,
             active = me.activeYear,
             year;
 
         if (!value) {
             me.value = [null, null];
-        } else if (Ext.isDate(value)) {
+        }
+        else if (Ext.isDate(value)) {
             me.value = [value.getMonth(), value.getFullYear()];
-        } else {
+        }
+        else {
             me.value = [value[0], value[1]];
         }
 
         if (me.rendered) {
             year = me.value[1];
+
             if (year !== null) {
                 if ((year < active || year > active + me.yearOffset)) {
                     me.activeYear = year - me.yearOffset + 1;
                 }
             }
+
             me.updateBody();
         }
 
@@ -394,7 +407,7 @@ Ext.define('Ext.picker.Month', {
      * 0 based.
      * @return {Number[]} The selected value
      */
-    getValue: function(){
+    getValue: function() {
         return this.value;
     },
 
@@ -402,8 +415,9 @@ Ext.define('Ext.picker.Month', {
      * Checks whether the picker has a selection
      * @return {Boolean} Returns true if both a month and year have been selected
      */
-    hasSelection: function(){
+    hasSelection: function() {
         var value = this.value;
+
         return value[0] !== null && value[1] !== null;
     },
 
@@ -413,7 +427,7 @@ Ext.define('Ext.picker.Month', {
      * @private
      * @return {Number[]} An array of years
      */
-    getYears: function(){
+    getYears: function() {
         var me = this,
             offset = me.yearOffset,
             start = me.activeYear, // put the "active" year on the left
@@ -432,7 +446,7 @@ Ext.define('Ext.picker.Month', {
      * Update the years in the body based on any change
      * @private
      */
-    updateBody: function(){
+    updateBody: function() {
         var me = this,
             years = me.years,
             months = me.months,
@@ -449,23 +463,27 @@ Ext.define('Ext.picker.Month', {
             months.removeCls(cls);
 
             yearItems = years.elements;
-            yLen      = yearItems.length;
+            yLen = yearItems.length;
 
             for (y = 0; y < yLen; y++) {
                 el = Ext.fly(yearItems[y]);
 
                 year = yearNumbers[y];
                 el.dom.innerHTML = year;
+
                 if (year === value) {
                     el.addCls(cls);
                 }
             }
+
             if (month !== null) {
                 if (month < monthOffset) {
                     month = month * 2;
-                } else {
+                }
+                else {
                     month = (month - monthOffset) * 2 + 1;
                 }
+
                 months.item(month).addCls(cls);
             }
         }
@@ -480,7 +498,9 @@ Ext.define('Ext.picker.Month', {
      */
     getYear: function(defaultValue, offset) {
         var year = this.value[1];
+
         offset = offset || 0;
+
         return year === null ? defaultValue : year + offset;
     },
     
@@ -499,7 +519,8 @@ Ext.define('Ext.picker.Month', {
         if (e.getTarget('.' + me.baseCls + '-month')) {
             e.stopEvent();
             me.onMonthClick(t, isDouble);
-        } else if (e.getTarget('.' + me.baseCls + '-year')) {
+        }
+        else if (e.getTarget('.' + me.baseCls + '-year')) {
             e.stopEvent();
             me.onYearClick(t, isDouble);
         }
@@ -509,10 +530,11 @@ Ext.define('Ext.picker.Month', {
      * Modify the year display by passing an offset.
      * @param {Number} [offset=10] The offset to move by.
      */
-    adjustYear: function(offset){
+    adjustYear: function(offset) {
         if (typeof offset !== 'number') {
             offset = this.totalYears;
         }
+
         this.activeYear += offset;
         this.updateBody();
     },
@@ -521,7 +543,7 @@ Ext.define('Ext.picker.Month', {
      * React to the ok button being pressed
      * @private
      */
-    onOkClick: function(){
+    onOkClick: function() {
         this.fireEvent('okclick', this, this.value);
     },
 
@@ -529,7 +551,7 @@ Ext.define('Ext.picker.Month', {
      * React to the cancel button being pressed
      * @private
      */
-    onCancelClick: function(){
+    onCancelClick: function() {
         this.fireEvent('cancelclick', this);
     },
 
@@ -539,8 +561,9 @@ Ext.define('Ext.picker.Month', {
      * @param {HTMLElement} target The element that was clicked
      * @param {Boolean} isDouble True if the event was a doubleclick
      */
-    onMonthClick: function(target, isDouble){
+    onMonthClick: function(target, isDouble) {
         var me = this;
+
         me.value[0] = me.resolveOffset(me.months.indexOf(target), me.monthOffset);
         me.updateBody();
         me.fireEvent('month' + (isDouble ? 'dbl' : '') + 'click', me, me.value);
@@ -553,8 +576,9 @@ Ext.define('Ext.picker.Month', {
      * @param {HTMLElement} target The element that was clicked
      * @param {Boolean} isDouble True if the event was a doubleclick
      */
-    onYearClick: function(target, isDouble){
+    onYearClick: function(target, isDouble) {
         var me = this;
+
         me.value[1] = me.activeYear + me.resolveOffset(me.years.indexOf(target), me.yearOffset);
         me.updateBody();
         me.fireEvent('year' + (isDouble ? 'dbl' : '') + 'click', me, me.value);
@@ -563,17 +587,19 @@ Ext.define('Ext.picker.Month', {
     },
 
     /**
-     * Returns an offsetted number based on the position in the collection. Since our collections aren't
-     * numerically ordered, this function helps to normalize those differences.
+     * Returns an offsetted number based on the position in the collection.
+     * Since our collections aren't numerically ordered, this function helps
+     * to normalize those differences.
      * @private
      * @param {Object} index
      * @param {Object} offset
      * @return {Number} The correctly offsetted number
      */
-    resolveOffset: function(index, offset){
+    resolveOffset: function(index, offset) {
         if (index % 2 === 0) {
             return (index / 2);
-        } else {
+        }
+        else {
             return offset + Math.floor(index / 2);
         }
     },
@@ -587,7 +613,7 @@ Ext.define('Ext.picker.Month', {
     privates: {
         // Do the job of a container layout at this point even though we are not a Container.
         // TODO: Refactor as a Container.
-        finishRenderChildren: function () {
+        finishRenderChildren: function() {
             var me = this;
 
             this.callParent(arguments);

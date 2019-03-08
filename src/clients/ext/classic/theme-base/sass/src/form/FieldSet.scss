@@ -3,8 +3,8 @@
     position: relative;
     overflow: hidden;
     
-    // Safari 11 has a bug where fieldset legend is not displayed
-    .#{$prefix}safari11 & {
+    // Safari has a bug where fieldset legend is not displayed
+    .#{$prefix}safari:not(.#{$prefix}safari10m) & {
         overflow: visible;
     }
 }

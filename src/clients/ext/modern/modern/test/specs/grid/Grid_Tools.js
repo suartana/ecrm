@@ -1,7 +1,7 @@
 /* global Ext, jasmine, expect */
 
 topSuite("Ext.grid.Grid_Tools",
-    ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit'],
+    [false, 'Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit'],
 function() {
 
     var Model = Ext.define(null, {

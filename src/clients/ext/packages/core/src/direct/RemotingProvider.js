@@ -12,12 +12,12 @@
  * outputted by the server-side Ext Direct stack when the API description is built.
  */
 Ext.define('Ext.direct.RemotingProvider', {
-    extend: 'Ext.direct.JsonProvider', 
-    alias:  'direct.remotingprovider',
+    extend: 'Ext.direct.JsonProvider',
+    alias: 'direct.remotingprovider',
     
     requires: [
-        'Ext.util.MixedCollection', 
-        'Ext.util.DelayedTask', 
+        'Ext.util.MixedCollection',
+        'Ext.util.DelayedTask',
         'Ext.direct.Transaction',
         'Ext.direct.RemotingMethod',
         'Ext.direct.Manager'
@@ -267,7 +267,9 @@ Ext.define('Ext.direct.RemotingProvider', {
 
         me.callParent([config]);
 
-        me.namespace = (Ext.isString(me.namespace)) ? Ext.ns(me.namespace) : me.namespace || Ext.global;
+        me.namespace = (Ext.isString(me.namespace) ? Ext.ns(me.namespace) : me.namespace) ||
+                       Ext.global;
+        
         me.callBuffer = [];
     },
     
@@ -275,6 +277,7 @@ Ext.define('Ext.direct.RemotingProvider', {
         if (this.callTask) {
             this.callTask.cancel();
         }
+        
         this.callParent();
     },
     
@@ -310,11 +313,11 @@ Ext.define('Ext.direct.RemotingProvider', {
     getNamespace: function(root, action) {
         var parts, ns, i, len;
         
-        root  = root || Ext.global;
+        root = root || Ext.global;
         parts = action.toString().split('.');
 
         for (i = 0, len = parts.length; i < len; i++) {
-            ns   = parts[i];
+            ns = parts[i];
             root = root[ns];
 
             if (typeof root === 'undefined') {
@@ -334,14 +337,14 @@ Ext.define('Ext.direct.RemotingProvider', {
     createNamespaces: function(root, action) {
         var parts, ns, i, len;
         
-        root  = root || Ext.global;
+        root = root || Ext.global;
         parts = action.toString().split('.');
         
         for (i = 0, len = parts.length; i < len; i++) {
             ns = parts[i];
             
             root[ns] = root[ns] || {};
-            root     = root[ns];
+            root = root[ns];
         }
         
         return root;
@@ -438,6 +441,7 @@ Ext.define('Ext.direct.RemotingProvider', {
             if (transaction.isForm) {
                 form = transaction.form;
                 
+                /* eslint-disable-next-line max-len */
                 isUpload = String(form.getAttribute("enctype")).toLowerCase() === 'multipart/form-data';
                 
                 postParams = {
@@ -533,6 +537,7 @@ Ext.define('Ext.direct.RemotingProvider', {
         if (transaction.isForm || enableBuffer === false || transaction.disableBatching ||
             transaction.timeout != null) {
             me.sendTransaction(transaction);
+            
             return;
         }
         
@@ -617,6 +622,7 @@ Ext.define('Ext.direct.RemotingProvider', {
     
             if (enableUrlEncode) {
                 params = {};
+                /* eslint-disable-next-line max-len */
                 params[Ext.isString(enableUrlEncode) ? enableUrlEncode : 'data'] = Ext.encode(callData);
                 request.params = params;
             }
@@ -715,6 +721,7 @@ Ext.define('Ext.direct.RemotingProvider', {
                     me.fireEvent('data', me, event);
                     me.fireEvent('exception', me, event);
 
+                    /* eslint-disable-next-line max-len */
                     if (transaction && me.fireEvent('beforecallback', me, event, transaction) !== false) {
                         me.runCallback(transaction, event, false);
                     }
@@ -755,15 +762,15 @@ Ext.define('Ext.direct.RemotingProvider', {
         
         if (transaction && transaction.callback) {
             callback = transaction.callback;
-            options  = transaction.callbackOptions;
-            result   = typeof event.result !== 'undefined' ? event.result : event.data;
+            options = transaction.callbackOptions;
+            result = typeof event.result !== 'undefined' ? event.result : event.data;
 
             if (Ext.isFunction(callback)) {
                 callback(result, event, success, options);
             }
             else {
                 Ext.callback(callback[funcName], callback.scope, [result, event, success, options]);
-                Ext.callback(callback.callback,  callback.scope, [result, event, success, options]);
+                Ext.callback(callback.callback, callback.scope, [result, event, success, options]);
             }
         }
     },

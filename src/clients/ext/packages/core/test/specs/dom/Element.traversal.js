@@ -4,22 +4,22 @@ topSuite("Ext.dom.Element.traversal", [false, 'Ext.dom.Element'], function() {
     
     beforeEach(function() {
         el = Ext.getBody().createChild({
-            id      : 'ExtElementHelper',
-            cls     : 'wrapper',
-            style   : 'position:absolute;',
+            id: 'ExtElementHelper',
+            cls: 'wrapper',
+            style: 'position:absolute;',
             children: [
-                {id: 'child1', style: 'position:absolute;'},
-                {id: 'child2', style: 'position:absolute;'},
-                {id: 'child3', style: 'position:absolute;'},
+                { id: 'child1', style: 'position:absolute;' },
+                { id: 'child2', style: 'position:absolute;' },
+                { id: 'child3', style: 'position:absolute;' },
                 {
                     id: 'child4',
                     children: [
                         {
-                            id : 'child4_1',
+                            id: 'child4_1',
                             cls: 'findIt',
                             children: [
                                 {
-                                    id : 'child4_1_1'
+                                    id: 'child4_1_1'
                                 }
                             ]
                         }
@@ -29,8 +29,8 @@ topSuite("Ext.dom.Element.traversal", [false, 'Ext.dom.Element'], function() {
         });
         
         input = Ext.getBody().createChild({
-            id  : 'ExtElementInputHelper',
-            tag : 'input',
+            id: 'ExtElementInputHelper',
+            tag: 'input',
             type: 'text'
         });
         
@@ -106,6 +106,7 @@ topSuite("Ext.dom.Element.traversal", [false, 'Ext.dom.Element'], function() {
     describe("select", function() {
         it("should return an Ext.CompositeELementLite", function() {
             var result = el.select('div');
+
             expect(result).toBeDefined();
             expect(result.elements.length).toEqual(6);
             expect(result instanceof Ext.CompositeElementLite).toBe(true);
@@ -334,18 +335,18 @@ topSuite("Ext.dom.Element.traversal", [false, 'Ext.dom.Element'], function() {
         });
     });
     
-    describe("contains", function(){
-        it('should return false for siblings', function(){
+    describe("contains", function() {
+        it('should return false for siblings', function() {
             expect(Ext.fly(child1).contains(child4_1_1)).toBe(false);
             expect(Ext.fly(child2).contains(child4_1_1)).toBe(false);
         });
-        it('should return true for parents', function(){
+        it('should return true for parents', function() {
             expect(Ext.fly(child4_1).contains(child4_1_1)).toBe(true);
         });
-        it('should return true for grandparents', function(){
+        it('should return true for grandparents', function() {
             expect(Ext.fly(child4).contains(child4_1_1)).toBe(true);
         });
-        it('should return true for self', function(){
+        it('should return true for self', function() {
             expect(Ext.fly(child4_1_1).contains(child4_1_1)).toBe(true);
         });
     });

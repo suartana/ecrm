@@ -107,8 +107,8 @@ Ext.define('Ext.grid.plugin.Summary', {
 
         this.setOwner(grid);
         row = this.getRow();
-
         grid.addCls(Ext.baseCSSPrefix + 'grid-has-summaryrow');
+
         if (scrollable) {
             rowScroller = row.getScrollable();
             if (!rowScroller) {

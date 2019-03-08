@@ -1,4 +1,9 @@
 topSuite("Ext.Util", false, function() {
+    var fakeScope = {
+        id: "fakeScope",
+        fakeScope: true
+    };
+    
     describe("Ext.callback", function() {
         var spy;
 
@@ -6,19 +11,19 @@ topSuite("Ext.Util", false, function() {
             spy = jasmine.createSpy();
         });
 
-        it('should not fail if given a null callback', function () {
+        it('should not fail if given a null callback', function() {
             expect(function() {
                 Ext.callback(null);
             }).not.toThrow();
         });
 
-        it('should not fail if given an undefined callback', function () {
+        it('should not fail if given an undefined callback', function() {
             expect(function() {
                 Ext.callback(undefined);
             }).not.toThrow();
         });
 
-        it('should not fail if given an invalid callback', function () {
+        it('should not fail if given an invalid callback', function() {
             expect(function() {
                 Ext.callback(42);
             }).not.toThrow();
@@ -26,7 +31,7 @@ topSuite("Ext.Util", false, function() {
 
         it("should pass arguments to the callback function", function() {
             Ext.callback(spy, fakeScope, [1, 2, 3, 4, 6]);
-            expect(spy).toHaveBeenCalledWith(1, 2, 3, 4,6);
+            expect(spy).toHaveBeenCalledWith(1, 2, 3, 4, 6);
         });
 
         it("should be able to defer function call", function() {
@@ -34,38 +39,42 @@ topSuite("Ext.Util", false, function() {
                 Ext.callback(spy, undefined, [1, 2, 3, 4, 6], 1);
                 expect(spy).not.toHaveBeenCalled();
             });
+            
             waitsFor(function() {
                 return spy.callCount > 0;
             }, "deferred callback never called");
+            
             runs(function() {
                 expect(spy).toHaveBeenCalledWith(1, 2, 3, 4, 6);
             });
-
         });
 
-        it("should return the return value of the given function", function () {
+        it("should return the return value of the given function", function() {
             var x = 0,
-                fn = function (y) {
+                fn = function(y) {
                     return x = this.z * 10 + y;
                 },
-                y = Ext.callback(fn, {z: 42}, [7]);
+                y = Ext.callback(fn, { z: 42 }, [7]);
 
             expect(x).toBe(427);
             expect(y).toBe(427);
         });
         
         describe("scoping", function() {
-            describe('up', function () {
-                it('should find the appropriate scope', function () {
+            describe('up', function() {
+                it('should find the appropriate scope', function() {
                     var top = {
-                        foo: function (x) {
+                        foo: function(x) {
                             top.x = x;
+
                             return x * 2;
                         }
                     };
+
                     var bottom = {
-                        up: function (query) {
+                        up: function(query) {
                             expect(query).toBe(undefined); // doesn't use CQ
+
                             return top;
                         }
                     };
@@ -142,6 +151,7 @@ topSuite("Ext.Util", false, function() {
                             
                         }
                     };
+                    
                     spyOn(scopeInfo, 'foo');
                 });
                 
@@ -182,9 +192,11 @@ topSuite("Ext.Util", false, function() {
                             Ext.callback('foo', scopeInfo, undefined, 1);
                             expect(scopeInfo.foo).not.toHaveBeenCalled();
                         });
+                        
                         waitsFor(function() {
                             return scopeInfo.foo.callCount > 0;
                         }, "deferred callback never called");
+                        
                         runs(function() {
                             expect(scopeInfo.foo).toHaveBeenCalled();
                             expect(scopeInfo.foo.mostRecentCall.object).toBe(scopeInfo);
@@ -194,6 +206,7 @@ topSuite("Ext.Util", false, function() {
                 
                 describe("with caller", function() {
                     var theScope, caller;
+
                     beforeEach(function() {
                         theScope = {
                             foo: function() {
@@ -205,6 +218,7 @@ topSuite("Ext.Util", false, function() {
                                 return theScope;
                             }
                         };
+                        
                         spyOn(theScope, 'foo');
                     });
                     
@@ -233,9 +247,11 @@ topSuite("Ext.Util", false, function() {
                                 Ext.callback('foo', undefined, undefined, 1, caller);
                                 expect(theScope.foo).not.toHaveBeenCalled();
                             });
+                            
                             waitsFor(function() {
                                 return theScope.foo.callCount > 0;
                             }, "deferred callback never called");
+                            
                             runs(function() {
                                 expect(theScope.foo).toHaveBeenCalled();
                                 expect(theScope.foo.mostRecentCall.object).toBe(caller.resolveListenerScope());
@@ -263,9 +279,11 @@ topSuite("Ext.Util", false, function() {
                                 Ext.callback('foo', 'this', undefined, 1, caller);
                                 expect(theScope.foo).not.toHaveBeenCalled();
                             });
+                            
                             waitsFor(function() {
                                 return theScope.foo.callCount > 0;
                             }, "deferred callback never called");
+                            
                             runs(function() {
                                 expect(theScope.foo).toHaveBeenCalled();
                                 expect(theScope.foo.mostRecentCall.object).toBe(theScope);
@@ -293,9 +311,11 @@ topSuite("Ext.Util", false, function() {
                                 Ext.callback('foo', 'controller', undefined, 1, caller);
                                 expect(theScope.foo).not.toHaveBeenCalled();
                             });
+                            
                             waitsFor(function() {
                                 return theScope.foo.callCount > 0;
                             }, "deferred callback never called");
+                            
                             runs(function() {
                                 expect(theScope.foo).toHaveBeenCalled();
                                 expect(theScope.foo.mostRecentCall.object).toBe(theScope);
@@ -307,66 +327,68 @@ topSuite("Ext.Util", false, function() {
         });
     }); // Ext.callback
 
-    describe('copyToIf String[]', function () {
+    describe('copyToIf String[]', function() {
         var dest;
+
         var source = { a: 1, b: 'x', c: 42 };
 
-        beforeEach(function () {
+        beforeEach(function() {
             dest = { a: 427 };
         });
 
-        it('should leave existing properties alone', function () {
+        it('should leave existing properties alone', function() {
             Ext.copyToIf(dest, source, ['a']);
             expect(dest).toEqual({ a: 427 });
         });
 
-        it('should add new properties', function () {
-            Ext.copyToIf(dest, source, ['a','b']);
+        it('should add new properties', function() {
+            Ext.copyToIf(dest, source, ['a', 'b']);
             expect(dest).toEqual({ a: 427, b: 'x' });
         });
     });
 
-    describe('copyToIf String', function () {
+    describe('copyToIf String', function() {
         var dest;
+
         var source = { a: 1, b: 'x', c: 42 };
 
-        beforeEach(function () {
+        beforeEach(function() {
             dest = { a: 427 };
         });
 
-        it('should leave existing properties alone', function () {
+        it('should leave existing properties alone', function() {
             Ext.copyToIf(dest, source, 'a');
             expect(dest).toEqual({ a: 427 });
         });
 
-        it('should add new properties', function () {
+        it('should add new properties', function() {
             Ext.copyToIf(dest, source, 'a,b');
             expect(dest).toEqual({ a: 427, b: 'x' });
         });
     });
 
-    describe('coerce', function () {
+    describe('coerce', function() {
         var coerce = Ext.coerce;
 
         function doCoercion(type, v, res) {
-            it('should coerce ' + (typeof v) + ' "' + v + '", to type: ' + type + ', value: ' + res, function () {
+            it('should coerce ' + (typeof v) + ' "' + v + '", to type: ' + type + ', value: ' + res, function() {
                 expect(coerce(v, type)).toBe(res);
             });
         }
 
-        describe('boolean', function () {
+        describe('boolean', function() {
             doCoercion(true, 'true', true);
             doCoercion(true, 'false', false);
             doCoercion(true, '1', true);
             doCoercion(true, '0', false);
         });
 
-        describe('number', function () {
+        describe('number', function() {
             doCoercion(5, 7, 7);
             doCoercion(5, '13', 13);
         });
 
-        describe('null', function () {
+        describe('null', function() {
             doCoercion(null, null, null);
             doCoercion(null, 'null', null);
             doCoercion(null, undefined, false);
@@ -375,14 +397,14 @@ topSuite("Ext.Util", false, function() {
             doCoercion(null, 1, false);
         });
 
-        describe('string', function () {
+        describe('string', function() {
             doCoercion('', 'true', 'true');
             doCoercion('', 'false', 'false');
             doCoercion('', '1', '1');
             doCoercion('', '0', '0');
         });
 
-        describe('undefined', function () {
+        describe('undefined', function() {
             doCoercion(undefined, undefined, undefined);
             doCoercion(undefined, 'undefined', undefined);
             doCoercion(undefined, null, false);
@@ -392,4 +414,3 @@ topSuite("Ext.Util", false, function() {
         });
     });
 });
-

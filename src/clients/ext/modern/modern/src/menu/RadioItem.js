@@ -138,7 +138,7 @@ Ext.define('Ext.menu.RadioItem', {
 
             // Sync state of all siblings in group via the parent menu *before* we call parent.
             // State must be correct.
-            if (parentMenu && name) {
+            if (name && parentMenu && !parentMenu.updatingGroups) {
                 groups = {};
 
                 if (checkboxElement.checked) {

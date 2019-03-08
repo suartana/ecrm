@@ -11,7 +11,7 @@ topSuite("Ext.data.identifier.Sequential", function() {
     
     describe("defaults", function() {
         beforeEach(function() {
-            make(); 
+            make();
         });
         
         it("should default prefix to null", function() {
@@ -30,12 +30,12 @@ topSuite("Ext.data.identifier.Sequential", function() {
             expect(idgen.generate()).toBe(2);
             expect(idgen.generate()).toBe(3);
             expect(idgen.generate()).toBe(4);
-        });  
+        });
         
         it("should generate with a prefix", function() {
             make({
                 prefix: 'foo'
-            });    
+            });
             expect(idgen.generate()).toBe('foo1');
             expect(idgen.generate()).toBe('foo2');
             expect(idgen.generate()).toBe('foo3');
@@ -45,7 +45,7 @@ topSuite("Ext.data.identifier.Sequential", function() {
         it("should generate with a custom seed", function() {
             make({
                 seed: 103
-            });    
+            });
             expect(idgen.generate()).toBe(103);
             expect(idgen.generate()).toBe(104);
             expect(idgen.generate()).toBe(105);
@@ -56,7 +56,7 @@ topSuite("Ext.data.identifier.Sequential", function() {
             make({
                 prefix: 'foo',
                 seed: 103
-            });    
+            });
             expect(idgen.generate()).toBe('foo103');
             expect(idgen.generate()).toBe('foo104');
             expect(idgen.generate()).toBe('foo105');

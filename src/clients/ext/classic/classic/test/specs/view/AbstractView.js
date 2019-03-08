@@ -1,14 +1,14 @@
-/* global Ext, expect, jasmine */
-
 topSuite("Ext.view.AbstractView", ['Ext.data.ArrayStore'], function() {
     var store, view,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+
             return this;
         };
     
@@ -189,6 +189,7 @@ topSuite("Ext.view.AbstractView", ['Ext.data.ArrayStore'], function() {
                     }
                 }
             });
+
             store.add({
                 field: 'a'
             });
