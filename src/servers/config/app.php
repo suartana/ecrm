@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Docu Media Schweiz GmbH ERP & CRM'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://http://docucrm.docu.test'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\Oci8\Oci8ServiceProvider::class,
-	    Sven\ArtisanView\ServiceProvider::class,
+	    Laravel\Passport\PassportServiceProvider::class,
 
     ],
 

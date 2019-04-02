@@ -1,11 +1,28 @@
 .auth-locked-window{
     .x-window-body {
         background-color: $base-crm-background-color;
+        background-image: url("/resources/images/home.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
-    &.x-window-default {
+    h1 {
+        font-size: 24px;
+        color:#ffffff;
+    }
+
+    .slogan{
+        font-size: 24px;
+        color: #ffffff;
+    }
+
+    .x-window-default {
         border: none;
         border-radius: 0;
         padding: 0;
+    }
+    .x-window-header-default {
+        border-width: 0px !important;
     }
 }

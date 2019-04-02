@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'oracle'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,8 +40,8 @@ return [
             'port' => '1521',
             'database' => '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=dg-xois-db.docunet.info)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XOISDEV)))',
             'service_name' => 'XOISDEV',
-            'username' => 'xois_mgr',
-            'password' => 'xois2468',
+            'username' => 'xois_local',
+            'password' => 'xois_local',
             'charset' => 'AL32UTF8',
             'prefix' => '',
         ],

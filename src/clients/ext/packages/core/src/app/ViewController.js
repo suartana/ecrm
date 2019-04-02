@@ -221,7 +221,7 @@ Ext.define('Ext.app.ViewController', {
      */
     getReferences: function() {
         var view = this.view;
-        
+        console.log();
         return view && view.getReferences();
     },
 

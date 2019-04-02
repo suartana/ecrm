@@ -28,23 +28,13 @@ Ext.define('Docucrm.view.main.MainController', {
 			before: 'beforeShowNode'
 		},
 		':login': {
-			action: 'showLogin',
-			before: 'beforeShowLogin'
+			action: 'showLogin'
 		}
 	},
 	/**
 	 * Set the private variable
 	 */
 	lastView: null,
-	/**
-	 * Route before login action
-	 *
-	 * @param id
-	 * @param action
-	 */
-	beforeShowLogin:function(id,action){
-		console.log("login ....","id",id,"action",action);
-	},
 	/**
 	 * Route before show node action
 	 *
@@ -98,6 +88,8 @@ Ext.define('Docucrm.view.main.MainController', {
 			lastView = me.lastView,
 			existingItem = mainCard.child('component[routeId=' + hashTag + ']'),
 			newView;
+
+		//me.keeplive();
 
 		// Kill any previously routed window
 		if (lastView && lastView.isWindow) {
@@ -162,7 +154,7 @@ Ext.define('Docucrm.view.main.MainController', {
 		var me = this,
 			sImage = '<div class="main-logo"><img src="resources/images/logo.png" width="22px"></div>',
 			lImage = '<div class="main-logo"><img class="documedia" src="resources/images/login_logo.png" width="210px" valign="center"></div>',
-			documediaLog = Ext.getCmp("documediaLogo"),
+			documediaLog = Ext.ComponentQuery.query("#documediaLogo")[0],
 			refs = me.getReferences(),
 			navigationList = refs.navigationTreeList,
 			wrapContainer = refs.mainContainerWrap,
@@ -273,5 +265,75 @@ Ext.define('Docucrm.view.main.MainController', {
 	 */
 	onEmailRouteChange: function () {
 		this.setCurrentView('email');
+	},
+	/**
+	 * Keep app alive
+	 */
+	keeplive : function(){
+		// It's important to note that this type of application could use
+		// any type of storage, i.e., Cookies, LocalStorage, etc.
+		var loggedIn, me = this;
+		// Check to see the current value of the localStorage key
+		loggedIn = localStorage.getItem("tokens");
+		// This ternary operator determines the value of the TutorialLoggedIn key.
+		// If TutorialLoggedIn isn't true, we display the login window,
+		// otherwise, we display the main view
+		Ext.Ajax.request({
+			headers :Docucrm.util.Tools.getApiHeaders(),
+			url: '/api/userinfo',
+			scope: this,
+			method:'GET',
+			success: function(response) {
+				var obj = Ext.decode(response.responseText),
+					cardView = obj.status.api_token && obj.success && obj.status.emp ?  true : false;
+				//me.setMainView(cardView ? 'Docucrm.view.main.Main' : 'Docucrm.view.authentication.Login');
+				me.redirectTo(cardView ? "#dasboard" : "#login");
+				//me.setMainView( cardView ?  'Docucrm.view.main.Main' : 'Docucrm.view.authentication.Login');
+			},
+			failure: function(response) {
+				//me.setMainView('Docucrm.view.authentication.Login');
+				me.redirectTo("#login");
+			}
+		});
+
+	},
+	logout:function(){
+		var me = this;
+		Ext.MessageBox.confirm({
+			title: Docucrm.util.Translate.label('System Logout'),
+			msg:Docucrm.util.Translate.label( 'Are you sure you want to do that?'),
+			buttons: Ext.MessageBox.OKCANCEL,
+			scope: this,
+			icon: Ext.MessageBox.QUESTION,
+			fn: function(btn) {
+				if (btn === 'ok') {
+					me.logoutUser();
+				}
+			}
+		});
+	},
+	logoutUser :function (button) {
+		// It's important to note that this type of application could use
+		// any type of storage, i.e., Cookies, LocalStorage, etc.
+		var loggedIn, me = this;
+		// Check to see the current value of the localStorage key
+		loggedIn = localStorage.getItem("tokens");
+		// This ternary operator determines the value of the TutorialLoggedIn key.
+		// If TutorialLoggedIn isn't true, we display the login window,
+		// otherwise, we display the main view
+		Ext.Ajax.request({
+			headers : Docucrm.util.Tools.getApiHeaders(),
+			url: '/api/crm/logout',
+			scope: this,
+			method:'GET',
+			success: function(response) {
+				window.location.href = "/user/#login";
+				localStorage.setItem("tokens", "");
+			},
+			failure: function(response) {
+				localStorage.setItem("tokens", "");
+				Docucrm.util.Translate.infoBox("Error","Something has gone wrong. Please contact a system administrator.");
+			}
+		});
 	}
 });

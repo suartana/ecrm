@@ -1,3 +1,13 @@
+/**
+ * @version    	$Id: LockScreen.js gsuartana $
+ * @copyright  	Copyright (c) 2019 by Docu Media Schweiz GmbH, Switzerland
+ *
+ * @class
+ * View definition for Authentication Lock Screen View.
+ *
+ * @author  Gede Suartana <gede.suartana@reussprivate.com>
+ */
+
 Ext.define('Docucrm.view.authentication.LockScreen', {
     extend: 'Docucrm.view.authentication.LockingWindow',
     xtype: 'lockscreen',

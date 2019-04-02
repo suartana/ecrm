@@ -1,7 +1,13 @@
 /**
+ * @version    	$Id: LockingWindow.js gsuartana $
+ * @copyright  	Copyright (c) 2019 by Docu Media Schweiz GmbH, Switzerland
+ *
+ * @class
  * This class provides the modal Ext.Window support for all Authentication forms.
  * It's layout is structured to center any Authentication dialog within it's center,
  * and provides a backGround image during such operations.
+ *
+ * @author  Gede Suartana <gede.suartana@reussprivate.com>
  */
 Ext.define('Docucrm.view.authentication.LockingWindow', {
     extend: 'Ext.window.Window',

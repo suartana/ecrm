@@ -1,6 +1,6 @@
 Ext.define('Docucrm.view.main.Main', {
     extend: 'Ext.container.Viewport',
-
+    xtype: 'dashboard',
     requires: [
         'Ext.button.Segmented',
         'Ext.list.Tree'
@@ -16,7 +16,7 @@ Ext.define('Docucrm.view.main.Main', {
         type: 'vbox',
         align: 'stretch'
     },
-
+    plugins: 'viewport',
     listeners: {
         render: 'onMainViewRender'
     },
@@ -32,7 +32,7 @@ Ext.define('Docucrm.view.main.Main', {
                     xtype: 'component',
                     reference: 'senchaLogo',
                     cls: 'sencha-logo',
-                    id:'documediaLogo',
+                    itemId:'documediaLogo',
                     html: '<div class="main-logo"><img class="documedia" src="resources/images/login_logo.png" width="210px" valign="center"></div>',
                     width: 250
                 },
@@ -40,7 +40,7 @@ Ext.define('Docucrm.view.main.Main', {
                     margin: '0 0 0 8',
                     ui: 'header',
                     iconCls:'x-fa fa-navicon',
-                    id: 'main-navigation-btn',
+                    itemId: 'main-navigation-btn',
                     handler: 'onToggleNavigationSize'
                 },
 				{
@@ -99,7 +99,13 @@ Ext.define('Docucrm.view.main.Main', {
                     width: 35,
                     alt:'current user image',
                     src: 'resources/images/user-profile/gede.jpg'
-                }
+                },
+                {
+                    iconCls:'x-fa fa-sign-out',
+                    ui: 'header',
+                    tooltip: 'Logout',
+                    handler:'logout'
+                },
             ]
         },
         {

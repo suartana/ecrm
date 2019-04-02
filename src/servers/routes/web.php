@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 /*
  * |--------------------------------------------------------------------------
  * | Web Routes
@@ -10,25 +11,31 @@
  * | to using a Closure or controller method. Build something great!
  * |
  */
+Auth::routes([
+	'register' => false,
+	'verify' => true,
+	'reset' => true
+]);
+// public routes
 Route::group([
-    'middleware' => [
-        'web'
-    ]
-],
-    function () {
-	    // login firts
-	    //Auth::routes();
-	    //Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-	    //main index
-	    Route::get('/', 'Users\UserController@index');
-	    //get navigation json data
-	    Route::get('/system/navigation', 'Systems\MenuController@index');
+	'middleware' => [
+		'web'
+	]
+],function () {
+	//navigation
+	Route::get('/system/navigation', 'Systems\MenuController@index');
+	Route::get('/', function () {
+		return view('index');
+	});
+	Route::get('/user', function () {
+		return view('index');
+	});
+	Route::get('/login', function () {
+		return view('index');
+	});
+	Route::get('/reset', 'Auth\ResetPasswordController@index');
+	//language translation
+	Route::get('/translation/jstranslations', 'Systems\TranslationController@jstranslations');
+});
 
-        Route::get('/test', 'Tests\OracleController@index');
 
-    });
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +12,17 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::prefix('crm')->group(function(){
+	Route::post('login', 'Api\AuthController@login');
+	Route::post('resetpassword', 'Api\ResetPasswordController@sendEmail');
+	Route::group(['middleware' => 'auth:api'], function(){
+		Route::get('getUser', 'Api\AuthController@getUser');
+		Route::get('/logout', 'Api\AuthController@logout');
+	});
+});
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['middleware' => ['auth:api']], function () {
+	Route::get('/user', 'Api\AuthController@getUser');
+	Route::get('/userinfo', 'Users\UserController@status');
 });

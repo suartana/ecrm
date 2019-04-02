@@ -1,7 +1,15 @@
+/**
+ * @version    	$Id: Login.js gsuartana $
+ * @copyright  	Copyright (c) 2019 by Docu Media Schweiz GmbH, Switzerland
+ *
+ * @class
+ * View definition for Authentication Login View.
+ *
+ * @author  Gede Suartana <gede.suartana@reussprivate.com>
+ */
 Ext.define('Docucrm.view.authentication.Login', {
     extend: 'Docucrm.view.authentication.LockingWindow',
     xtype: 'login',
-
     requires: [
         'Docucrm.view.authentication.Dialog',
         'Ext.container.Container',
@@ -9,10 +17,9 @@ Ext.define('Docucrm.view.authentication.Login', {
         'Ext.form.field.Checkbox',
         'Ext.button.Button'
     ],
-
-    title: '<h3>Docu CRM v.3.0</h3>',
+    itemId:'authlogin',
+    title: '<h1><span class="slogan">"Changes for the Better..."</span> Docu Media ERP & CRM</h1>',
     defaultFocus: 'authdialog', // Focus the Auth Form to force field focus as well
-
     items: [
         {
             xtype: 'authdialog',
@@ -45,7 +52,8 @@ Ext.define('Docucrm.view.authentication.Login', {
                 {
                     xtype: 'textfield',
                     cls: 'auth-textbox',
-                    name: 'userid',
+                    name: 'email',
+                    itemId:'email',
                     bind: '',
                     height: 55,
                     hideLabel: true,
@@ -61,6 +69,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                     xtype: 'textfield',
                     cls: 'auth-textbox',
                     height: 55,
+                    itemId:'password',
                     hideLabel: true,
                     emptyText: 'Password',
                     inputType: 'password',
@@ -83,11 +92,19 @@ Ext.define('Docucrm.view.authentication.Login', {
                             cls: 'form-panel-font-color rememberMeCheckbox',
                             height: 30,
                             bind: '',
+                            itemId:'rememberme',
+                            name: 'rememberme',
                             boxLabel: 'Remember me'
                         },
                         {
-                            xtype: 'box',
-                            html: '<a href="#passwordreset" class="link-forgot-password"> Forgot Password ?</a>'
+                            xtype: 'container',
+                            html: '<a href="#passwordreset" class="link-forgot-password"> Forgot Password ?</a>',
+                            listeners: {
+                                click: {
+                                    element: 'el', //bind to the underlying el property on the panel
+                                    fn: 'forgetPasswordWindow'
+                                }
+                            }
                         }
                     ]
                 },

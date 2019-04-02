@@ -2,6 +2,8 @@
  * This file is responsible for launching the application. Application logic should be
  * placed in the Docucrm.Application class.
  */
+//Make sure strict mode is on
+'use strict';
 Ext.application({
     name: 'Docucrm',
 
