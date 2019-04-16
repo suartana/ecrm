@@ -75,9 +75,7 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
                     iconAlign: 'right',
                     iconCls: 'x-fa fa-angle-right',
                     text: 'Reset Password',
-                    listeners: {
-                        click: 'onResetClick'
-                    }
+                    handler: 'onResetButtonClick'
                 },
                 {
                     xtype: 'component',

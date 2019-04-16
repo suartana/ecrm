@@ -13,30 +13,28 @@ Ext.define('Docucrm.Application', {
         'NavigationTree'
     ],
     defaultToken : 'dashboard',
-    init:function(application){
-        console.log("route",window.route);
-        console.log("params",window.params);
-    },
-    mainView: Docucrm.util.Helpers.appMainView(),
+    mainView: Helpers.appMainView(),
     launch: function () {
         var me = this,
             route = window.route;
         // If the user not loggedin, we display the login window,
         // otherwise, we display the main view
-        console.log("route",route);
-        if(route !== 'reset' && Docucrm.util.Helpers.apiTokens() ) {
+        if(route !== 'reset' && Helpers.apiTokens() ) {
             Ext.Ajax.request({
-                headers: Docucrm.util.Helpers.apiHeaders(),
-                url: '/api/userinfo',
+                headers: Helpers.apiHeaders(),
+                url: '/api/users/status',
                 scope: this,
                 method: 'GET',
                 success: function (response) {
                     var obj = Ext.decode(response.responseText),
-                        cardView = obj.status.api_token && obj.success && obj.status.emp ? true : false;
-                    me.redirectTo(cardView ? "#dasboard" : "#login");
+                        cardView = obj.data.id && obj.success && obj.data.emp ? true : false;
+                    localStorage.setItem("profile", JSON.stringify(obj.data));
+                    me.redirectTo(cardView ? "dasboard" : "login",true);
                 },
                 failure: function (response) {
+                    Helpers.removeTokens();
                     me.setMainView('Docucrm.view.authentication.Login');
+                    me.redirectTo('login', true);
                 }
             });
         }

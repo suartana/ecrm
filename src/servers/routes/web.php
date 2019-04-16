@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
 	'register' => false,
 	'verify' => true,
-	'reset' => true
+	'reset' => false
 ]);
 // public routes
 Route::group([
@@ -22,20 +22,13 @@ Route::group([
 		'web'
 	]
 ],function () {
-	//navigation
-	Route::get('/system/navigation', 'Systems\MenuController@index');
-	Route::get('/', function () {
-		return view('index');
-	});
-	Route::get('/user', function () {
-		return view('index');
-	});
-	Route::get('/login', function () {
-		return view('index');
-	});
+	Route::get('/', 'AppController@index');
+	Route::get('/user', 'AppController@index');
+	Route::get('/login', 'AppController@index');
 	Route::get('/reset', 'Auth\ResetPasswordController@index');
 	//language translation
-	Route::get('/translation/jstranslations', 'Systems\TranslationController@jstranslations');
+	Route::get('/translation/jstranslations', 'Systems\Language\TranslationController@jstranslations');
+	Route::get('/setlang', 'Systems\Language\TranslationController@setLocale');
+	Route::get('/translation/add', 'Systems\Language\TranslationController@addTranslation');
+	Route::get('/storage/images/{filename}', 'Systems\File\ImagesController@displayImage');
 });
-
-

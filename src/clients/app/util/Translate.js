@@ -11,28 +11,13 @@
  */
 Ext.define('Docucrm.util.Translate', {
 	requires: ['Docucrm.util.Tools'],
+	alternateClassName: ['Translate'],
 	uses: ['Docucrm.util.Html'],
 	singleton: true,
-
 	/**
 	 * The id of the Docucrm component.
 	 */
 	id: 'utilTranslate',
-
-	/**
-	 * @ignore
-	 */
-	constructor: function() {
-		this.callParent(arguments);
-		this.reinit();
-	},
-
-	/**
-	 * @private @property {Array}
-	 *
-	 * Array with all translation texts loaded from the database.
-	 */
-	_translateTexts: null,
 
 	/**
 	 * @private
@@ -41,70 +26,7 @@ Ext.define('Docucrm.util.Translate', {
 	 */
 	_activeLanguage: 'en',
 
-	/**
-	 * Reload the translation texts from the server.
-	 *  @param {Function} [callback] A function to be used as callback after the texts have been reloaded.
-	 *  @param {Object} [scope] The scope to be used for the callback function.
-	 */
-	reinit: function(callback, scope) {
-		this._translateTexts = [];
 
-		Ext.Ajax.request({
-			method: "GET",
-			url: "/translation/jstranslations",
-			async: false,
-			// wait for completion!!
-			disableCaching: true,
-			scope: this,
-			success: function(response) {
-				this._translateTexts = Ext.JSON.decode(response.responseText);
-
-				var fields = [{
-					name: 'id',
-					type: 'string'
-				}, {
-					name: 'text',
-					type: 'string'
-				}, {
-					name: 'FIT_TITLE',
-					type: 'text'
-				}, {
-					name: 'FLI_ACTIVE',
-					type: 'boolean'
-				}];
-
-
-				/* this._faqTree = Ext.create("Ext.data.TreeStore", {
-					 fields: fields,
-					 root: {
-						 children: this._translateTexts.faqTree
-					 }
-				 });*/
-
-				if (Ext.isFunction(callback)) {
-					callback.call(scope || this, true);
-				}
-			},
-			failure: function(response) {
-				if (Ext.isFunction(callback)) {
-					callback.call(scope || this, false);
-				}
-			}
-		});
-	},
-
-	/**
-	 * Get all translation texts.
-	 *
-	 * @return {Array} Array with all translation texts.
-	 */
-	getTranslateTexts: function() {
-		if (this._translateTexts === null) {
-			this.reinit();
-		}
-
-		return this._translateTexts;
-	},
 
 	/**
 	 * Get the active language.
@@ -125,121 +47,67 @@ Ext.define('Docucrm.util.Translate', {
 	setActiveLanguage: function(language) {
 		this._activeLanguage = language;
 	},
-
-	_replaceVariable: function(variable) {
-
+	/**
+	 * Search json data by key
+	 *
+	 * @param key
+	 * @returns {*}
+	 */
+	getData: function(key) {
+		var me = this,
+			data = JSON.parse(localStorage.getItem("languages"));
+		return data.filter(
+			function(data){
+				return data.item == key;
+			}
+		);
 	},
 
-	/**
-	 * Replace text variables in a pre-translated string.
-	 *
-	 * The variables have the general format `${type:name}`. They come in different flavours:
-	 *     - images as `${img:path_to_image}` where the `path_to_image` is relative to the resources directory of D2i
-	 *     - store values `${store:field}` will retrieve the field of the first record in a global store
-	 *
-	 * @param {String} text The text with variables.
-	 * @param {String} [notFoundValue] A value to use if a variable cannot be replaced.
-	 *
-	 * @return {String} The text with all variables replaced.
-	 */
-	replaceVariables: function(text, notFoundValue, storeRecords, defaultLocation, defaultType) {
-		var count = 0;
-		var hasChange = true;
-		while (hasChange && count < 5) {
-			var variables = Ext.isString(text) ? text.match(/\$\{[^\}]+\}/gi) : false;
-			if (variables) {
-				hasChange = false;
-
-				for (var i in variables) {
-					var variable = variables[i];
-					var variableWithEnclosure = new RegExp('<p>\\s*' + Util.Tools.quoteRegExp(variable) + '[\\s\\n\\r]*</p>');
-					var result;
-					var path;
-					var infoType;
-
-					var match;
-					if ((match = variable.match(/\$\{img:([a-z0-9\.\/_\-]+)\}/i) || variable.match(/\$\{img:([a-z0-9\.\/_\-]+);([^\}]+)\}/i))) {
-						hasChange = true;
-						if (match[2]) {
-							result = '<img style="' + match[2] + '" src="/resources/' + match[1] + '" />';
-						} else {
-							result = '<img src="/resources/' + match[1] + '" />';
-						}
-					} else if ((match = variable.match(/\$\{html:([a-z0-9_]+)\}/i))) {
-						hasChange = true;
-						result = Util.Translate.html(match[1].toUpperCase());
-					} else if ((match = variable.match(/\$\{faq(\w*):([a-z0-9_]+)\}/i))) {
-						if (!defaultLocation || !defaultType) {
-							console.warn("tying to lookup " + match[2].toUpperCase() + " without default information");
-						}
-
-						defaultLocation = defaultLocation ? defaultLocation.toUpperCase() : "UNDEFINED";
-						defaultType = defaultType ? defaultType.toUpperCase() : "UNDEFINED";
-
-						infoType = match[1] === "" ? 'all' : match[1];
-						path = [defaultLocation, defaultType, match[2].toUpperCase()];
-
-						hasChange = true;
-						result = Util.Translate.faqTree(path, infoType);
-					} else if ((match = variable.match(/\$\{faq(\w*):([a-z0-9_]+):([a-z0-9_]+):([a-z0-9_]+)\}/i))) {
-						infoType = match[1] === "" ? 'all' : match[1];
-						path = Ext.Array.slice(match, 2);
-
-						hasChange = true;
-						result = Util.Translate.faqTree(path, infoType);
-					} else if ((match = variable.match(/\$\{([a-z0-9_]+):([a-z0-9_]+)\}/i))) {
-						hasChange = true;
-						var record = null;
-
-						var store = Database.StoreManager.getGlobalStore(match[1]);
-						if (store) {
-							record = store.first();
-						} else if (storeRecords) {
-							store = true;
-							record = storeRecords[match[1].toLowerCase()];
-						}
-
-						if (store) {
-							if (record) {
-								var key = match[2].toUpperCase();
-								if (record.isModel) {
-									result = record.get(key);
-								} else if (Ext.isSimpleObject(record)) {
-									result = record[key];
-								}
-
-								if (result === undefined) {
-									result = notFoundValue === undefined ? "${" + match[1] + ":" + match[2] + "-existing?}" : notFoundValue;
-								} else if (Ext.isDate(result)) {
-									if (result.getHours() || result.getMinutes() || result.getSeconds()) {
-										result = Util.Tools.formatTimestamp(result);
-									} else {
-										result = Util.Tools.formatDate(result);
-									}
-								}
-							} else {
-								result = notFoundValue === undefined ? "${" + match[1] + "-empty?:" + match[2] + "}" : notFoundValue;
-							}
-						} else {
-							result = notFoundValue === undefined ? "${" + match[1] + "-existing?:" + match[2] + "}" : notFoundValue;
-						}
-					}
-
-					if (hasChange) {
-						if (text.match(variableWithEnclosure)) {
-							text = text.replace(variableWithEnclosure, result);
-						}
-						else {
-							text = text.replace(variable, result);
-						}
-					}
+	//return an array of objects according to key, value, or key and value matching
+	getObjects : function (obj, key, val) {
+		var me = this, objects = [];
+		for (var i in obj) {
+			if (!obj.hasOwnProperty(i)) continue;
+			if (typeof obj[i] == 'object') {
+				objects = objects.concat(me.getObjects(obj[i], key, val));
+			} else
+			//if key matches and value matches or if key matches and value is not passed (eliminating the case where key matches but passed value does not)
+			if (i == key && obj[i] == val || i == key && val == '') { //
+				objects.push(obj);
+			} else if (obj[i] == val && key == ''){
+				//only add if the object is not already in the array
+				if (objects.lastIndexOf(obj) == -1){
+					objects.push(obj);
 				}
 			}
+		}
+		return objects;
+	},
 
-			count++;
+	//return an array of values that match on a certain key
+	getValues : function (obj, key) {
+		var me = this, objects = [];
+		for (var i in obj) {
+			if (!obj.hasOwnProperty(i)) continue;
+			if (typeof obj[i] == 'object') {
+				objects = objects.concat(me.getValues(obj[i], key));
+			} else if (i == key) {
+				objects.push(obj[i]);
+			}
+		}
+		return objects;
+	},
+
+	//return an array of keys that match on a certain value
+	getText : function (obj, val) {
+		var me = this,objects = [];
+		for (var i in obj) {
+			if (!obj.hasOwnProperty(i)) continue;
+			if (obj[i] == val) {
+				return obj.text;
+			}
 		}
 
-		return text;
 	},
 
 	/**
@@ -255,10 +123,10 @@ Ext.define('Docucrm.util.Translate', {
 	 */
 	element: function(type, code, params, notFoundValue, titleTag, storeRecords) {
 		var lang = this.getActiveLanguage();
-		var translateTexts = this.getTranslateTexts();
+		var translateTexts = JSON.parse(localStorage.getItem("languages"));
 		var text = code;
 		var title;
-
+		console.log("translateTexts",translateTexts);
 		if (translateTexts[type] && translateTexts[type][code]) {
 			text = translateTexts[type][code][lang];
 			if (Ext.isSimpleObject(text)) {
@@ -303,24 +171,28 @@ Ext.define('Docucrm.util.Translate', {
 	/**
 	 * Retrieve a label text and translate it using the subsitution parameters.
 	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
+	 * @param {String} key Lookup code for the element.
 	 *
 	 * @return {String} The translated text with all variables substituted.
 	 */
-	label: function(text, params, notFoundValue, storeRecords) {
-		if (Ext.isSimpleObject(text)) {
-			var obj = text;
-			text = "";
-			Ext.Object.each(obj, function(key, value) {
-				text += Util.Html.wrap('tr', Util.Html.wrap(['td', 'b'], key.charAt(0).toUpperCase() + key.slice(1) + ":&nbsp;") + Util.Html.wrap('td', value));
-			});
-
-			text = Util.Html.wrap('table', text, 'border="0" cellpadding="0" cellspacing="0"');
+	label: function(key) {
+		var me = this,obj, txt;
+		if (Ext.isString(key)) {
+			obj = me.getData(key);
+			txt = obj.length ? obj[0].text : me.splitLabel(key);
 		}
-
-		return this.element('labels', text, params, notFoundValue, false, storeRecords);
+		return txt;
+	},
+	/**
+	 * Split string on UpperCase Characters
+	 * This should handle the numbers as well..
+	 * the join at the end results in concatenating all the array items to a sentence if that's what you looking for
+	 *
+	 * @param text
+	 * @returns {*}
+	 */
+	splitLabel:function(text){
+		return text.match(/[A-Z][a-z]+|[0-9]+/g).join(" ");
 	},
 	/**
 	 * Retrieve a message text and translate it using the subsitution parameters.
@@ -580,293 +452,5 @@ Ext.define('Docucrm.util.Translate', {
 		var dialog = System.Dialog.showDialog(options);
 
 		return dialog;
-	},
-
-	/**
-	 * A generic dialog with a prompt field.
-	 *
-	 * @param {String|Object} titleOrConfig Use either for a complete configuration object or for the title of the message box.
-	 * @param {String} [message] Message to be displayed. This parameter is *mandatory*, if the first parameter is just a title string.
-	 * @param {Function|String[]} [functionOrArgs] Use either for supplying substitution parameters for the message or the callback function.
-	 * @param {Function} [functionOrOpts] If arguments were passed in the previous parameter, the callback function is passed here.
-	 * @param {String|Number} [icon] Icon to be used in the message box panel. {@link System.Dialog} icon constants can be used here.
-	 * @param {Object|Number} [buttons] Buttons to be used in the message box panel. {@link System.Dialog} button constants can be used here.
-	 */
-	promptBox: function(titleOrConfig, message, functionOrArgs, func, icon, buttons) {
-		return this.messageBox(titleOrConfig, message, functionOrArgs, func, icon, buttons, true);
-	},
-
-	/**
-	 * Generic function to display a notification window. This function is not normally called directly. Rather use the specific notification functions instead.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {String[]} [args] Substitution parameters for the message.
-	 * @param {Boolean} [htmlToken] Pass `true` if the message is a HTML token rather than a text string.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself. Defaults to 6000ms.
-	 * @param {String|Number} [icon] Icon to be used in the notification window. The default is an icon signifiying 'informational message'.
-	 * @param {String} [style] Additional CSS class to style the notification window.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	notificationBox: function(message, options) {
-		var config = Ext.apply({
-			title: this.label(options.title ? options.title : 'Notification'),
-			cls: 'ux-notification-light',
-			icon: options.icon ? options.icon : 'client/resources/iconsMedium/information.png',
-			message: options.htmlToken ? this.html(message, options.args) : this.label(message, options.args),
-			autoHide: options.hideDelay === false ? false : true,
-			autoHideDelay: options.hideDelay ? options.hideDelay : 6000,
-			closable: true
-		}, options);
-
-		var notification = Ext.create('Docucrm.util.Notification', config);
-
-		// add the notification to the Docucrm view to make sure they are using the proper zIndexManager.
-		//var DocucrmView = Docucrm.getView();
-		//DocucrmView.add(notification);
-
-		notification.show();
-
-		return notification;
-	},
-
-	/**
-	 * Confirmational message box with two buttons: 'Yes' and 'No'.
-	 *
-	 * @param {String|Object} titleOrConfig Use either for a complete configuration object or for the title of the message box.
-	 * @param {String} [message] Message to be displayed. This parameter is *mandatory*, the first parameter is just a title string.
-	 * @param {Function|String[]} [functionOrArgs] Use either for supplying substitution parameters for the message or the callback function.
-	 * @param {Function} [func] If arguments were passed in the previous parameter, the callback function is passed here.
-	 *
-	 * @return {Ext.window.Window} The dialog view.
-	 */
-	confirmBox: function(titleOrConfig, message, functionOrArgs, func) {
-		return this.messageBox(titleOrConfig, message, functionOrArgs, func, undefined, System.Dialog.YESNO);
-	},
-
-	/**
-	 * Confirmational message box with three buttons: 'Yes', 'No' and 'Cancel'.
-	 *
-	 * @param {String|Object} titleOrConfig Use either for a complete configuration object or for the title of the message box.
-	 * @param {String} [message] Message to be displayed. This parameter is *mandatory*, the first parameter is just a title string.
-	 * @param {Function|String[]} [functionOrArgs] Use either for supplying substitution parameters for the message or the callback function.
-	 * @param {Function} [func] If arguments were passed in the previous parameter, the callback function is passed here.
-	 *
-	 * @return {Ext.window.Window} The dialog view.
-	 */
-	confirmBoxWithCancel: function(titleOrConfig, message, functionOrArgs, func) {
-		return this.messageBox(titleOrConfig, message, functionOrArgs, func, System.Dialog.CONFIRM, System.Dialog.YESNOCANCEL);
-	},
-	/**
-	 * Warning message box with one button: 'OK'.
-	 *
-	 * @param {String|Object} titleOrConfig Use either for a complete configuration object or for the title of the message box.
-	 * @param {String} [message] Message to be displayed. This parameter is *mandatory*, the first parameter is just a title string.
-	 * @param {Function|String[]} [functionOrArgs] Use either for supplying substitution parameters for the message or the callback function.
-	 * @param {Function} [func] If arguments were passed in the previous parameter, the callback function is passed here.
-	 *
-	 * @return {Ext.window.Window} The dialog view.
-	 */
-	warningBox: function(titleOrConfig, message, functionOrArgs, func) {
-		return this.messageBox(titleOrConfig, message, functionOrArgs, func, System.Dialog.WARNING, System.Dialog.OK);
-	},
-
-	/**
-	 * Error message box with one button: 'OK'.
-	 *
-	 * @param {String|Object} titleOrConfig Use either for a complete configuration object or for the title of the message box.
-	 * @param {String} [message] Message to be displayed. This parameter is *mandatory*, the first parameter is just a title string.
-	 * @param {Function|String[]} [functionOrArgs] Use either for supplying substitution parameters for the message or the callback function.
-	 * @param {Function} [func] If arguments were passed in the previous parameter, the callback function is passed here.
-	 *
-	 * @return {Ext.window.Window} The dialog view.
-	 */
-	errorBox: function(titleOrConfig, message, functionOrArgs, func) {
-		return this.messageBox(titleOrConfig, message, functionOrArgs, func, System.Dialog.ERROR, System.Dialog.OK);
-	},
-
-	/**
-	 * Informational notification with a text message.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	infoNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Notification",
-			icon: 'client/resources/iconsMedium/information.png',
-			//args: argsOrOptions,
-			htmlToken: false
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Warning notification with a text message.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	warningNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Warning",
-			icon: 'client/resources/iconsMedium/warning.png',
-			args: argsOrOptions,
-			htmlToken: false
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Error notification with a text message.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	errorNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Error",
-			icon: 'client/resources/iconsMedium/error.png',
-			args: argsOrOptions,
-			htmlToken: false
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Informational notification with a HTML token.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	infoHtmlNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Notification",
-			icon: 'client/resources/iconsMedium/information.png',
-			args: argsOrOptions,
-			htmlToken: true
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Warning notification with a HTML token.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	warningHtmlNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Warning",
-			icon: 'client/resources/iconsMedium/warning.png',
-			args: argsOrOptions,
-			htmlToken: true
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Error notification with a HTML token.
-	 *
-	 * @param {String} title The title of the notification window.
-	 * @param {String} [message] Message to be displayed.
-	 * @param {Number} [hideDelay] Delay in milliseconds before the notification will hide itself.
-	 *
-	 * @return {Util.Notification} The notification window.
-	 */
-	errorHtmlNotification: function(message, argsOrOptions) {
-		var opts = Ext.apply({
-			title: "Error",
-			icon: 'client/resources/iconsMedium/error.png',
-			args: argsOrOptions,
-			htmlToken: true
-		}, argsOrOptions);
-
-		return this.notificationBox(message, opts);
-	},
-
-	/**
-	 * Create a string from a number and an item description.
-	 * @param  {Number} n        	The number of items.
-	 * @param  {String} singular 	The item in singular (ie. 'one user')
-	 * @param  {String} plural   	The item in plural (ie. '%s users')
-	 * @param  {String[]} wrapTags 	An array with tags to be wrapped around the resulting string. Defaults to `['b', 'i']`.
-	 * @return {String}          	The formatted string.
-	 */
-	makeQuantity: function(n, singular, plural, wrapTags) {
-		if (wrapTags === undefined) {
-			wrapTags = [];
-		}
-
-		return Util.Html.wrap(wrapTags, n == 1 ? singular : Util.Tools.format(plural, n));
-	},
-
-	/**
-	 * Create a string from a number and an item description. The result wil be wrapped as bold and italic.
-	 * @param  {Number} n        	The number of items.
-	 * @param  {String} singular 	The item in singular (ie. 'one user')
-	 * @param  {String} plural   	The item in plural (ie. '%s users')
-	 * @param  {String[]} wrapTags 	An array with tags to be wrapped around the resulting string. Defaults to `['b', 'i']`.
-	 */
-	makeQuantityEmphasis: function(n, singular, plural) {
-		return this.makeQuantity(n, singular, plural, ['b', 'i']);
-	},
-	/**
-	 * Informational notification with a text message.info Box
-	 * @param {String} [title] Title to be displayed.
-	 * @param {String} [msg] Message to be displayed.
-	 */
-	infoBox:function( title,msg){
-		if(title === 'Error'){
-			msg = "<span class='error'>"+msg+"</span>";
-			title = "<span class='error'>"+title+"</span>";
-			iconCls = 'x-fa fa-exclamation-triangle';
-		}else{
-			msg = "<span class='success'>"+msg+"</span>";
-			title = "<span class='successtitle'>"+title+"</span>";
-			iconCls = 'x-fa fa-info';
-		}
-
-		var config = Ext.apply({
-			position: 'tr',
-			useXAxis: true,
-			cls: 'ux-notification-light',
-			iconCls:iconCls,
-			closable: true,
-			width:350,
-			height:150,
-			title: title,
-			margin:10,
-			bodyStyle: 'background:#FFFFFF;',
-			html: msg,
-			slideInDuration: 800,
-			slideBackDuration: 1500,
-			autoCloseDelay:6000,
-			slideInAnimation: 'easeIn',
-			slideBackAnimation: 'bounceOut'
-		});
-
-		Ext.create('Docucrm.util.Notification',config).show();
 	}
 });

@@ -10391,6 +10391,10 @@ body.x-ios.x-webview.x-portrait {
 .auth-locked-window .x-window-header-default {
     border-width: 0px !important;
 }
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/authentication/LockingWindow.scss:30 */
+.langIcon {
+    cursor: pointer;
+}
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/authentication/Dialog.scss:4 */
 .auth-dialog .auth-profile-wrap {
     background: #f95c4a;
@@ -12995,41 +12999,46 @@ body.x-ios.x-webview.x-portrait {
 .sencha-dash-dash-headerbar .header-right-profile-image {
     border-radius: 20px;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:144 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:142 */
+.sencha-dash-dash-headerbar .header-right-profile-image-top {
+    border-radius: 20px;
+    cursor: pointer;
+}
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:148 */
 .top-english-button .x-btn-icon-el {
     width: 21px;
     height: 14px;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:151 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:155 */
 .collapsed .hot-icon:after,
 .collapsed .new-icon:after {
     display: none;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:155 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:159 */
 .collapsed .x-tree-elbow-img {
     display: none;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:159 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:163 */
 .collapsed .x-tree-node-text {
     display: none;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:163 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:167 */
 .x-grid-cell {
     position: relative;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:167 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:171 */
 .hot-icon.hot-icon:after,
 .new-icon.hot-icon:after {
     content: "HOT";
     background: #e3495a;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:171 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:175 */
 .hot-icon.new-icon:after,
 .new-icon.new-icon:after {
     content: "NEW";
     background: #f95c4a;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:175 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:179 */
 .hot-icon:after,
 .new-icon:after {
     height: 18px;
@@ -13044,17 +13053,17 @@ body.x-ios.x-webview.x-portrait {
     font-size: 10px;
     line-height: 18px;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:190 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:194 */
 .x-treelist-item-tool {
     height: 64px;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:192 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:196 */
 .x-treelist-item-tool.hot-icon:after,
 .x-treelist-item-tool.new-icon:after {
     background: #f95c4a;
     content: '';
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:206 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:210 */
 .x-html-editor-input {
     border: 1px solid #ccc;
 }
@@ -14841,12 +14850,4 @@ body.x-ios.x-webview.x-portrait {
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
 .x-btn-facebook-small-tr {
     background-position: right -3px;
-}
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
-.x-btn-facebook-small-bl {
-    background-position: 0 -4px;
-}
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
-.x-btn-facebook-small-br {
-    background-position: right -5px;
 }

@@ -16,6 +16,7 @@
 //jshint laxcomma:true
 Ext.define('Docucrm.util.Tools', {
 	singleton: true,
+	alternateClassName: ['Tools'],
 	//uses: ['System.Dialog', 'Base.view.mixins.SmartComponent'],
 	/**
 	 * The id of the Docucrm component.
@@ -1205,42 +1206,6 @@ Ext.define('Docucrm.util.Tools', {
 		});
 
 	},
-	/**
-	 * Regex is Integer
-	 *
-	 * @param val
-	 * @returns {*}
-	 */
-	isInteger : function (val) {
-		return val.match(/^[0-9]$/)
-	},
-	/**
-	 * Set api token
-	 *
-	 * @returns {string}
-	 */
-	getTokens :function(){
-		return localStorage.getItem("tokens");
-	},
-	/**
-	 * Set Extjs Headers params
-	 *
-	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
-	 */
-	getApiHeaders:function(){
-		var loggedIn = this.getTokens(),
-			headers = {
-				'Content-Type' : 'application/json',
-				'Accept' : 'application/json',
-				'Authorization' : 'Bearer '+ loggedIn,
-				'X-CSRF-TOKEN': loggedIn
-			};
 
-		return headers;
-	},
-	getMainView:function(){
-		var route = window.route;
-
-	}
 
 });

@@ -5,14 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, user-scalable=yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Docu Media GmbH ERP & CRM</title>
+    <title>Docu Media Schweiz GmbH ERP & CRM</title>
+    <link rel="shortcut icon" href="/resources/images/favicon.gif" type="image/gif" />
     <link href="/resources/css/splash.css?v={{now()}}" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Actor' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
 		var Ext = Ext || {}; // Ext namespace won't be defined yet...
-		window.Laravel = {"csrfToken":"{{ csrf_token() }}"} ;
-		window.route = "{{Request::path()}}";
-		window.params = "";
+		window.Laravel = {"csrfToken":"{{ csrf_token() }}"} ; // set the csrf_token parameters
+		window.route = "{{Request::path()}}"; // set the route parameters
+		window.params = "{{ $token ? $token : '' }}"; // set the token parameters
+
 		// This function is called by the Microloader after it has performed basic
 		// device detection. The results are provided in the "tags" object. You can
 		// use these tags here or even add custom tags. These can be used by platform

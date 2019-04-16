@@ -3,20 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\UserView;
+use App\Traits\Translatetable;
 use App\Utils\Util;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Traits\JsonRespondController;
 use App\Models\Users\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Session;
 
 
 class AuthController extends Controller
 {
-	use JsonRespondController;
-
-	public $successStatus = 200;
+	use JsonRespondController, AuthenticatesUsers, Translatetable;
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('guest', ['except' => 'logout']);
+	}
 
 	/**
 	 * Handle a login request to the application.
@@ -25,26 +35,25 @@ class AuthController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function login(Request $request)
-	{
-
+	{   //validate the input parameters
 		$this->validateRequest($request);
-
+		//set user credetials
 		try {
 			$credentials = $request->only('email', 'password');
 			if(Auth::attempt($credentials)) {
 				$user  = Auth::user();
+				$fullname = UserView::getFullname($request->get("email"));
 				$result = [
 					"success" => true,
-					"user" => $user,
+					"user" => $fullname,
 					"token" => $user->createToken('docucrm')->accessToken
 				];
-				//$this->redirectTo("/user/#dashboard");
 				return $this->respond($result);
 			}else{
-				return $this->respondUnauthorized("Login password or E-mail did not match");
+				return $this->respondUnauthorized( $this->translate( "validations", "loginError") );
 			}
 		} catch (\Exception $e) {
-			return $this->respondUnauthorized("Login password or E-mail did not match");
+			return $this->respondUnauthorized( $this->translate( "error", "reportAdmin") );
 		}
 	}
 
@@ -75,20 +84,23 @@ class AuthController extends Controller
 		return true;
 	}
 
-
 	public function getUser()
 	{
 		$user = Auth::user();
 		return response()->json(['success' => $user,"user" => "test"], $this->successStatus);
 	}
 
-
+	/**
+	 * Logout user and clear the login session
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function logout(){
 		if (Auth::check()) {
 			Auth::user()->token()->revoke();
-			return response()->json(['success' =>'logout_success'],200);
+			return $this->respond(["success" => true]);
 		}else{
-			return response()->json(['error' =>'api.something_went_wrong'], 500);
+			return  $this->respondWithError("Something went wrong, please contact your administrator.");
 		}
 	}
 

@@ -268,36 +268,18 @@ Ext.define('Docucrm.view.main.MainController', {
 	},
 	/**
 	 * Keep app alive
+	 * @todo please find out how to track if the user session expired
 	 */
 	keeplive : function(){
-		// It's important to note that this type of application could use
-		// any type of storage, i.e., Cookies, LocalStorage, etc.
-		var loggedIn, me = this;
-		// Check to see the current value of the localStorage key
-		loggedIn = localStorage.getItem("tokens");
-		// This ternary operator determines the value of the TutorialLoggedIn key.
-		// If TutorialLoggedIn isn't true, we display the login window,
-		// otherwise, we display the main view
-		Ext.Ajax.request({
-			headers :Docucrm.util.Tools.getApiHeaders(),
-			url: '/api/userinfo',
-			scope: this,
-			method:'GET',
-			success: function(response) {
-				var obj = Ext.decode(response.responseText),
-					cardView = obj.status.api_token && obj.success && obj.status.emp ?  true : false;
-				//me.setMainView(cardView ? 'Docucrm.view.main.Main' : 'Docucrm.view.authentication.Login');
-				me.redirectTo(cardView ? "#dasboard" : "#login");
-				//me.setMainView( cardView ?  'Docucrm.view.main.Main' : 'Docucrm.view.authentication.Login');
-			},
-			failure: function(response) {
-				//me.setMainView('Docucrm.view.authentication.Login');
-				me.redirectTo("#login");
-			}
-		});
+
 
 	},
-	logout:function(){
+	/**
+	 * On Toolbar button logout click show messagebox comfirm
+	 *
+	 * @return {void}
+	 */
+	onLogoutClick:function(){
 		var me = this;
 		Ext.MessageBox.confirm({
 			title: Docucrm.util.Translate.label('System Logout'),
@@ -307,33 +289,36 @@ Ext.define('Docucrm.view.main.MainController', {
 			icon: Ext.MessageBox.QUESTION,
 			fn: function(btn) {
 				if (btn === 'ok') {
-					me.logoutUser();
+					me.doLogoutUser();
 				}
 			}
 		});
 	},
-	logoutUser :function (button) {
-		// It's important to note that this type of application could use
-		// any type of storage, i.e., Cookies, LocalStorage, etc.
-		var loggedIn, me = this;
-		// Check to see the current value of the localStorage key
-		loggedIn = localStorage.getItem("tokens");
+	/**
+	 * Call api logout
+	 *
+	 * @return {void}
+	 */
+	doLogoutUser :function () {
 		// This ternary operator determines the value of the TutorialLoggedIn key.
 		// If TutorialLoggedIn isn't true, we display the login window,
 		// otherwise, we display the main view
 		Ext.Ajax.request({
-			headers : Docucrm.util.Tools.getApiHeaders(),
+			headers : Helpers.apiHeaders(),
 			url: '/api/crm/logout',
 			scope: this,
-			method:'GET',
+			method:'POST',
 			success: function(response) {
 				window.location.href = "/user/#login";
 				localStorage.setItem("tokens", "");
 			},
 			failure: function(response) {
 				localStorage.setItem("tokens", "");
-				Docucrm.util.Translate.infoBox("Error","Something has gone wrong. Please contact a system administrator.");
+				Message.infoBox("Error","Something has gone wrong. Please contact a system administrator.");
 			}
 		});
+	},
+	onUserProvileClick:function(){
+		Message.infoBox("Info","My Profile");
 	}
 });

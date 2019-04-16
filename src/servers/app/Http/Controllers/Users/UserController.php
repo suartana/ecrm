@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Models\Users\UserView;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -25,14 +26,31 @@ class UserController extends Controller
 		$this->middleware('auth');
 	}
 
+
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		$token = ['token' => "" ];
+		return view('index', $token);
+	}
+
+	/**
+	 * Check if the user still loggin
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function status()
 	{
-
 		if (Auth::check()) {
 			$user = Auth::user();
+			$userinfo = $user ?  UserView::getProfile($user->getAuthIdentifier()) : false ;
 			$status = [
-				"status" => $user,
-				"success" => true
+				"data" => $userinfo,
+				"success" => $user ? true : false
 			];
 		}else{
 			$status = [
@@ -44,23 +62,17 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Show the application dashboard.
+	 * Get user profile
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function index()
-	{
-		return view ( 'users/index' );
-	}
-
-	/**
-	 * rendering login view
-	 *
-	 * @param Request $request
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function loginform(Request $request)
-	{
-		return view ( 'auth.login' );
+	public function profile()
+	{   $user = Auth::user();
+		$userinfo =  $user ? UserView::getProfile($user->getAuthIdentifier()) : false ;
+		$data = [
+			"data" => $userinfo,
+			"success" => $user ? true : false
+		];
+		return response()->json($data);
 	}
 }

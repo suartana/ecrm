@@ -1,7 +1,8 @@
 Ext.define('Docucrm.store.NavigationTree', {
     extend: 'Ext.data.TreeStore',
-    storeId: 'NavigationTree',
-	autoload:true,
+    storeId: 'storeNavigationTreeId',
+	alias:'store.navigationtree',
+	autoLoad:true,
     fields: [{
         name: 'text'
     }],
@@ -10,12 +11,13 @@ Ext.define('Docucrm.store.NavigationTree', {
 	},
 	proxy: {
 		type: 'ajax',
-		url: '/system/navigation',
+		url: '/api/system/navigation',
 		reader: {
 			type: 'json',
 			rootProperty: 'data',
 			idProperty: 'id',
 			messageProperty: 'msg'
-		}
+		},
+		headers: Docucrm.util.Helpers.storeHeaders()
 	}
 });

@@ -47,19 +47,19 @@ Ext.define('Docucrm.util.PasswordStrength', {
      * @cfg {String}
      * Color of the strength bar if the password is poor.
      */
-    colorPoor: "#edd712",
+    colorPoor: "#ed8228",
 
     /**
      * @cfg {String}
      * Color of the strength bar if the password is good.
      */
-    colorGood: "#1aff00",
+    colorGood: "#83ff58",
 
     /**
      * @cfg {String}
      * Color of the strength bar if the password is excellent.
      */
-    colorExcelent: "#15ff00",
+    colorExcelent: "#07bf10",
 
     /**
      * @cfg {String}
@@ -118,10 +118,9 @@ Ext.define('Docucrm.util.PasswordStrength', {
 
                     this.objMeter = this.child.createChild({
                         tag: "div",
-                        cls:'form-strengthmeter',
                         style: {
-                            'height': 15,
-                            'margin-top': 5,
+                            'height': 11,
+                            'margin-top': 0,
                             'width': this.child.getWidth(),
                             'background-color': this.backgroundColor,
                             'float': this.scrollAlign,
@@ -165,9 +164,8 @@ Ext.define('Docucrm.util.PasswordStrength', {
 
         this.scoreBar = this.objMeter.createChild({
             tag: "div",
-            cls:'form-strengthmeter',
             style: {
-                'height': 15,
+                'height': 11,
                 'width': objectWidth,
                 'float': this.scrollAlign,
                 'text-align': this.textAlign,

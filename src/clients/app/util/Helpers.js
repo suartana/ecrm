@@ -16,6 +16,7 @@
 //jshint laxcomma:true
 Ext.define('Docucrm.util.Helpers', {
 	singleton: true,
+	alternateClassName: ['Helpers'],
 	//uses: ['System.Dialog', 'Base.view.mixins.SmartComponent'],
 	/**
 	 * The id of the Docucrm component.
@@ -28,6 +29,14 @@ Ext.define('Docucrm.util.Helpers', {
 	 */
 	apiTokens :function(){
 		return localStorage.getItem("tokens");
+	},
+	/**
+	 * Remove item tokens from local storage
+	 *
+	 * @return {void}
+	 */
+	removeTokens:function(){
+		localStorage.removeItem("tokens");
 	},
 	/**
 	 * Set Extjs Headers params
@@ -43,6 +52,18 @@ Ext.define('Docucrm.util.Helpers', {
 				'X-CSRF-TOKEN': loggedIn
 			};
 
+		return headers;
+	},
+	/**
+	 * Set Extjs Headers params
+	 *
+	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
+	 */
+	storeHeaders:function(){
+		var loggedIn = this.apiTokens(),
+			headers = {
+				Authorization : 'Bearer '+ loggedIn
+			};
 		return headers;
 	},
 	/**
@@ -65,7 +86,7 @@ Ext.define('Docucrm.util.Helpers', {
 				mainView = 'Docucrm.view.authentication.Login';
 			break;
 		}
-		return mainView = me.apiTokens ? mainView : 'Docucrm.view.authentication.Login';
+		return  me.apiTokens() || route === 'reset' ? mainView : 'Docucrm.view.authentication.Login';
 	}
 
 });

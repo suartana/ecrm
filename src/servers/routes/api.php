@@ -14,15 +14,28 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('crm')->group(function(){
 	Route::post('login', 'Api\AuthController@login');
+	Route::post('logout', 'Api\AuthController@logout');
 	Route::post('resetpassword', 'Api\ResetPasswordController@sendEmail');
+	Route::post('changepassword', 'Api\PasswordChangeController@passwordChange');
+
+});
+
+//set route prefix users
+Route::prefix('users')->group(function(){
+	//auth-api
 	Route::group(['middleware' => 'auth:api'], function(){
-		Route::get('getUser', 'Api\AuthController@getUser');
-		Route::get('/logout', 'Api\AuthController@logout');
+		//navigation
+		Route::get('/profile', 'Users\UserController@profile');
+		Route::get('/status', 'Users\UserController@status');
 	});
 });
 
-
-Route::group(['middleware' => ['auth:api']], function () {
-	Route::get('/user', 'Api\AuthController@getUser');
-	Route::get('/userinfo', 'Users\UserController@status');
+//set route prefix system
+Route::prefix('system')->group(function(){
+	//auth-api
+	Route::group(['middleware' => 'auth:api'], function(){
+		//navigation
+		Route::get('/navigation', 'Systems\ACL\NaviController@index');
+	});
 });
+

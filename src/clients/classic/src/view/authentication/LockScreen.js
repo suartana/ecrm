@@ -20,7 +20,9 @@ Ext.define('Docucrm.view.authentication.LockScreen', {
         'Ext.layout.container.HBox',
         'Ext.layout.container.VBox'
     ],
-
+    viewModel:{
+        type: 'main'
+    },
     title: '<h3>Session Expired</h3>',
 
     defaultFocus : 'authdialog',  // Focus the Auth Form to force field focus as well
@@ -56,11 +58,16 @@ Ext.define('Docucrm.view.authentication.LockScreen', {
                             width: 80,
                             alt: 'lockscreen-image',
                             cls: 'lockscreen-profile-img auth-profile-img',
-                            src: 'resources/images/user-profile/gede.jpg'
+                            bind:{
+                                src:"{profileimagepath}"
+                            }
                         },
                         {
                             xtype: 'box',
-                            html: '<div class=\'user-name-text\'> Gede Suartana </div><div class=\'user-post-text\'> Senior Developer</div>'
+                            bind:{
+                                html: '<div class=\'user-name-text\'> {fullname} </div><div class=\'user-post-text\'>{profile.occupation_str}</div>'
+                            },
+
                         }
                     ]
                 },
@@ -81,7 +88,7 @@ Ext.define('Docucrm.view.authentication.LockScreen', {
 						{
 							padding: '5 0 0 0',
 							xtype:'container',
-							html:'<img src="resources/images/login_logo.png" width="225px">'
+							html:'<img src="resources/images/login_logo.png" width="160px">'
 						},
                         {
                             xtype: 'textfield',

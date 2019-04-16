@@ -39,15 +39,77 @@ Ext.define('Docucrm.view.authentication.Login', {
             },
 
             items: [
-				{
+				/*{
 					padding: '5 0 0 0',
 					xtype:'container',
 					html:'<img src="resources/images/login_logo.png" width="225px">'
-				},
+				},*/
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: '',
+                    labelWidth: 110,
+                    padding: '5 0 0 0',
+                    height:50,
+                    layout: 'hbox',
+                    combineErrors: true,
+                    defaults: {
+                        hideLabel: 'true'
+                    },
+
+                    items: [
+                        {
+                            padding: '5 0 0 0',
+                            xtype:'container',
+                            html:'<img src="resources/images/login_logo.png" width="160px">'
+                        },
+                        {
+                            xtype: 'tbfill',
+                            width: '20%',
+
+                        },
+                        {
+                            xtype: 'button',
+                            ui:'btnlang',
+                            tooltip:'Deutsch',
+                            icon:"resources/images/icons/ge_flag.png",
+                            name:'de',
+                            itemId:'de',
+                            handler:'onLanguageChange'
+                        },
+                        {
+                            xtype: 'button',
+                            ui:'btnlang',
+                            tooltip:'Français',
+                            icon:"resources/images/icons/fr_flag.png",
+                            name:'fr',
+                            itemId:'fr',
+                            handler:'onLanguageChange'
+                        },
+                        {
+                            xtype: 'button',
+                            ui:'btnlang',
+                            tooltip:'Italiano',
+                            icon:"resources/images/icons/it_flag.png",
+                            name:'it',
+                            itemId:'it',
+                            handler:'onLanguageChange'
+                        },
+                        {
+                            xtype: 'button',
+                            ui:'btnlang',
+                            tooltip:'English',
+                            icon:"resources/images/icons/uk_flag.png",
+                            name:'en',
+                            itemId:'en',
+                            handler:'onLanguageChange'
+                        }
+
+                    ]
+                },
 
                 {
                     xtype: 'label',
-                    text: 'Sign into your account'
+                    text:Translate.label("SignIntoYourAccount")
                 },
                 {
                     xtype: 'textfield',
@@ -58,7 +120,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                     height: 55,
                     hideLabel: true,
                     allowBlank : false,
-                    emptyText: 'Benutzername',
+                    emptyText: Translate.label("username"),
                     triggers: {
                         glyphed: {
                             cls: 'trigger-glyph-noop auth-email-trigger'
@@ -117,9 +179,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                     iconCls: 'x-fa fa-angle-right',
                     text: 'Login',
                     formBind: true,
-                    listeners: {
-                        click: 'onLoginButton'
-                    }
+                    handler: 'onLoginButtonClick'
                 }
             ]
         }

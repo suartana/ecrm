@@ -5,10 +5,10 @@ Ext.define('Docucrm.view.main.Main', {
         'Ext.button.Segmented',
         'Ext.list.Tree'
     ],
-
     controller: 'main',
-    viewModel: 'main',
-
+    viewModel:{
+        type: 'main'
+    },
     cls: 'sencha-dash-viewport',
     itemId: 'mainView',
 
@@ -20,7 +20,6 @@ Ext.define('Docucrm.view.main.Main', {
     listeners: {
         render: 'onMainViewRender'
     },
-
     items: [
         {
             xtype: 'toolbar',
@@ -88,24 +87,91 @@ Ext.define('Docucrm.view.main.Main', {
                     tooltip: 'See your profile'
                 },
                 {
-                    xtype: 'tbtext',
-                    text: 'Gede Suartana',
-                    cls: 'top-user-name'
-                },
-                {
                     xtype: 'image',
-                    cls: 'header-right-profile-image',
+                    cls: 'header-right-profile-image-top',
                     height: 35,
                     width: 35,
                     alt:'current user image',
-                    src: 'resources/images/user-profile/gede.jpg'
+                    bind:{
+                        src:"{profileimagepath}"
+                    },
+                    listeners: {
+                        click: {
+                            element: 'el',
+                            fn: 'onUserProvileClick'
+                        }
+                    }
                 },
                 {
-                    iconCls:'x-fa fa-sign-out',
-                    ui: 'header',
-                    tooltip: 'Logout',
-                    handler:'logout'
-                },
+                    tooltip: 'Profile',
+                    bind:{
+                        text:"<b>{fullname}</b>"
+                    },
+                    ui:'titlebarbutton',
+                    cls:'profile',
+                    menu: {
+                        id: 'mainMenu',
+                        showSeparator: true,
+                        items: [
+                            {
+                                iconCls:'x-fa fa-user myprofile',
+                                tooltip: 'My Profile',
+                                text:'My Profile',
+                                handler:''
+                            },
+                            '-',
+                            {
+                                iconCls:'x-fa fa-info about',
+                                tooltip: 'About',
+                                text:'About',
+                                handler:''
+                            },
+                            {
+                                text: 'Languages',
+                                iconCls:'x-fa fa-bullhorn languages',
+                                tooltip: 'Please select your language',
+                                menu: {
+                                    items: [
+                                        // stick any markup in a menu
+                                        '<b class="menu-title"></b>',
+                                        {
+                                            text: 'German',
+                                            checked: true,
+                                            icon:'resources/images/icons/ge_flag.png',
+                                            group: 'theme',
+                                            checkHandler: ''
+                                        }, {
+                                            text: 'English',
+                                            checked: false,
+                                            icon:'resources/images/icons/uk_flag.png',
+                                            group: 'theme',
+                                            checkHandler: ''
+                                        }, {
+                                            text: 'France',
+                                            checked: false,
+                                            icon:'resources/images/icons/fr_flag.png',
+                                            group: 'theme',
+                                            checkHandler: ''
+                                        }, {
+                                            text: 'Italian',
+                                            checked: false,
+                                            icon:'resources/images/icons/it_flag.png',
+                                            group: 'theme',
+                                            checkHandler: ''
+                                        }
+                                    ]
+                                }
+                            },
+                            '-',
+                            {
+                                iconCls:'x-fa fa-sign-out logout',
+                                tooltip: 'Logout',
+                                text:'Logout',
+                                handler:'onLogoutClick'
+                            }
+                        ]
+                    }
+                }
             ]
         },
         {
@@ -119,7 +185,7 @@ Ext.define('Docucrm.view.main.Main', {
                     reference: 'navigationTreeList',
                     itemId: 'navigationTreeList',
                     ui: 'navigation',
-                    store: 'NavigationTree',
+                    store: 'storeNavigationTreeId',
                     width: 250,
                     expanderFirst: false,
                     expanderOnly: false,

@@ -27,7 +27,7 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user';
+    protected $redirectTo = 'user';
 
     /**
      * Create a new controller instance.
@@ -41,6 +41,9 @@ class ResetPasswordController extends Controller
 
     public function index(Request $request)
     {   $token = ['token' => $request->get("token") ];
-	    return view('reset', $token);
+	    return view('index', $token);
     }
+
+
+
 }

@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Mail\Auth\ResetPasswordMail;
-use App\Models\Auth\PasswordReset;
 use App\Models\Users\User;
+use App\Notifications\ResetPassword;
 use App\Traits\JsonRespondController;
-use App\Utils\Util;
-use http\Env\Response;
+use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Notifiable;
 
-class ResetPasswordController extends Controller
+class  ResetPasswordController extends Controller
 {
-	use JsonRespondController;
-
+	use JsonRespondController, SendsPasswordResetEmails, Notifiable;
+	/**
+	 * Get user data
+	 *
+	 * @var static object
+	 */
 	protected static $user;
+	/**
+	 * Set email receiver
+	 *
+	 * @var String $email
+	 */
+	protected $email;
 	/**
 	 * Set send email action
 	 *
@@ -25,58 +34,23 @@ class ResetPasswordController extends Controller
 	 */
 	public function sendEmail(Request $request)
 	{
-		if (!self::validateEmail($request->email)) {
-			return $this->failedResponse($request->email);
+		if (!User::validateEmail($request->email)) {
+			return $this->respondWithError("{$request->email} is not recognized as a username or e-mail address.");
 		}
-		self::send($request->email);
-		return $this->successResponse();
+		try {
+			//send the Reset E-mail Notification
+			$password_broker = app(PasswordBroker::class); //so we can have dependency injection
+			$token = $password_broker->createToken(User::$user); //create reset password toke
+			$this->email = $request->email;
+			$this->notify(new ResetPassword($token,$request->email));
+			//set json data
+			$jdata = [
+				"success" => true,
+				"msg" => "Reset Email is send successfully, please check your inbox"
+			];
+			return $this->respond($jdata);
+		} catch (\Exception $e) {
+			return $this->respondWithError("Something went wrong, please contact your administrator.");
+		}
 	}
-	/**
-	 * Send the email with the token
-	 *
-	 * @param string $email
-	 * @return void
-	 */
-	private static function send(string $email): void
-	{   $user = self::$user;
-		$fullname = "Gede Suartana";
-		$token = PasswordReset::createToken($email);
-		Mail::to($email)->send(new ResetPasswordMail($token,$fullname));
-	}
-	/**
-	 * Validating user e-mail
-	 *
-	 * @param string $email
-	 * @return bool
-	 */
-	private static function validateEmail(string $email): bool
-	{
-		self::$user = User::where('email', $email)->first();
-		return !!self::$user;
-	}
-
-	/**
-	 * Set failed response
-	 *
-	 * @param string $email
-	 * @return Response
-	 */
-	private function failedResponse(string $email)
-	{
-		return $this->respondWithError("$email is not recognized as a username or e-mail address.");
-	}
-
-	/**
-	 * Set success response
-	 *
-	 * @return Response
-	 */
-	private function successResponse()
-	{   $jdata = [
-			"success" => true,
-			"msg" => "Reset Email is send successfully, please check your inbox"
-		];
-		return $this->respond($jdata);
-	}
-
 }

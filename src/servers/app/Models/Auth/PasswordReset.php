@@ -49,4 +49,15 @@ class PasswordReset extends Model
 		return $token;
 	}
 
+	/**
+	 * Check if the user token exists
+	 *
+	 * @param string $token
+	 * @return bool
+	 */
+	public static function getUserToken(string $token): bool
+	{
+		return !!self::where('token', $token)->first();
+	}
+
 }

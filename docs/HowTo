@@ -1,20 +1,7 @@
-security:
-encoders:
-    App\Entity\User:
-        algorithm: bcrypt
-providers:
-    user_provider:
-      entity:
-        class: App\Entity\User
-        property: username
-firewalls:
-    dev:
-      pattern: ^/(_(profiler|wdt)|css|images|js)/
-      security: false
-    main:
-      anonymous: ~
-      json_login:
-        check_path: login
-      provider: user_provider
-      logout:
-        path: logout
+# Read before Coding
+
+1. https://www.swarmonline.com/20-tips-for-getting-started-with-ext-js/
+2. https://www.sencha.com/blog/top-10-ext-js-development-practices-to-avoid-2/
+3. Standard Coding Style Frontend Extjs Docu
+4. Standard Coding Style Backedn PHP Docu
+

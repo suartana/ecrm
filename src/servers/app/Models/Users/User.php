@@ -11,13 +11,25 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
 	use Notifiable, HasApiTokens;
-	/*
-	 * set default table
+	/**
+	 *  set default table
+	 * @var string $table
 	 */
 	protected $table = 'sys_user';
 
-	// set default primary key
+	/**
+	 * set default primary key
+	 *
+	 * @var string $primaryKey
+	 */
 	protected $primaryKey = 'id';
+
+	/**
+	 * Set static public object
+	 *
+	 * @var $user
+	 */
+	public static $user;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -46,17 +58,10 @@ class User extends Authenticatable
 		'email_verified_at' => 'datetime',
 	];
 
-	/**
-	 * Get users's full name. The name is formatted according to the user's
-	 * preference, either "Firstname Lastname", or "Lastname Firstname".
-	 *
-	 * @return string
-	 */
-	public function getFullname()
+	public function getId()
 	{
-		return $this->name;
+		return $this->id;
 	}
-
 	/**
 	 * Get user login status
 	 * @param array $aPost
@@ -67,5 +72,17 @@ class User extends Authenticatable
 			->where("status",1)
 			->where("email",$aPost["email"])->first();
 		return $userId ? $userId->id : null;
+	}
+
+	/**
+	 * Validating user e-mail
+	 *
+	 * @param string $email
+	 * @return bool
+	 */
+	public static function validateEmail(string $email): bool
+	{
+		self::$user = User::where('email', $email)->first();
+		return !!self::$user;
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Systems;
+namespace App\Http\Controllers\Systems\ACL;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class MenuController extends Controller
+class NaviController extends Controller
 {
 	/**
 	 * Set Menu Navigation

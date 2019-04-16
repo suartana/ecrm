@@ -1,6 +1,7 @@
 Ext.define('Docucrm.view.authentication.AuthenticationController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.authentication',
+    alternateClassName: ['AuthenticationController'],
     /**
      * Login user via auth-api
      * If user login success, write locale storage with token parameter
@@ -8,7 +9,7 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
      *
      * @param button
      */
-    onLoginButton: function(button) {
+    onLoginButtonClick: function(button) {
         var view = this.getView(),
             form = view.getForm();
         //form is valid ?
@@ -18,20 +19,20 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
                 scope: this,
                 method:'POST',
                 clientValidation:true,
-                waitTitle: Docucrm.util.Translate.label( 'Login' )+"...",
-                waitMsg : "<span class='waitmsg'>"+Docucrm.util.Translate.label( 'Please wait' )+"...<span>",
+                waitTitle: Translate.label( 'Login' )+"...",
+                waitMsg : "<span class='waitmsg'>"+ Translate.label( 'Please wait' )+"...<span>",
                 bodyStyle: 'background:#FFFFFF;',
-                success: function(form,action) { console.log("action",action);
+                success: function(form,action) {
                     var response = action.response,
                         status = response.statusText,
                         obj = action.result,
-                        fullname = obj.user.emp,
+                        fullname = obj.user,
                         token = obj.token,
                         success = obj.success;
 
                     if(status === 'OK' && success){
                         localStorage.setItem("tokens", token);
-                        Docucrm.util.Translate.infoBox("Info", Docucrm.util.Translate.label( "Wellcome ") + " - "+fullname ,Ext.MessageBox.INFO);
+                        Message.infoBox("Info", Translate.label( "Wellcome ") + " - "+fullname ,Ext.MessageBox.INFO);
                         window.location.href = "/user/#dashboard";
                     }
                 },
@@ -39,11 +40,11 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
                     var response = action.response,
                         obj = Ext.decode(response.responseText),
                         message = obj.error.message;
-                        Docucrm.util.Translate.infoBox("Error",message);
+                        Message.infoBox("Error",message);
                 }
             });
         }else{
-            Docucrm.util.Translate.infoBox("Error","Invalid Username or Password!!");
+            Message.infoBox("Error","Invalid Username or Password!!");
         }
     },
 
@@ -59,26 +60,24 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
         this.redirectTo('dashboard', true);
     },
     /**
-     * On reset button clicked
-     * Resset the password via api
+     * Create new password
      *
-     * @param {element} [button]
+     * @param button
      */
-    onResetClick: function(button) {
+    onChangePasswordButtonClick:function(button){
         //set vars
         var view = this.getView(),
-            email = view.down("#email").getValue(),
             form = view.getForm(),
             message;
         //is an email
-        if(email) {
+        if(form.isValid()) {
             form.submit({
-                url: 'api/crm/resetpassword',
+                url: 'api/crm/changepassword',
                 scope: this,
                 method: 'POST',
                 clientValidation: true,
-                waitTitle: Docucrm.util.Translate.label('Resetting the Password'),
-                waitMsg: "<span class='waitmsg'>" + Docucrm.util.Translate.label('Please wait') + "...<span>",
+                waitTitle: Translate.label('Change Password'),
+                waitMsg: "<span class='waitmsg'>" + Translate.label('Please wait') + "...<span>",
                 bodyStyle: 'background:#FFFFFF;',
                 success: function (form, action) {
                     var response = action.response,
@@ -86,24 +85,60 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
                         obj = action.result;
 
                     if (status === 'OK' && obj.success) {
-                        message = Docucrm.util.Translate.message(obj.msg);
-                        Docucrm.util.Translate.infoBox("Info", message);
+                        Message.infoBox("Info", Translate.message(obj.msg));
+                        window.location.href = "/user/#login";
                     }
                 },
                 failure: function (form, action) {
                     var response = action.response,
-                        obj = Ext.decode(response.responseText),
-                        message = obj.error.message;
-                        Docucrm.util.Translate.infoBox("Error", message);
+                        obj = Ext.decode(response.responseText);
+                    Message.infoBox("Error", obj.error.message);
                 }
             });
         }else{
-            message = Docucrm.util.Translate.html("<b>Es ist ein fehler aufgetreten. bitte versuche es noch einmal</b>");
-            Docucrm.util.Translate.infoBox("Error", message);
+            Message.infoBox("Error", Translate.message("Something went wrong please try again"));
+        }
+    },
+    /**
+     * On reset button clicked
+     * Resset the password via api
+     *
+     * @param {element} [button]
+     */
+    onResetButtonClick: function(button) {
+        //set vars
+        var view = this.getView(),
+            form = view.getForm();
+
+        //validation
+        if(form.isValid()) {
+            form.submit({
+                url: 'api/crm/resetpassword',
+                scope: this,
+                method: 'POST',
+                clientValidation: true,
+                waitTitle: Translate.label('Resetting the Password'),
+                waitMsg: "<span class='waitmsg'>" + Translate.label('Please wait') + "...<span>",
+                bodyStyle: 'background:#FFFFFF;',
+                success: function (form, action) {
+                    var response = action.response,
+                        status = response.statusText,
+                        obj = action.result;
+                    //if the status OK
+                    status === 'OK' && obj.success ? Message.infoBox("Info", Translate.message(obj.msg)) : "";
+                },
+                failure: function (form, action) {
+                    var response = action.response,
+                        obj = Ext.decode(response.responseText);
+
+                    Message.infoBox("Error", obj.error.message);
+                }
+            });
+        }else{
+            Message.infoBox("Error", Translate.html("Something went wrong please try again"));
         }
     },
     forgetPasswordWindow:  function() {
-
         Ext.create({
             xtype:'passwordreset'
         });
@@ -116,4 +151,26 @@ Ext.define('Docucrm.view.authentication.AuthenticationController', {
     validateField: function(field) {
         field.next().validate();
     },
+    onLanguageChange:function(element){
+        console.log("lang",element.getItemId());
+        var me = this;
+        Ext.Ajax.request({
+            method: "GET",
+            url: "/setlang",
+            async: false,
+            params:{lang:element.getItemId()},
+            // wait for completion!!
+            disableCaching: true,
+            scope: this,
+            success: function(response, opts) {
+                var obj = Ext.JSON.decode(response.responseText),title;
+               console.log("obj",obj);
+               title = obj.success ? "Info" : "Error" ;
+               Message.infoBox(title,obj.message);
+            },
+            failure: function(response) {
+                Message.infoBox("Error","Something went wrong, Please contact your administrator.");
+            }
+        });
+    }
 });
