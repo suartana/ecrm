@@ -6,6 +6,8 @@ namespace App\Models\Users;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -85,4 +87,23 @@ class User extends Authenticatable
 		self::$user = User::where('email', $email)->first();
 		return !!self::$user;
 	}
+
+	/**
+	 * Update user password
+	 *
+	 * @param $email
+	 * @param $password
+	 * @return mixed
+	 */
+	public static function changePassword($email,$password)
+	{
+		$user =  User::where('email', $email)->update(
+			[
+				"password" =>  Hash::make($password),
+				"remember_token" => Str::random(60)
+			]
+		);
+		return $user;
+	}
+
 }

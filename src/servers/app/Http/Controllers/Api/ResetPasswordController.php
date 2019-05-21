@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Users\User;
 use App\Notifications\ResetPassword;
-use App\Traits\JsonRespondController;
+use App\Traits\JsonRespondTrait;
+use App\Traits\TranslationTrait;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 
 class  ResetPasswordController extends Controller
 {
-	use JsonRespondController, SendsPasswordResetEmails, Notifiable;
+	use JsonRespondTrait, SendsPasswordResetEmails, Notifiable, TranslationTrait;
 	/**
 	 * Get user data
 	 *
@@ -35,7 +36,7 @@ class  ResetPasswordController extends Controller
 	public function sendEmail(Request $request)
 	{
 		if (!User::validateEmail($request->email)) {
-			return $this->respondWithError("{$request->email} is not recognized as a username or e-mail address.");
+			return $this->respondWithError($this->translate("passwords","User"));
 		}
 		try {
 			//send the Reset E-mail Notification
@@ -46,11 +47,11 @@ class  ResetPasswordController extends Controller
 			//set json data
 			$jdata = [
 				"success" => true,
-				"msg" => "Reset Email is send successfully, please check your inbox"
+				"msg" => $this->translate("passwords","Sent")
 			];
 			return $this->respond($jdata);
 		} catch (\Exception $e) {
-			return $this->respondWithError("Something went wrong, please contact your administrator.");
+			return $this->respondWithError( $this->translate( "error", "ReportAdmin") );
 		}
 	}
 }

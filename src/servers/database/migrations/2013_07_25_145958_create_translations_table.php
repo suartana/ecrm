@@ -16,14 +16,17 @@ class CreateTranslationsTable extends Migration
             $table->increments('id');
             $table->string('locale', 6);
             $table->string('namespace', 150)->default('*');
-            $table->string('group', 150);
+            $table->string('type', 150);
             $table->string('item', 150);
             $table->text('text');
             $table->boolean('unstable')->default(false);
             $table->boolean('locked')->default(false);
-            $table->timestamps();
             $table->foreign('locale')->references('locale')->on('translator_languages');
-            $table->unique(['locale', 'namespace', 'group', 'item']);
+            $table->unique(['locale', 'namespace', 'type', 'item']);
+            $table->string("created_by");
+	        $table->string("updated_by");
+	        $table->softDeletes();
+	        $table->timestamps();
         });
     }
 

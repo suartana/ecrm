@@ -17,7 +17,6 @@ Route::prefix('crm')->group(function(){
 	Route::post('logout', 'Api\AuthController@logout');
 	Route::post('resetpassword', 'Api\ResetPasswordController@sendEmail');
 	Route::post('changepassword', 'Api\PasswordChangeController@passwordChange');
-
 });
 
 //set route prefix users
@@ -27,6 +26,7 @@ Route::prefix('users')->group(function(){
 		//navigation
 		Route::get('/profile', 'Users\UserController@profile');
 		Route::get('/status', 'Users\UserController@status');
+		Route::get('/setlocale', 'Users\UserController@setUserLocale');
 	});
 });
 
@@ -35,7 +35,7 @@ Route::prefix('system')->group(function(){
 	//auth-api
 	Route::group(['middleware' => 'auth:api'], function(){
 		//navigation
-		Route::get('/navigation', 'Systems\ACL\NaviController@index');
+		Route::get('/treelist', 'Systems\ACL\NaviController@treeList');
 	});
 });
 

@@ -142,6 +142,16 @@ Ext.define('Docucrm.util.Tools', {
 	},
 
 	/**
+	 * Redirect url
+	 *
+	 * @param {url} string url.
+	 *
+	 * @return {String} javascript redirect url
+	 */
+	redirect:function(url){
+		return window.location.href = url;
+	},
+	/**
 	 * Converts a JavaScript data object to a string using the format default date format.
 	 *
 	 * @param {Date} date A date object.

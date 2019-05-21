@@ -11,7 +11,6 @@
 Ext.define('Docucrm.view.authentication.PasswordReset', {
     extend: 'Docucrm.view.authentication.LockingWindow',
     xtype: 'passwordreset',
-
     requires: [
         'Docucrm.view.authentication.Dialog',
         'Ext.form.Label',
@@ -19,7 +18,7 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
         'Ext.button.Button'
     ],
     itemId:'passwordreset',
-    title: "<h1>"+Docucrm.util.Translate.label('Reset Password')+"</h1>",
+    title: "<h1>"+Translate.title('ResetPassword')+"</h1>",
     defaultFocus : 'authdialog',  // Focus the Auth Form to force field focus as well
 
     items: [
@@ -48,7 +47,7 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
                 {
                     xtype: 'label',
                     cls: 'lock-screen-top-label',
-                    text: 'Enter your email address for further reset instructions'
+                    text: Translate.label("ResetPassword")
                 },
                 {
                     xtype: 'textfield',
@@ -57,7 +56,7 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
                     name: 'email',
                     hideLabel: true,
                     allowBlank: false,
-                    emptyText: 'vorname.nachname@docu.ch',
+                    emptyText: 'ab.yxz@docu.ch',
                     itemId:'email',
                     vtype: 'email',
                     triggers: {
@@ -74,7 +73,7 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
                     formBind: true,
                     iconAlign: 'right',
                     iconCls: 'x-fa fa-angle-right',
-                    text: 'Reset Password',
+                    text: Translate.button("ResetPassword"),
                     handler: 'onResetButtonClick'
                 },
                 {
@@ -82,7 +81,8 @@ Ext.define('Docucrm.view.authentication.PasswordReset', {
                     width:150,
                     html: '<div style="text-align:right">' +
                         '<a href="#login" class="link-forgot-password">'+
-                            'Back to Log In</a>' +
+                         Translate.button("BackToLogIn") +
+                         '</a>' +
                         '</div>',
                     listeners: {
                         click: {

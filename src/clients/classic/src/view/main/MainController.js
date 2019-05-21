@@ -82,7 +82,7 @@ Ext.define('Docucrm.view.main.MainController', {
 			mainCard = refs.mainCardPanel,
 			mainLayout = mainCard.getLayout(),
 			navigationList = refs.navigationTreeList,
-			store = navigationList.getStore(),
+			store = Ext.StoreManager.get("storeNavigationTreeId"),
 			node = store.findNode('routeId', hashTag) || store.findNode('viewType', hashTag),
 			view = (node && node.get('viewType')) || hashTag === 'login' ? hashTag : 'admindashboard',
 			lastView = me.lastView,
@@ -282,8 +282,8 @@ Ext.define('Docucrm.view.main.MainController', {
 	onLogoutClick:function(){
 		var me = this;
 		Ext.MessageBox.confirm({
-			title: Docucrm.util.Translate.label('System Logout'),
-			msg:Docucrm.util.Translate.label( 'Are you sure you want to do that?'),
+			title: Translate.title('Logout')+ '?',
+			msg: Translate.auth( 'UserLogout'),
 			buttons: Ext.MessageBox.OKCANCEL,
 			scope: this,
 			icon: Ext.MessageBox.QUESTION,
@@ -300,6 +300,9 @@ Ext.define('Docucrm.view.main.MainController', {
 	 * @return {void}
 	 */
 	doLogoutUser :function () {
+		var view = this.getView();
+		//tell the user have to wait
+		view.mask(Translate.submit('PleaseWait')+"...");
 		// This ternary operator determines the value of the TutorialLoggedIn key.
 		// If TutorialLoggedIn isn't true, we display the login window,
 		// otherwise, we display the main view
@@ -309,16 +312,57 @@ Ext.define('Docucrm.view.main.MainController', {
 			scope: this,
 			method:'POST',
 			success: function(response) {
-				window.location.href = "/user/#login";
-				localStorage.setItem("tokens", "");
+				//clear the local storage
+				ExtStorage.clearExpired();
+				//to be sure token is cleared
+				ExtStorage.setItem("tokens", "");
+				//redirect to login window
+				Tools.redirect("/user/#login");
+				view.unmask();
 			},
 			failure: function(response) {
-				localStorage.setItem("tokens", "");
-				Message.infoBox("Error","Something has gone wrong. Please contact a system administrator.");
+				ExtStorage.setItem("tokens", "");
+				ExtStorage.clear();
+				Message.infoBox("Error",Translate.error("ReportAdmin") );
 			}
 		});
 	},
+
 	onUserProvileClick:function(){
 		Message.infoBox("Info","My Profile");
+	},
+	/**
+	 *
+	 * @param elem
+	 * @return void
+	 */
+	onLanguageSelect:function(elem){
+		var locale = elem.getValue(),
+			view = this.getView();
+
+		//tell the user have to wait
+		view.mask(Translate.submit('PleaseWait')+"...");
+
+		Ext.Ajax.request({
+			headers : Helpers.apiHeaders(),
+			method: "GET",
+			url: "api/users/setlocale",
+			params:{locale:locale},
+			scope: this,
+			success: function(response, opts) {
+				var obj = Ext.JSON.decode(response.responseText),title;
+				title = obj.success ? "Info" : "Error" ;
+				ExtStorage.setItem("locale", locale);
+				ExtStorage.setItem("languages", JSON.stringify(obj.datalang));
+				Message.infoBox(title,obj.message);
+				ExtStorage.isExists("languages") ? window.location.href = "/user/#dashboard" : false;
+				view.unmask();
+			},
+			failure: function(response) {
+				Message.infoBox("Error",Translate.error("ReportAdmin"));
+			}
+		});
 	}
+
+
 });

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Systems\Language;
 
-use App\Traits\JsonRespondController;
-use App\Traits\Translatetable;
+use App\Traits\JsonRespondTrait;
+use App\Traits\TranslationTrait;
+use App\Utils\Util;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
@@ -13,7 +14,7 @@ use Config;
 
 class TranslationController extends Controller
 {
-	use Translatetable, JsonRespondController;
+	use TranslationTrait, JsonRespondTrait;
 
 	public function jstranslations ()
 	{
@@ -35,15 +36,16 @@ class TranslationController extends Controller
 			$locale = Config::get('app.locale');
 		}
 
+		Session::put("locale", $locale);
+
 		if (Auth::check()) {
 			Auth::user()->setAttribute('locale', $locale)->save();
-		} else {
-			Session::put("locale", $locale);
 		}
 
 		return $this->respond([
 			"success" => $locale ==  Session::get("locale") ? true : false,
-			"message" => $locale ==  Session::get("locale")? $this->translate("info","languageChange") : $this->translate("error", "reportAdmin")
+			"datalang" => $this->translations(),
+			"message" => $locale ==  Session::get("locale")? $this->translate("info","LanguageChange") : $this->translate("error", "reportAdmin")
 		]);
 	}
 

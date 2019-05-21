@@ -51,11 +51,12 @@
      */
     "requires": [
         "charts",
+        "locale",
         "sencha-charts",
         "font-awesome",
         "ux"
     ],
-
+    "locale": "en",
     /**
      * Sass configuration properties.
      */
@@ -557,7 +558,6 @@
             "theme": "theme-triton"
         }
     },
-
     /**
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.

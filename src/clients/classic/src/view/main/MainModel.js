@@ -4,15 +4,10 @@
 Ext.define('Docucrm.view.main.MainModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.main',
-    stores:{
-        user:{
-            type:'userstore'
-        }
-    },
     data: {
         name: 'Docucrm',
         currentView: null,
-        fullname:null,
+        fullname:"G Su",
         profile:null,
         profileimagepath:null,
         gender:null,
@@ -21,28 +16,30 @@ Ext.define('Docucrm.view.main.MainModel', {
     formulas: {
         profile:{
             get:function (get) {
-                return this.getData();
+                return this.getData() ? this.getData() : false;
             }
         },
         profileimagepath:{
             get:function () {
-                return "/storage/images/"+this.getData().img;
+                var data = this.getData(),
+                    path = '/storage/images/',
+                    defImg = data.anrede === '1' ? 'man.png' : 'woman.png';
+                return data.img ? path+data.img : path+defImg;
             }
         },
         fullname:{
             get:function () {
                 var data = this.getData(),
-                    fname = data.firstname;
-                return fname.substring(0, 1) + ". " + data.lastname;
+                    fname = data ?  data.firstname : "";
+                return data ? fname.substring(0, 1) + ". " + data.lastname : "";
             }
         },
         gender:function () {
-            var data = this.getData();
-
-            return data.anrede === 1 ? '' : '' ;
+            var data = this.getData() ? this.getData().anrede : "";
+            return data === '1' ? 'm' : 'w' ;
         }
     },
     getData(){
-        return JSON.parse(localStorage.getItem("profile"));
+        return ExtStorage.getItem("profile") ? JSON.parse(ExtStorage.getItem("profile")) : false;
     }
 });

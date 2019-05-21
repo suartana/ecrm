@@ -1,13 +1,11 @@
 Ext.define('Docucrm.view.main.MainContainerWrap', {
     extend: 'Ext.container.Container',
     xtype: 'maincontainerwrap',
-
+    alias: 'widget.maincontainerwrap',
     requires : [
         'Ext.layout.container.HBox'
     ],
-
     scrollable: 'y',
-
     layout: {
         type: 'hbox',
         align: 'stretchmax',
@@ -19,7 +17,6 @@ Ext.define('Docucrm.view.main.MainContainerWrap', {
             width: true
         }
     },
-
     beforeLayout : function() {
         // We setup some minHeights dynamically to ensure we stretch to fill the height
         // of the viewport minus the top toolbar

@@ -16,5 +16,12 @@ Ext.application({
     //
     requires: [
         'Docucrm.*'
-    ]
+    ],
+    launch: function () {
+        var file = '/ext/classic/locale/overrides/'+window.locale +'/ext-locale-'+window.locale +'.js';
+        Ext.Loader.loadScript({
+            url: Ext.util.Format.format(file),
+            scope: this
+        });
+    },
 });

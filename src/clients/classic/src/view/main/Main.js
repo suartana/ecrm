@@ -52,7 +52,7 @@ Ext.define('Docucrm.view.main.Main', {
 					},
 					items:[
 						{
-							emptyText : 'Search....',
+							emptyText : Translate.label('Search')+"...",
 							triggers: {
 								searchTrigger: {
 									handler: function(field, trigger, e) {
@@ -86,24 +86,9 @@ Ext.define('Docucrm.view.main.Main', {
                     hrefTarget: '_self',
                     tooltip: 'See your profile'
                 },
+
                 {
-                    xtype: 'image',
-                    cls: 'header-right-profile-image-top',
-                    height: 35,
-                    width: 35,
-                    alt:'current user image',
-                    bind:{
-                        src:"{profileimagepath}"
-                    },
-                    listeners: {
-                        click: {
-                            element: 'el',
-                            fn: 'onUserProvileClick'
-                        }
-                    }
-                },
-                {
-                    tooltip: 'Profile',
+                    tooltip: Translate.label('MyProfile'),
                     bind:{
                         text:"<b>{fullname}</b>"
                     },
@@ -115,61 +100,80 @@ Ext.define('Docucrm.view.main.Main', {
                         items: [
                             {
                                 iconCls:'x-fa fa-user myprofile',
-                                tooltip: 'My Profile',
-                                text:'My Profile',
+                                tooltip: Translate.label('MyProfile'),
+                                text: Translate.label('MyProfile'),
                                 handler:''
                             },
                             '-',
                             {
                                 iconCls:'x-fa fa-info about',
-                                tooltip: 'About',
-                                text:'About',
+                                tooltip: Translate.label('About'),
+                                text: Translate.label('About'),
                                 handler:''
                             },
                             {
-                                text: 'Languages',
+                                text: Translate.label('Language'),
                                 iconCls:'x-fa fa-bullhorn languages',
-                                tooltip: 'Please select your language',
                                 menu: {
                                     items: [
                                         // stick any markup in a menu
                                         '<b class="menu-title"></b>',
                                         {
-                                            text: 'German',
-                                            checked: true,
+                                            text: Translate.lang('German'),
+                                            checked: Translate.getSelectedLanguages("de"),
                                             icon:'resources/images/icons/ge_flag.png',
                                             group: 'theme',
-                                            checkHandler: ''
+                                            value:'de',
+                                            handler: 'onLanguageSelect'
                                         }, {
-                                            text: 'English',
-                                            checked: false,
+                                            text: Translate.lang('English'),
+                                            checked: Translate.getSelectedLanguages("en"),
                                             icon:'resources/images/icons/uk_flag.png',
                                             group: 'theme',
-                                            checkHandler: ''
+                                            value:'en',
+                                            handler: 'onLanguageSelect'
                                         }, {
-                                            text: 'France',
-                                            checked: false,
+                                            text: Translate.lang('French'),
+                                            checked: Translate.getSelectedLanguages("fr"),
                                             icon:'resources/images/icons/fr_flag.png',
                                             group: 'theme',
-                                            checkHandler: ''
+                                            value:'fr',
+                                            handler: 'onLanguageSelect'
                                         }, {
-                                            text: 'Italian',
-                                            checked: false,
+                                            text: Translate.lang('Italian'),
+                                            checked: Translate.getSelectedLanguages("it"),
                                             icon:'resources/images/icons/it_flag.png',
                                             group: 'theme',
-                                            checkHandler: ''
+                                            value:'it',
+                                            handler: 'onLanguageSelect'
                                         }
                                     ]
                                 }
                             },
                             '-',
                             {
-                                iconCls:'x-fa fa-sign-out logout',
-                                tooltip: 'Logout',
-                                text:'Logout',
+                                iconCls:'x-fa fa-power-off logout',
+                                tooltip: Translate.label('Logout'),
+                                text:  Translate.label('Logout'),
                                 handler:'onLogoutClick'
                             }
                         ]
+                    }
+                },
+                {
+                    xtype: 'image',
+                    cls: 'header-right-profile-image-top',
+                    height: 35,
+                    width: 35,
+                    alt: 'current user image',
+                    bind:{
+                        src:"{profileimagepath}"
+                    },
+                    listeners: {
+                        click: {
+                            element: 'el',
+                            fn: 'onUserProvileClick'
+                        }
                     }
                 }
             ]

@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Models\Users\User;
 use App\Models\Users\UserView;
+use App\Traits\JsonRespondTrait;
+use App\Traits\TranslationTrait;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+	use JsonRespondTrait, TranslationTrait;
 	/**
 	 * Where to redirect users after login.
 	 *
@@ -47,9 +52,9 @@ class UserController extends Controller
 	{
 		if (Auth::check()) {
 			$user = Auth::user();
-			$userinfo = $user ?  UserView::getProfile($user->getAuthIdentifier()) : false ;
+			$userinfo = $user ?  "loggedin" : "Unauthorized" ;
 			$status = [
-				"data" => $userinfo,
+				"status" => $userinfo,
 				"success" => $user ? true : false
 			];
 		}else{
@@ -58,7 +63,7 @@ class UserController extends Controller
 				"success" => false
 			];
 		}
-		return response()->json($status);
+		return $this->respond($status);
 	}
 
 	/**
@@ -73,6 +78,28 @@ class UserController extends Controller
 			"data" => $userinfo,
 			"success" => $user ? true : false
 		];
-		return response()->json($data);
+		return $this->respond($data);
+	}
+
+	/**
+	 * Set default user locale
+	 *
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function setUserLocale(Request $request)
+	{
+		$locale = $request->get("locale");
+		//set user session locale
+		Session::put("locale", $locale);
+		//check if user logged in
+		$result = Auth::check() ? Auth::user()->setAttribute('locale', $locale)->save() :  false;
+		//set json data
+		$data = [
+			"message" => $result ? $this->translate("info","LanguageChange") : $this->translate("error", "reportAdmin"),
+			"datalang" => $this->translations(),
+			"success" => $result ? true : false
+		];
+		return $this->respond($data);
 	}
 }

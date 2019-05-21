@@ -10,7 +10,7 @@ body{
 h1{
     font-family: 'Actor', sans-serif;
     color:#f95c4a;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     letter-spacing:1px;
     font-weight:200;
@@ -200,3 +200,25 @@ h1{
     line-height: 11px;
     width: 100%;
 }
+
+
+.x-mask-msg-text {
+    padding: 25px 0 0 !important;
+    background-image: url(/resources/images/loadingsmall.gif)!important;
+    background-repeat: no-repeat !important;
+    background-position: center 0 !important;
+}
+
+.x-mask-msg {
+    padding: 10px;
+    font-weight: bold;
+    background: #d0d0d0;
+}
+
+.x-mask-msg-inner {
+    padding: 0;
+    background-color: transparent;
+    color: #404040;
+    font: 400 13px 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+}
+

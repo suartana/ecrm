@@ -2,9 +2,11 @@
 
 namespace App\Models\Auth;
 
+use App\Utils\Util;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class PasswordReset extends Model
@@ -50,14 +52,27 @@ class PasswordReset extends Model
 	}
 
 	/**
-	 * Check if the user token exists
+	 * Check if the password reset token is exists
 	 *
-	 * @param string $token
+	 * @param $request
 	 * @return bool
 	 */
-	public static function getUserToken(string $token): bool
+	public static function checkHastToken ($request):bool
 	{
-		return !!self::where('token', $token)->first();
+		$user = PasswordReset::getUserToken($request->email);
+		$tokenEqual = Hash::check($request->token,$user->token);
+		return $tokenEqual;
+	}
+
+	/**
+	 * Get the user token
+	 *
+	 * @param string $token;
+	 * @return bool
+	 */
+	public static function getUserToken(string $email)
+	{
+		return self::select("token")->where('email', $email)->first();
 	}
 
 }

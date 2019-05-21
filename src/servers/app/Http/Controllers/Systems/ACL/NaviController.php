@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Systems\ACL;
 
+use App\Models\Systems\Modules\Module;
+use App\Models\Systems\Modules\Properties;
+use App\Models\Systems\Modules\SubModule;
+use App\Traits\TranslationTrait;
+use App\Utils\Util;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class NaviController extends Controller
 {
+	use TranslationTrait;
 	/**
 	 * Set Menu Navigation
 	 *
@@ -15,133 +21,108 @@ class NaviController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$acl = [
-			[
-				'text'=> 'Dashboard',
-				'iconCls'=> 'x-fa fa-home home',
-				'rowCls'=> 'nav-tree-badge nav-tree-badge-new',
-				'viewType'=> 'admindashboard',
-				'routeId' => 'dashboard',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Customers',
-				'iconCls'=> 'x-fa fa-users customers',
-				'viewType'=> 'email',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Products',
-				'iconCls'=> 'x-fa fa-suitcase products',
-				'viewType'=> 'email',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Sales',
-				'iconCls'=> 'x-fa fa-building sell',
-				'rowCls'=> 'nav-tree-badge nav-tree-badge-hot',
-				'viewType'=> 'email',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Marketing',
-				'iconCls'=> 'x-fa fa-pie-chart marketing',
-				'viewType'=> 'profile',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Activities',
-				'iconCls'=> 'x-fa fa-tasks activities',
-				'viewType'=> 'searchresults',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Collaboration',
-				'iconCls'=> 'x-fa fa-handshake-o collaboration',
-				'viewType'=> 'faq',
-				'leaf'=> true
-			],
+		$modules = Module::where("locale",$this->getLocale())->orderBy("seq","asc")->get();
 
-			[
-				'text'=> 'Reports',
-				'iconCls'=> 'x-fa fa-bar-chart forms',
-				'viewType'=> 'forms',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Finance',
-				'iconCls'=> 'x-fa fa-money charts',
-				'viewType'=> 'charts',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'All',
-				'iconCls'=> 'x-fa fa-list-alt all',
-				'expanded'=> false,
-				'id' => 'all',
-				'itemId' => 'all',
-				'selectable'=> false
-			],
-			[
-				'text'=> 'System Settings',
-				'iconCls'=> 'x-fa fa-cogs support',
-				'viewType'=> 'widgets',
-				'leaf'=> true
-			]
-		];
-
-		$all = [
-			[
-				'text'=> 'Blank Page',
-				'iconCls'=> 'x-fa fa-file-o marketing',
-				'viewType'=> 'pageblank',
-				'leaf'=> true,
-			],
-			[
-				'text'=> '404 Error',
-				'iconCls'=> 'x-fa fa-exclamation-triangle charts ',
-				'viewType'=> 'page404',
-				'leaf'=> true
-			],
-			[
-				'text'=> '500 Error',
-				'iconCls'=> 'x-fa fa-times-circle home',
-				'viewType'=> 'page500',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Lock Screen',
-				'iconCls'=> 'x-fa fa-lock support',
-				'viewType'=> 'lockscreen',
-				'leaf'=> true
-			],
-
-			[
-				'text'=> 'Login',
-				'iconCls'=> 'x-fa fa-check collaboration',
-				'viewType'=> 'login',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Register',
-				'iconCls'=> 'x-fa fa-pencil-square-o sell',
-				'viewType'=> 'register',
-				'leaf'=> true
-			],
-			[
-				'text'=> 'Password Reset',
-				'iconCls'=> 'x-fa fa-lightbulb-o all',
-				'viewType'=> 'passwordreset',
-				'leaf'=> true
-			]
-		];
+		//dd($modules);
+		$mods = [];
+		foreach ($modules as $key => $module){
+			//Util::dump($module->properties);
+			$subMods = $this->getSubModules($module->code);
+			$subMods ? $mods[] = [
+				'text' => $module->descr,
+				'iconCls'=> $module->properties->iconcls,
+				'rowCls'=> $module->properties->rowcls,
+//				'viewType'=> $module->properties->viewtype ? Util::clean($module->properties->viewtype) : "",
+//				'leaf'=> false,
+//				'expanded'=> false,
+//				'selectable'=> false,
+				'children'  => $subMods
+			] :
+			$mods[] = [
+				'text' => $module->descr,
+				'iconCls'=> $module->properties->iconcls,
+				'rowCls'=> $module->properties->rowcls,
+				'viewType'=> $module->properties->viewtype ? Util::clean($module->properties->viewtype) : "",
+				'routeId' => $module->properties->routeid ? Util::clean($module->properties->routeid) : "",
+				'itemId'=> $module->code ? Util::clean($module->code) : "",
+				'leaf'=> $module->properties->leaf ? true : false
+			];
+		}
 
 		$jsonData = [
 			"success" => true,
-			"data" => $request->get("node") == 'all' ? $all : $acl
+			"data" => $mods
 		];
 
 		return response()->json($jsonData);
 
+	}
+
+	/**
+	 * Set Menu Navigation
+	 *
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function treeList(Request $request)
+	{
+		$modules = Module::where("locale",$this->getLocale())->orderBy("seq","asc")->get();
+		$mods = [];
+		foreach ($modules as $key => $module){
+			//Util::dump($module->properties);
+			$subMods = $this->getSubModules($module->code);
+			$subMods ? $mods[] = [
+				'text' => $module->descr,
+				'iconCls'=> $module->properties->iconcls,
+				'rowCls'=> $module->properties->rowcls,
+//				'viewType'=> $module->properties->viewtype ? Util::clean($module->properties->viewtype) : "",
+//				'leaf'=> false,
+				'itemId'=> $module->code,
+				'id'=> $module->code,
+				'expanded'=> false,
+				'selectable'=> true,
+				'children'  => $subMods ? true : false
+			] :
+				$mods[] = [
+					'text' => $module->descr,
+					'iconCls'=> $module->properties->iconcls,
+					'rowCls'=> $module->properties->rowcls,
+					'viewType'=> $module->properties->viewtype ? Util::clean($module->properties->viewtype) : "",
+					'routeId' => $module->properties->routeid ? Util::clean($module->properties->routeid) : "",
+					'itemId'=> $module->code ? Util::clean($module->code) : "",
+					'leaf'=> $module->properties->leaf ? true : false
+				];
+		}
+		$code = (int) $request->get("node") ;
+		$jsonData = [
+			"success" => true,
+			"data" => $code ? $this->getSubModules($code) :  $mods
+		];
+		return response()->json($jsonData);
+	}
+
+	/**
+	 * Get the submodules
+	 *
+	 * @param int $code
+	 * @return array
+	 */
+	private function getSubModules(int $code)
+	{
+		$submodules = SubModule::where([["locale",$this->getLocale()],["sysmodid",$code]])->orderBy("seq","asc")->get();
+		$submods = [];
+		if($submodules){
+			foreach ($submodules as $key => $submodule){
+				if ($code == $submodule->sysmodid){
+					$submods[] = [
+						'text' => $submodule->descr,
+						'iconCls'=> $submodule->properties->iconcls,
+						'viewType'=> $submodule->properties->viewtype ? Util::clean($submodule->properties->viewtype) : "",
+						'leaf'=>  true
+					];
+				}
+			}
+		}
+		return $submods;
 	}
 }

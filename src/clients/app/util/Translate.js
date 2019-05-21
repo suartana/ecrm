@@ -38,6 +38,15 @@ Ext.define('Docucrm.util.Translate', {
 	},
 
 	/**
+	 * Get Selected language
+	 *
+	 * @param lang
+	 * @returns {boolean}
+	 */
+	getSelectedLanguages:function(lang){
+		return window.locale === lang ? true : false;
+	},
+	/**
 	 * Set the active language.
 	 *
 	 * @param {String} language The new language to be used.
@@ -53,14 +62,18 @@ Ext.define('Docucrm.util.Translate', {
 	 * @param key
 	 * @returns {*}
 	 */
-	getData: function(key) {
+	getData: function(type,key) {
 		var me = this,
 			data = JSON.parse(localStorage.getItem("languages"));
-		return data.filter(
-			function(data){
-				return data.item == key;
-			}
-		);
+		if(data) {
+			return data.filter(
+				function (data) {
+					return data.type == type && data.item == key;
+				}
+			);
+		}else{
+			return key;
+		}
 	},
 
 	//return an array of objects according to key, value, or key and value matching
@@ -175,13 +188,78 @@ Ext.define('Docucrm.util.Translate', {
 	 *
 	 * @return {String} The translated text with all variables substituted.
 	 */
-	label: function(key) {
+	translateElement: function(type,key) {
 		var me = this,obj, txt;
 		if (Ext.isString(key)) {
-			obj = me.getData(key);
+			obj = me.getData(type ? type : 'label', key);
 			txt = obj.length ? obj[0].text : me.splitLabel(key);
 		}
 		return txt;
+	},
+	/**
+	 * Retrieve a label text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	lang: function(key) {
+		return this.translateElement("language",key);
+	},
+	/**
+	 * Retrieve a label text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	label: function(key) {
+		return this.translateElement("label",key);
+	},
+	/**
+	 * Retrieve a button text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	button: function(key) {
+		return this.translateElement("button",key);
+	},
+	/**
+	 * Retrieve a title text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	title: function(key) {
+		return this.translateElement("title",key);
+	},
+	/**
+	 * Retrieve a validation text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	validation: function(key) {
+		return this.translateElement("validation",key);
+	},
+	auth: function(key) {
+		return this.translateElement("auth",key);
+	},
+	error: function(key) {
+		return this.translateElement("error",key);
+	},
+	submit: function(key) {
+		return this.translateElement("submit",key);
+	},
+	info: function(key) {
+		return this.translateElement("info",key);
+	},
+	menu: function(key) {
+		return this.translateElement("menu",key);
 	},
 	/**
 	 * Split string on UpperCase Characters

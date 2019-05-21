@@ -1,3 +1,7 @@
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-btn-facebook-small-tr {
+    background-position: right -3px;
+}
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
 .x-btn-facebook-small-bl {
     background-position: 0 -4px;
@@ -12160,42 +12164,50 @@
     color: #ff5722 !important;
 }
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:394 */
+.systems {
+    color: #76ff03 !important;
+}
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:398 */
+.administration {
+    color: #bd2130 !important;
+}
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:402 */
 .all {
     color: #4bcffa !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:397 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:405 */
 .charts {
     color: #fff200 !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:401 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:409 */
 .forms {
     color: #1abc9c !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:405 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:413 */
 .customers {
     color: #c4e538 !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:409 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:417 */
 .products {
     color: #f1c40f !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:413 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:421 */
 .myprofile {
     color: #f16a0f !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:417 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:425 */
 .about {
     color: #f1c40f !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:421 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:429 */
 .languages {
     color: #07bf10 !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:426 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:434 */
 .logout {
     color: #f11e21 !important;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:430 */
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/src/view/main/Main.scss:438 */
 .ux-notification-light .x-panel-header-default {
     background-color: green;
 }

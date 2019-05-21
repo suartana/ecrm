@@ -36,5 +36,5 @@ Ext.define('Docucrm.util.AdvancedVType', {
         return true;
     },
 
-    passwordText: 'Passwords do not match'
+    passwordText: Translate.validation("UnmatchedPassword")
 });

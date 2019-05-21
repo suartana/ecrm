@@ -44,12 +44,12 @@ Ext.define('Docucrm.util.Helpers', {
 	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
 	 */
 	apiHeaders:function(){
-		var loggedIn = this.apiTokens(),
+		var tokens = this.apiTokens(),
 			headers = {
 				'Content-Type' : 'application/json',
 				'Accept' : 'application/json',
-				'Authorization' : 'Bearer '+ loggedIn,
-				'X-CSRF-TOKEN': loggedIn
+				'Authorization' : 'Bearer '+ tokens,
+				'X-CSRF-TOKEN': tokens
 			};
 
 		return headers;
@@ -60,11 +60,20 @@ Ext.define('Docucrm.util.Helpers', {
 	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
 	 */
 	storeHeaders:function(){
-		var loggedIn = this.apiTokens(),
+		var tokens = this.apiTokens(),
 			headers = {
-				Authorization : 'Bearer '+ loggedIn
+				Authorization : 'Bearer '+ tokens
 			};
 		return headers;
+	},
+	/**
+	 * Check if locale storage are empty
+	 *
+	 * @param key
+	 * @returns {boolean}
+	 */
+	isExists:function(key){
+		return key === null || key === "null" || key.length < 1 ? false : true;
 	},
 	/**
 	 * Set the default main View
@@ -74,19 +83,50 @@ Ext.define('Docucrm.util.Helpers', {
 	appMainView:function(){
 		var me = this,
 			route = window.route,
-			mainView;
+			mainView,
+			loginView = 'Docucrm.view.authentication.Login',
+			channgePassView = 'Docucrm.view.authentication.ChangePassword',
+			mainView = 'Docucrm.view.main.Main',
+			profile = localStorage.getItem("profile") ;
+
+		try {
+			// If the user not loggedin, we display the login window,
+			// otherwise, we display the main view
+			if(route !== 'reset' && me.apiTokens() ) {
+				//get user status
+				Ext.Ajax.request({
+					headers: me.apiHeaders(),
+					url: '/api/users/status',
+					scope: this,
+					method: 'GET',
+					success: function (response) {
+						var obj = Ext.decode(response.responseText);
+						obj.status == 'loggedin' ? true : me.removeTokens();
+					},
+					failure: function (response) {
+						me.removeTokens();
+					}
+				});
+			}
+		} catch (exception) {
+			me.removeTokens();
+			Message.infoBox("Error",Translate.error("ReportAdmin"));
+		}
+
 		switch (route) {
 			case 'reset':
-				mainView = 'Docucrm.view.authentication.ChangePassword';
-			break;
+				mainView = channgePassView;
+				break;
 			case 'user':
-				mainView = 'Docucrm.view.main.Main';
-			break;
+				mainView = me.isExists(profile) ? mainView: loginView;
+				break;
 			default:
-				mainView = 'Docucrm.view.authentication.Login';
-			break;
+				mainView = me.apiTokens() && me.isExists(profile) ? mainView : loginView ;
+				break;
 		}
-		return  me.apiTokens() || route === 'reset' ? mainView : 'Docucrm.view.authentication.Login';
+
+		return  me.apiTokens() || route === 'reset' ? mainView : loginView ;
+
 	}
 
 });

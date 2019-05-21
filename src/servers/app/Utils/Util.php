@@ -245,6 +245,15 @@ class Util
 	 */
 	static $actual = 1;
 
+	public static function clean($string)
+	{
+		if($string) {
+			$string = preg_replace('/\s+/', '', $string);
+			return str_replace(' ', '', $string);
+		}
+
+	}
+
 	/**
 	 * Set Curent Datetime
 	 *

@@ -10,7 +10,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
         'Ext.form.field.Text'
     ],
     itemId:'resetpassword',
-    title: '<h1>Create new password</h1>',
+    title: '<h1>'+Translate.title('ResetPassword')+'</h1>',
     defaultFocus: 'authdialog',  // Focus the Auth Form to force field focus as well
 
     items: [
@@ -40,7 +40,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                 },
                 {
                     xtype: 'label',
-                    text: Docucrm.util.Translate.label('E-Mail Address')
+                    text: Translate.label('Email')
                 },
                 {
                     xtype: 'textfield',
@@ -61,7 +61,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                 {
                     xtype: 'label',
                     cls: 'lock-screen-top-label',
-                    text: Docucrm.util.Translate.label('Enter new password')
+                    text: Translate.label('EnterNewPassword')
                 },
                 {
                     xtype: 'passwordstrength',
@@ -70,11 +70,11 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                     inputType: 'password',
                     hideLabel: true,
                     allowBlank : false,
-                    emptyText: 'Password',
+                    emptyText: Translate.label('Password'),
                     name: 'password',
                     itemId: 'password',
                     minLength: 8,
-                    minLengthText: Docucrm.util.Translate.label('The password must be at least 8 characters long.'),
+                    minLengthText: Translate.label('The password must be at least 8 characters long.'),
                     msgTarget: 'under',
                     strengthMeterId: 'userPasswordStrengthMeter',
                     listeners: {
@@ -93,7 +93,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                     vtype: 'password',
                     allowBlank : false,
                     inputType: 'password',
-                    emptyText: 'Confirm Password',
+                    emptyText: Translate.label('ConfirmPassword'),
                     initialPassField: 'password',
                     msgTarget: 'under',
                     triggers: {
@@ -125,7 +125,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                     margin: '5 0',
                     iconAlign: 'right',
                     iconCls: 'x-fa fa-angle-right',
-                    text: 'Change Password',
+                    text: Translate.button('ChangePassword'),
                     handler: 'onChangePasswordButtonClick'
                 },
 				{	xtype: 'textfield',
@@ -139,7 +139,7 @@ Ext.define('Docucrm.view.authentication.ChangePassword', {
                     xtype: 'component',
                     html: '<div style="text-align:right">' +
                         '<a href="#login" class="link-forgot-password">'+
-                            'Back to Log In</a>' +
+                            Translate.button('BackToLogIn')+'</a>' +
                         '</div>',
                     listeners: {
                         click: {

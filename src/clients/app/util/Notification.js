@@ -7,7 +7,7 @@
  */
 Ext.define('Docucrm.util.Notification', {
 	extend: 'Ext.window.Toast',
-	xtype: 'winToast',
+	xtype: 'toast',
 	tpl: '<span>{message}</span><br><span>{data}</span>',
 	align: 'tr',
 	width: 350,

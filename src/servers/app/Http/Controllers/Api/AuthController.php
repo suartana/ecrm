@@ -4,29 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\UserView;
-use App\Traits\Translatetable;
-use App\Utils\Util;
+use App\Traits\JsonRespondTrait;
+use App\Traits\TranslationTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use App\Traits\JsonRespondController;
 use App\Models\Users\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Session;
-
 
 class AuthController extends Controller
 {
-	use JsonRespondController, AuthenticatesUsers, Translatetable;
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('guest', ['except' => 'logout']);
-	}
+	use JsonRespondTrait, AuthenticatesUsers, TranslationTrait;
 
 	/**
 	 * Handle a login request to the application.
@@ -35,22 +24,32 @@ class AuthController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function login(Request $request)
-	{   //validate the input parameters
+	{
+		//is user check rememberme
+		$this->isUserRemember();
+		//validate the input parameters
 		$this->validateRequest($request);
 		//set user credetials
 		try {
 			$credentials = $request->only('email', 'password');
-			if(Auth::attempt($credentials)) {
+			// set the remember me cookie if the user check the box
+			if(Auth::attempt($credentials,$request->rememberme)) {
 				$user  = Auth::user();
 				$fullname = UserView::getFullname($request->get("email"));
+				$userinfo = UserView::getProfile($user->getAuthIdentifier()) ;
+				//set last user login
+				$user->lastlogin = Carbon::now()->toDateTimeString();
+				$user->save();
+
 				$result = [
 					"success" => true,
+					"data" => $userinfo,
 					"user" => $fullname,
 					"token" => $user->createToken('docucrm')->accessToken
 				];
 				return $this->respond($result);
 			}else{
-				return $this->respondUnauthorized( $this->translate( "validations", "loginError") );
+				return $this->respondUnauthorized( $this->translate( "validation", "LoginError") );
 			}
 		} catch (\Exception $e) {
 			return $this->respondUnauthorized( $this->translate( "error", "reportAdmin") );
@@ -83,13 +82,6 @@ class AuthController extends Controller
 
 		return true;
 	}
-
-	public function getUser()
-	{
-		$user = Auth::user();
-		return response()->json(['success' => $user,"user" => "test"], $this->successStatus);
-	}
-
 	/**
 	 * Logout user and clear the login session
 	 *
@@ -97,10 +89,22 @@ class AuthController extends Controller
 	 */
 	public function logout(){
 		if (Auth::check()) {
-			Auth::user()->token()->revoke();
+			Auth::logout();
 			return $this->respond(["success" => true]);
 		}else{
-			return  $this->respondWithError("Something went wrong, please contact your administrator.");
+			return  $this->respondWithError($this->translate( "error", "reportAdmin"));
+		}
+	}
+
+	/**
+	 * Check if user checked the remember me
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	private function isUserRemember()
+	{
+		if (Auth::check()) {
+			return $this->respond(["success" => true,"status" => "loggedin" , "keepalive" => "rememberme"]);
 		}
 	}
 

@@ -39,11 +39,6 @@ Ext.define('Docucrm.view.authentication.Login', {
             },
 
             items: [
-				/*{
-					padding: '5 0 0 0',
-					xtype:'container',
-					html:'<img src="resources/images/login_logo.png" width="225px">'
-				},*/
                 {
                     xtype: 'fieldcontainer',
                     fieldLabel: '',
@@ -70,7 +65,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                         {
                             xtype: 'button',
                             ui:'btnlang',
-                            tooltip:'Deutsch',
+                            tooltip: Translate.lang('German'),
                             icon:"resources/images/icons/ge_flag.png",
                             name:'de',
                             itemId:'de',
@@ -79,7 +74,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                         {
                             xtype: 'button',
                             ui:'btnlang',
-                            tooltip:'Français',
+                            tooltip: Translate.lang('French'),
                             icon:"resources/images/icons/fr_flag.png",
                             name:'fr',
                             itemId:'fr',
@@ -88,7 +83,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                         {
                             xtype: 'button',
                             ui:'btnlang',
-                            tooltip:'Italiano',
+                            tooltip:  Translate.lang('Italian'),
                             icon:"resources/images/icons/it_flag.png",
                             name:'it',
                             itemId:'it',
@@ -97,7 +92,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                         {
                             xtype: 'button',
                             ui:'btnlang',
-                            tooltip:'English',
+                            tooltip: Translate.lang('English'),
                             icon:"resources/images/icons/uk_flag.png",
                             name:'en',
                             itemId:'en',
@@ -109,18 +104,19 @@ Ext.define('Docucrm.view.authentication.Login', {
 
                 {
                     xtype: 'label',
-                    text:Translate.label("SignIntoYourAccount")
+                    text:Translate.label("SignIn")
                 },
                 {
                     xtype: 'textfield',
                     cls: 'auth-textbox',
                     name: 'email',
                     itemId:'email',
+                    vtype: 'email',
                     bind: '',
                     height: 55,
                     hideLabel: true,
                     allowBlank : false,
-                    emptyText: Translate.label("username"),
+                    emptyText: Translate.label("Username"),
                     triggers: {
                         glyphed: {
                             cls: 'trigger-glyph-noop auth-email-trigger'
@@ -133,7 +129,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                     height: 55,
                     itemId:'password',
                     hideLabel: true,
-                    emptyText: 'Password',
+                    emptyText: Translate.label("Password"),
                     inputType: 'password',
                     name: 'password',
                     bind: '',
@@ -156,11 +152,11 @@ Ext.define('Docucrm.view.authentication.Login', {
                             bind: '',
                             itemId:'rememberme',
                             name: 'rememberme',
-                            boxLabel: 'Remember me'
+                            boxLabel: Translate.label("RememberMe")
                         },
                         {
                             xtype: 'container',
-                            html: '<a href="#passwordreset" class="link-forgot-password"> Forgot Password ?</a>',
+                            html: '<a href="#passwordreset" class="link-forgot-password"> '+ Translate.label("ForgotPassword") +'?</a>',
                             listeners: {
                                 click: {
                                     element: 'el', //bind to the underlying el property on the panel
@@ -177,7 +173,7 @@ Ext.define('Docucrm.view.authentication.Login', {
                     ui: 'soft-green',
                     iconAlign: 'right',
                     iconCls: 'x-fa fa-angle-right',
-                    text: 'Login',
+                    text:Translate.button("Login"),
                     formBind: true,
                     handler: 'onLoginButtonClick'
                 }
