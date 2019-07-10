@@ -237,6 +237,26 @@ Ext.define('Docucrm.util.Translate', {
 		return this.translateElement("title",key);
 	},
 	/**
+	 * Retrieve a column text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	column: function(key){
+		return this.translateElement("column",key);
+	},
+	/**
+	 * Retrieve a tooltip text and translate it using the subsitution parameters.
+	 *
+	 * @param {String} key Lookup code for the element.
+	 *
+	 * @return {String} The translated text with all variables substituted.
+	 */
+	tooltip: function(key) {
+		return this.translateElement("tooltip",key);
+	},
+	/**
 	 * Retrieve a validation text and translate it using the subsitution parameters.
 	 *
 	 * @param {String} key Lookup code for the element.
@@ -271,146 +291,6 @@ Ext.define('Docucrm.util.Translate', {
 	 */
 	splitLabel:function(text){
 		return text.match(/[A-Z][a-z]+|[0-9]+/g).join(" ");
-	},
-	/**
-	 * Retrieve a message text and translate it using the subsitution parameters.
-	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated text with all variables substituted.
-	 */
-	message: function(text, params, notFoundValue, storeRecords) {
-		if (Ext.isSimpleObject(text)) {
-			var obj = text;
-			text = "";
-			Ext.Object.each(obj, function(key, value) {
-				text += Util.Html.wrap('tr', Util.Html.wrap(['td', 'b'], key.charAt(0).toUpperCase() + key.slice(1) + ":&nbsp;") + Util.Html.wrap('td', value));
-			});
-
-			text = Util.Html.wrap('table', text, 'border="0" cellpadding="0" cellspacing="0"');
-		}
-
-		return this.element('labels', text, params, notFoundValue, false, storeRecords);
-	},
-
-	/**
-	 * Retrieve a html block and translate it using the subsitution parameters.
-	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated html block with all variables substituted.
-	 */
-	html: function(token, params, notFoundValue, storeRecords) {
-
-		var html =  this.element('html', Ext.isString(token) ? token.toUpperCase() : token, params, notFoundValue, false, storeRecords);
-		console.log("html",html);
-		return html;
-	},
-
-	/**
-	 * Retrieve a html block including the title of an FAQ entry and translate it using the subsitution parameters.
-	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated html block with all variables substituted.
-	 *
-	 * @obsolete	Use #faqTree instead.
-	 */
-	faq: function(token, params, notFoundValue, titleTag, storeRecords) {
-		console.warn("call to obsolete function Util.Tranlsate.faq");
-		return this.element('faq', Ext.isString(token) ? token.toUpperCase() : token, params, notFoundValue, titleTag, storeRecords);
-	},
-
-	/**
-	 * Retrieve a html block of an FAQ entry and translate it using the subsitution parameters.
-	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated html block with all variables substituted.
-	 *
-	 * @obsolete	Use #faqTree instead.
-	 */
-	faqText: function(token, params, notFoundValue, storeRecords) {
-		console.warn("call to obsolete function Util.Tranlsate.faqText");
-		return this.element('faq', Ext.isString(token) ? token.toUpperCase() : token, params, notFoundValue, false, storeRecords);
-	},
-
-	/**
-	 * Retrieve the title of an FAQ entry and translate it using the subsitution parameters.
-	 *
-	 * @param {String} code Lookup code for the element.
-	 * @param {String[]} [parameters] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated html block with all variables substituted.
-	 *
-	 * @obsolete	Use #faqTree instead.
-	 */
-	faqTitle: function(token, params, notFoundValue, titleTag, storeRecords) {
-		console.warn("call to obsolete function Util.Tranlsate.faqTitle");
-		return this.element('faq', Ext.isString(token) ? token.toUpperCase() : token, params, notFoundValue, true, storeRecords);
-	},
-
-	/**
-	 * Retrieve a html block of an FAQ entry and translate it using the subsitution parameters.
-	 *
-	 * @param {String|String[]} path Lookup code for the element.
-	 * @param {String} infoType The type of information to return
-	 * @param {String[]} [params] Parameters to be used in substitutions for the translated text.
-	 * @param {String} [notFoundValue] Return value if the code could not be looked up.
-	 *
-	 * @return {String} The translated html block with all variables substituted.
-	 */
-	faqTree: function(path, infoType, params, notFoundValue, storeRecords) {
-		if (Ext.isString(path)) {
-			path = path.replace(/^\//, "").split(/\//);
-		}
-
-		infoType = infoType ? infoType.toLowerCase() : 'all';
-
-		var child = this._faqTree.getRootNode();
-		var depth = 0;
-		var last = path.length;
-		var anchor;
-		while (child && depth < last) {
-			anchor = path[depth++].toUpperCase();
-			child = child.findChild("id", anchor);
-		}
-
-		var text;
-		if (child) {
-			if (infoType == 'all' || infoType == 'text') {
-				text = child.get('text');
-
-				if (infoType == 'all') {
-					text = '<a name="' + anchor + '"></a><h3>' + child.get("FIT_TITLE") + '</h3>' + text;
-				}
-			}
-			else {
-				text = child.get("FIT_TITLE");
-			}
-
-			text = Util.Tools.format(text, params);
-		}
-
-		if (text === undefined) {
-			if (notFoundValue === undefined) {
-				text = "${" + path.join(":") + "-defined?}";
-			}
-			else {
-				text = notFoundValue;
-			}
-		}
-
-		return text;
 	},
 
 	/**

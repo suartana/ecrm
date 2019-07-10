@@ -37,7 +37,7 @@
 
     // Various sizes for the pieces:
     $item-icon-font-size: 18px,
-    $item-icon-width: 44px,
+    $item-icon-width: 20px,
     $item-expander-font-size: 16px,
     $item-expander-width: 24px,
 
@@ -435,6 +435,38 @@
     color: #F11E21 !important;
 }
 
+
+.additem{
+    color: #4caf50 !important;
+}
+
+
+.deleteitem {
+    color: #d0211c !important;
+}
+
+.options {
+    color: #76ff03 !important;
+}
+
+.edititem {
+    color: #b2ff59 !important;
+}
+
+
+.help{
+    color: #76ff03 !important;
+}
+
 .ux-notification-light .x-panel-header-default {
     background-color: green;
+}
+
+.x-body {
+    color: #404040;
+    font-size: 13px;
+    line-height: 17px;
+    font-weight: 400;
+    font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    background: #f0f0f0;
 }

@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Helpers\Helper;
+use App\Http\Resources\Users\SalutationCollection;
+use App\Http\Resources\Users\UserViewCollection;
+use App\Models\Users\Solutation;
 use App\Models\Users\User;
 use App\Models\Users\UserView;
+use App\Services\Users\UserService;
 use App\Traits\JsonRespondTrait;
 use App\Traits\TranslationTrait;
-use App\Utils\Util;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +19,9 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-	use JsonRespondTrait, TranslationTrait;
+	use JsonRespondTrait,
+		TranslationTrait,
+		ResetsPasswords;
 	/**
 	 * Where to redirect users after login.
 	 *
@@ -55,6 +62,7 @@ class UserController extends Controller
 			$userinfo = $user ?  "loggedin" : "Unauthorized" ;
 			$status = [
 				"status" => $userinfo,
+				"token" => $user->getRememberToken(),
 				"success" => $user ? true : false
 			];
 		}else{
@@ -72,13 +80,20 @@ class UserController extends Controller
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function profile()
-	{   $user = Auth::user();
-		$userinfo =  $user ? UserView::getProfile($user->getAuthIdentifier()) : false ;
-		$data = [
-			"data" => $userinfo,
-			"success" => $user ? true : false
-		];
-		return $this->respond($data);
+	{
+		try {
+			$user = Auth::user();
+			return new UserViewCollection(
+				UserView::where(
+					[
+					'id' => $user->getAuthIdentifier() ,
+					"ANREDE_LANG" => $this->mappingLocale($this->getLocale())
+					]
+				)->get()
+			);
+		}catch (\Exception $e) {
+			return  $this->respondWithError($e->getMessage());
+		}
 	}
 
 	/**
@@ -96,10 +111,67 @@ class UserController extends Controller
 		$result = Auth::check() ? Auth::user()->setAttribute('locale', $locale)->save() :  false;
 		//set json data
 		$data = [
-			"message" => $result ? $this->translate("info","LanguageChange") : $this->translate("error", "reportAdmin"),
+			"message" => $result ? $this->translate("info","LanguageChange") : $this->translate("error", "ReportAdmin"),
 			"datalang" => $this->translations(),
 			"success" => $result ? true : false
 		];
 		return $this->respond($data);
+	}
+
+	/**
+	 * Provide Salutation list
+	 *
+	 * @return SalutationCollection|\Illuminate\Http\JsonResponse
+	 */
+	public function salutation()
+	{
+		try {
+			return new SalutationCollection(Solutation::where("lang",$this->mappingLocale($this->getLocale()))->get());
+		}catch (\Exception $e) {
+			return  $this->respondWithError($e->getMessage());
+		}
+	}
+
+	/**
+	 * Update user password
+	 *
+	 * @param Request $request
+	 * @param UserService $userService
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function changePassword(Request $request, UserService $userService)
+	{
+		try {
+			//use userservice to change the user password
+			if($userService->changePassword(Auth::user(),$request->get("password"))){
+				$data = [
+					"success" => true,
+					"message" => $this->translate("passwords","Reset")
+				];
+				return $this->respond($data);
+			}else{
+				return $this->respondValidatorFailed($this->translate("passwords","User"));
+			}
+		}catch (\Exception $e){
+			return  $this->respondWithError($e->getMessage());
+		}
+	}
+
+	public function save(Request $request, UserService $userService)
+	{
+		try {
+			//use userservice to save the data
+			if( $userService->execute($request->all()) ){
+				$data = [
+					"success" => true,
+					"message" =>  $this->translate("info","TheDataHasBeenSaved")
+				];
+				return $this->respond($data);
+			}else{
+				return $this->respondValidatorFailed($this->translate("error","ReportAdmin"));
+			}
+		}catch (\Exception $e){
+			return  $this->respondWithError($e->getMessage());
+		}
 	}
 }

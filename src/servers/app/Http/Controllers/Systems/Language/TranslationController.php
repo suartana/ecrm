@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Systems\Language;
 
+use App\Http\Resources\Systems\Languages\LanguageCollection;
+use App\Models\Systems\Language\Language;
 use App\Traits\JsonRespondTrait;
 use App\Traits\TranslationTrait;
-use App\Utils\Util;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use Config;
@@ -45,8 +45,18 @@ class TranslationController extends Controller
 		return $this->respond([
 			"success" => $locale ==  Session::get("locale") ? true : false,
 			"datalang" => $this->translations(),
-			"message" => $locale ==  Session::get("locale")? $this->translate("info","LanguageChange") : $this->translate("error", "reportAdmin")
+			"message" => $locale ==  Session::get("locale")? $this->translate("info","LanguageChange") : $this->translate("error", "ReportAdmin")
 		]);
+	}
+
+	/**
+	 * Provide languages list
+	 *
+	 * @return LanguageCollection
+	 */
+	public function language()
+	{
+		return new LanguageCollection(Language::orderBy("locale","asc")->get());
 	}
 
 

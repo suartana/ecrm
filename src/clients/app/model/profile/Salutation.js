@@ -1,10 +1,7 @@
-Ext.define('Docucrm.model.system.Languages', {
+Ext.define('Docucrm.model.profile.Salutation', {
 	extend: 'Docucrm.model.Base',
-	alias:'model.languages',
+	alias:'model.salutation',
 	fields: [
-		{
-			name: 'id'
-		},
 		{
 			name: 'code'
 		},

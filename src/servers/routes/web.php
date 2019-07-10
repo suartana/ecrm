@@ -32,5 +32,6 @@ Route::group([
 	Route::get('/setlang', 'Systems\Language\TranslationController@setLocale');
 	Route::get('/translation/add', 'Systems\Language\TranslationController@addTranslation');
 	Route::get('/storage/images/{filename}', 'Systems\File\ImagesController@displayImage');
-	Route::get('menu', 'Systems\ACL\NaviController@index');
+
+	Route::get('testdata', 'Systems\Language\CountriesController@countries');
 });

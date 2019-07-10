@@ -18,7 +18,7 @@ class CreateTranslationsTable extends Migration
             $table->string('namespace', 150)->default('*');
             $table->string('type', 150);
             $table->string('item', 150);
-            $table->text('text');
+            $table->string('text',3000);
             $table->boolean('unstable')->default(false);
             $table->boolean('locked')->default(false);
             $table->foreign('locale')->references('locale')->on('translator_languages');

@@ -3,6 +3,7 @@
 namespace App\Models\Users;
 
 
+use App\Models\Systems\Modules\Module;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;

@@ -14,6 +14,6 @@ class SubModule extends Model
 	 */
 	public function properties()
 	{
-		return $this->hasOne(Properties::class,"syssubmodcode","code")->withDefault();
+		return $this->hasOne(Properties::class,"code","code")->withDefault();
 	}
 }

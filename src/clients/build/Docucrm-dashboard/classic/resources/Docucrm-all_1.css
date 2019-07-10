@@ -23,11 +23,6 @@
 .boldFont {
     font-weight: bold;
 }
-/* /home/gede/Documents/006_Developments/docucrm/src/clients/classic/sass/etc/all.scss:58 */
-.x-treelist-row .x-treelist-item-wrap {
-    margin-left: 10px !important;
-    margin-right: 0;
-}
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/packages/core/sass/src/util/SizeMonitor.scss:5 */
 .x-size-monitored {
     /**
@@ -16053,4 +16048,11 @@ div.x-border-layout-ct {
 /* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-neutral/sass/src/resizer/Resizer.scss:167 */
 .x-window-collapsed .x-window-handle {
     display: none;
+}
+/* /home/gede/Documents/006_Developments/docucrm/src/clients/ext/classic/theme-neutral/sass/src/resizer/Resizer.scss:172 */
+.x-resizable-proxy {
+    border: 1px dashed #3b5a82;
+    position: absolute;
+    overflow: hidden;
+    z-index: 50000;
 }

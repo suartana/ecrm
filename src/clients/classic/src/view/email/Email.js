@@ -2,6 +2,7 @@ Ext.define('Docucrm.view.email.Email', {
     extend: 'Ext.container.Container',
 
     xtype: 'email',
+    alias: 'widget.email',
 
     controller: 'email',
 

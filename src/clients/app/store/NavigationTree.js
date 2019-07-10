@@ -7,8 +7,13 @@ Ext.define('Docucrm.store.NavigationTree', {
 		name: 'text'
 	}],
 	root: {
-		expanded: true
+		expanded: true,
+		id: 0,
+		name : 'Root',
+		loaded: true
 	},
+	lazyFill: true,
+	rootVisible: true,
 	proxy: {
 		type: 'ajax',
 		url: '/api/system/treelist',
@@ -16,7 +21,8 @@ Ext.define('Docucrm.store.NavigationTree', {
 			type: 'json',
 			rootProperty: 'data',
 			idProperty: 'id',
-			messageProperty: 'msg'
+			totalProperty:'recordCount',
+			successProperty: 'success'
 		},
 		headers: Helpers.storeHeaders()
 	}

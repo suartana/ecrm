@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -15,6 +16,11 @@ class AppController extends Controller
 	{
 		$token = ['token' => "" ];
 		return view('index', $token);
+	}
+
+	public function saveModule(Request $request)
+	{
+		Helper::xdump($request->all());
 	}
 
 }

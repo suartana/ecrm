@@ -1,18 +1,19 @@
 Ext.define('Docucrm.view.profile.Social', {
     extend: 'Ext.panel.Panel',
     xtype: 'profilesocial',
-
+    itemId: 'profilesocial',
     requires: [
         'Ext.Button',
         'Ext.Container'
     ],
-
     layout: {
         type: 'vbox',
         align: 'middle'
     },
-
-    height: 320,
+    viewModel: {
+        type: 'userprofileview'
+    },
+    height: 250,
 
     bodyPadding: 20,
 
@@ -23,53 +24,39 @@ Ext.define('Docucrm.view.profile.Social', {
             height: 120,
             width: 120,
             alt: 'profile-picture',
-            src: 'resources/images/user-profile/20.png'
+            bind: {
+                src: "storage/images/{userprofile.img}"
+            }
         },
         {
             xtype: 'component',
             cls: 'userProfileName',
             height: '',
-            html: 'Jessica Warren'
+            bind: {
+                html: "{userprofile.firstname} {userprofile.lastname}"
+            }
         },
         {
             xtype: 'component',
             cls: 'userProfileDesc',
-            html: 'CO-FOUNDER, CEO'
+            bind: {
+                html: "{userprofile.occupation}"
+            }
         },
         {
-            xtype: 'container',
-            layout: 'hbox',
-            defaults: {
-                xtype: 'button',
-                margin: 5
-            },
-            margin: 5,
-            items: [
-                {
-                    ui: 'facebook',
-                    iconCls: 'x-fa fa-facebook'
-                },
-                {
-                    ui: 'soft-cyan',
-                    iconCls: 'x-fa fa-twitter'
-                },
-                {
-                    ui: 'soft-red',
-                    iconCls: 'x-fa fa-google-plus'
-                },
-                {
-                    ui: 'soft-purple',
-                    iconCls: 'x-fa fa-envelope'
-                }
-            ]
+            xtype: 'component',
+            cls: 'userProfileDesc',
+            height:15,
+            html:''
         },
         {
             xtype: 'button',
+            ui: 'facebook',
             width: 220,
-            text: 'Follow',
+            text: 'Upload Profile Image',
             platformConfig: {
                 classic: {
-                    scale: 'large'
+                    scale: 'small'
                 },
                 modern: {
                     ui: 'action'

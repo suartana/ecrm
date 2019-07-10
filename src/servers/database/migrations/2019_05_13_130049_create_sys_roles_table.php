@@ -17,8 +17,8 @@ class CreateSysRolesTable extends Migration
             $table->increments('id');
 	        $table->integer("code");
 	        $table->integer("deptluid");
-            $table->integer("sysmodid")->unsigned()->index()->foreign()->references("id")->on("sys_modules")->onDelete("cascade");
-	        $table->integer("syssubmodid")->nullable()->unsigned()->index()->foreign()->references("id")->on("sys_submodules")->onDelete("cascade");
+            $table->integer("modcode")->unsigned()->index()->foreign()->references("id")->on("sys_modules")->onDelete("cascade");
+	       $table->tinyInteger("modtype")->default(1);
 	        $table->tinyInteger("mcreate");
 	        $table->tinyInteger("mread")->default(1);
 	        $table->tinyInteger("mupdate");

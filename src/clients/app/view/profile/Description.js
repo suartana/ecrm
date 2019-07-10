@@ -1,12 +1,14 @@
 Ext.define('Docucrm.view.profile.Description', {
     extend: 'Ext.Panel',
     xtype: 'profiledescription',
-
+    itemId: 'profiledescription',
     requires: [
         'Ext.Button',
         'Ext.Img'
     ],
-
+    viewModel: {
+        type: 'userprofileview'
+    },
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -20,7 +22,9 @@ Ext.define('Docucrm.view.profile.Description', {
         {
             xtype: 'component',
             baseCls: 'box x-fa fa-home',
-            html: 'San Jose, CA',
+            bind:{
+                html: '{userdetail.town}'
+            },
             padding: '0 0 12 0'
         },
         {

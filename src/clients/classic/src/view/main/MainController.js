@@ -22,13 +22,9 @@ Ext.define('Docucrm.view.main.MainController', {
 	 * Set the application routes
 	 */
 	routes: {
-		':node': 'onRouteChange',
-		':node/:id': {
-			action: 'showNode',
-			before: 'beforeShowNode'
-		},
-		':login': {
-			action: 'showLogin'
+		':node': {
+			before: 'wait',
+			action: 'onRouteChange'
 		}
 	},
 	/**
@@ -51,6 +47,17 @@ Ext.define('Docucrm.view.main.MainController', {
 			this.onBadRoute();
 		}*/
 		console.log("id",id,"action",action);
+	},
+	wait : function() {
+		var args   = Ext.Array.slice(arguments),
+			action = args.pop(),
+			store  = Ext.getStore('storeNavigationTreeId');
+
+		if (store.loading) {
+			store.on('load', action.resume, action);
+		} else {
+			action.resume();
+		}
 	},
 	/**
 	 * Route show node action
@@ -84,11 +91,12 @@ Ext.define('Docucrm.view.main.MainController', {
 			navigationList = refs.navigationTreeList,
 			store = Ext.StoreManager.get("storeNavigationTreeId"),
 			node = store.findNode('routeId', hashTag) || store.findNode('viewType', hashTag),
-			view = (node && node.get('viewType')) || hashTag === 'login' ? hashTag : 'admindashboard',
+			viewStore = (node && node.get('viewType')) ? node.get('viewType') : 'admindashboard',
+			view = hashTag === 'profile' ? hashTag : viewStore,
 			lastView = me.lastView,
 			existingItem = mainCard.child('component[routeId=' + hashTag + ']'),
 			newView;
-
+		console.log("view",view,"viewtype",node);
 		//me.keeplive();
 
 		// Kill any previously routed window
@@ -362,6 +370,9 @@ Ext.define('Docucrm.view.main.MainController', {
 				Message.infoBox("Error",Translate.error("ReportAdmin"));
 			}
 		});
+	},
+	myProfile:function (button) {
+		this.redirectTo('profile', true);
 	}
 
 

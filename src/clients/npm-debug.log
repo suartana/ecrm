@@ -13,7 +13,7 @@
 4 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:131:7)
 4 verbose stack     at process._tickCallback (internal/process/next_tick.js:180:9)
 5 verbose cwd /home/gede/Documents/006_Developments/docucrm/src/clients
-6 error Linux 4.15.0-50-generic
+6 error Linux 4.15.0-54-generic
 7 error argv "/usr/bin/node" "/usr/bin/npm" "--registry" "https://npm.sencha.com" "whoami"
 8 error node v8.10.0
 9 error npm  v3.5.2

@@ -52,7 +52,7 @@ class AuthController extends Controller
 				return $this->respondUnauthorized( $this->translate( "validation", "LoginError") );
 			}
 		} catch (\Exception $e) {
-			return $this->respondUnauthorized( $this->translate( "error", "reportAdmin") );
+			return $this->respondUnauthorized( $this->translate( "error", "ReportAdmin") );
 		}
 	}
 
@@ -92,7 +92,7 @@ class AuthController extends Controller
 			Auth::logout();
 			return $this->respond(["success" => true]);
 		}else{
-			return  $this->respondWithError($this->translate( "error", "reportAdmin"));
+			return  $this->respondWithError($this->translate( "error", "ReportAdmin"));
 		}
 	}
 

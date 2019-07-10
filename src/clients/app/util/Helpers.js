@@ -59,6 +59,21 @@ Ext.define('Docucrm.util.Helpers', {
 	 *
 	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
 	 */
+	apiPostHeaders:function(){
+		var tokens = this.apiTokens(),
+			headers = {
+				'X-CSRF-TOKEN': tokens,
+				'X-Requested-With': 'XMLHttpRequest',
+				'Authorization' : 'Bearer '+ tokens
+			};
+
+		return headers;
+	},
+	/**
+	 * Set Extjs Headers params
+	 *
+	 * @returns {{Authorization: string, Accept: string, "X-CSRF-TOKEN": string, "Content-Type": string}}
+	 */
 	storeHeaders:function(){
 		var tokens = this.apiTokens(),
 			headers = {
@@ -127,6 +142,23 @@ Ext.define('Docucrm.util.Helpers', {
 
 		return  me.apiTokens() || route === 'reset' ? mainView : loginView ;
 
+	},
+	/**
+	 * Cloning store
+	 * @param object source [data store]
+	 * @return object target
+	 */
+	deepCloneStore: function  (store) {
+		var source = Ext.isString(store) ? Ext.data.StoreManager.lookup(store) : store,
+			clone = Ext.create(source.$className, {
+				model: source.model
+			});
+
+		clone.add(Ext.Array.map(source.getRange(), function (record) {
+			return record.copy();
+		}));
+
+		return clone;
 	}
 
 });

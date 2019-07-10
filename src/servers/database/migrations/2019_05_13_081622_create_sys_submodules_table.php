@@ -15,7 +15,7 @@ class CreateSysSubmodulesTable extends Migration
     {
         Schema::create('sys_submodules', function (Blueprint $table) {
 	        $table->increments('id');
-	        $table->integer("sysmodid");
+	        $table->integer("modcode");
 	        $table->integer("code");
 	        $table->string("descr");
 	        $table->string("locale",2);

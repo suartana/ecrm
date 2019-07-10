@@ -95,14 +95,14 @@ Ext.define('Docucrm.view.main.Main', {
                     ui:'titlebarbutton',
                     cls:'profile',
                     menu: {
-                        id: 'mainMenu',
+                        itemId: 'mainMenu',
                         showSeparator: true,
                         items: [
                             {
                                 iconCls:'x-fa fa-user myprofile',
                                 tooltip: Translate.label('MyProfile'),
                                 text: Translate.label('MyProfile'),
-                                handler:''
+                                handler:'myProfile'
                             },
                             '-',
                             {
@@ -180,7 +180,7 @@ Ext.define('Docucrm.view.main.Main', {
         },
         {
             xtype: 'maincontainerwrap',
-            id: 'main-view-detail-wrap',
+            //id: 'main-view-detail-wrap',
             reference: 'mainContainerWrap',
             flex: 1,
             items: [
@@ -193,6 +193,8 @@ Ext.define('Docucrm.view.main.Main', {
                     width: 250,
                     expanderFirst: false,
                     expanderOnly: false,
+                    expanded: true,
+                    singleExpand: false,
                     listeners: {
                         selectionchange: 'onNavigationTreeSelectionChange'
                     }

@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Arr;
 
 class Handler extends ExceptionHandler
 {
@@ -46,14 +48,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
-	    /*return response()->json(
-		    [
-			    'errors' => [
-				    'status' => 401,
-				    'message' => 'Unauthenticated',
-			    ]
-		    ], 401
-	    );*/
+
+	    $class = get_class($exception);
+	    switch($class) {
+		    case 'InvalidArgumentException':
+			    return redirect("/user#login");
+		    break;
+		    default:
+			    return redirect("/user#login");
+		    break;
+	    }
+
+	    return parent::render($request, $exception);
     }
 }

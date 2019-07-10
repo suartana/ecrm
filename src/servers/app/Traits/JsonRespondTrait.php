@@ -94,14 +94,14 @@ trait JsonRespondTrait
 	 * Sends an error when the validator failed.
 	 * Error Code = 32.
 	 *
-	 * @param Validator $validator
+	 *@param string $message
 	 * @return JsonResponse
 	 */
-	public function respondValidatorFailed(Validator $validator)
+	public function respondValidatorFailed($message = null)
 	{
 		return $this->setHTTPStatusCode(422)
 			->setErrorCode(32)
-			->respondWithError($validator->errors()->all());
+			->respondWithError($message);
 	}
 
 	/**
@@ -162,6 +162,20 @@ trait JsonRespondTrait
 	}
 
 	/**
+	 * Sends a response unauthorized (401) to the request.
+	 * Error Code = 42.
+	 *
+	 * @param string $message
+	 * @return JsonResponse
+	 */
+	public function respondNoPermission($message = null)
+	{
+		return $this->setHTTPStatusCode(200)
+			->setErrorCode(43)
+			->respondWithError($message);
+	}
+
+	/**
 	 * Sends a response with error.
 	 *
 	 * @param string|array $message
@@ -190,5 +204,31 @@ trait JsonRespondTrait
 			'deleted' => true,
 			'id' => $id,
 		]);
+	}
+
+	/**
+	 * Failed Dependency
+	 *
+	 * @param null $message
+	 * @return JsonResponse
+	 */
+	public function respondItemHasChilds($message = null)
+	{
+		return $this->setHTTPStatusCode(424)
+			->setErrorCode(44)
+			->respondWithError($message);
+	}
+	/**
+	 * Json Decode
+	 *
+	 * @param $jsondata
+	 * @return bool
+	 */
+	public function decode($jsondata)
+	{
+		if($jsondata){
+			$jsondata = json_decode($jsondata);
+		}
+		return $jsondata ? $jsondata[0] : false;
 	}
 }

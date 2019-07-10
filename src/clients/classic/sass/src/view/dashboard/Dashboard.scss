@@ -81,6 +81,47 @@
     }
 }
 
+.dashboard-member-grid .x-fa, .ext-grid .x-fa{
+    height: 20px;
+    width: 20px;
+    background: $grid-item-edit-btn-color;
+    color: $lightest-color;
+    line-height: 20px;
+    margin-right:10px;
+    &:before{
+        display:block;
+        line-height:20px;
+        text-align:center;
+    }
+    &.fa-close{
+        background-color: $grid-item-close-btn-color;
+        color: $lightest-color;
+    }
+    &.fa-pencil{
+        background-color: $grid-item-edit-btn-color;
+        color: $lightest-color;
+    }
+    &.fa-plus-circle{
+        background-color: $grid-item-add-btn-color;
+        color: $lightest-color;
+    }
+    &.fa-refresh{
+        background-color: $grid-item-refresh-btn-color;
+        color: $lightest-color;
+    }
+    &.fa-tasks{
+        background-color: $grid-item-icon-btn-color;
+        color: $lightest-color;
+    }&.fa-cog{
+         background-color: $grid-item-cog-btn-color;
+         color: $lightest-color;
+     }
+    &.x-action-col-icon{
+        font-size: 13px !important;
+    }
+}
+
+
 .overflow-ellipsis{
     overflow:hidden;
 }

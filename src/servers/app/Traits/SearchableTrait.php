@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Helpers\Helper;
 use App\Helpers\StringHelper;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -19,15 +20,15 @@ trait SearchableTrait
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|null
 	 */
-	public function scopeSearch(Builder $builder, $needle, $accountId, $limitPerPage, $sortOrder, $whereCondition = null)
+	public function scopeSearch(Builder $builder, $needle, $limitPerPage, $sortOrder, $whereCondition = null)
 	{
 		if ($this->searchable_columns == null) {
 			return;
 		}
 
 		$queryString = StringHelper::buildQuery($this->searchable_columns, $needle);
-
-		$builder->whereRaw('account_id = '.$accountId.' and ('.$queryString.') '.$whereCondition);
+		Helper::xdump($queryString);
+		$builder->whereRaw('('.$queryString.') '.$whereCondition);
 		$builder->orderByRaw($sortOrder);
 		$builder->select($this->return_from_search);
 

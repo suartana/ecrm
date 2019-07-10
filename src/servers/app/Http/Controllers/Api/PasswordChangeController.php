@@ -6,7 +6,6 @@ use App\Models\Auth\PasswordReset;
 use App\Models\Users\User;
 use App\Traits\JsonRespondTrait;
 use App\Traits\TranslationTrait;
-use App\Utils\Util;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

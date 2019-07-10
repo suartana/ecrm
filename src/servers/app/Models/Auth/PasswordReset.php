@@ -2,7 +2,7 @@
 
 namespace App\Models\Auth;
 
-use App\Utils\Util;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;

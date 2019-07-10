@@ -2,7 +2,7 @@
 
 namespace App\Models\Users;
 
-use App\Utils\Util;
+use App\Models\Systems\Modules\Module;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -16,7 +16,7 @@ class UserView extends Model
 	 * set default primary key
 	 * @var bool
 	 */
-	protected $primaryKey = false;
+	protected $primaryKey = "id";
 	/**
 	 * Get users's full name. The name is formatted according to the user's
 	 * preference, either "Firstname Lastname", or "Lastname Firstname".
@@ -29,6 +29,13 @@ class UserView extends Model
 		return $user ? $user->firstname." ".$user->lastname : "";
 	}
 
+	/**
+	 * Provide user profile data
+	 *
+	 * @param int $id
+	 * @param string $lang
+	 * @return mixed
+	 */
 	public static function getProfile(int $id,string $lang = 'GER')
 	{
 		return UserView::select(
@@ -62,5 +69,15 @@ class UserView extends Model
 			"UPDATED_BY",
 			"USERLANG"
 		)->where(['id' => $id , "ANREDE_LANG" => $lang])->first();
+	}
+
+	/**
+	 * ORM set user belong to module
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function module()
+	{
+		return $this->belongsTo(Module::class);
 	}
 }

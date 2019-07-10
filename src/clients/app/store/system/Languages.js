@@ -1,25 +1,16 @@
 Ext.define('Docucrm.store.system.Languages', {
 	extend: 'Ext.data.Store',
-
 	alias: 'store.systemlanguages',
-
+	storeId:'systemlanguagesStoreId',
 	model: 'Docucrm.model.system.Languages',
-
 	proxy: {
 		type: 'ajax',
-		url: '/api/system/navigation',
+		url: '/api/system/languages',
 		reader: {
 			type: 'json',
-			rootProperty: 'data',
-			idProperty: 'id',
-			messageProperty: 'msg'
+			rootProperty: 'data'
 		},
+		headers: Helpers.storeHeaders()
 	},
-
-	autoLoad: 'true',
-
-	sorters: {
-		direction: 'ASC',
-		property: 'fullname'
-	}
+	autoLoad: true
 });

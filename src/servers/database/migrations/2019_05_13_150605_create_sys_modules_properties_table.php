@@ -15,16 +15,18 @@ class CreateSysModulesPropertiesTable extends Migration
     {
         Schema::create('sys_modules_properties', function (Blueprint $table) {
 	        $table->increments('id');
-	        $table->integer("sysmodcode")->unsigned()->index()->foreign()->references("code")->on("sys_modules")->onDelete("cascade");
-	        $table->integer("syssubmodcode")->nullable()->unsigned()->index()->foreign()->references("code")->on("sys_submodules")->onDelete("cascade");
-	        $table->string("iconcls")->nullable();
-	        $table->string("rowCls")->nullable();
+	        $table->integer("code")->index();
+	        $table->string("iconcls",256)->nullable();
+	        $table->string("rowCls",256)->nullable();
 	        $table->string("viewtype")->nullable();
 	        $table->char("routeid")->nullable();
 	        $table->char("itemid")->nullable();
 	        $table->char("leaf")->nullable();
 	        $table->char("selectable")->nullable();
 	        $table->char("expanded")->nullable();
+	        $table->tinyInteger("modtype")->default(1);
+	        $table->integer("created_by");
+	        $table->integer("updated_by")->nullable();
 	        $table->timestamps();
         });
     }

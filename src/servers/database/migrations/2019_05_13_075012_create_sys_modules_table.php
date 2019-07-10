@@ -15,12 +15,9 @@ class CreateSysModulesTable extends Migration
     {
         Schema::create('sys_modules', function (Blueprint $table) {
             $table->increments('id');
-            $table->smallInteger("code");
-            $table->string("descr");
-            $table->string("locale",2);
+            $table->string("descr",256);
             $table->integer("created_by");
             $table->integer("updated_by")->nullable();
-	        $table->softDeletes();
             $table->timestamps();
         });
     }

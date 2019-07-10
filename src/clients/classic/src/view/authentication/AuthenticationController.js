@@ -1,3 +1,11 @@
+/**
+ * Provide Controller for the Authentication
+ *
+ * @version v$i
+ * @controller-name: authentication
+ * @alternateClassName: AuthenticationController
+ * @author Gede Suartana <gede.suartana@docu.ch>
+ */
 Ext.define('Docucrm.view.authentication.AuthenticationController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.authentication',

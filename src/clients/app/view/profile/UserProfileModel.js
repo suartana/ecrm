@@ -1,69 +1,20 @@
 Ext.define('Docucrm.view.profile.UserProfileModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.userprofile',
-
+    alias: 'viewmodel.userprofileview',
+    data:{
+        userprofile:null
+    },
     stores: {
-        userSharedItems: {
-            autoLoad: true,
-            fields: [
-                {
-                    name: '_id'
-                },
-                {
-                    name: 'parent_id'
-                },
-                {
-                    name: 'name'
-                },
-                {
-                    name: 'source'
-                },
-                {
-                    name: 'date'
-                },
-                {
-                    name: 'isActive'
-                },
-                {
-                    name: 'time'
-                },
-                {
-                    name: 'content'
+        userData:{
+            type:'userprofile',
+            listeners: {
+                load: function (store, data, success) {
+                    Ext.ComponentQuery.query('#profilesocial')[0].getViewModel().set('userprofile', data[0]);
+                    Ext.ComponentQuery.query('#userform')[0].getViewModel().set('userprofile', data[0]);
                 }
-            ],
-            proxy: {
-                type: 'api',
-                url: '~api/usershareditems'
-            }            
-        },
-
-        userTimeline: {
-            autoLoad: true,
-            fields: [
-                {
-                    name: '_id'
-                },
-                {
-                    name: 'name'
-                },
-                {
-                    name: 'content'
-                },
-                {
-                    name: 'date',
-                    type: 'date'
-                },
-                {
-                    name: 'userId'
-                },
-                {
-                    name: 'notificationType'
-                }
-            ],
-            proxy: {
-                type: 'api',
-                url: '~api/usertimeline'
             }
-        }
+        },
+        userSharedItems:{},
+        userTimeline: {}
     }
 });

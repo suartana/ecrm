@@ -2,6 +2,7 @@
 
 namespace App\Models\Systems\Language;
 
+use App\Models\Systems\Modules\Module;
 use Illuminate\Database\Eloquent\Model;
 use Waavi\Translation\Traits\Translatable;
 
@@ -17,7 +18,7 @@ class Translation extends Model
 	 *  List of variables that can be mass assigned
 	 *  @var array
 	 */
-	protected $fillable = ['locale', 'namespace', 'group', 'item', 'text', 'unstable'];
+	protected $fillable = ['locale', 'namespace', 'type', 'item', 'text', 'unstable'];
 
 	/**
 	 *  Each translation belongs to a language.
@@ -62,5 +63,10 @@ class Translation extends Model
 	{
 		return (boolean) $this->locked;
 	}
-	
+
+
+	public function module()
+	{
+		$this->belongsTo(Module::class);
+	}
 }
