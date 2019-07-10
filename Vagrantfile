@@ -25,9 +25,9 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=775", "fmode=764"]
 
   # Run Ansible from the Vagrant VM
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "provisioning/vagrant.yml"
-    ansible.become = true
-    ansible.compatibility_mode = "2.0"
-  end
+  # config.vm.provision "ansible_local" do |ansible|
+  #   ansible.playbook = "provisioning/vagrant.yml"
+  #   ansible.become = true
+  #  ansible.compatibility_mode = "2.0"
+  # end
 end

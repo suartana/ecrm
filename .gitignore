@@ -7,4 +7,5 @@ __MACOSX
 /provisioning/*.retry
 .vagrant
 .project
+Vagrantfile
 ubuntu-xenial-16.04-cloudimg-console.log
